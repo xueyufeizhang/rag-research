@@ -3,14 +3,14 @@
 ## Pipeline
 
 1. **Chunking** (`chunk.py`) — fixed-size sliding-window text chunking with configurable overlap.
-2. **Extraction** (`extract.py`) — concurrent LLM calls (bounded by a semaphore, with retry/backoff) extract entities and binary relations from each chunk as JSON. Malformed model output is repaired with `json_repair` before parsing.
+2. **Extraction** (`extract.py`) — concurrent LLM calls extract entities and binary relations from each chunk as JSON. Malformed model output is repaired with `json_repair` before parsing.
 3. **Deduplication & merge** (`core.py`, `LightRAG.construct`) — entities sharing a name are merged (descriptions concatenated, source chunks unioned); relations are merged per unordered `(source, target)` pair.
 4. **Storage** (`storage.py`) — three primitives, each JSON/npy-backed on disk:
    - `KVStore` — key/value store for entities, relations, and chunks
    - `VectorIndex` — flat numpy cosine-similarity index (separate indexes for entities, relations, chunks)
    - `GraphStore` — a `networkx` graph, persisted via `node_link_data`
-5. **Retrieval** (`core.py`, `LightRAG.retrieve`) — **naive** mode is implemented: embed the query, take cosine top-k over the chunk vector index, and feed the retrieved chunks to the LLM as context. `local` and `global` (graph-aware retrieval over entities/relations) are under active development; `hybrid` will combine them once both land.
-6. **Visualization** (`visual.py`) — loads a persisted `graph.json` and renders an interactive, type-colored HTML graph with `pyvis`.
+5. **Retrieval** (`core.py`, `LightRAG.retrieve`) — **naive** mode is implemented: embed the query, take cosine top-k over the chunk vector index, and feed the retrieved chunks to the LLM as context. `local` and `global` (graph-aware retrieval over entities/relations) are under implementation.
+6. **Visualization** (`visual.py`) — loads a persisted `graph.json` and renders an HTML graph with `pyvis`.
 
 ## Project layout
 
