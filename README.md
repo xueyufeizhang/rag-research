@@ -1,11 +1,5 @@
 # lightrag-replication
 
-A from-scratch Python re-implementation of [LightRAG](https://github.com/HKUDS/LightRAG)'s indexing pipeline — built to understand its design as background/baseline work for a Master's thesis on agentic search systems with knowledge-graph-based memory (Politecnico di Torino).
-
-## What this is
-
-LightRAG builds a knowledge graph **offline** from a document corpus, then answers queries via naive/local/global/hybrid retrieval over that graph. This repo replicates the **indexing** half of that pipeline end to end, plus naive vector retrieval, as a reference implementation. It served as a stepping stone toward a larger system proposed in the thesis that instead builds the KG **incrementally, online, from agent interactions** rather than once, offline, from a static corpus.
-
 ## Pipeline
 
 1. **Chunking** (`chunk.py`) — fixed-size sliding-window text chunking with configurable overlap.
