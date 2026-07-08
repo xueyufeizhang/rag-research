@@ -1,0 +1,4546 @@
+{
+  "A Christmas Carol": {
+    "name": "A Christmas Carol",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Charles Dickens": {
+    "name": "Charles Dickens",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Arthur Rackham": {
+    "name": "Arthur Rackham",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Project Gutenberg": {
+    "name": "Project Gutenberg",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "J. B. Lippincott Company": {
+    "name": "J. B. Lippincott Company",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "United States": {
+    "name": "United States",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Philadelphia": {
+    "name": "Philadelphia",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "New York": {
+    "name": "New York",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Great Britain": {
+    "name": "Great Britain",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Bob Cratchit": {
+    "name": "Bob Cratchit",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Peter Cratchit": {
+    "name": "Peter Cratchit",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Tim Cratchit ('Tiny Tim')": {
+    "name": "Tim Cratchit ('Tiny Tim')",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Mr. Fezziwig": {
+    "name": "Mr. Fezziwig",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Fred": {
+    "name": "Fred",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Ghost of Christmas Past": {
+    "name": "Ghost of Christmas Past",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Ghost of Christmas Present": {
+    "name": "Ghost of Christmas Present",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Ghost of Christmas Yet to Come": {
+    "name": "Ghost of Christmas Yet to Come",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_23",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_69",
+      "carol_chunk_69",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_76",
+      "carol_chunk_77",
+      "carol_chunk_77",
+      "carol_chunk_78",
+      "carol_chunk_79",
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Ghost of Jacob Marley": {
+    "name": "Ghost of Jacob Marley",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Joe": {
+    "name": "Joe",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Ebenezer Scrooge": {
+    "name": "Ebenezer Scrooge",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Mr. Topper": {
+    "name": "Mr. Topper",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Dick Wilkins": {
+    "name": "Dick Wilkins",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Belle": {
+    "name": "Belle",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Caroline": {
+    "name": "Caroline",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Mrs. Cratchit": {
+    "name": "Mrs. Cratchit",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Belinda and Martha Cratchit": {
+    "name": "Belinda and Martha Cratchit",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Mrs. Dilber": {
+    "name": "Mrs. Dilber",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Fan": {
+    "name": "Fan",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Mrs. Fezziwig": {
+    "name": "Mrs. Fezziwig",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Stave One--Marley's Ghost": {
+    "name": "Stave One--Marley's Ghost",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Stave Two--The First of the Three Spirits": {
+    "name": "Stave Two--The First of the Three Spirits",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Stave Three--The Second of the Three Spirits": {
+    "name": "Stave Three--The Second of the Three Spirits",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Stave Four--The Last of the Spirits": {
+    "name": "Stave Four--The Last of the Spirits",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Stave Five--The End of It": {
+    "name": "Stave Five--The End of It",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_15",
+      "carol_chunk_27",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_35",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_47",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_64",
+      "carol_chunk_66",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_71"
+    ]
+  },
+  "Scrooge": {
+    "name": "Scrooge",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_3",
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_6",
+      "carol_chunk_7",
+      "carol_chunk_8",
+      "carol_chunk_9",
+      "carol_chunk_10",
+      "carol_chunk_11",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_16",
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_20",
+      "carol_chunk_21",
+      "carol_chunk_22",
+      "carol_chunk_23",
+      "carol_chunk_24",
+      "carol_chunk_25",
+      "carol_chunk_26",
+      "carol_chunk_27",
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_31",
+      "carol_chunk_32",
+      "carol_chunk_33",
+      "carol_chunk_34",
+      "carol_chunk_35",
+      "carol_chunk_36",
+      "carol_chunk_37",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_41",
+      "carol_chunk_42",
+      "carol_chunk_46",
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_49",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_55",
+      "carol_chunk_56",
+      "carol_chunk_57",
+      "carol_chunk_58",
+      "carol_chunk_59",
+      "carol_chunk_60",
+      "carol_chunk_61",
+      "carol_chunk_63",
+      "carol_chunk_64",
+      "carol_chunk_65",
+      "carol_chunk_66",
+      "carol_chunk_69",
+      "carol_chunk_70",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_55"
+    ]
+  },
+  "Old Scratch": {
+    "name": "Old Scratch",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_3",
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_6",
+      "carol_chunk_7",
+      "carol_chunk_8",
+      "carol_chunk_9",
+      "carol_chunk_10",
+      "carol_chunk_11",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_16",
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_20",
+      "carol_chunk_21",
+      "carol_chunk_22",
+      "carol_chunk_23",
+      "carol_chunk_24",
+      "carol_chunk_25",
+      "carol_chunk_26",
+      "carol_chunk_27",
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_31",
+      "carol_chunk_32",
+      "carol_chunk_33",
+      "carol_chunk_34",
+      "carol_chunk_35",
+      "carol_chunk_36",
+      "carol_chunk_37",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_41",
+      "carol_chunk_42",
+      "carol_chunk_46",
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_49",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_55",
+      "carol_chunk_56",
+      "carol_chunk_57",
+      "carol_chunk_58",
+      "carol_chunk_59",
+      "carol_chunk_60",
+      "carol_chunk_61",
+      "carol_chunk_63",
+      "carol_chunk_64",
+      "carol_chunk_65",
+      "carol_chunk_66",
+      "carol_chunk_69",
+      "carol_chunk_70",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_55"
+    ]
+  },
+  "Bed-curtains": {
+    "name": "Bed-curtains",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_3",
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_6",
+      "carol_chunk_7",
+      "carol_chunk_8",
+      "carol_chunk_9",
+      "carol_chunk_10",
+      "carol_chunk_11",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_16",
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_20",
+      "carol_chunk_21",
+      "carol_chunk_22",
+      "carol_chunk_23",
+      "carol_chunk_24",
+      "carol_chunk_25",
+      "carol_chunk_26",
+      "carol_chunk_27",
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_31",
+      "carol_chunk_32",
+      "carol_chunk_33",
+      "carol_chunk_34",
+      "carol_chunk_35",
+      "carol_chunk_36",
+      "carol_chunk_37",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_41",
+      "carol_chunk_42",
+      "carol_chunk_46",
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_49",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_55",
+      "carol_chunk_56",
+      "carol_chunk_57",
+      "carol_chunk_58",
+      "carol_chunk_59",
+      "carol_chunk_60",
+      "carol_chunk_61",
+      "carol_chunk_63",
+      "carol_chunk_64",
+      "carol_chunk_65",
+      "carol_chunk_66",
+      "carol_chunk_69",
+      "carol_chunk_70",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_55"
+    ]
+  },
+  "Plump sister in the lace tucker": {
+    "name": "Plump sister in the lace tucker",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_3",
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_6",
+      "carol_chunk_7",
+      "carol_chunk_8",
+      "carol_chunk_9",
+      "carol_chunk_10",
+      "carol_chunk_11",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_16",
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_20",
+      "carol_chunk_21",
+      "carol_chunk_22",
+      "carol_chunk_23",
+      "carol_chunk_24",
+      "carol_chunk_25",
+      "carol_chunk_26",
+      "carol_chunk_27",
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_31",
+      "carol_chunk_32",
+      "carol_chunk_33",
+      "carol_chunk_34",
+      "carol_chunk_35",
+      "carol_chunk_36",
+      "carol_chunk_37",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_41",
+      "carol_chunk_42",
+      "carol_chunk_46",
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_49",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_55",
+      "carol_chunk_56",
+      "carol_chunk_57",
+      "carol_chunk_58",
+      "carol_chunk_59",
+      "carol_chunk_60",
+      "carol_chunk_61",
+      "carol_chunk_63",
+      "carol_chunk_64",
+      "carol_chunk_65",
+      "carol_chunk_66",
+      "carol_chunk_69",
+      "carol_chunk_70",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_75",
+      "carol_chunk_76",
+      "carol_chunk_55"
+    ]
+  },
+  "Marley": {
+    "name": "Marley",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_8",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_58"
+    ]
+  },
+  "Stave Four": {
+    "name": "Stave Four",
+    "type": "Event",
+    "description": "",
+    "source_id": [
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_8",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_58"
+    ]
+  },
+  "Stave Five": {
+    "name": "Stave Five",
+    "type": "Event",
+    "description": "",
+    "source_id": [
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_8",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_58"
+    ]
+  },
+  "Register of his burial": {
+    "name": "Register of his burial",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_8",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_58"
+    ]
+  },
+  "Clergyman": {
+    "name": "Clergyman",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_8",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_58"
+    ]
+  },
+  "Undertaker": {
+    "name": "Undertaker",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_8",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_58"
+    ]
+  },
+  "'Change": {
+    "name": "'Change",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_8",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_58"
+    ]
+  },
+  "Door-nail": {
+    "name": "Door-nail",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_8",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_58"
+    ]
+  },
+  "Christmas Eve": {
+    "name": "Christmas Eve",
+    "type": "Event",
+    "description": "",
+    "source_id": [
+      "carol_chunk_5",
+      "carol_chunk_11",
+      "carol_chunk_11",
+      "carol_chunk_73",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_16",
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_25",
+      "carol_chunk_27",
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_31",
+      "carol_chunk_32",
+      "carol_chunk_36",
+      "carol_chunk_46",
+      "carol_chunk_49",
+      "carol_chunk_54",
+      "carol_chunk_55",
+      "carol_chunk_56",
+      "carol_chunk_60",
+      "carol_chunk_65",
+      "carol_chunk_70"
+    ]
+  },
+  "counting-house": {
+    "name": "counting-house",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_5",
+      "carol_chunk_11",
+      "carol_chunk_11",
+      "carol_chunk_73",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_16",
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_25",
+      "carol_chunk_27",
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_31",
+      "carol_chunk_32",
+      "carol_chunk_36",
+      "carol_chunk_46",
+      "carol_chunk_49",
+      "carol_chunk_54",
+      "carol_chunk_55",
+      "carol_chunk_56",
+      "carol_chunk_60",
+      "carol_chunk_65",
+      "carol_chunk_70"
+    ]
+  },
+  "court outside": {
+    "name": "court outside",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_5",
+      "carol_chunk_11",
+      "carol_chunk_11",
+      "carol_chunk_73",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_16",
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_25",
+      "carol_chunk_27",
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_31",
+      "carol_chunk_32",
+      "carol_chunk_36",
+      "carol_chunk_46",
+      "carol_chunk_49",
+      "carol_chunk_54",
+      "carol_chunk_55",
+      "carol_chunk_56",
+      "carol_chunk_60",
+      "carol_chunk_65",
+      "carol_chunk_70"
+    ]
+  },
+  "Scrooge's nephew": {
+    "name": "Scrooge's nephew",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_6",
+      "carol_chunk_8",
+      "carol_chunk_50",
+      "carol_chunk_51",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_8",
+      "carol_chunk_8",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75"
+    ]
+  },
+  "City clocks": {
+    "name": "City clocks",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_6",
+      "carol_chunk_8",
+      "carol_chunk_50",
+      "carol_chunk_51",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_8",
+      "carol_chunk_8",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75"
+    ]
+  },
+  "Counting-house": {
+    "name": "Counting-house",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_6",
+      "carol_chunk_8",
+      "carol_chunk_50",
+      "carol_chunk_51",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_8",
+      "carol_chunk_8",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75"
+    ]
+  },
+  "Clerk": {
+    "name": "Clerk",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_6",
+      "carol_chunk_8",
+      "carol_chunk_50",
+      "carol_chunk_51",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_8",
+      "carol_chunk_8",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75"
+    ]
+  },
+  "Coal-box": {
+    "name": "Coal-box",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_6",
+      "carol_chunk_8",
+      "carol_chunk_50",
+      "carol_chunk_51",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_8",
+      "carol_chunk_8",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75"
+    ]
+  },
+  "Court": {
+    "name": "Court",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_6",
+      "carol_chunk_8",
+      "carol_chunk_50",
+      "carol_chunk_51",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_8",
+      "carol_chunk_8",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75"
+    ]
+  },
+  "nephew": {
+    "name": "nephew",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_7"
+    ]
+  },
+  "Christmas-time": {
+    "name": "Christmas-time",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_7"
+    ]
+  },
+  "veneration due to its sacred name and origin": {
+    "name": "veneration due to its sacred name and origin",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_7"
+    ]
+  },
+  "clerk in the tank": {
+    "name": "clerk in the tank",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_7"
+    ]
+  },
+  "Scrooge's clerk": {
+    "name": "Scrooge's clerk",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_8"
+    ]
+  },
+  "Portly gentlemen": {
+    "name": "Portly gentlemen",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_8"
+    ]
+  },
+  "Parliament": {
+    "name": "Parliament",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_8"
+    ]
+  },
+  "Bedlam": {
+    "name": "Bedlam",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_8"
+    ]
+  },
+  "Scrooge and Marley's office": {
+    "name": "Scrooge and Marley's office",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_8"
+    ]
+  },
+  "Merry Christmas": {
+    "name": "Merry Christmas",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_8"
+    ]
+  },
+  "Christmas humour": {
+    "name": "Christmas humour",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_8"
+    ]
+  },
+  "liberality": {
+    "name": "liberality",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_8"
+    ]
+  },
+  "leman": {
+    "name": "leman",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_9",
+      "carol_chunk_57"
+    ]
+  },
+  "prisons": {
+    "name": "prisons",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_9",
+      "carol_chunk_57"
+    ]
+  },
+  "Union workhouses": {
+    "name": "Union workhouses",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_9",
+      "carol_chunk_57"
+    ]
+  },
+  "Treadmill and the Poor Law": {
+    "name": "Treadmill and the Poor Law",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_9",
+      "carol_chunk_57"
+    ]
+  },
+  "Christian cheer of mind or body": {
+    "name": "Christian cheer of mind or body",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_9",
+      "carol_chunk_57"
+    ]
+  },
+  "a fund to buy the Poor some meat and drink, and means of warmth": {
+    "name": "a fund to buy the Poor some meat and drink, and means of warmth",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_9",
+      "carol_chunk_57"
+    ]
+  },
+  "Want": {
+    "name": "Want",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_9",
+      "carol_chunk_57"
+    ]
+  },
+  "Abundance": {
+    "name": "Abundance",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_9",
+      "carol_chunk_57"
+    ]
+  },
+  "gentlemen": {
+    "name": "gentlemen",
+    "type": "Other",
+    "description": "",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_44"
+    ]
+  },
+  "church": {
+    "name": "church",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_44"
+    ]
+  },
+  "main street": {
+    "name": "main street",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_44"
+    ]
+  },
+  "court": {
+    "name": "court",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_44"
+    ]
+  },
+  "gas-pipes": {
+    "name": "gas-pipes",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_44"
+    ]
+  },
+  "brazier": {
+    "name": "brazier",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_44"
+    ]
+  },
+  "water-plug": {
+    "name": "water-plug",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_44"
+    ]
+  },
+  "holly sprigs and berries": {
+    "name": "holly sprigs and berries",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_44"
+    ]
+  },
+  "Poulterers' and grocers'": {
+    "name": "Poulterers' and grocers'",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_44"
+    ]
+  },
+  "Lord Mayor": {
+    "name": "Lord Mayor",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_44"
+    ]
+  },
+  "Mansion House": {
+    "name": "Mansion House",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_44"
+    ]
+  },
+  "tailor": {
+    "name": "tailor",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_44"
+    ]
+  },
+  "Clayton": {
+    "name": "Clayton",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_11",
+      "carol_chunk_73"
+    ]
+  },
+  "Cornhill": {
+    "name": "Cornhill",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_11",
+      "carol_chunk_73"
+    ]
+  },
+  "Camden Town": {
+    "name": "Camden Town",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_11",
+      "carol_chunk_73"
+    ]
+  },
+  "melancholy tavern": {
+    "name": "melancholy tavern",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_11",
+      "carol_chunk_73"
+    ]
+  },
+  "house": {
+    "name": "house",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_12"
+    ]
+  },
+  "door knocker": {
+    "name": "door knocker",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_12"
+    ]
+  },
+  "Genius of the Weather": {
+    "name": "Genius of the Weather",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_12"
+    ]
+  },
+  "City of London": {
+    "name": "City of London",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_12"
+    ]
+  },
+  "Corporation, aldermen, and livery": {
+    "name": "Corporation, aldermen, and livery",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_12"
+    ]
+  },
+  "Wine-merchant's cellars": {
+    "name": "Wine-merchant's cellars",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_13"
+    ]
+  },
+  "Gas-lamps": {
+    "name": "Gas-lamps",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_13"
+    ]
+  },
+  "Lumber-room": {
+    "name": "Lumber-room",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_13"
+    ]
+  },
+  "Fire-guard": {
+    "name": "Fire-guard",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_13"
+    ]
+  },
+  "Shoes": {
+    "name": "Shoes",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_13"
+    ]
+  },
+  "Fish baskets": {
+    "name": "Fish baskets",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_13"
+    ]
+  },
+  "Washing-stand": {
+    "name": "Washing-stand",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_13"
+    ]
+  },
+  "Poker": {
+    "name": "Poker",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_13"
+    ]
+  },
+  "Sitting-room": {
+    "name": "Sitting-room",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_13"
+    ]
+  },
+  "Bedroom": {
+    "name": "Bedroom",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_13"
+    ]
+  },
+  "Cains and Abels, Pharaoh's daughters, Queens of Sheba, Angelic messengers descending through the air on clouds like feather-beds, Abrahams, Belshazzars, Apostles putting off to sea in butter-boats": {
+    "name": "Cains and Abels, Pharaoh's daughters, Queens of Sheba, Angelic messengers descending through the air on clouds like feather-beds, Abrahams, Belshazzars, Apostles putting off to sea in butter-boats",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_14",
+      "carol_chunk_16",
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_25",
+      "carol_chunk_27",
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_31",
+      "carol_chunk_32",
+      "carol_chunk_36",
+      "carol_chunk_46",
+      "carol_chunk_49",
+      "carol_chunk_54",
+      "carol_chunk_55",
+      "carol_chunk_56",
+      "carol_chunk_60",
+      "carol_chunk_65",
+      "carol_chunk_70"
+    ]
+  },
+  "Bell": {
+    "name": "Bell",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_14",
+      "carol_chunk_16",
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_25",
+      "carol_chunk_27",
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_31",
+      "carol_chunk_32",
+      "carol_chunk_36",
+      "carol_chunk_46",
+      "carol_chunk_49",
+      "carol_chunk_54",
+      "carol_chunk_55",
+      "carol_chunk_56",
+      "carol_chunk_60",
+      "carol_chunk_65",
+      "carol_chunk_70"
+    ]
+  },
+  "Ghost": {
+    "name": "Ghost",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_14",
+      "carol_chunk_16",
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_25",
+      "carol_chunk_27",
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_31",
+      "carol_chunk_32",
+      "carol_chunk_36",
+      "carol_chunk_46",
+      "carol_chunk_49",
+      "carol_chunk_54",
+      "carol_chunk_55",
+      "carol_chunk_56",
+      "carol_chunk_60",
+      "carol_chunk_65",
+      "carol_chunk_70"
+    ]
+  },
+  "Cellar Door": {
+    "name": "Cellar Door",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_15",
+      "carol_chunk_71"
+    ]
+  },
+  "Chain": {
+    "name": "Chain",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_15",
+      "carol_chunk_71"
+    ]
+  },
+  "Cash-boxes, keys, padlocks, ledgers, deeds, and heavy purses": {
+    "name": "Cash-boxes, keys, padlocks, ledgers, deeds, and heavy purses",
+    "type": "Data",
+    "description": "",
+    "source_id": [
+      "carol_chunk_15",
+      "carol_chunk_71"
+    ]
+  },
+  "Dying Flame": {
+    "name": "Dying Flame",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_15",
+      "carol_chunk_71"
+    ]
+  },
+  "ooge": {
+    "name": "ooge",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_36",
+      "carol_chunk_53",
+      "carol_chunk_57",
+      "carol_chunk_70",
+      "carol_chunk_71"
+    ]
+  },
+  "Jacob Marley": {
+    "name": "Jacob Marley",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_36",
+      "carol_chunk_53",
+      "carol_chunk_57",
+      "carol_chunk_70",
+      "carol_chunk_71"
+    ]
+  },
+  "chain": {
+    "name": "chain",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_17",
+      "carol_chunk_18",
+      "carol_chunk_19",
+      "carol_chunk_36",
+      "carol_chunk_53",
+      "carol_chunk_57",
+      "carol_chunk_70",
+      "carol_chunk_71"
+    ]
+  },
+  "Marley's Ghost": {
+    "name": "Marley's Ghost",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_20",
+      "carol_chunk_21",
+      "carol_chunk_21"
+    ]
+  },
+  "Phantoms": {
+    "name": "Phantoms",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_20",
+      "carol_chunk_21",
+      "carol_chunk_21"
+    ]
+  },
+  "Invisible World": {
+    "name": "Invisible World",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_20",
+      "carol_chunk_21",
+      "carol_chunk_21"
+    ]
+  },
+  "The First of the Three Spirits": {
+    "name": "The First of the Three Spirits",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_20",
+      "carol_chunk_21",
+      "carol_chunk_21"
+    ]
+  },
+  "Mr. Ebenezer Scrooge": {
+    "name": "Mr. Ebenezer Scrooge",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_21"
+    ]
+  },
+  "First of Exchange": {
+    "name": "First of Exchange",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_21"
+    ]
+  },
+  "visitor": {
+    "name": "visitor",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_22"
+    ]
+  },
+  "The Spirit": {
+    "name": "The Spirit",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_24",
+      "carol_chunk_59",
+      "carol_chunk_59"
+    ]
+  },
+  "winter day": {
+    "name": "winter day",
+    "type": "Event",
+    "description": "",
+    "source_id": [
+      "carol_chunk_24",
+      "carol_chunk_59",
+      "carol_chunk_59"
+    ]
+  },
+  "market-town": {
+    "name": "market-town",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_24",
+      "carol_chunk_59",
+      "carol_chunk_59"
+    ]
+  },
+  "shaggy ponies": {
+    "name": "shaggy ponies",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_24",
+      "carol_chunk_59",
+      "carol_chunk_59"
+    ]
+  },
+  "Ali Baba": {
+    "name": "Ali Baba",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_25",
+      "carol_chunk_26"
+    ]
+  },
+  "A solitary child": {
+    "name": "A solitary child",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_25",
+      "carol_chunk_26"
+    ]
+  },
+  "Mansion of dull red brick": {
+    "name": "Mansion of dull red brick",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_25",
+      "carol_chunk_26"
+    ]
+  },
+  "Well-cock surmounted cupola on the roof": {
+    "name": "Well-cock surmounted cupola on the roof",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_25",
+      "carol_chunk_26"
+    ]
+  },
+  "Bell hanging in the cupola": {
+    "name": "Bell hanging in the cupola",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_25",
+      "carol_chunk_26"
+    ]
+  },
+  "Coach-houses and sheds": {
+    "name": "Coach-houses and sheds",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_25",
+      "carol_chunk_26"
+    ]
+  },
+  "Dull yard behind the house": {
+    "name": "Dull yard behind the house",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_25",
+      "carol_chunk_26"
+    ]
+  },
+  "Despondent poplar tree": {
+    "name": "Despondent poplar tree",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_25",
+      "carol_chunk_26"
+    ]
+  },
+  "Valentine": {
+    "name": "Valentine",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Orson": {
+    "name": "Orson",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Sultan's Groom": {
+    "name": "Sultan's Groom",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Genii": {
+    "name": "Genii",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Parrot": {
+    "name": "Parrot",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Robin Crusoe": {
+    "name": "Robin Crusoe",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Friday": {
+    "name": "Friday",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "schoolmaster": {
+    "name": "schoolmaster",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_27",
+      "carol_chunk_28"
+    ]
+  },
+  "Master Scrooge": {
+    "name": "Master Scrooge",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_31",
+      "carol_chunk_31"
+    ]
+  },
+  "Fezziwig": {
+    "name": "Fezziwig",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_31",
+      "carol_chunk_31"
+    ]
+  },
+  "Ebenezer": {
+    "name": "Ebenezer",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_31",
+      "carol_chunk_31"
+    ]
+  },
+  "Dick": {
+    "name": "Dick",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31",
+      "carol_chunk_31",
+      "carol_chunk_31"
+    ]
+  },
+  "'prentice": {
+    "name": "'prentice",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "Hill-ho": {
+    "name": "Hill-ho",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "Chirrup": {
+    "name": "Chirrup",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "Miss Fezziwigs": {
+    "name": "Miss Fezziwigs",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "housemaid": {
+    "name": "housemaid",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "baker": {
+    "name": "baker",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "cook": {
+    "name": "cook",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "milkman": {
+    "name": "milkman",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "boy from over the way": {
+    "name": "boy from over the way",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "girl from next door but one": {
+    "name": "girl from next door but one",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "fiddler": {
+    "name": "fiddler",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_30",
+      "carol_chunk_31"
+    ]
+  },
+  "Sir Roger de Coverley": {
+    "name": "Sir Roger de Coverley",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_30",
+      "carol_chunk_31"
+    ]
+  },
+  "negus": {
+    "name": "negus",
+    "type": "Data",
+    "description": "",
+    "source_id": [
+      "carol_chunk_30",
+      "carol_chunk_31"
+    ]
+  },
+  "Cold Roast": {
+    "name": "Cold Roast",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_30",
+      "carol_chunk_31"
+    ]
+  },
+  "Cold Boiled": {
+    "name": "Cold Boiled",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_30",
+      "carol_chunk_31"
+    ]
+  },
+  "mince-pies": {
+    "name": "mince-pies",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_30",
+      "carol_chunk_31"
+    ]
+  },
+  "Christmas Past": {
+    "name": "Christmas Past",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_32"
+    ]
+  },
+  "fair young girl": {
+    "name": "fair young girl",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_32"
+    ]
+  },
+  "she": {
+    "name": "she",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_33",
+      "carol_chunk_35",
+      "carol_chunk_41",
+      "carol_chunk_42",
+      "carol_chunk_48",
+      "carol_chunk_49",
+      "carol_chunk_51",
+      "carol_chunk_60",
+      "carol_chunk_65",
+      "carol_chunk_35",
+      "carol_chunk_49"
+    ]
+  },
+  "Spirit": {
+    "name": "Spirit",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_33",
+      "carol_chunk_35",
+      "carol_chunk_41",
+      "carol_chunk_42",
+      "carol_chunk_48",
+      "carol_chunk_49",
+      "carol_chunk_51",
+      "carol_chunk_60",
+      "carol_chunk_65",
+      "carol_chunk_35",
+      "carol_chunk_49"
+    ]
+  },
+  "_her_ (comely matron)": {
+    "name": "_her_ (comely matron)",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "beautiful young girl": {
+    "name": "beautiful young girl",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "mother and daughter": {
+    "name": "mother and daughter",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "father": {
+    "name": "father",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "man laden with Christmas toys and presents": {
+    "name": "man laden with Christmas toys and presents",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "porter": {
+    "name": "porter",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "The Second of the Three Spirits": {
+    "name": "The Second of the Three Spirits",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_36"
+    ]
+  },
+  "Gentlemen of the free-and-easy sort": {
+    "name": "Gentlemen of the free-and-easy sort",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_36"
+    ]
+  },
+  "Ghostly light": {
+    "name": "Ghostly light",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_37"
+    ]
+  },
+  "Groove": {
+    "name": "Groove",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_37"
+    ]
+  },
+  "Hearth": {
+    "name": "Hearth",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_37"
+    ]
+  },
+  "Turkey, geese, game, poultry, brawn, great joints of meat, sucking-pigs, long wreaths of sausages, mince-pies, plum-puddings, barrels of oysters, red-hot chestnuts, cherry-cheeked apples, juicy oranges, luscious pears, immense twelfth-cakes, and seething bowls of punch": {
+    "name": "Turkey, geese, game, poultry, brawn, great joints of meat, sucking-pigs, long wreaths of sausages, mince-pies, plum-puddings, barrels of oysters, red-hot chestnuts, cherry-cheeked apples, juicy oranges, luscious pears, immense twelfth-cakes, and seething bowls of punch",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_37"
+    ]
+  },
+  "Christmas morning": {
+    "name": "Christmas morning",
+    "type": "Event",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "holly": {
+    "name": "holly",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "mistletoe": {
+    "name": "mistletoe",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "red berries": {
+    "name": "red berries",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "ivy": {
+    "name": "ivy",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "turkeys": {
+    "name": "turkeys",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "geese": {
+    "name": "geese",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "game": {
+    "name": "game",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "poultry": {
+    "name": "poultry",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "brawn": {
+    "name": "brawn",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "meat": {
+    "name": "meat",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "pigs": {
+    "name": "pigs",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "sausages": {
+    "name": "sausages",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "oysters": {
+    "name": "oysters",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "pies": {
+    "name": "pies",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "puddings": {
+    "name": "puddings",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "fruit": {
+    "name": "fruit",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "punch": {
+    "name": "punch",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "snow": {
+    "name": "snow",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_39",
+      "carol_chunk_40"
+    ]
+  },
+  "Spanish onions": {
+    "name": "Spanish onions",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Spanish friars": {
+    "name": "Spanish friars",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "grapes": {
+    "name": "grapes",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "filberts": {
+    "name": "filberts",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Norfolk Biffins": {
+    "name": "Norfolk Biffins",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "oranges": {
+    "name": "oranges",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "lemons": {
+    "name": "lemons",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "gold and silver fish": {
+    "name": "gold and silver fish",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "tea": {
+    "name": "tea",
+    "type": "Data",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "coffee": {
+    "name": "coffee",
+    "type": "Data",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "raisins": {
+    "name": "raisins",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "almonds": {
+    "name": "almonds",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "cinnamon sticks": {
+    "name": "cinnamon sticks",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "spices": {
+    "name": "spices",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "candied fruits": {
+    "name": "candied fruits",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "figs": {
+    "name": "figs",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "French plums": {
+    "name": "French plums",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Grocer and his people": {
+    "name": "Grocer and his people",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_41",
+      "carol_chunk_42",
+      "carol_chunk_43",
+      "carol_chunk_65"
+    ]
+  },
+  "Belinda Cratchit": {
+    "name": "Belinda Cratchit",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_42",
+      "carol_chunk_43"
+    ]
+  },
+  "Master Peter Cratchit": {
+    "name": "Master Peter Cratchit",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_42",
+      "carol_chunk_43"
+    ]
+  },
+  "Bob's private property": {
+    "name": "Bob's private property",
+    "type": "Other",
+    "description": "",
+    "source_id": [
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_47",
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_72"
+    ]
+  },
+  "Martha": {
+    "name": "Martha",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_47",
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_72"
+    ]
+  },
+  "Tiny Tim": {
+    "name": "Tiny Tim",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_46",
+      "carol_chunk_47",
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_72"
+    ]
+  },
+  "Master Peter": {
+    "name": "Master Peter",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_50"
+    ]
+  },
+  "Miss Belinda": {
+    "name": "Miss Belinda",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_50"
+    ]
+  },
+  "Christmas Day": {
+    "name": "Christmas Day",
+    "type": "Event",
+    "description": "",
+    "source_id": [
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_50"
+    ]
+  },
+  "goose": {
+    "name": "goose",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_45"
+    ]
+  },
+  "pudding": {
+    "name": "pudding",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_45"
+    ]
+  },
+  "Bob": {
+    "name": "Bob",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_68",
+      "carol_chunk_68",
+      "carol_chunk_76",
+      "carol_chunk_67"
+    ]
+  },
+  "Peter": {
+    "name": "Peter",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_66",
+      "carol_chunk_67",
+      "carol_chunk_68",
+      "carol_chunk_68",
+      "carol_chunk_76",
+      "carol_chunk_67"
+    ]
+  },
+  "Countess": {
+    "name": "Countess",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_48",
+      "carol_chunk_69",
+      "carol_chunk_76"
+    ]
+  },
+  "Lord": {
+    "name": "Lord",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_48",
+      "carol_chunk_69",
+      "carol_chunk_76"
+    ]
+  },
+  "Pawnbroker": {
+    "name": "Pawnbroker",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_48",
+      "carol_chunk_69",
+      "carol_chunk_76"
+    ]
+  },
+  "lamplighter": {
+    "name": "lamplighter",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_49"
+    ]
+  },
+  "lighthouse": {
+    "name": "lighthouse",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_50"
+    ]
+  },
+  "seaweed": {
+    "name": "seaweed",
+    "type": "NaturalObject",
+    "description": "",
+    "source_id": [
+      "carol_chunk_50"
+    ]
+  },
+  "storm-birds": {
+    "name": "storm-birds",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_50"
+    ]
+  },
+  "Scrooge's niece": {
+    "name": "Scrooge's niece",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_51",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_54"
+    ]
+  },
+  "Topper": {
+    "name": "Topper",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75"
+    ]
+  },
+  "Scrooge's niece's sister (the plump one with the lace tucker)": {
+    "name": "Scrooge's niece's sister (the plump one with the lace tucker)",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_54",
+      "carol_chunk_75"
+    ]
+  },
+  "Uncle Scrooge": {
+    "name": "Uncle Scrooge",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "London": {
+    "name": "London",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "Almshouse": {
+    "name": "Almshouse",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "Hospital": {
+    "name": "Hospital",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "Gaol": {
+    "name": "Gaol",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "Twelfth-Night party": {
+    "name": "Twelfth-Night party",
+    "type": "Event",
+    "description": "",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "children": {
+    "name": "children",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "Spirit of Christmas Present": {
+    "name": "Spirit of Christmas Present",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "Ignorance": {
+    "name": "Ignorance",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "Phantom of Christmas Yet to Come": {
+    "name": "Phantom of Christmas Yet to Come",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "Ghost of the Future": {
+    "name": "Ghost of the Future",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_58",
+      "carol_chunk_59"
+    ]
+  },
+  "Great fat man with a monstrous chin": {
+    "name": "Great fat man with a monstrous chin",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_58",
+      "carol_chunk_59"
+    ]
+  },
+  "Red-faced gentleman with a pendulous excrescence on the end of his nose": {
+    "name": "Red-faced gentleman with a pendulous excrescence on the end of his nose",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_58",
+      "carol_chunk_59"
+    ]
+  },
+  "First speaker": {
+    "name": "First speaker",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "Man with the large chin": {
+    "name": "Man with the large chin",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "Jacob": {
+    "name": "Jacob",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_60",
+      "carol_chunk_61",
+      "carol_chunk_64",
+      "carol_chunk_61",
+      "carol_chunk_64"
+    ]
+  },
+  "Phantom": {
+    "name": "Phantom",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_60",
+      "carol_chunk_61",
+      "carol_chunk_64",
+      "carol_chunk_61",
+      "carol_chunk_64"
+    ]
+  },
+  "Porch": {
+    "name": "Porch",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_60",
+      "carol_chunk_61",
+      "carol_chunk_64",
+      "carol_chunk_61",
+      "carol_chunk_64"
+    ]
+  },
+  "old man with the pipe": {
+    "name": "old man with the pipe",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "charwoman": {
+    "name": "charwoman",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "laundress": {
+    "name": "laundress",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "undertaker's man": {
+    "name": "undertaker's man",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "woman": {
+    "name": "woman",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "man in faded black": {
+    "name": "man in faded black",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "old Joe": {
+    "name": "old Joe",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "seal or two": {
+    "name": "seal or two",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "pencil-case": {
+    "name": "pencil-case",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "sleeve-buttons": {
+    "name": "sleeve-buttons",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "brooch": {
+    "name": "brooch",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "sheets and towels": {
+    "name": "sheets and towels",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "wearing apparel": {
+    "name": "wearing apparel",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "two old fashioned silver teaspoons": {
+    "name": "two old fashioned silver teaspoons",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "sugar-tongs": {
+    "name": "sugar-tongs",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "boots": {
+    "name": "boots",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "bed-curtains": {
+    "name": "bed-curtains",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_63",
+      "carol_chunk_71",
+      "carol_chunk_63",
+      "carol_chunk_71"
+    ]
+  },
+  "blankets": {
+    "name": "blankets",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_63",
+      "carol_chunk_71",
+      "carol_chunk_63",
+      "carol_chunk_71"
+    ]
+  },
+  "shirt": {
+    "name": "shirt",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_63",
+      "carol_chunk_71",
+      "carol_chunk_63",
+      "carol_chunk_71"
+    ]
+  },
+  "old man": {
+    "name": "old man",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_64"
+    ]
+  },
+  "bed": {
+    "name": "bed",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_64"
+    ]
+  },
+  "flannel bag with money in it": {
+    "name": "flannel bag with money in it",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_64"
+    ]
+  },
+  "unhappy man": {
+    "name": "unhappy man",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_64"
+    ]
+  },
+  "Death": {
+    "name": "Death",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_64"
+    ]
+  },
+  "Avarice": {
+    "name": "Avarice",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "Dark house": {
+    "name": "Dark house",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "Cat": {
+    "name": "Cat",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "Rats": {
+    "name": "Rats",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "Mother and her children": {
+    "name": "Mother and her children",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "Father (husband)": {
+    "name": "Father (husband)",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "he": {
+    "name": "he",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_66",
+      "carol_chunk_66"
+    ]
+  },
+  "her husband": {
+    "name": "her husband",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_66",
+      "carol_chunk_66"
+    ]
+  },
+  "_she_": {
+    "name": "_she_",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_66",
+      "carol_chunk_66"
+    ]
+  },
+  "the half-drunken woman": {
+    "name": "the half-drunken woman",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_66",
+      "carol_chunk_66"
+    ]
+  },
+  "Cratchit's wife": {
+    "name": "Cratchit's wife",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_67",
+      "carol_chunk_67"
+    ]
+  },
+  "Mr. Scrooge's nephew": {
+    "name": "Mr. Scrooge's nephew",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_68"
+    ]
+  },
+  "Spirit of Tiny Tim": {
+    "name": "Spirit of Tiny Tim",
+    "type": "Creature",
+    "description": "",
+    "source_id": [
+      "carol_chunk_69"
+    ]
+  },
+  "Spirits": {
+    "name": "Spirits",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_71"
+    ]
+  },
+  "saucepan": {
+    "name": "saucepan",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_71"
+    ]
+  },
+  "gruel": {
+    "name": "gruel",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_71"
+    ]
+  },
+  "stockings": {
+    "name": "stockings",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_71"
+    ]
+  },
+  "Christmas Time": {
+    "name": "Christmas Time",
+    "type": "Event",
+    "description": "",
+    "source_id": [
+      "carol_chunk_71"
+    ]
+  },
+  "Boy in Sunday clothes": {
+    "name": "Boy in Sunday clothes",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_72"
+    ]
+  },
+  "Poulterer's shop": {
+    "name": "Poulterer's shop",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_72"
+    ]
+  },
+  "Joe Miller": {
+    "name": "Joe Miller",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_72"
+    ]
+  },
+  "Prize turkey": {
+    "name": "Prize turkey",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_72"
+    ]
+  },
+  "Knocker": {
+    "name": "Knocker",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_72"
+    ]
+  },
+  "portly gentleman": {
+    "name": "portly gentleman",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_73"
+    ]
+  },
+  "Mr. Scrooge": {
+    "name": "Mr. Scrooge",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_74"
+    ]
+  },
+  "Scrooge's niece by marriage": {
+    "name": "Scrooge's niece by marriage",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_74"
+    ]
+  },
+  "The gentleman": {
+    "name": "The gentleman",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_74"
+    ]
+  },
+  "Church": {
+    "name": "Church",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_74"
+    ]
+  },
+  "Dining-room": {
+    "name": "Dining-room",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_74"
+    ]
+  },
+  "Niece by marriage sitting in the corner with a footstool": {
+    "name": "Niece by marriage sitting in the corner with a footstool",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_74"
+    ]
+  },
+  "Housekeepers": {
+    "name": "Housekeepers",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_74"
+    ]
+  },
+  "plump sister": {
+    "name": "plump sister",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_75"
+    ]
+  },
+  "clock": {
+    "name": "clock",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_75"
+    ]
+  },
+  "Christmas": {
+    "name": "Christmas",
+    "type": "Event",
+    "description": "",
+    "source_id": [
+      "carol_chunk_76"
+    ]
+  },
+  "Total-Abstinence Principle": {
+    "name": "Total-Abstinence Principle",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_76"
+    ]
+  },
+  "trademark license": {
+    "name": "trademark license",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_77"
+    ]
+  },
+  "eBook": {
+    "name": "eBook",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_77"
+    ]
+  },
+  "Full Project Gutenberg™ License": {
+    "name": "Full Project Gutenberg™ License",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_77"
+    ]
+  },
+  "Gutenberg™": {
+    "name": "Gutenberg™",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_78",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Project Gutenberg™ electronic works": {
+    "name": "Project Gutenberg™ electronic works",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_78",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Public domain": {
+    "name": "Public domain",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_78",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Foundation": {
+    "name": "Foundation",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_78",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Project Gutenberg™ mission": {
+    "name": "Project Gutenberg™ mission",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_78",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Project Gutenberg™ License": {
+    "name": "Project Gutenberg™ License",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_78",
+      "carol_chunk_80",
+      "carol_chunk_82",
+      "carol_chunk_84"
+    ]
+  },
+  "Project Gutenberg License": {
+    "name": "Project Gutenberg License",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_79"
+    ]
+  },
+  "Plain Vanilla ASCII": {
+    "name": "Plain Vanilla ASCII",
+    "type": "Concept",
+    "description": "",
+    "source_id": [
+      "carol_chunk_80",
+      "carol_chunk_81",
+      "carol_chunk_83",
+      "carol_chunk_84",
+      "carol_chunk_85"
+    ]
+  },
+  "Project Gutenberg Literary Archive Foundation": {
+    "name": "Project Gutenberg Literary Archive Foundation",
+    "type": "Organization",
+    "description": "The foundation associated with Project Gutenberg for managing and supporting its operations",
+    "source_id": [
+      "carol_chunk_80",
+      "carol_chunk_81",
+      "carol_chunk_83",
+      "carol_chunk_84",
+      "carol_chunk_85"
+    ]
+  },
+  "Project Gutenberg™": {
+    "name": "Project Gutenberg™",
+    "type": "Organization",
+    "description": "An organization that provides free eBooks to the public",
+    "source_id": [
+      "carol_chunk_81",
+      "carol_chunk_83",
+      "carol_chunk_85",
+      "carol_chunk_85"
+    ]
+  },
+  "Internal Revenue Service": {
+    "name": "Internal Revenue Service",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "Mississippi": {
+    "name": "Mississippi",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "Salt Lake City": {
+    "name": "Salt Lake City",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "UT 84116": {
+    "name": "UT 84116",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "www.gutenberg.org": {
+    "name": "www.gutenberg.org",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "www.gutenberg.org/contact": {
+    "name": "www.gutenberg.org/contact",
+    "type": "Artifact",
+    "description": "",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "IRS": {
+    "name": "IRS",
+    "type": "Organization",
+    "description": "",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "Professor Michael S. Hart": {
+    "name": "Professor Michael S. Hart",
+    "type": "Person",
+    "description": "",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "Project Gutenberg™ eBooks": {
+    "name": "Project Gutenberg™ eBooks",
+    "type": "Content",
+    "description": "",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "www.gutenberg.org/donate": {
+    "name": "www.gutenberg.org/donate",
+    "type": "Location",
+    "description": "",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "nberg.org": {
+    "name": "nberg.org",
+    "type": "Location",
+    "description": "A website mentioned in the context of Project Gutenberg",
+    "source_id": [
+      "carol_chunk_85"
+    ]
+  },
+  "eBooks": {
+    "name": "eBooks",
+    "type": "Content",
+    "description": "Digital books produced by or related to Project Gutenberg",
+    "source_id": [
+      "carol_chunk_85"
+    ]
+  },
+  "email newsletter": {
+    "name": "email newsletter",
+    "type": "Content",
+    "description": "A digital communication sent out by Project Gutenberg to inform subscribers about new eBooks",
+    "source_id": [
+      "carol_chunk_85"
+    ]
+  }
+}

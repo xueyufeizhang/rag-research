@@ -1,0 +1,7 @@
+python-dotenv
+httpx
+openai
+json-repair
+numpy
+networkx
+pyvis
