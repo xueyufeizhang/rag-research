@@ -68,12 +68,6 @@ To explore the resulting graph visually:
 uv run python visual.py
 ```
 
-## Status
-
-**Implemented:** chunking, concurrent LLM-based entity/relation extraction (with retry and partial-failure tolerance), dedup/merge, KV + vector + graph storage, naive/local/global/hybrid retrieval, graph visualization.
-
-**In progress:** retrieval ranking and context-size control for graph-aware modes.
-
 ## License
 
 MIT — see [LICENSE](LICENSE).
