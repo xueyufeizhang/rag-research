@@ -41,4 +41,4 @@ for u, v, attrs in G.edges(data=True):
 
 net = Network(height="900px", width="100%", notebook=False)
 net.from_nx(G)
-net.show("./replicate/knowledge_graph.html", notebook=False)
+net.show("./knowledge_graph.html", notebook=False)

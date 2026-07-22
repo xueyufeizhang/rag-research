@@ -15,7 +15,7 @@ API_MODEL = os.getenv("API_MODEL", "")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "")
 OLLAMA_MODEL = os.getenv("LLM_MODEL", "")
 
-ENBED_MODEL = os.getenv("EMBED_MODEL", "")
+EMBED_MODEL = os.getenv("EMBED_MODEL", "")
 EXTRACTION_TIMEOUT = int(os.getenv("EXTRACTION_TIMEOUT", 600))
 
 api_client = AsyncOpenAI(base_url=API_BASE_URL, api_key=API_KEY) if LLM_BACKEND == "api" else None
@@ -52,14 +52,14 @@ async def embed_func(text: str) -> list[float]:
      async with httpx.AsyncClient() as client:
           response = await client.post(
                f"{OLLAMA_BASE_URL}/api/embed",
-               json={"model": ENBED_MODEL, "input": text},
+               json={"model": EMBED_MODEL, "input": text},
                timeout=EXTRACTION_TIMEOUT
           )
           return response.json()["embeddings"][0]
 
 
 async def main():
-     lightrag = LightRAG(os.getenv("WORKING_DIR", "./replicate/dickens"), llm_func, CON_NUM, embed_func)
+     lightrag = LightRAG(os.getenv("WORKING_DIR", "./dickens"), llm_func, CON_NUM, embed_func)
      with open("./carol.txt", "r", encoding="utf-8")as f: 
           await lightrag.construct(f.read(), "carol")
      answer =  await lightrag.retrieve("Who is Scrooge?", mode="naive")

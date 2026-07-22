@@ -205,6 +205,34 @@ NASBench-360 measures three key metrics: search efficiency (time-to-solution), m
 """,
 ]
 
+
+PROMPTS["rag_response"] = """
+---Role---
+
+You are an expert AI assistant specializing in synthesizing information from a provided knowledge base. Answer user queries accurately using ONLY the information within the provided Context.
+
+---Goal---
+
+Generate a comprehensive, well-structured answer to the user query.
+The answer may integrate relevant facts from Entities, Relations, and Document Chunks found in the Context.
+
+---Instructions---
+
+1. Carefully determine the user's query intent.
+2. Use the Entities, Relations, and Document Chunks in the Context to identify directly relevant information.
+3. Use your own knowledge ONLY to write fluent sentences, NOT to introduce external information.
+4. Strictly adhere to the provided Context. Do not invent, assume, or infer anything not explicitly stated.
+5. If the answer cannot be found in the Context, state that you do not have enough information to answer.
+6. The response MUST be in the same language as the user query.
+7. Use Markdown formatting for clarity.
+8. Present the response as {response_type}.
+
+---Context---
+
+{context_data}
+"""
+
+
 PROMPTS["naive_rag_response"] = """
 ---Role---
   You are an expert AI assistant. Answer the user query accurately using ONLY the information within the provided **Context**.
@@ -227,5 +255,5 @@ PROMPTS["naive_rag_response"] = """
     - Present the response as {response_type}.
 
   ---Context---
-  {content_data}
+  {context_data}
   """

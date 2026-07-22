@@ -12,9 +12,11 @@ load_dotenv()
 
 @dataclass
 class LightRAGConfig:
-    chunk_size: int = int(os.getenv("CHUNK_SIZE"))
-    chunk_overlap_size: int = int(os.getenv("CHUNK_OVERLAP_SIZE"))
-    chunk_top_k: int = int(os.getenv("CHUNK_TOP_K"))
+    chunk_size: int = int(os.getenv("CHUNK_SIZE", 2400))
+    chunk_overlap_size: int = int(os.getenv("CHUNK_OVERLAP_SIZE", 200))
+    chunk_top_k: int = int(os.getenv("CHUNK_TOP_K", 5))
+    entity_top_k: int = int(os.getenv("ENTITY_TOP_K", 5))
+    relation_top_k: int = int(os.getenv("RELATION_TOP_K", 5))
 
 
 class LightRAG:
@@ -51,19 +53,160 @@ class LightRAG:
     def _build_context(self, entities: list[dict], relations: list[dict], chunks: list[dict]) -> str:
         parts = []
         if entities:
-            pass
+            entity_lines = "\n".join(json.dumps(
+                {
+                    "name": e.get("name", ""),
+                    "type": e.get("type", ""),
+                    "description": e.get("description", ""),
+                },
+                ensure_ascii=False,
+            ) for e in entities)
+            parts.append("-----Entities-----\n" + entity_lines)
         if relations:
-            pass
+            relation_lines = "\n".join(json.dumps(
+                {
+                    "source": r.get("source", ""),
+                    "target": r.get("target", ""),
+                    "keywords": r.get("keywords", []),
+                    "description": r.get("description", ""),
+                },
+                ensure_ascii=False,
+            ) for r in relations)
+            parts.append("-----Relations-----\n" + relation_lines)
         if chunks:
-            lines = "\n".join(json.dumps(
-                {"content": c["text"]}, ensure_ascii=False) for c in chunks)
-            parts.append("-----Chunks-----\n" + lines)
+            chunk_lines = "\n".join(json.dumps(
+                {"content": c.get("text", "")},
+                ensure_ascii=False,
+            ) for c in chunks if c)
+            parts.append("-----Chunks-----\n" + chunk_lines)
         return "\n\n".join(parts)
+
+    def _get_relations_from_entities(self, entities: list[dict]) -> list[dict]:
+        relations = []
+        seen = set()
+
+        for entity in entities:
+            name = entity.get("name")
+            if not name or self.graph.get_node(name) is None:
+                continue
+
+            for nb in self.graph.get_neighbors(name):
+                relation_key = "||".join(sorted([name, nb]))
+                if relation_key in seen:
+                    continue
+                relation = self.relation_kv.get(relation_key)
+                if relation:
+                    relations.append(relation)
+                    seen.add(relation_key)
+        return relations
+
+    def _get_entities_from_relations(self, relations: list[dict]) -> list[dict]:
+        entities = []
+        seen = set()
+
+        for relation in relations:
+            for node in (relation.get("source"), relation.get("target")):
+                if not node or node in seen:
+                    continue
+                entity = self.entity_kv.get(node)
+                if entity:
+                    entities.append(entity)
+                    seen.add(node)
+        return entities
+
+    def _get_chunks_by_source_ids(self, source_ids: list[str]) -> list[dict]:
+        chunks = []
+        seen = set()
+        for sid in source_ids:
+            if not sid or sid in seen:
+                continue
+            chunk = self.chunk_kv.get(sid)
+            if not chunk:
+                continue
+            chunks.append(chunk)
+            seen.add(sid)
+        return chunks
     
     async def _naive_retrieve(self, query: str) -> list[dict]:
         emb = await self.embed_func(query)
         hits = self.chunk_vidx.query(emb, self.config.chunk_top_k)   # [(chunk_key, score)]
         return [self.chunk_kv.get(k) for k, _ in hits if self.chunk_kv.get(k)]
+
+    async def _local_retrieve(self, query: str) -> tuple[list[dict], list[dict], list[dict]]:
+        emb = await self.embed_func(query)
+        hits = self.entity_vidx.query(emb, self.config.entity_top_k)
+        entities = [self.entity_kv.get(k) for k, _ in hits if self.entity_kv.get(k)]
+        relations = self._get_relations_from_entities(entities)
+
+        source_ids = []
+        for e in entities:
+            source_ids.extend(e.get("source_id", []))
+        for r in relations:
+            source_ids.extend(r.get("source_id", []))
+        chunks = self._get_chunks_by_source_ids(source_ids)
+        return entities, relations, chunks
+
+    async def _global_retrieve(self, query: str) -> tuple[list[dict], list[dict], list[dict]]:
+        emb = await self.embed_func(query)
+        hits = self.relation_vidx.query(emb, self.config.relation_top_k)
+        relations = [self.relation_kv.get(k) for k, _ in hits if self.relation_kv.get(k)]
+        entities = self._get_entities_from_relations(relations)
+
+        source_ids = []
+        # for e in entities:
+        #     source_ids.extend(e.get("source_id", []))
+        for r in relations:
+            source_ids.extend(r.get("source_id", []))
+        chunks = self._get_chunks_by_source_ids(source_ids)
+        return entities, relations, chunks
+
+    def _dedupe_entities(self, entities: list[dict]) -> list[dict]:
+        output_entities = []
+        seen = set()
+
+        for entity in entities:
+            key = entity.get("name")
+            if not key or key in seen:
+                continue
+            output_entities.append(entity)
+            seen.add(key)
+        return output_entities
+
+    def _dedupe_relations(self, relations: list[dict]) -> list[dict]:
+        output_relations = []
+        seen = set()
+
+        for relation in relations:
+            source = relation.get("source")
+            target = relation.get("target")
+            if not source or not target:
+                continue
+            key = "||".join(sorted([source, target]))
+            if key in seen:
+                continue
+            output_relations.append(relation)
+            seen.add(key)
+        return output_relations
+
+    def _dedupe_chunks(self, chunks: list[dict]) -> list[dict]:
+        output_chunks = []
+        seen = set()
+
+        for chunk in chunks:
+            key = chunk.get("text")
+            if not key or key in seen:
+                continue
+            output_chunks.append(chunk)
+            seen.add(key)
+        return output_chunks
+
+    async def _hybrid_retrieve(self, query: str) -> tuple[list[dict], list[dict], list[dict]]:
+        local_entities, local_relations, local_chunks = await self._local_retrieve(query)
+        global_entities, global_relations, global_chunks = await self._global_retrieve(query)
+        entities = self._dedupe_entities(local_entities + global_entities)
+        relations = self._dedupe_relations(local_relations + global_relations)
+        chunks = self._dedupe_chunks(local_chunks + global_chunks)
+        return entities, relations, chunks
 
 
     async def construct(self, documents: str, file_id: str = "") -> None:
@@ -133,15 +276,30 @@ class LightRAG:
     async def retrieve(self, query: str, mode: str = 'hybrid') -> str:
         """
         1. Naive 👌
-        2. Local
-        3. Global
-        4. Hybrid
+        2. Local 👌
+        3. Global 👌
+        4. Hybrid 👌
         """
         if mode == "naive":
             chunks = await self._naive_retrieve(query)
             context = self._build_context([], [], chunks)
             print(f"\n[retrieved {len(chunks)} chunks]\n{context[:500]}\n---\n")
+            system_prompt = PROMPTS["naive_rag_response"].format(response_type="Multiple Paragraphs", context_data=context)
+        elif mode == "local":
+            entities, relations, chunks = await self._local_retrieve(query)
+            context = self._build_context(entities, relations, chunks)
+            system_prompt = PROMPTS["rag_response"].format(response_type="Multiple Paragraphs", context_data=context)
+        elif mode == "global":
+            entities, relations, chunks = await self._global_retrieve(query)
+            context = self._build_context(entities, relations, chunks)
+            system_prompt = PROMPTS["rag_response"].format(response_type="Multiple Paragraphs", context_data=context)
+        elif mode == "hybrid":
+            entities, relations, chunks = await self._hybrid_retrieve(query)
+            context = self._build_context(entities, relations, chunks)
+            system_prompt = PROMPTS["rag_response"].format(response_type="Multiple Paragraphs", context_data=context)
         else:
-            NotImplementedError(mode)
-        system_prompt = PROMPTS["naive_rag_response"].format(content_data=context, response_type="Multiple Paragraphs")
+            raise ValueError(f"unknown retrieval mode: {mode}")
+
+        if mode in ["local", "global", "hybrid"]:
+            print(f"\n[retrieved {len(entities)} entities, {len(relations)} relations, and {len(chunks)} chunks]\n{context[:500]}\n-----\n")
         return await self.llm_func(system=system_prompt, prompt=query)

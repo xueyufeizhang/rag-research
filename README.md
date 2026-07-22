@@ -9,7 +9,11 @@
    - `KVStore` — key/value store for entities, relations, and chunks
    - `VectorIndex` — flat numpy cosine-similarity index (separate indexes for entities, relations, chunks)
    - `GraphStore` — a `networkx` graph, persisted via `node_link_data`
-5. **Retrieval** (`core.py`, `LightRAG.retrieve`) — **naive** mode is implemented: embed the query, take cosine top-k over the chunk vector index, and feed the retrieved chunks to the LLM as context. `local` and `global` (graph-aware retrieval over entities/relations) are under implementation.
+5. **Retrieval** (`core.py`, `LightRAG.retrieve`) — four modes are implemented:
+   - `naive` — chunk-vector retrieval only
+   - `local` — entity-vector retrieval plus one-hop graph expansion
+   - `global` — relation-vector retrieval plus endpoint entity lookup
+   - `hybrid` — merges local and global retrieval results
 6. **Visualization** (`visual.py`) — loads a persisted `graph.json` and renders an HTML graph with `pyvis`.
 
 ## Project layout
@@ -32,12 +36,11 @@ knowledge_graph.html    pre-rendered visualization of dickens/graph.json
 ```bash
 git clone https://github.com/xueyufeizhang/lightrag-replication.git
 cd lightrag-replication
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+uv sync
 cp .env.example .env   # then fill in values for your setup
 ```
 
-Requires Python 3.10+.
+Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
 
 ### LLM backend
 
@@ -54,22 +57,22 @@ See `.env.example` for the full list of configuration variables (chunking size/o
 ## Usage
 
 ```bash
-python main.py
+uv run python main.py
 ```
 
-This builds the KV/vector/graph stores under `WORKING_DIR` (skipping construction if a store already exists there) and prints an answer to a sample query ("Who is Scrooge?") using naive retrieval.
+This builds the KV/vector/graph stores under `WORKING_DIR` (skipping construction if a store already exists there) and prints an answer to a sample query ("Who is Scrooge?"). Retrieval mode can be selected in `main.py`.
 
 To explore the resulting graph visually:
 
 ```bash
-python visual.py
+uv run python visual.py
 ```
 
 ## Status
 
-**Implemented:** chunking, concurrent LLM-based entity/relation extraction (with retry and partial-failure tolerance), dedup/merge, KV + vector + graph storage, naive (vector-only) retrieval, graph visualization.
+**Implemented:** chunking, concurrent LLM-based entity/relation extraction (with retry and partial-failure tolerance), dedup/merge, KV + vector + graph storage, naive/local/global/hybrid retrieval, graph visualization.
 
-**In progress:** `local` and `global` graph-aware retrieval modes (`core.py`, `LightRAG.retrieve`) are actively being developed, not yet functional; `hybrid` is planned once both land.
+**In progress:** retrieval ranking and context-size control for graph-aware modes.
 
 ## License
 
