@@ -57,7 +57,7 @@ def summarize_mode(mode: str, mode_results: list[dict]) -> dict:
         "chunk_hit_rate": sum(r["chunk_metrics"]["hit"] for r in mode_results) / total,
     }
 
-async def evaluate() -> tuple[list[dict], list[dict]]:
+async def eval_retrieval() -> tuple[list[dict], list[dict]]:
     lightrag = LightRAG(os.getenv("WORKING_DIR", "./dickens"), llm_func, CON_NUM, embed_func)
     with open("./carol.txt", "r", encoding="utf-8")as f: 
         await lightrag.construct(f.read(), "carol")
@@ -116,7 +116,7 @@ async def evaluate() -> tuple[list[dict], list[dict]]:
 
 if __name__ == "__main__":
     import asyncio
-    results, summaries = asyncio.run(evaluate())
+    results, summaries = asyncio.run(eval_retrieval())
 
     os.makedirs("./eval/runs", exist_ok=True)
     with open("./eval/runs/retrieval_eval_results.json", "w", encoding="utf-8") as f:
