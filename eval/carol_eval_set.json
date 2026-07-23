@@ -1,0 +1,403 @@
+{
+  "dataset": "a_christmas_carol",
+  "version": "0.1",
+  "source_store": "dickens",
+  "description": "A manually annotated evaluation set on A Christmas Carol.",
+  "annotation_schema": {
+    "gold_entities": "Core entity names that should be retrieved or used to answer the question.",
+    "gold_relations": "Core relation keys from dickens/relations.json. Relation keys are unordered source||target pairs.",
+    "gold_chunks": "Core supporting chunk ids from dickens/chunks.json.",
+    "gold_answer_points": "Atomic facts expected in a grounded answer.",
+    "expected_keyword_groups": "Keyword or synonym groups for lightweight answer coverage scoring. A group is satisfied if any item appears."
+  },
+  "questions": [
+    {
+      "id": "carol_easy_001",
+      "difficulty": "easy",
+      "question_type": "entity",
+      "question": "Who is Jacob Marley, and why is he important to Scrooge?",
+      "gold_entities": ["Jacob Marley", "Scrooge", "The Chain"],
+      "gold_relations": ["Marley||Scrooge", "Jacob Marley||Scrooge", "Jacob Marley||The Chain"],
+      "gold_chunks": ["carol_chunk_5", "carol_chunk_15", "carol_chunk_17", "carol_chunk_19"],
+      "gold_answer_points": [
+        "Jacob Marley is Scrooge's dead former business partner.",
+        "Marley appears as a ghost to warn Scrooge.",
+        "Marley's chain symbolizes the consequences of his life and choices.",
+        "Marley tells Scrooge he still has a chance to escape the same fate."
+      ],
+      "expected_keyword_groups": [["partner", "business partner"], ["ghost", "spectre"], ["chain"], ["warn", "chance", "hope"]]
+    },
+    {
+      "id": "carol_easy_002",
+      "difficulty": "easy",
+      "question_type": "entity",
+      "question": "Who is Bob Cratchit in relation to Scrooge?",
+      "gold_entities": ["Bob Cratchit", "Scrooge", "Tiny Tim"],
+      "gold_relations": ["Bob Cratchit||Tiny Tim", "Scrooge||Tiny Tim"],
+      "gold_chunks": ["carol_chunk_6", "carol_chunk_43", "carol_chunk_44", "carol_chunk_76"],
+      "gold_answer_points": [
+        "Bob Cratchit is Scrooge's clerk.",
+        "Bob works in cold and poor conditions under Scrooge.",
+        "Bob is Tiny Tim's father.",
+        "After Scrooge changes, Scrooge raises Bob's salary and treats him better."
+      ],
+      "expected_keyword_groups": [["clerk"], ["cold", "coal"], ["Tiny Tim"], ["salary", "raise"]]
+    },
+    {
+      "id": "carol_easy_003",
+      "difficulty": "easy",
+      "question_type": "relation",
+      "question": "How does Fred treat Scrooge despite Scrooge's hostility?",
+      "gold_entities": ["Fred", "Scrooge"],
+      "gold_relations": ["Fred||Scrooge"],
+      "gold_chunks": ["carol_chunk_8", "carol_chunk_55", "carol_chunk_74", "carol_chunk_75"],
+      "gold_answer_points": [
+        "Fred invites Scrooge to Christmas dinner despite being rejected.",
+        "Fred remains cheerful and good-natured toward Scrooge.",
+        "Fred's household later welcomes Scrooge warmly.",
+        "Fred's conduct contrasts with Scrooge's isolation and bitterness."
+      ],
+      "expected_keyword_groups": [["invite", "dinner"], ["cheerful", "good-natured"], ["welcome", "let me in"], ["contrast"]]
+    },
+    {
+      "id": "carol_easy_004",
+      "difficulty": "easy",
+      "question_type": "entity",
+      "question": "What kind of employer is Fezziwig in Scrooge's memory?",
+      "gold_entities": ["Fezziwig", "Scrooge", "Dick Wilkins"],
+      "gold_relations": ["Fezziwig||Scrooge", "Dick Wilkins||Fezziwig"],
+      "gold_chunks": ["carol_chunk_29", "carol_chunk_31", "carol_chunk_32"],
+      "gold_answer_points": [
+        "Fezziwig is Scrooge's former employer.",
+        "Fezziwig stops work for Christmas Eve and hosts a joyful celebration.",
+        "Fezziwig treats his apprentices warmly.",
+        "The memory makes Scrooge think about how he treats his own clerk."
+      ],
+      "expected_keyword_groups": [["employer", "master"], ["Christmas Eve"], ["dance", "ball", "celebration"], ["clerk"]]
+    },
+    {
+      "id": "carol_easy_005",
+      "difficulty": "easy",
+      "question_type": "entity",
+      "question": "What are Ignorance and Want, and what warning do they carry?",
+      "gold_entities": ["Ignorance", "Want", "The Spirit"],
+      "gold_relations": ["Ignorance||Want", "Ignorance||The Spirit", "The Spirit||Want"],
+      "gold_chunks": ["carol_chunk_57"],
+      "gold_answer_points": [
+        "Ignorance and Want are two children revealed by the Ghost of Christmas Present.",
+        "They belong to mankind rather than to the Spirit personally.",
+        "The Spirit warns Scrooge to beware of both children, especially Ignorance.",
+        "Their appearance connects social neglect with future doom."
+      ],
+      "expected_keyword_groups": [["Ignorance"], ["Want"], ["children"], ["beware", "Doom"]]
+    },
+    {
+      "id": "carol_easy_006",
+      "difficulty": "easy",
+      "question_type": "entity",
+      "question": "What actions show that Scrooge has changed on Christmas morning?",
+      "gold_entities": ["Scrooge", "Bob Cratchit", "Tiny Tim", "Fred", "Prize Turkey"],
+      "gold_relations": ["Prize Turkey||Scrooge", "Scrooge||Turkey", "Fred||Scrooge", "Scrooge||Tiny Tim"],
+      "gold_chunks": ["carol_chunk_72", "carol_chunk_74", "carol_chunk_75", "carol_chunk_76"],
+      "gold_answer_points": [
+        "Scrooge wakes joyfully on Christmas Day.",
+        "Scrooge buys or sends a large turkey for the Cratchit family.",
+        "Scrooge makes amends through charitable giving and social warmth.",
+        "Scrooge raises Bob Cratchit's salary and becomes a second father to Tiny Tim."
+      ],
+      "expected_keyword_groups": [["Christmas Day"], ["turkey"], ["charity", "back-payments", "munificence"], ["salary"], ["second father"]]
+    },
+    {
+      "id": "carol_medium_001",
+      "difficulty": "medium",
+      "question_type": "entity",
+      "question": "How is Scrooge characterized before any supernatural visitations occur?",
+      "gold_entities": ["Scrooge", "Marley"],
+      "gold_relations": ["Marley||Scrooge"],
+      "gold_chunks": ["carol_chunk_5", "carol_chunk_6", "carol_chunk_8", "carol_chunk_9"],
+      "gold_answer_points": [
+        "Scrooge is described as tight-fisted, covetous, cold, and solitary.",
+        "He resists warmth, generosity, and social connection.",
+        "He rejects Fred's Christmas invitation.",
+        "He refuses charitable appeals for the poor."
+      ],
+      "expected_keyword_groups": [["tight-fisted", "covetous", "miserly"], ["cold", "solitary"], ["humbug", "Christmas"], ["poor", "charity"]]
+    },
+    {
+      "id": "carol_medium_002",
+      "difficulty": "medium",
+      "question_type": "relation",
+      "question": "How does Scrooge respond to requests for charity, and what does this reveal about his worldview?",
+      "gold_entities": ["Scrooge", "Prisons", "Union Workhouses", "Poor Law", "Surplus Population"],
+      "gold_relations": ["Prisons||Scrooge", "Scrooge||Union Workhouses", "Poor Law||Scrooge", "Scrooge||Surplus Population"],
+      "gold_chunks": ["carol_chunk_9", "carol_chunk_57"],
+      "gold_answer_points": [
+        "Scrooge refuses to contribute to charitable relief.",
+        "He points to prisons and workhouses as existing institutions for the poor.",
+        "He repeats or endorses language about reducing the surplus population.",
+        "The Ghost later turns these words back on him as moral criticism."
+      ],
+      "expected_keyword_groups": [["charity", "poor", "destitute"], ["prisons"], ["workhouses"], ["surplus population"], ["rebuke"]]
+    },
+    {
+      "id": "carol_medium_003",
+      "difficulty": "medium",
+      "question_type": "relation",
+      "question": "Why does Marley's Ghost say Scrooge is in danger?",
+      "gold_entities": ["Jacob Marley", "Scrooge", "Mankind", "Charity", "The Common Welfare"],
+      "gold_relations": ["Jacob Marley||Scrooge", "Jacob Marley||Mankind", "Charity||Jacob Marley", "Jacob Marley||The Common Welfare"],
+      "gold_chunks": ["carol_chunk_17", "carol_chunk_18", "carol_chunk_19"],
+      "gold_answer_points": [
+        "Marley says every spirit must go among fellow humans and do good.",
+        "Marley suffers because he neglected mankind, charity, mercy, and benevolence.",
+        "Marley's fate is a warning about Scrooge's own worldly life.",
+        "The three Spirits are offered as Scrooge's chance and hope."
+      ],
+      "expected_keyword_groups": [["mankind"], ["charity", "mercy", "benevolence"], ["remorse", "penance"], ["Three Spirits", "chance", "hope"]]
+    },
+    {
+      "id": "carol_medium_004",
+      "difficulty": "medium",
+      "question_type": "entity",
+      "question": "What does the Ghost of Christmas Past reveal about Scrooge's childhood loneliness?",
+      "gold_entities": ["Ghost of Christmas Past", "Scrooge", "Ali Baba", "Fan"],
+      "gold_relations": ["Ghost of Christmas Past||Scrooge"],
+      "gold_chunks": ["carol_chunk_23", "carol_chunk_25", "carol_chunk_26", "carol_chunk_28"],
+      "gold_answer_points": [
+        "The Ghost of Christmas Past takes Scrooge back to his old school.",
+        "Scrooge sees himself as a solitary child neglected by friends.",
+        "Scrooge remembers imaginary companions from books such as Ali Baba.",
+        "The memories soften him emotionally and expose his buried loneliness."
+      ],
+      "expected_keyword_groups": [["Ghost of Christmas Past"], ["school"], ["solitary child", "alone"], ["Ali Baba"], ["sobbed", "gladness"]]
+    },
+    {
+      "id": "carol_medium_005",
+      "difficulty": "medium",
+      "question_type": "relation",
+      "question": "How does Belle's scene explain what Scrooge has lost?",
+      "gold_entities": ["Belle", "Scrooge"],
+      "gold_relations": ["Belle||Scrooge", "Belle||The Husband"],
+      "gold_chunks": ["carol_chunk_32", "carol_chunk_33", "carol_chunk_34", "carol_chunk_35"],
+      "gold_answer_points": [
+        "Belle releases Scrooge because his nature and priorities have changed.",
+        "The scene links Scrooge's emotional loss to his pursuit of wealth.",
+        "A later vision shows Belle in a warm family setting.",
+        "The contrast makes Scrooge confront the domestic happiness he forfeited."
+      ],
+      "expected_keyword_groups": [["Belle"], ["release"], ["changed nature", "altered spirit"], ["wealth", "gold"], ["family", "children"]]
+    },
+    {
+      "id": "carol_medium_006",
+      "difficulty": "medium",
+      "question_type": "relation",
+      "question": "How does the Cratchit Christmas dinner affect Scrooge's view of poverty and family?",
+      "gold_entities": ["Scrooge", "Bob Cratchit", "Tiny Tim", "Mrs. Cratchit"],
+      "gold_relations": ["Bob Cratchit||Tiny Tim", "Bob Cratchit||Mrs. Cratchit", "Scrooge||Tiny Tim"],
+      "gold_chunks": ["carol_chunk_43", "carol_chunk_44", "carol_chunk_46", "carol_chunk_47", "carol_chunk_48"],
+      "gold_answer_points": [
+        "The Cratchits have limited means but share warmth and affection.",
+        "Tiny Tim's condition draws Scrooge's concern.",
+        "Bob toasts Scrooge as the Founder of the Feast despite Mrs. Cratchit's resentment.",
+        "The Ghost rebukes Scrooge by applying his own surplus population language to Tiny Tim."
+      ],
+      "expected_keyword_groups": [["Cratchit"], ["Tiny Tim"], ["Founder of the Feast"], ["poor man's child"], ["surplus population"]]
+    },
+    {
+      "id": "carol_medium_007",
+      "difficulty": "medium",
+      "question_type": "theme",
+      "question": "What does Fred's Christmas party show Scrooge about social warmth?",
+      "gold_entities": ["Fred", "Scrooge"],
+      "gold_relations": ["Fred||Scrooge"],
+      "gold_chunks": ["carol_chunk_53", "carol_chunk_54", "carol_chunk_55", "carol_chunk_75"],
+      "gold_answer_points": [
+        "Fred's household is musical, playful, and welcoming.",
+        "Scrooge sees himself become the subject of a laughing guessing game.",
+        "The scene presents social joy without material gain.",
+        "Scrooge later returns to Fred's home and is warmly received."
+      ],
+      "expected_keyword_groups": [["party", "games", "music"], ["Fred"], ["laughter"], ["welcome", "dinner"], ["happiness"]]
+    },
+    {
+      "id": "carol_medium_008",
+      "difficulty": "medium",
+      "question_type": "relation",
+      "question": "How does the Ghost of Christmas Yet to Come differ from the earlier spirits?",
+      "gold_entities": ["Scrooge", "Ghost of Christmas Yet to Come", "The Ghost of Christmas Yet to Come"],
+      "gold_relations": ["Ebenezer Scrooge||Ghost of Christmas Yet to Come", "Scrooge||The Ghost of Christmas Yet to Come"],
+      "gold_chunks": ["carol_chunk_58", "carol_chunk_59", "carol_chunk_69", "carol_chunk_70"],
+      "gold_answer_points": [
+        "The Ghost of Christmas Yet to Come is silent and frightening.",
+        "It shows Scrooge future scenes rather than explaining them directly.",
+        "The scenes lead Scrooge toward the truth of his own death.",
+        "Scrooge is terrified but seeks to learn whether the future can change."
+      ],
+      "expected_keyword_groups": [["silent", "dusky", "shroud"], ["Future"], ["grave"], ["fear", "trembled"], ["change"]]
+    },
+    {
+      "id": "carol_hard_001",
+      "difficulty": "hard",
+      "question_type": "multi-hop",
+      "question": "How do Marley's warning and the three Spirits together push Scrooge toward moral change?",
+      "gold_entities": ["Scrooge", "Jacob Marley", "Ghost of Christmas Past", "Ghost of Christmas Present", "Ghost of Christmas Yet to Come"],
+      "gold_relations": ["Jacob Marley||Scrooge", "Ghost of Christmas Past||Scrooge", "Ghost of Christmas Present||Scrooge", "Scrooge||The Ghost of Christmas Yet to Come"],
+      "gold_chunks": ["carol_chunk_17", "carol_chunk_18", "carol_chunk_19", "carol_chunk_23", "carol_chunk_38", "carol_chunk_57", "carol_chunk_70"],
+      "gold_answer_points": [
+        "Marley frames Scrooge's danger as spiritual and moral.",
+        "The Ghost of Christmas Past exposes Scrooge's earlier loneliness and lost affections.",
+        "The Ghost of Christmas Present reveals living communities, poverty, and social responsibility.",
+        "The Ghost of Christmas Yet to Come shows the consequences of Scrooge's current path.",
+        "Together these visions make Scrooge repent and choose a different course."
+      ],
+      "expected_keyword_groups": [["Marley"], ["Past"], ["Present"], ["Yet to Come", "Future"], ["repent", "change", "altered life"]]
+    },
+    {
+      "id": "carol_hard_002",
+      "difficulty": "hard",
+      "question_type": "multi-hop",
+      "question": "Compare the emotional lessons Scrooge learns from Fezziwig, Belle, and the Cratchit family.",
+      "gold_entities": ["Scrooge", "Fezziwig", "Belle", "Bob Cratchit", "Tiny Tim"],
+      "gold_relations": ["Fezziwig||Scrooge", "Belle||Scrooge", "Bob Cratchit||Tiny Tim", "Scrooge||Tiny Tim"],
+      "gold_chunks": ["carol_chunk_29", "carol_chunk_31", "carol_chunk_32", "carol_chunk_33", "carol_chunk_34", "carol_chunk_44", "carol_chunk_47"],
+      "gold_answer_points": [
+        "Fezziwig teaches that kindness from an employer can create real happiness.",
+        "Belle shows Scrooge what he sacrificed by choosing wealth over love.",
+        "The Cratchit family shows affection, gratitude, and vulnerability despite poverty.",
+        "Together these scenes connect personal memory with social responsibility."
+      ],
+      "expected_keyword_groups": [["Fezziwig"], ["Belle"], ["Cratchit"], ["kindness", "happiness"], ["wealth", "love"], ["responsibility"]]
+    },
+    {
+      "id": "carol_hard_003",
+      "difficulty": "hard",
+      "question_type": "theme",
+      "question": "How does the story use cold and warmth to contrast Scrooge's character with Christmas generosity?",
+      "gold_entities": ["Scrooge", "Ghost of Christmas Present", "Bob Cratchit", "Fred"],
+      "gold_relations": ["Fred||Scrooge", "Bob Cratchit||Tiny Tim", "Ghost of Christmas Present||Scrooge"],
+      "gold_chunks": ["carol_chunk_5", "carol_chunk_6", "carol_chunk_38", "carol_chunk_43", "carol_chunk_46", "carol_chunk_72"],
+      "gold_answer_points": [
+        "Early Scrooge is associated with coldness, hardness, and lack of warmth.",
+        "His office and clerk's fire reflect his emotional stinginess.",
+        "The Ghost of Christmas Present appears amid abundant festive warmth.",
+        "The Cratchit household is materially poor but emotionally warm.",
+        "Christmas morning reverses the cold imagery with brightness and joy."
+      ],
+      "expected_keyword_groups": [["cold", "frost", "flint"], ["fire", "coal"], ["abundance", "plum-puddings", "torch"], ["Cratchit"], ["bright", "jovial"]]
+    },
+    {
+      "id": "carol_hard_004",
+      "difficulty": "hard",
+      "question_type": "multi-hop",
+      "question": "How does Tiny Tim function as a moral test for Scrooge?",
+      "gold_entities": ["Tiny Tim", "Scrooge", "Bob Cratchit", "Ghost of Christmas Present", "The Ghost of Christmas Yet to Come"],
+      "gold_relations": ["Bob Cratchit||Tiny Tim", "Scrooge||Tiny Tim", "The Ghost of Christmas Yet to Come||Tiny Tim"],
+      "gold_chunks": ["carol_chunk_44", "carol_chunk_46", "carol_chunk_47", "carol_chunk_67", "carol_chunk_68", "carol_chunk_69", "carol_chunk_76"],
+      "gold_answer_points": [
+        "Tiny Tim's frailty awakens Scrooge's concern.",
+        "The Ghost of Christmas Present rebukes Scrooge with his own harsh logic about surplus population.",
+        "The future vision of Tiny Tim's absence deepens the moral stakes.",
+        "After changing, Scrooge becomes a second father to Tiny Tim."
+      ],
+      "expected_keyword_groups": [["Tiny Tim"], ["cripple", "frail"], ["surplus population"], ["future", "absence", "death"], ["second father"]]
+    },
+    {
+      "id": "carol_hard_005",
+      "difficulty": "hard",
+      "question_type": "theme",
+      "question": "How does Dickens connect private greed with public social harm?",
+      "gold_entities": ["Scrooge", "Jacob Marley", "Ignorance", "Want", "Prisons", "Union Workhouses"],
+      "gold_relations": ["Prisons||Scrooge", "Scrooge||Union Workhouses", "Scrooge||Surplus Population", "Jacob Marley||Mankind", "Ignorance||Want"],
+      "gold_chunks": ["carol_chunk_9", "carol_chunk_17", "carol_chunk_18", "carol_chunk_47", "carol_chunk_57"],
+      "gold_answer_points": [
+        "Scrooge treats poverty as someone else's institutional problem.",
+        "Marley frames neglect of mankind as a spiritual failure.",
+        "The Ghost of Christmas Present exposes Ignorance and Want as human responsibilities.",
+        "The narrative criticizes wealth without compassion as socially destructive."
+      ],
+      "expected_keyword_groups": [["greed", "wealth"], ["poor", "destitute"], ["mankind"], ["Ignorance"], ["Want"], ["workhouses", "prisons"]]
+    },
+    {
+      "id": "carol_hard_006",
+      "difficulty": "hard",
+      "question_type": "multi-hop",
+      "question": "How do the future visions show Scrooge the consequences of being unloved?",
+      "gold_entities": ["Scrooge", "Old Joe", "Mrs. Dilber", "Bob Cratchit", "Tiny Tim"],
+      "gold_relations": ["Old Joe||The Charwoman", "Mrs. Dilber||Old Joe", "Bob Cratchit||Tiny Tim", "Scrooge||The Ghost of Christmas Yet to Come"],
+      "gold_chunks": ["carol_chunk_59", "carol_chunk_61", "carol_chunk_62", "carol_chunk_64", "carol_chunk_65", "carol_chunk_67", "carol_chunk_70"],
+      "gold_answer_points": [
+        "Businessmen speak of the dead man casually and without grief.",
+        "People strip and sell the dead man's belongings at Old Joe's shop.",
+        "The lonely corpse contrasts with the Cratchit family's grief over Tiny Tim.",
+        "Scrooge realizes the dead man's fate may be his own.",
+        "Seeing his own grave makes Scrooge beg to change his life."
+      ],
+      "expected_keyword_groups": [["cheap funeral"], ["Old Joe"], ["bed-curtains", "shirt"], ["lonely", "unloved"], ["grave"], ["change"]]
+    },
+    {
+      "id": "carol_hard_007",
+      "difficulty": "hard",
+      "question_type": "relation",
+      "question": "Why is the contrast between Bob Cratchit's toast and Mrs. Cratchit's reaction important?",
+      "gold_entities": ["Bob Cratchit", "Mrs. Cratchit", "Scrooge", "Tiny Tim"],
+      "gold_relations": ["Bob Cratchit||Mrs. Cratchit", "Bob Cratchit||Tiny Tim", "Scrooge||Tiny Tim"],
+      "gold_chunks": ["carol_chunk_46", "carol_chunk_47"],
+      "gold_answer_points": [
+        "Bob calls Scrooge the Founder of the Feast.",
+        "Mrs. Cratchit resents Scrooge because of his treatment of the family.",
+        "Bob tries to preserve Christmas goodwill despite hardship.",
+        "The contrast shows both Bob's generosity and the real harm caused by Scrooge."
+      ],
+      "expected_keyword_groups": [["Founder of the Feast"], ["Mrs. Cratchit"], ["resent", "piece of my mind"], ["Christmas Day"], ["goodwill"]]
+    },
+    {
+      "id": "carol_hard_008",
+      "difficulty": "hard",
+      "question_type": "theme",
+      "question": "How does Scrooge's understanding of business change across the story?",
+      "gold_entities": ["Scrooge", "Jacob Marley", "Fezziwig", "Bob Cratchit"],
+      "gold_relations": ["Marley||Scrooge", "Jacob Marley||Mankind", "Fezziwig||Scrooge", "Bob Cratchit||Tiny Tim"],
+      "gold_chunks": ["carol_chunk_5", "carol_chunk_17", "carol_chunk_18", "carol_chunk_29", "carol_chunk_31", "carol_chunk_76"],
+      "gold_answer_points": [
+        "At first Scrooge treats business as money-making and control.",
+        "Marley says mankind was his business, challenging Scrooge's narrow view.",
+        "Fezziwig shows that an employer's small kindness can create great happiness.",
+        "Scrooge eventually changes how he treats Bob Cratchit as an employer."
+      ],
+      "expected_keyword_groups": [["business"], ["mankind"], ["Fezziwig"], ["employer", "master"], ["salary", "Bob Cratchit"]]
+    },
+    {
+      "id": "carol_hard_009",
+      "difficulty": "hard",
+      "question_type": "multi-hop",
+      "question": "How do Scrooge's memories of childhood and lost love prepare him for his later concern for Tiny Tim?",
+      "gold_entities": ["Scrooge", "Ghost of Christmas Past", "Belle", "Tiny Tim", "Bob Cratchit"],
+      "gold_relations": ["Ghost of Christmas Past||Scrooge", "Belle||Scrooge", "Bob Cratchit||Tiny Tim", "Scrooge||Tiny Tim"],
+      "gold_chunks": ["carol_chunk_25", "carol_chunk_26", "carol_chunk_33", "carol_chunk_34", "carol_chunk_44", "carol_chunk_47"],
+      "gold_answer_points": [
+        "The childhood scenes reveal Scrooge's own loneliness and vulnerability.",
+        "Belle's scene exposes the emotional cost of Scrooge's devotion to wealth.",
+        "These memories soften Scrooge before he sees the Cratchit family.",
+        "Tiny Tim's vulnerability becomes morally legible because Scrooge has reencountered his own buried feeling."
+      ],
+      "expected_keyword_groups": [["childhood", "solitary"], ["Belle"], ["wealth"], ["soften", "emotion"], ["Tiny Tim"]]
+    },
+    {
+      "id": "carol_hard_010",
+      "difficulty": "hard",
+      "question_type": "theme",
+      "question": "What evidence shows that Scrooge's transformation is social rather than only private?",
+      "gold_entities": ["Scrooge", "Bob Cratchit", "Tiny Tim", "Fred", "Prize Turkey"],
+      "gold_relations": ["Prize Turkey||Scrooge", "Fred||Scrooge", "Scrooge||Tiny Tim", "Scrooge||Turkey"],
+      "gold_chunks": ["carol_chunk_72", "carol_chunk_74", "carol_chunk_75", "carol_chunk_76"],
+      "gold_answer_points": [
+        "Scrooge's joy immediately turns into action toward others.",
+        "He sends a turkey to the Cratchits.",
+        "He makes charitable amends to the gentleman collector.",
+        "He visits Fred and joins family fellowship.",
+        "He raises Bob Cratchit's salary and supports Tiny Tim."
+      ],
+      "expected_keyword_groups": [["turkey"], ["charity", "back-payments"], ["Fred"], ["salary"], ["Tiny Tim", "second father"]]
+    }
+  ]
+}

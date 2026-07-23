@@ -280,6 +280,7 @@ dependencies = [
     { name = "openai" },
     { name = "python-dotenv" },
     { name = "pyvis" },
+    { name = "tqdm" },
 ]
 
 [package.metadata]
@@ -291,6 +292,7 @@ requires-dist = [
     { name = "openai", specifier = ">=2.46.0" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "pyvis", specifier = ">=0.3.2" },
+    { name = "tqdm", specifier = ">=4.69.0" },
 ]
 
 [[package]]

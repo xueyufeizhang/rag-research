@@ -121,16 +121,27 @@ class LightRAG:
             if not sid or sid in seen:
                 continue
             chunk = self.chunk_kv.get(sid)
-            if not chunk:
-                continue
-            chunks.append(chunk)
-            seen.add(sid)
+            if chunk:
+                chunks.append({
+                    **chunk,
+                    "chunk_id": sid,
+                })
+                seen.add(sid)
         return chunks
     
     async def _naive_retrieve(self, query: str) -> list[dict]:
         emb = await self.embed_func(query)
         hits = self.chunk_vidx.query(emb, self.config.chunk_top_k)   # [(chunk_key, score)]
-        return [self.chunk_kv.get(k) for k, _ in hits if self.chunk_kv.get(k)]
+        chunks = []
+        for k, score in hits:
+            chunk = self.chunk_kv.get(k)
+            if chunk:
+                chunks.append({
+                    **chunk,
+                    "chunk_id": k,
+                    "score": score,
+                })
+        return chunks
 
     async def _local_retrieve(self, query: str) -> tuple[list[dict], list[dict], list[dict]]:
         emb = await self.embed_func(query)
@@ -267,7 +278,7 @@ class LightRAG:
 
         for i in range(len(chunks)):
             key = f"{file_id}_chunk_{i+1}"
-            self.chunk_kv.set(key, {"text": chunks[i], "file_id": file_id})
+            self.chunk_kv.set(key, {"chunk_id": key, "text": chunks[i], "file_id": file_id})
             self.chunk_vidx.add(key, await self.embed_func(chunks[i]))
 
         self._save_all()
@@ -303,3 +314,44 @@ class LightRAG:
         if mode in ["local", "global", "hybrid"]:
             print(f"\n[retrieved {len(entities)} entities, {len(relations)} relations, and {len(chunks)} chunks]\n{context[:500]}\n-----\n")
         return await self.llm_func(system=system_prompt, prompt=query)
+
+
+    def _relation_key(self, relation: dict) -> str:
+        source = relation.get("source")
+        target = relation.get("target")
+        if not source or not target:
+            return ""
+        return "||".join(sorted([source, target]))
+
+    async def retrieve_trace(self, query: str, mode: str = "hybrid") -> dict:
+        if mode == "naive":
+            chunks = await self._naive_retrieve(query)
+            entities, relations = [], []
+        elif mode == "local":
+            entities, relations, chunks = await self._local_retrieve(query)
+        elif mode == "global":
+            entities, relations, chunks = await self._global_retrieve(query)
+        elif mode == "hybrid":
+            entities, relations, chunks = await self._hybrid_retrieve(query)
+        else:
+            raise ValueError(f"unknown retrieval mode: {mode}")
+
+        entity_ids = list(dict.fromkeys(
+            e.get("name") for e in entities if e.get("name")
+        ))
+        relation_ids = list(dict.fromkeys(
+            self._relation_key(r) for r in relations if r.get("source") and r.get("target")
+        ))
+        chunk_ids = list(dict.fromkeys(
+            c.get("chunk_id") for c in chunks if c.get("chunk_id")
+        ))
+        return {
+            "query": query,
+            "mode": mode,
+            "entity_ids": entity_ids,
+            "relation_ids": relation_ids,
+            "chunk_ids": chunk_ids,
+            "entities": entities,
+            "relations": relations,
+            "chunks": chunks,
+        }
