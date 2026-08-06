@@ -1,6 +1,6 @@
-from chunk import chunk
+from chunk import chunk_async, ChunkConfig
 from extract import extract
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from dotenv import load_dotenv
 from storage import KVStore, GraphStore, VectorIndex
 from typing import Any
@@ -12,8 +12,20 @@ load_dotenv()
 
 @dataclass
 class LightRAGConfig:
-    chunk_size: int = int(os.getenv("CHUNK_SIZE", 2400))
-    chunk_overlap_size: int = int(os.getenv("CHUNK_OVERLAP_SIZE", 200))
+    # chunk_size: int = int(os.getenv("FIXED_WINDOW_SIZE", 2400))
+    # chunk_overlap_size: int = int(os.getenv("FIXED_WINDOW_OVERLAP", 200))
+    chunk_config: ChunkConfig = field(default_factory=lambda: ChunkConfig(
+        strategy=os.getenv("CHUNKING_STRATEGY", "fixed"),
+        fixed_size=int(os.getenv("FIXED_WINDOW_SIZE", 2400)),
+        fixed_overlap=int(os.getenv("FIXED_WINDOW_OVERLAP", 200)),
+        sentence_window_size=int(os.getenv("SENTENCE_WINDOW_SIZE", 8)),
+        sentence_window_overlap=int(os.getenv("SENTENCE_WINDOW_OVERLAP", 2)),
+        semantic_breakpoint_percentile=float(os.getenv("SEMANTIC_BREAKPOINT_PERCENTILE", 90)),
+        semantic_min_sentences=int(os.getenv("SEMANTIC_MIN_SENTENCES", 8)),
+        semantic_max_sentences=int(os.getenv("SEMANTIC_MAX_SENTENCES", 24)),
+        semantic_buffer_size=int(os.getenv("SEMANTIC_BUFFER_SIZE", 1)),
+        semantic_embedding_concurrency=int(os.getenv("SEMANTIC_EMBEDDING_CONCURRENCY", 4)),
+    ))
     chunk_top_k: int = int(os.getenv("CHUNK_TOP_K", 5))
     entity_top_k: int = int(os.getenv("ENTITY_TOP_K", 5))
     relation_top_k: int = int(os.getenv("RELATION_TOP_K", 5))
@@ -230,7 +242,7 @@ class LightRAG:
         if self.chunk_kv.all():
             print("[construct] store already built, skip")
             return
-        chunks = chunk(documents, self.config.chunk_size, self.config.chunk_overlap_size)
+        chunks = await chunk_async(documents, self.config.chunk_config, self.embed_func)
         # chunks = chunks[:5]
         all_entities, all_relations = await extract(chunks, self.llm_func, file_id, self.con_num)
 

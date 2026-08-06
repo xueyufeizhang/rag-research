@@ -11,7 +11,7 @@ from core import LightRAG
 from backend import llm_func, embed_func
 
 load_dotenv()
-CON_NUM = os.getenv("CON_NUM", 4)
+CON_NUM = os.getenv("CON_NUM", 5)
 
 def normalize_relation_key(key: str) -> str:
     parts = key.split("||")
@@ -19,17 +19,27 @@ def normalize_relation_key(key: str) -> str:
         return key.strip()
     return "||".join(sorted([parts[0].strip(), parts[1].strip()]))
 
-def calc_recall(retrieved: list[str], gold: list[str]) -> dict:
+def calc_metrics(retrieved: list[str], gold: list[str]) -> dict:
     retrieved_set = set(retrieved)
     gold_set = set(gold)
     matched = retrieved_set & gold_set
+
+    recall = len(matched) / len(gold_set) if gold_set else 0.0
+    precision = len(matched) / len(retrieved_set) if retrieved_set else 0.0
+    f1 = (
+        2 * precision * recall / (precision + recall)
+        if precision + recall > 0
+        else 0.0
+    )
 
     return {
         "matched": sorted(matched),
         "matched_count": len(matched),
         "gold_count": len(gold_set),
         "retrieved_count": len(retrieved_set),
-        "recall": len(matched) / len(gold_set) if gold_set else 0.0,
+        "recall": recall,
+        "precision": precision,
+        "f1": f1,
         "hit": len(matched) > 0,
     }
 
@@ -42,6 +52,12 @@ def summarize_mode(mode: str, mode_results: list[dict]) -> dict:
             "avg_entity_recall": 0.0,
             "avg_relation_recall": 0.0,
             "avg_chunk_recall": 0.0,
+            "avg_entity_precision": 0.0,
+            "avg_relation_precision": 0.0,
+            "avg_chunk_precision": 0.0,
+            "avg_entity_f1": 0.0,
+            "avg_relation_f1": 0.0,
+            "avg_chunk_f1": 0.0,
             "entity_hit_rate": 0.0,
             "relation_hit_rate": 0.0,
             "chunk_hit_rate": 0.0,
@@ -49,9 +65,19 @@ def summarize_mode(mode: str, mode_results: list[dict]) -> dict:
     return {
         "mode": mode,
         "count": total,
+
         "avg_entity_recall": sum(r["entity_metrics"]["recall"] for r in mode_results) / total,
         "avg_relation_recall": sum(r["relation_metrics"]["recall"] for r in mode_results) / total,
         "avg_chunk_recall": sum(r["chunk_metrics"]["recall"] for r in mode_results) / total,
+
+        "avg_entity_precision": sum(r["entity_metrics"]["precision"] for r in mode_results) / total,
+        "avg_relation_precision": sum(r["relation_metrics"]["precision"] for r in mode_results) / total,
+        "avg_chunk_precision": sum(r["chunk_metrics"]["precision"] for r in mode_results) / total,
+
+        "avg_entity_f1": sum(r["entity_metrics"]["f1"] for r in mode_results) / total,
+        "avg_relation_f1": sum(r["relation_metrics"]["f1"] for r in mode_results) / total,
+        "avg_chunk_f1": sum(r["chunk_metrics"]["f1"] for r in mode_results) / total,
+
         "entity_hit_rate": sum(r["entity_metrics"]["hit"] for r in mode_results) / total,
         "relation_hit_rate": sum(r["relation_metrics"]["hit"] for r in mode_results) / total,
         "chunk_hit_rate": sum(r["chunk_metrics"]["hit"] for r in mode_results) / total,
@@ -61,7 +87,7 @@ async def eval_retrieval() -> tuple[list[dict], list[dict]]:
     lightrag = LightRAG(os.getenv("WORKING_DIR", "./dickens"), llm_func, CON_NUM, embed_func)
     with open("./carol.txt", "r", encoding="utf-8")as f: 
         await lightrag.construct(f.read(), "carol")
-    with open("./eval/carol_eval_set.json", "r", encoding="utf-8") as f:
+    with open("./eval/carol_eval_set_semantic.json", "r", encoding="utf-8") as f:
         eval_questions = json.load(f).get("questions", [])
 
     results = []
@@ -81,9 +107,9 @@ async def eval_retrieval() -> tuple[list[dict], list[dict]]:
             gold_relations = [normalize_relation_key(gr) for gr in item.get("gold_relations", [])]
             gold_chunks = item.get("gold_chunks", [])
 
-            entity_metrics = calc_recall(retrieved_entities, gold_entities)
-            relation_metrics = calc_recall(retrieved_relations, gold_relations)
-            chunk_metrics = calc_recall(retrieved_chunks, gold_chunks)
+            entity_metrics = calc_metrics(retrieved_entities, gold_entities)
+            relation_metrics = calc_metrics(retrieved_relations, gold_relations)
+            chunk_metrics = calc_metrics(retrieved_chunks, gold_chunks)
 
             row = {
                 "id": item.get("id"),
@@ -106,8 +132,14 @@ async def eval_retrieval() -> tuple[list[dict], list[dict]]:
         summaries.append(summary)
         print(f"\n[{summary['mode']}] {summary['count']} questions")
         print(f"  entity recall:   {summary['avg_entity_recall']:.3f}")
+        print(f"  entity precision:   {summary['avg_entity_precision']:.3f}")
+        print(f"  entity f1:   {summary['avg_entity_f1']:.3f}\n")
         print(f"  relation recall: {summary['avg_relation_recall']:.3f}")
+        print(f"  relation precision: {summary['avg_relation_precision']:.3f}")
+        print(f"  relation f1: {summary['avg_relation_f1']:.3f}\n")
         print(f"  chunk recall:    {summary['avg_chunk_recall']:.3f}")
+        print(f"  chunk precision:    {summary['avg_chunk_precision']:.3f}")
+        print(f"  chunk f1:    {summary['avg_chunk_f1']:.3f}\n")
         print(f"  entity hit rate:   {summary['entity_hit_rate']:.3f}")
         print(f"  relation hit rate: {summary['relation_hit_rate']:.3f}")
         print(f"  chunk hit rate:    {summary['chunk_hit_rate']:.3f}")

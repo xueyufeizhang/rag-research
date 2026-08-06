@@ -53,6 +53,11 @@ cover/
 
 # Evaluation outputs
 eval/runs/
+test/
+
+# Local report drafts and generated deliverables
+reports/
+scripts/build_experiment_report_docx.py
 
 # Translations
 *.mo

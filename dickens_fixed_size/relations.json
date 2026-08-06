@@ -1,0 +1,5051 @@
+{
+  "A Christmas Carol||Charles Dickens": {
+    "source": "Charles Dickens",
+    "target": "A Christmas Carol",
+    "keywords": [
+      "authorship"
+    ],
+    "description": "Charles Dickens is the author of A Christmas Carol.",
+    "source_id": [
+      "carol_chunk_1"
+    ]
+  },
+  "A Christmas Carol||Arthur Rackham": {
+    "source": "Arthur Rackham",
+    "target": "A Christmas Carol",
+    "keywords": [
+      "illustration"
+    ],
+    "description": "Arthur Rackham illustrated A Christmas Carol.",
+    "source_id": [
+      "carol_chunk_1"
+    ]
+  },
+  "A Christmas Carol||Project Gutenberg": {
+    "source": "Project Gutenberg",
+    "target": "A Christmas Carol",
+    "keywords": [
+      "digital publication",
+      "distribution",
+      "electronic book"
+    ],
+    "description": "Project Gutenberg provides A Christmas Carol as a free eBook under its license. | Project Gutenberg distributes A Christmas Carol as an electronic work.",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_76"
+    ]
+  },
+  "A Christmas Carol||J. B. Lippincott Company": {
+    "source": "J. B. Lippincott Company",
+    "target": "A Christmas Carol",
+    "keywords": [
+      "publishing"
+    ],
+    "description": "J. B. Lippincott Company published the 1915 edition of A Christmas Carol.",
+    "source_id": [
+      "carol_chunk_1"
+    ]
+  },
+  "Bob Cratchit||Ebenezer Scrooge": {
+    "source": "Ebenezer Scrooge",
+    "target": "Bob Cratchit",
+    "keywords": [
+      "employment",
+      "relationship",
+      "employer-employee",
+      "instruction"
+    ],
+    "description": "Bob Cratchit is the clerk to Ebenezer Scrooge. | Scrooge instructs Bob Cratchit to buy another coal-scuttle, showing a relationship of authority.",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_76"
+    ]
+  },
+  "Bob Cratchit||Tiny Tim": {
+    "source": "Bob Cratchit",
+    "target": "Tiny Tim",
+    "keywords": [
+      "family",
+      "father-son",
+      "care",
+      "father-child",
+      "conversation",
+      "companionship",
+      "father",
+      "son",
+      "illness",
+      "grief",
+      "love",
+      "loss",
+      "memory",
+      "familial connection",
+      "spiritual essence"
+    ],
+    "description": "Tiny Tim is the youngest son of Bob Cratchit. | Bob Cratchit carries Tiny Tim on his shoulder, showing his care for his son. | Bob Cratchit reports Tiny Tim's thoughtful and kind words about Christmas and his hope that people see him. | Bob Cratchit takes Tiny Tim beside him at the table during the meal. | Bob Cratchit is Tiny Tim's father, and he holds Tiny Tim's hand, showing love and concern. | Bob Cratchit mourns Tiny Tim, promising to visit his grave on Sundays. He is deeply affected by his son's death. | Bob fondly remembers Tiny Tim and encourages the family to never forget him. | Tiny Tim is referred to as having a childish essence from God, linking him to the Cratchit family, especially Bob.",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_43",
+      "carol_chunk_44",
+      "carol_chunk_46",
+      "carol_chunk_67",
+      "carol_chunk_68",
+      "carol_chunk_69"
+    ]
+  },
+  "Ebenezer Scrooge||Ghost of Jacob Marley": {
+    "source": "Ghost of Jacob Marley",
+    "target": "Ebenezer Scrooge",
+    "keywords": [
+      "partnership",
+      "former business",
+      "warning",
+      "haunting",
+      "friendship"
+    ],
+    "description": "Ghost of Jacob Marley was Scrooge's former partner in business. | Marley's Ghost appears to Scrooge to warn him of the consequences of his actions and to inform him of the upcoming visits by the Three Spirits.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_19"
+    ]
+  },
+  "Belle||Ebenezer Scrooge": {
+    "source": "Belle",
+    "target": "Ebenezer Scrooge",
+    "keywords": [
+      "romantic history"
+    ],
+    "description": "Belle is an old sweetheart of Scrooge's.",
+    "source_id": [
+      "carol_chunk_2"
+    ]
+  },
+  "Caroline||Ebenezer Scrooge": {
+    "source": "Caroline",
+    "target": "Ebenezer Scrooge",
+    "keywords": [
+      "debtor relationship"
+    ],
+    "description": "Caroline is the wife of one of Scrooge's debtors.",
+    "source_id": [
+      "carol_chunk_2"
+    ]
+  },
+  "Belinda Cratchit||Mrs. Cratchit": {
+    "source": "Mrs. Cratchit",
+    "target": "Belinda Cratchit",
+    "keywords": [
+      "family",
+      "parent-child",
+      "cooperation"
+    ],
+    "description": "Mrs. Cratchit is the mother of Belinda Cratchit. | Mrs. Cratchit is assisted by her daughter Belinda in laying the cloth.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_42"
+    ]
+  },
+  "Martha Cratchit||Mrs. Cratchit": {
+    "source": "Mrs. Cratchit",
+    "target": "Martha Cratchit",
+    "keywords": [
+      "family",
+      "parent-child",
+      "mother-daughter",
+      "affection"
+    ],
+    "description": "Mrs. Cratchit is the mother of Martha Cratchit. | Mrs. Cratchit warmly welcomes Martha and kisses her upon her arrival.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_43"
+    ]
+  },
+  "Ebenezer Scrooge||Fan": {
+    "source": "Fan",
+    "target": "Ebenezer Scrooge",
+    "keywords": [
+      "family",
+      "sibling"
+    ],
+    "description": "Fan is the sister of Scrooge.",
+    "source_id": [
+      "carol_chunk_2"
+    ]
+  },
+  "Mr. Fezziwig||Mrs. Fezziwig": {
+    "source": "Mrs. Fezziwig",
+    "target": "Mr. Fezziwig",
+    "keywords": [
+      "partnership",
+      "marriage"
+    ],
+    "description": "Mrs. Fezziwig is the worthy partner of Mr. Fezziwig.",
+    "source_id": [
+      "carol_chunk_2"
+    ]
+  },
+  "Dick Wilkins||Ebenezer Scrooge": {
+    "source": "Dick Wilkins",
+    "target": "Ebenezer Scrooge",
+    "keywords": [
+      "apprenticeship",
+      "friendship",
+      "companionship"
+    ],
+    "description": "Dick Wilkins was a fellow apprentice of Scrooge's. | Ebenezer Scrooge and Dick Wilkins were fellow apprentices together, and Scrooge recalls Dick's attachment to him.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_29"
+    ]
+  },
+  "Joe||The Woman": {
+    "source": "Joe",
+    "target": "The Woman",
+    "keywords": [
+      "interrogation",
+      "moral outrage",
+      "transaction",
+      "negotiation"
+    ],
+    "description": "Joe questions the woman about taking down the bed-curtains from the deceased person's room, expressing disbelief. | The Woman demands that Joe open the bundle and appraise its value.",
+    "source_id": [
+      "carol_chunk_3",
+      "carol_chunk_62"
+    ]
+  },
+  "Bed-Curtains||The Woman": {
+    "source": "The Woman",
+    "target": "Bed-Curtains",
+    "keywords": [
+      "theft",
+      "desecration"
+    ],
+    "description": "The woman admits to taking down the bed-curtains, rings and all, from the room where a person was lying dead.",
+    "source_id": [
+      "carol_chunk_3"
+    ]
+  },
+  "Fred||Scrooge": {
+    "source": "Scrooge",
+    "target": "Fred",
+    "keywords": [
+      "family",
+      "dinner invitation",
+      "disdain",
+      "pity",
+      "family reunion",
+      "forgiveness",
+      "invitation",
+      "dinner"
+    ],
+    "description": "Scrooge asks Fred to let him in for dinner, revealing his intention to join his nephew. | Scrooge dislikes Fred and refuses his dinner invitations, while Fred pities Scrooge and plans to visit him yearly. | Scrooge visits his nephew Fred and is warmly welcomed for dinner. | Fred comes to dinner and is welcomed by Scrooge, showing a familial and social connection.",
+    "source_id": [
+      "carol_chunk_3",
+      "carol_chunk_52",
+      "carol_chunk_74",
+      "carol_chunk_75"
+    ]
+  },
+  "Marley||Scrooge": {
+    "source": "Scrooge",
+    "target": "Marley",
+    "keywords": [
+      "business partnership",
+      "death",
+      "legacy",
+      "partnership",
+      "business",
+      "fear",
+      "supernatural",
+      "memory",
+      "haunting",
+      "historical comparison"
+    ],
+    "description": "Scrooge was Marley's business partner and is linked to Marley through the firm's name and Marley's death. | Scrooge and Marley are business partners in the firm Scrooge and Marley. | Marley is Scrooge's deceased partner, dead for seven years, and had not been thought of by Scrooge until this moment. | Scrooge fears seeing Marley's pigtail, indicating a lingering apprehension about Marley's ghost. | Scrooge is haunted by the face of Marley, who is seven years dead, despite his dismissive attitude. | The hearth had never seen such a blaze during Scrooge's or Marley's time, indicating a shared history with the location.",
+    "source_id": [
+      "carol_chunk_4",
+      "carol_chunk_5",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_37"
+    ]
+  },
+  "Scrooge||Scrooge and Marley": {
+    "source": "Scrooge and Marley",
+    "target": "Scrooge",
+    "keywords": [
+      "business",
+      "ownership"
+    ],
+    "description": "The firm Scrooge and Marley is associated with Scrooge, who is a principal of the company. | Scrooge is the owner of the firm Scrooge and Marley.",
+    "source_id": [
+      "carol_chunk_4",
+      "carol_chunk_5"
+    ]
+  },
+  "Marley||Scrooge and Marley": {
+    "source": "Scrooge and Marley",
+    "target": "Marley",
+    "keywords": [
+      "business",
+      "legacy"
+    ],
+    "description": "The firm Scrooge and Marley retains Marley's name, linking Marley to the business even after his death.",
+    "source_id": [
+      "carol_chunk_4"
+    ]
+  },
+  "Counting-House||Scrooge": {
+    "source": "Scrooge",
+    "target": "Counting-House",
+    "keywords": [
+      "workplace",
+      "business"
+    ],
+    "description": "Scrooge works in his counting-house on Christmas Eve.",
+    "source_id": [
+      "carol_chunk_5"
+    ]
+  },
+  "Scrooge||The Clerk": {
+    "source": "Scrooge",
+    "target": "The Clerk",
+    "keywords": [
+      "employment",
+      "control",
+      "employer-employee",
+      "conflict"
+    ],
+    "description": "Scrooge employs the clerk, who works in a dismal cell, and Scrooge withholds coal, preventing the clerk from having a larger fire. | Scrooge is the employer of the clerk, who earns fifteen shillings a week and is warmer-hearted than Scrooge. | Scrooge is the employer of the clerk and has a contentious relationship regarding the Christmas day off.",
+    "source_id": [
+      "carol_chunk_6",
+      "carol_chunk_8",
+      "carol_chunk_11"
+    ]
+  },
+  "Scrooge||Scrooge's Nephew": {
+    "source": "Scrooge",
+    "target": "Scrooge's Nephew",
+    "keywords": [
+      "family",
+      "Christmas interaction",
+      "family conflict",
+      "disagreement",
+      "invitation",
+      "conflict",
+      "surprise",
+      "opinion",
+      "sympathy"
+    ],
+    "description": "Scrooge's nephew visits Scrooge to wish him a merry Christmas, but Scrooge dismisses the greeting as humbug. | Scrooge argues with his nephew about the value of Christmas, with Scrooge rejecting the holiday and his nephew defending it. | Scrooge's nephew invites Scrooge to dine and tries to be friendly, but Scrooge repeatedly dismisses him. | Scrooge is surprised to recognize his nephew's laugh and finds himself in the nephew's room. | Scrooge's nephew, Fred, talks about Scrooge with a mix of humor and sympathy, saying that he cannot be angry with him and feels sorry for him.",
+    "source_id": [
+      "carol_chunk_6",
+      "carol_chunk_7",
+      "carol_chunk_8",
+      "carol_chunk_50",
+      "carol_chunk_51"
+    ]
+  },
+  "Fire||Scrooge's Nephew": {
+    "source": "Scrooge's Nephew",
+    "target": "Fire",
+    "keywords": [
+      "personal state",
+      "symbolism"
+    ],
+    "description": "The nephew is described as all in a glow from walking, contrasting with the cold fires in the counting-house.",
+    "source_id": [
+      "carol_chunk_6"
+    ]
+  },
+  "Candle||The Clerk": {
+    "source": "The Clerk",
+    "target": "Candle",
+    "keywords": [
+      "attempt to warm",
+      "ineffectiveness"
+    ],
+    "description": "The clerk tries to warm himself at the candle but fails, as he is not a man of strong imagination.",
+    "source_id": [
+      "carol_chunk_6"
+    ]
+  },
+  "Coal-box||The Clerk": {
+    "source": "The Clerk",
+    "target": "Coal-box",
+    "keywords": [
+      "resource restriction"
+    ],
+    "description": "The clerk cannot replenish his fire because Scrooge keeps the coal-box in his own room.",
+    "source_id": [
+      "carol_chunk_6"
+    ]
+  },
+  "Counting-house||Scrooge": {
+    "source": "Scrooge",
+    "target": "Counting-house",
+    "keywords": [
+      "ownership",
+      "workplace"
+    ],
+    "description": "Scrooge owns and operates the counting-house, where the scene takes place and where he stays busy.",
+    "source_id": [
+      "carol_chunk_6"
+    ]
+  },
+  "Counting-house||Fog": {
+    "source": "Fog",
+    "target": "Counting-house",
+    "keywords": [
+      "environment",
+      "permeation"
+    ],
+    "description": "The fog comes pouring into the counting-house through every chink and keyhole, creating a dense, dark atmosphere.",
+    "source_id": [
+      "carol_chunk_6"
+    ]
+  },
+  "Fire||The Clerk": {
+    "source": "Fire",
+    "target": "The Clerk",
+    "keywords": [
+      "heating",
+      "insufficiency"
+    ],
+    "description": "The clerk's fire is very small, resembling a single coal, and is insufficient to keep him warm.",
+    "source_id": [
+      "carol_chunk_6"
+    ]
+  },
+  "Scrooge||Scrooge's Clerk": {
+    "source": "Scrooge",
+    "target": "Scrooge's Clerk",
+    "keywords": [
+      "workplace authority",
+      "discipline"
+    ],
+    "description": "Scrooge threatens to dismiss his clerk for applauding the nephew's defense of Christmas.",
+    "source_id": [
+      "carol_chunk_7"
+    ]
+  },
+  "Christmas||Scrooge's Nephew": {
+    "source": "Scrooge's Nephew",
+    "target": "Christmas",
+    "keywords": [
+      "belief",
+      "positive sentiment",
+      "irony"
+    ],
+    "description": "The nephew believes Christmas is a good time that benefits people spiritually. | Scrooge's nephew recounts that Scrooge called Christmas a humbug and believed it.",
+    "source_id": [
+      "carol_chunk_7",
+      "carol_chunk_51"
+    ]
+  },
+  "Christmas||Scrooge": {
+    "source": "Scrooge",
+    "target": "Christmas",
+    "keywords": [
+      "negative sentiment",
+      "rejection",
+      "dismissal",
+      "personal attitude",
+      "opinion",
+      "skepticism",
+      "thematic influence",
+      "transformation"
+    ],
+    "description": "Scrooge dismisses Christmas as a time for paying bills without money and wishes to punish those who celebrate it. | Scrooge dismisses Christmas, stating he does not make merry at Christmas and cannot afford to make idle people merry. | Scrooge is implied to hold a negative view of Christmas, calling it a humbug. | Christmas is a pivotal theme that influences Scrooge's transformation from miserly to generous.",
+    "source_id": [
+      "carol_chunk_7",
+      "carol_chunk_9",
+      "carol_chunk_51",
+      "carol_chunk_75"
+    ]
+  },
+  "Mr. Marley||Scrooge": {
+    "source": "Scrooge",
+    "target": "Mr. Marley",
+    "keywords": [
+      "business partnership",
+      "death"
+    ],
+    "description": "Mr. Marley was Scrooge's business partner who died seven years ago.",
+    "source_id": [
+      "carol_chunk_8"
+    ]
+  },
+  "Scrooge||The Portly Gentlemen": {
+    "source": "The Portly Gentlemen",
+    "target": "Scrooge",
+    "keywords": [
+      "charity",
+      "solicitation"
+    ],
+    "description": "The portly gentlemen approach Scrooge for charitable donations, referencing his firm's name.",
+    "source_id": [
+      "carol_chunk_8"
+    ]
+  },
+  "Scrooge||Scrooge and Marley's": {
+    "source": "Scrooge",
+    "target": "Scrooge and Marley's",
+    "keywords": [
+      "ownership",
+      "business"
+    ],
+    "description": "Scrooge is the surviving partner of the firm Scrooge and Marley's.",
+    "source_id": [
+      "carol_chunk_8"
+    ]
+  },
+  "Gentleman||Scrooge": {
+    "source": "Scrooge",
+    "target": "Gentleman",
+    "keywords": [
+      "interaction",
+      "charity refusal"
+    ],
+    "description": "Scrooge interacts with the Gentleman, who requests a donation for the poor, but Scrooge refuses to give anything.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Prisons||Scrooge": {
+    "source": "Scrooge",
+    "target": "Prisons",
+    "keywords": [
+      "referencing",
+      "social institutions"
+    ],
+    "description": "Scrooge asks about prisons, suggesting they are an existing means of supporting the poor.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Scrooge||Union Workhouses": {
+    "source": "Scrooge",
+    "target": "Union Workhouses",
+    "keywords": [
+      "referencing",
+      "social institutions"
+    ],
+    "description": "Scrooge asks if the Union workhouses are still in operation, indicating his reliance on such institutions.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Scrooge||Treadmill": {
+    "source": "Scrooge",
+    "target": "Treadmill",
+    "keywords": [
+      "referencing",
+      "penal system"
+    ],
+    "description": "Scrooge mentions the Treadmill as a symbol of the penal system in operation.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Poor Law||Scrooge": {
+    "source": "Scrooge",
+    "target": "Poor Law",
+    "keywords": [
+      "referencing",
+      "legislation"
+    ],
+    "description": "Scrooge references the Poor Law as an existing mechanism for dealing with the poor.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Gentleman||The Poor": {
+    "source": "Gentleman",
+    "target": "The Poor",
+    "keywords": [
+      "charity",
+      "fundraising"
+    ],
+    "description": "The Gentleman and his colleague are raising a fund to provide the Poor with meat, drink, and warmth.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Christmas||Gentleman": {
+    "source": "Gentleman",
+    "target": "Christmas",
+    "keywords": [
+      "timing",
+      "festive season"
+    ],
+    "description": "The Gentleman chooses Christmas as the time for fundraising because Want is keenly felt.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Scrooge||The Gentlemen": {
+    "source": "Scrooge",
+    "target": "The Gentlemen",
+    "keywords": [
+      "confrontation",
+      "refusal"
+    ],
+    "description": "The Gentlemen withdraw after failing to persuade Scrooge, who resumes his work.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "The Ancient Tower||The Fog": {
+    "source": "The Ancient Tower",
+    "target": "The Fog",
+    "keywords": [
+      "visibility",
+      "environmental effect"
+    ],
+    "description": "The ancient tower becomes invisible in the fog, with its bell sounding from the clouds.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "The Lord Mayor||The Mansion House": {
+    "source": "The Lord Mayor",
+    "target": "The Mansion House",
+    "keywords": [
+      "residence",
+      "authority"
+    ],
+    "description": "The Lord Mayor gives orders from the Mansion House, his stronghold.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "The Little Tailor||The Lord Mayor": {
+    "source": "The Little Tailor",
+    "target": "The Lord Mayor",
+    "keywords": [
+      "punishment",
+      "fine"
+    ],
+    "description": "The little tailor was fined by the Lord Mayor for being drunk and bloodthirsty.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Scrooge||The Carol Singer": {
+    "source": "The Carol Singer",
+    "target": "Scrooge",
+    "keywords": [
+      "entertainment",
+      "Christmas"
+    ],
+    "description": "The carol singer attempts to sing a Christmas carol at Scrooge's keyhole.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "The Cold||The Ragged Men and Boys": {
+    "source": "The Ragged Men and Boys",
+    "target": "The Cold",
+    "keywords": [
+      "survival",
+      "warmth"
+    ],
+    "description": "The ragged men and boys gather around a fire to warm themselves against the intense cold.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Scrooge||The Counting-House": {
+    "source": "Scrooge",
+    "target": "The Counting-House",
+    "keywords": [
+      "workplace",
+      "ownership"
+    ],
+    "description": "Scrooge owns and operates the counting-house, where he works and employs the clerk.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "The Clerk||The Counting-House": {
+    "source": "The Clerk",
+    "target": "The Counting-House",
+    "keywords": [
+      "employment",
+      "work"
+    ],
+    "description": "The clerk is employed at Scrooge's counting-house and works there.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "Scrooge||The Ruler": {
+    "source": "Scrooge",
+    "target": "The Ruler",
+    "keywords": [
+      "violent reaction",
+      "defense"
+    ],
+    "description": "Scrooge seizes the ruler to frighten away the carol singer.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "The Christmas Carol||The Singer": {
+    "source": "The Singer",
+    "target": "The Christmas Carol",
+    "keywords": [
+      "performance",
+      "singing"
+    ],
+    "description": "The singer sings a Christmas carol at Scrooge's keyhole.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "Scrooge||The Singer": {
+    "source": "The Singer",
+    "target": "Scrooge",
+    "keywords": [
+      "intimidation",
+      "conflict"
+    ],
+    "description": "Scrooge's aggressive reaction with the ruler frightens the singer away.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "Scrooge||The Tavern": {
+    "source": "Scrooge",
+    "target": "The Tavern",
+    "keywords": [
+      "dining",
+      "routine"
+    ],
+    "description": "Scrooge takes his melancholy dinner at the tavern.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "Scrooge||The Chambers": {
+    "source": "Scrooge",
+    "target": "The Chambers",
+    "keywords": [
+      "residence",
+      "history"
+    ],
+    "description": "Scrooge lives in the chambers that once belonged to his deceased partner.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "Christmas Eve||The Clerk": {
+    "source": "Christmas Eve",
+    "target": "The Clerk",
+    "keywords": [
+      "holiday",
+      "celebration"
+    ],
+    "description": "Christmas Eve is the reason the clerk is given a day off and celebrates by sliding on Cornhill.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "Christmas Eve||Scrooge": {
+    "source": "Christmas Eve",
+    "target": "Scrooge",
+    "keywords": [
+      "grudging concession",
+      "holiday"
+    ],
+    "description": "Scrooge grudgingly gives the clerk the day off for Christmas Eve.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "Scrooge||The House": {
+    "source": "Scrooge",
+    "target": "The House",
+    "keywords": [
+      "residence",
+      "familiarity",
+      "occupancy",
+      "security",
+      "caution"
+    ],
+    "description": "Scrooge lives in the house and knows its every stone; he has resided there for his entire residence in the City of London. | Scrooge secures his house, checks his rooms, and locks himself in, demonstrating caution within his own home.",
+    "source_id": [
+      "carol_chunk_12",
+      "carol_chunk_13"
+    ]
+  },
+  "Scrooge||The Door Knocker": {
+    "source": "Scrooge",
+    "target": "The Door Knocker",
+    "keywords": [
+      "interaction",
+      "supernatural occurrence"
+    ],
+    "description": "Scrooge sees the door knocker transform into Marley's face while he is about to enter the house.",
+    "source_id": [
+      "carol_chunk_12"
+    ]
+  },
+  "Marley's Ghost||The Door Knocker": {
+    "source": "The Door Knocker",
+    "target": "Marley's Ghost",
+    "keywords": [
+      "supernatural manifestation",
+      "transformation"
+    ],
+    "description": "The door knocker temporarily transforms into the face of Marley's ghost before reverting back.",
+    "source_id": [
+      "carol_chunk_12"
+    ]
+  },
+  "Marley||Marley's Ghost": {
+    "source": "Marley's Ghost",
+    "target": "Marley",
+    "keywords": [
+      "identity",
+      "supernatural connection"
+    ],
+    "description": "Marley's Ghost is the apparition of Marley, appearing with his characteristic look and ghostly spectacles.",
+    "source_id": [
+      "carol_chunk_12"
+    ]
+  },
+  "Genius of the Weather||The House": {
+    "source": "The House",
+    "target": "Genius of the Weather",
+    "keywords": [
+      "atmosphere",
+      "personification"
+    ],
+    "description": "The Genius of the Weather sits in mournful meditation on the threshold of the house, contributing to the dreary atmosphere.",
+    "source_id": [
+      "carol_chunk_12"
+    ]
+  },
+  "Scrooge||The Bell": {
+    "source": "Scrooge",
+    "target": "The Bell",
+    "keywords": [
+      "supernatural event",
+      "astonishment",
+      "dread"
+    ],
+    "description": "Scrooge observes the bell begin to swing and ring, causing him astonishment and inexplicable dread.",
+    "source_id": [
+      "carol_chunk_14"
+    ]
+  },
+  "Scrooge||The Chain": {
+    "source": "Scrooge",
+    "target": "The Chain",
+    "keywords": [
+      "hearing",
+      "supernatural",
+      "fear"
+    ],
+    "description": "Scrooge hears the clanking of a heavy chain below, associating it with ghosts dragging chains.",
+    "source_id": [
+      "carol_chunk_14"
+    ]
+  },
+  "The Dutch Merchant||The Fire": {
+    "source": "The Dutch Merchant",
+    "target": "The Fire",
+    "keywords": [
+      "construction",
+      "historical",
+      "origin"
+    ],
+    "description": "The Dutch Merchant built the old fireplace where the low fire burns.",
+    "source_id": [
+      "carol_chunk_14"
+    ]
+  },
+  "Marley's Ghost||Scrooge": {
+    "source": "Scrooge",
+    "target": "Marley's Ghost",
+    "keywords": [
+      "encounter",
+      "disbelief"
+    ],
+    "description": "Scrooge encounters Marley's Ghost and expresses skepticism about the ghost's existence.",
+    "source_id": [
+      "carol_chunk_15"
+    ]
+  },
+  "Jacob Marley||Scrooge": {
+    "source": "Scrooge",
+    "target": "Jacob Marley",
+    "keywords": [
+      "former partnership",
+      "recognition",
+      "supernatural visitation",
+      "remorse",
+      "moral lesson",
+      "death",
+      "past",
+      "prediction",
+      "foretelling",
+      "past visitation",
+      "memory"
+    ],
+    "description": "Scrooge recognizes Jacob Marley as his former business partner when the ghost reveals his identity. | Jacob Marley's ghost visits Scrooge to warn him about the consequences of a self-centered life. | Scrooge reflects on the death of Jacob Marley, thinking about how he might have cultivated kindness earlier in life without resorting to the sexton's spade. | Jacob Marley's prediction is recalled by Scrooge when the Ghost of Christmas Yet to Come appears. | Scrooge recalls that the Ghost of Jacob Marley entered through the door, indicating a past connection.",
+    "source_id": [
+      "carol_chunk_15",
+      "carol_chunk_18",
+      "carol_chunk_53",
+      "carol_chunk_57",
+      "carol_chunk_71"
+    ]
+  },
+  "Marley's Ghost||The Chain": {
+    "source": "Marley's Ghost",
+    "target": "The Chain",
+    "keywords": [
+      "symbolism",
+      "burden"
+    ],
+    "description": "Marley's Ghost is bound by the chain, representing the weight of his past deeds.",
+    "source_id": [
+      "carol_chunk_15"
+    ]
+  },
+  "Marley's Ghost||The Fireplace": {
+    "source": "Marley's Ghost",
+    "target": "The Fireplace",
+    "keywords": [
+      "location",
+      "interaction"
+    ],
+    "description": "Marley's Ghost sits down opposite the fireplace, establishing a setting for the conversation with Scrooge.",
+    "source_id": [
+      "carol_chunk_15"
+    ]
+  },
+  "Scrooge||The Ghost": {
+    "source": "Scrooge",
+    "target": "The Ghost",
+    "keywords": [
+      "confrontation",
+      "skepticism",
+      "revelation",
+      "challenge",
+      "supernatural encounter",
+      "visitation",
+      "guidance",
+      "supernatural",
+      "interaction",
+      "supernatural guidance",
+      "observation",
+      "coercion",
+      "conflict",
+      "instruction",
+      "obedience",
+      "future",
+      "plea",
+      "intercession",
+      "question",
+      "rebuke",
+      "companionship",
+      "lesson",
+      "spiritual guidance"
+    ],
+    "description": "Scrooge confronts the Ghost with doubt and tries to dismiss it as a hallucination caused by indigestion. | The Ghost challenges Scrooge's skepticism and reveals its frightening nature to persuade him of its reality. | The Ghost draws aside Scrooge's bed curtains and appears face to face with him, causing Scrooge to start up in a half-recumbent attitude. | The Ghost leads Scrooge to revisit his past and points out significant scenes, including his lonely school days. | Scrooge observes the Ghost and glances anxiously towards the door in its presence. | Scrooge is accompanied by the Ghost and is reminded of his past through its visions. | The Ghost forces Scrooge to observe the next scene despite Scrooge's pleas to stop. | Scrooge attempts to extinguish the Ghost's light using the extinguisher-cap, but the light remains unbroken. | Scrooge follows the Ghost's instruction to touch its robe, initiating the vision. | The Ghost commands Scrooge to touch its robe, leading to a magical transition to Christmas morning. | The Ghost shows Scrooge the Cratchit family and reveals the potential death of Tiny Tim if the future remains unchanged. | Scrooge pleads with the Ghost to spare Tiny Tim's life. | The Ghost rebukes Scrooge for his judgments and leads him to observe the Cratchit family. | Scrooge and the Ghost are together at the party, with the Ghost observing Scrooge's enjoyment. | Scrooge interacts with the Ghost, who teaches him precepts and shows him the two children. | Scrooge is guided and confronted by The Ghost in a fearful place, discussing the dead man. | The Ghost conducts Scrooge to various scenes, including the Cratchit house. | The Ghost shows Scrooge his grave and future, prompting Scrooge's plea for change.",
+    "source_id": [
+      "carol_chunk_16",
+      "carol_chunk_22",
+      "carol_chunk_25",
+      "carol_chunk_27",
+      "carol_chunk_31",
+      "carol_chunk_33",
+      "carol_chunk_36",
+      "carol_chunk_39",
+      "carol_chunk_46",
+      "carol_chunk_47",
+      "carol_chunk_54",
+      "carol_chunk_56",
+      "carol_chunk_65",
+      "carol_chunk_66",
+      "carol_chunk_70"
+    ]
+  },
+  "Ebenezer Scrooge||Jacob Marley": {
+    "source": "Ebenezer Scrooge",
+    "target": "Jacob Marley",
+    "keywords": [
+      "confrontation",
+      "supernatural encounter"
+    ],
+    "description": "Scrooge is confronted by the ghost of Jacob Marley, who appears to Scrooge to warn him about his fate.",
+    "source_id": [
+      "carol_chunk_17"
+    ]
+  },
+  "Jacob Marley||The Ghost": {
+    "source": "Jacob Marley",
+    "target": "The Ghost",
+    "keywords": [
+      "identity",
+      "apparition"
+    ],
+    "description": "The Ghost is revealed to be the spirit of Jacob Marley, Scrooge's former business partner.",
+    "source_id": [
+      "carol_chunk_17"
+    ]
+  },
+  "Jacob Marley||The Chain": {
+    "source": "Jacob Marley",
+    "target": "The Chain",
+    "keywords": [
+      "burden",
+      "punishment"
+    ],
+    "description": "Marley is fettered by a chain that he forged in life, symbolizing his sins and missed opportunities.",
+    "source_id": [
+      "carol_chunk_17"
+    ]
+  },
+  "Ebenezer Scrooge||The Chain": {
+    "source": "Ebenezer Scrooge",
+    "target": "The Chain",
+    "keywords": [
+      "fear",
+      "warning"
+    ],
+    "description": "Scrooge appears to have his own chain growing, as Marley warns him about the weight and length of the chain he is forging.",
+    "source_id": [
+      "carol_chunk_17"
+    ]
+  },
+  "Jacob Marley||The Counting-House": {
+    "source": "Jacob Marley",
+    "target": "The Counting-House",
+    "keywords": [
+      "restriction",
+      "narrow-mindedness"
+    ],
+    "description": "In life, Marley's spirit never roved beyond the counting-house, indicating his limited and selfish focus.",
+    "source_id": [
+      "carol_chunk_17"
+    ]
+  },
+  "The Chain||The Ghost": {
+    "source": "The Ghost",
+    "target": "The Chain",
+    "keywords": [
+      "burden",
+      "symbolism",
+      "consequence"
+    ],
+    "description": "The ghost carries a chain that represents the burdens of his past actions and serves as a visual metaphor for his remorse.",
+    "source_id": [
+      "carol_chunk_18"
+    ]
+  },
+  "Jacob Marley||Mankind's Welfare": {
+    "source": "Jacob Marley",
+    "target": "Mankind's Welfare",
+    "keywords": [
+      "moral duty",
+      "business",
+      "charity"
+    ],
+    "description": "The ghost asserts that the common welfare should be everyone's business, contrasting with his own past neglect.",
+    "source_id": [
+      "carol_chunk_18"
+    ]
+  },
+  "Christian Spirit||Mankind's Welfare": {
+    "source": "Christian Spirit",
+    "target": "Mankind's Welfare",
+    "keywords": [
+      "moral ideal",
+      "service",
+      "kindness"
+    ],
+    "description": "The concept of a Christian spirit working kindly aligns with the ideal of caring for mankind's welfare.",
+    "source_id": [
+      "carol_chunk_18"
+    ]
+  },
+  "Ghost of Jacob Marley||The Three Spirits": {
+    "source": "Ghost of Jacob Marley",
+    "target": "The Three Spirits",
+    "keywords": [
+      "prophecy",
+      "guidance"
+    ],
+    "description": "Marley's Ghost tells Scrooge that the Three Spirits will visit him to give him a chance to avoid Marley's fate.",
+    "source_id": [
+      "carol_chunk_19"
+    ]
+  },
+  "Ebenezer Scrooge||The Three Spirits": {
+    "source": "Ebenezer Scrooge",
+    "target": "The Three Spirits",
+    "keywords": [
+      "visitation",
+      "redemption"
+    ],
+    "description": "Scrooge is told to expect the visits of the Three Spirits as his only hope to escape the path Marley tread.",
+    "source_id": [
+      "carol_chunk_19"
+    ]
+  },
+  "Scrooge||The Phantoms": {
+    "source": "Scrooge",
+    "target": "The Phantoms",
+    "keywords": [
+      "observation",
+      "supernatural encounter"
+    ],
+    "description": "Scrooge observes the phantoms as they wander and moan, and recognizes some of them from his past.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "Marley's Ghost||The Phantoms": {
+    "source": "The Phantoms",
+    "target": "Marley's Ghost",
+    "keywords": [
+      "chains",
+      "connection"
+    ],
+    "description": "The phantoms are linked to Marley's Ghost by the chains they all wear, symbolizing their shared fate.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "Scrooge||The Old Ghost in a White Waistcoat": {
+    "source": "Scrooge",
+    "target": "The Old Ghost in a White Waistcoat",
+    "keywords": [
+      "recognition",
+      "pity"
+    ],
+    "description": "Scrooge recognizes the old ghost and observes its sorrow over its inability to help others.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "The Ghost||The Phantoms": {
+    "source": "The Ghost",
+    "target": "The Phantoms",
+    "keywords": [
+      "participation",
+      "lamentation"
+    ],
+    "description": "The Ghost joins the phantoms in their mournful dirge before leaving.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "Scrooge||The Invisible World": {
+    "source": "Scrooge",
+    "target": "The Invisible World",
+    "keywords": [
+      "glimpse",
+      "supernatural"
+    ],
+    "description": "Scrooge's glimpse of the Invisible World contributes to his emotional exhaustion and need for rest.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "Scrooge||The Church Bell": {
+    "source": "Scrooge",
+    "target": "The Church Bell",
+    "keywords": [
+      "timekeeping"
+    ],
+    "description": "Scrooge listens to the church bell striking the hours, which indicates the time and leads to his astonishment.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "Ebenezer Scrooge||Marley's Ghost": {
+    "source": "Ebenezer Scrooge",
+    "target": "Marley's Ghost",
+    "keywords": [
+      "supernatural warning",
+      "haunted"
+    ],
+    "description": "Ebenezer Scrooge is greatly troubled by Marley's Ghost, which warned him of a future visitation when the bell tolls one.",
+    "source_id": [
+      "carol_chunk_21"
+    ]
+  },
+  "Ebenezer Scrooge||The Clock": {
+    "source": "Ebenezer Scrooge",
+    "target": "The Clock",
+    "keywords": [
+      "time confusion",
+      "observation"
+    ],
+    "description": "Scrooge is confused by the clock and bell striking twelve, suspecting an icicle got into the works.",
+    "source_id": [
+      "carol_chunk_21"
+    ]
+  },
+  "Ebenezer Scrooge||Scrooge's Repeater": {
+    "source": "Ebenezer Scrooge",
+    "target": "Scrooge's Repeater",
+    "keywords": [
+      "time correction",
+      "verification"
+    ],
+    "description": "Scrooge uses his repeater to correct the time shown by the clock, but it also strikes twelve.",
+    "source_id": [
+      "carol_chunk_21"
+    ]
+  },
+  "Ebenezer Scrooge||The First of Exchange": {
+    "source": "Ebenezer Scrooge",
+    "target": "The First of Exchange",
+    "keywords": [
+      "financial document",
+      "thought reference"
+    ],
+    "description": "Scrooge thinks about the First of Exchange document in the context of counting days and time.",
+    "source_id": [
+      "carol_chunk_21"
+    ]
+  },
+  "Marley's Ghost||The Visitation": {
+    "source": "Marley's Ghost",
+    "target": "The Visitation",
+    "keywords": [
+      "warning",
+      "prophecy"
+    ],
+    "description": "Marley's Ghost warned Scrooge of the Visitation when the bell tolls one, leading Scrooge to stay awake.",
+    "source_id": [
+      "carol_chunk_21"
+    ]
+  },
+  "Scrooge||The Hour Bell": {
+    "source": "Scrooge",
+    "target": "The Hour Bell",
+    "keywords": [
+      "timekeeping",
+      "auditory",
+      "counting"
+    ],
+    "description": "Scrooge listens to the hour bell and counts the quarters and the hour.",
+    "source_id": [
+      "carol_chunk_22"
+    ]
+  },
+  "Ghost of Christmas Past||Scrooge": {
+    "source": "Scrooge",
+    "target": "Ghost of Christmas Past",
+    "keywords": [
+      "spiritual visitation",
+      "reclamation",
+      "supernatural guidance",
+      "past visions",
+      "memory",
+      "past",
+      "supernatural"
+    ],
+    "description": "Scrooge is visited by the Ghost of Christmas Past, who seeks Scrooge's welfare and reclamation. | The Ghost of Christmas Past shows Scrooge scenes from his past, leading to an emotional encounter with a former love. | The Ghost of Christmas Past had previously shown Scrooge visions from his childhood, which are revisited in his mind during the niece's music.",
+    "source_id": [
+      "carol_chunk_23",
+      "carol_chunk_32",
+      "carol_chunk_53"
+    ]
+  },
+  "Scrooge||Spirit": {
+    "source": "Scrooge",
+    "target": "Spirit",
+    "keywords": [
+      "guidance",
+      "time travel",
+      "dialogue",
+      "observation"
+    ],
+    "description": "Scrooge is being led by the Spirit through a past experience, who provides support and ensures Scrooge can traverse realms. | Scrooge interacts with the Spirit, asking questions about the torch and the Spirit's actions.",
+    "source_id": [
+      "carol_chunk_24",
+      "carol_chunk_41"
+    ]
+  },
+  "Country Road||Scrooge": {
+    "source": "Scrooge",
+    "target": "Country Road",
+    "keywords": [
+      "childhood memories",
+      "nostalgic"
+    ],
+    "description": "Scrooge recognizes the country road as his boyhood place, triggering a flood of forgotten memories and emotions.",
+    "source_id": [
+      "carol_chunk_24"
+    ]
+  },
+  "Market Town||Scrooge": {
+    "source": "Scrooge",
+    "target": "Market Town",
+    "keywords": [
+      "childhood",
+      "recognition"
+    ],
+    "description": "Scrooge recalls and recognizes the market-town and its features (bridge, church, river) as part of his past.",
+    "source_id": [
+      "carol_chunk_24"
+    ]
+  },
+  "Boys||Scrooge": {
+    "source": "Scrooge",
+    "target": "Boys",
+    "keywords": [
+      "past",
+      "recognition"
+    ],
+    "description": "Scrooge sees and names the boys he knew in his youth, feeling unexpected joy and gladness at their sight.",
+    "source_id": [
+      "carol_chunk_24"
+    ]
+  },
+  "Boys||Farmers": {
+    "source": "Boys",
+    "target": "Farmers",
+    "keywords": [
+      "travel",
+      "rural life"
+    ],
+    "description": "Boys ride ponies or are carried in gigs and carts driven by farmers, traveling toward the market-town.",
+    "source_id": [
+      "carol_chunk_24"
+    ]
+  },
+  "Boys||Spirit": {
+    "source": "Spirit",
+    "target": "Boys",
+    "keywords": [
+      "illusion",
+      "shadows"
+    ],
+    "description": "The Spirit states that the boys are but shadows of things that have been, and they have no consciousness of Scrooge and the Spirit.",
+    "source_id": [
+      "carol_chunk_24"
+    ]
+  },
+  "Scrooge||The School": {
+    "source": "Scrooge",
+    "target": "The School",
+    "keywords": [
+      "past",
+      "childhood",
+      "location"
+    ],
+    "description": "Scrooge revisits the school where he was left alone as a child, and weeps at the memory.",
+    "source_id": [
+      "carol_chunk_25"
+    ]
+  },
+  "The Boy (Scrooge as a child)||The School": {
+    "source": "The Boy (Scrooge as a child)",
+    "target": "The School",
+    "keywords": [
+      "loneliness",
+      "neglect"
+    ],
+    "description": "The young Scrooge is a solitary child, neglected by friends, left at the school during the holidays.",
+    "source_id": [
+      "carol_chunk_25"
+    ]
+  },
+  "Ali Baba||The Boy (Scrooge as a child)": {
+    "source": "The Boy (Scrooge as a child)",
+    "target": "Ali Baba",
+    "keywords": [
+      "imagination",
+      "comfort"
+    ],
+    "description": "The young Scrooge is reading about Ali Baba, seeing him as a vivid and comforting figure.",
+    "source_id": [
+      "carol_chunk_25"
+    ]
+  },
+  "Ali Baba||Scrooge": {
+    "source": "Scrooge",
+    "target": "Ali Baba",
+    "keywords": [
+      "remembrance",
+      "past Christmas"
+    ],
+    "description": "Scrooge recalls Ali Baba appearing at the window during a past Christmas, expressing fondness for the character.",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Scrooge||Valentine": {
+    "source": "Scrooge",
+    "target": "Valentine",
+    "keywords": [
+      "story recollection"
+    ],
+    "description": "Scrooge mentions Valentine as part of the story characters he remembers from his past.",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Orson||Scrooge": {
+    "source": "Scrooge",
+    "target": "Orson",
+    "keywords": [
+      "story recollection"
+    ],
+    "description": "Scrooge mentions Orson as Valentine's wild brother in the stories he recalls.",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Genii||Sultan's Groom": {
+    "source": "Sultan's Groom",
+    "target": "Genii",
+    "keywords": [
+      "supernatural intervention"
+    ],
+    "description": "The Genii turned the Sultan's Groom upside down, as recalled by Scrooge.",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Princess||Sultan's Groom": {
+    "source": "Sultan's Groom",
+    "target": "Princess",
+    "keywords": [
+      "marriage",
+      "story"
+    ],
+    "description": "The Sultan's Groom was married to the Princess, an event Scrooge mentions.",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Parrot||Scrooge": {
+    "source": "Scrooge",
+    "target": "Parrot",
+    "keywords": [
+      "story recollection"
+    ],
+    "description": "Scrooge recalls the Parrot from the story and its appearance.",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Parrot||Robin Crusoe": {
+    "source": "Robin Crusoe",
+    "target": "Parrot",
+    "keywords": [
+      "companionship",
+      "story"
+    ],
+    "description": "Robin Crusoe called the Parrot 'Poor Robin Crusoe' when he returned home.",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Friday||Scrooge": {
+    "source": "Scrooge",
+    "target": "Friday",
+    "keywords": [
+      "story recollection"
+    ],
+    "description": "Scrooge recalls Friday running to the creek as part of the story.",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Scrooge||The Spirit": {
+    "source": "Scrooge",
+    "target": "The Spirit",
+    "keywords": [
+      "interaction",
+      "guidance",
+      "dialogue",
+      "confrontation",
+      "companionship",
+      "journey",
+      "observation",
+      "supernatural"
+    ],
+    "description": "Scrooge interacts with the Spirit, who asks about Scrooge's sadness and offers to show another Christmas. | The Spirit and Scrooge engage in a dialogue about the closing of places on the Seventh Day. | Scrooge and the Spirit walk together along the streets, with the Spirit guiding the experience. | Scrooge looks to the Spirit for explanations of the conversations and scenes he is shown. | The Spirit accompanies Scrooge and directs his attention to events in the future.",
+    "source_id": [
+      "carol_chunk_26",
+      "carol_chunk_42",
+      "carol_chunk_48",
+      "carol_chunk_59",
+      "carol_chunk_60"
+    ]
+  },
+  "Scrooge||The Boy Singing Carol": {
+    "source": "Scrooge",
+    "target": "The Boy Singing Carol",
+    "keywords": [
+      "regret",
+      "charity"
+    ],
+    "description": "Scrooge expresses regret for not giving the boy who sang a carol at his door something.",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Fan||Scrooge": {
+    "source": "Fan",
+    "target": "Scrooge",
+    "keywords": [
+      "sibling relationship",
+      "homecoming"
+    ],
+    "description": "Fan comes to bring Scrooge home and greets him as her dear brother.",
+    "source_id": [
+      "carol_chunk_27"
+    ]
+  },
+  "School Setting||Scrooge": {
+    "source": "Scrooge",
+    "target": "School Setting",
+    "keywords": [
+      "location relation",
+      "past residence"
+    ],
+    "description": "Scrooge is at the school when Fan arrives to take him home.",
+    "source_id": [
+      "carol_chunk_27"
+    ]
+  },
+  "Scrooge||The Schoolmaster": {
+    "source": "The Schoolmaster",
+    "target": "Scrooge",
+    "keywords": [
+      "authority",
+      "farewell"
+    ],
+    "description": "The schoolmaster calls for Scrooge's box, shakes hands with him, and hosts a farewell gathering.",
+    "source_id": [
+      "carol_chunk_27"
+    ]
+  },
+  "The Parlour||The Schoolmaster": {
+    "source": "The Schoolmaster",
+    "target": "The Parlour",
+    "keywords": [
+      "location",
+      "hosting"
+    ],
+    "description": "The schoolmaster brings Scrooge and Fan to the parlour and serves them wine and cake.",
+    "source_id": [
+      "carol_chunk_27"
+    ]
+  },
+  "Decanter of Light Wine||Schoolmaster": {
+    "source": "Schoolmaster",
+    "target": "Decanter of Light Wine",
+    "keywords": [
+      "production",
+      "hospitality"
+    ],
+    "description": "The schoolmaster produces a decanter of curiously light wine and serves it to the young people.",
+    "source_id": [
+      "carol_chunk_28"
+    ]
+  },
+  "Block of Heavy Cake||Schoolmaster": {
+    "source": "Schoolmaster",
+    "target": "Block of Heavy Cake",
+    "keywords": [
+      "production",
+      "hospitality"
+    ],
+    "description": "The schoolmaster produces a block of curiously heavy cake and serves it to the young people.",
+    "source_id": [
+      "carol_chunk_28"
+    ]
+  },
+  "Master Scrooge||Schoolmaster": {
+    "source": "Master Scrooge",
+    "target": "Schoolmaster",
+    "keywords": [
+      "departure",
+      "farewell"
+    ],
+    "description": "Master Scrooge bids the schoolmaster goodbye as he leaves the school in a chaise.",
+    "source_id": [
+      "carol_chunk_28"
+    ]
+  },
+  "Ghost||Master Scrooge": {
+    "source": "Ghost",
+    "target": "Master Scrooge",
+    "keywords": [
+      "supernatural",
+      "guidance"
+    ],
+    "description": "The Ghost accompanies Master Scrooge and shows him scenes from his past, including his departure from school.",
+    "source_id": [
+      "carol_chunk_28"
+    ]
+  },
+  "Ghost||Old Fezziwig": {
+    "source": "Ghost",
+    "target": "Old Fezziwig",
+    "keywords": [
+      "supernatural",
+      "memory"
+    ],
+    "description": "The Ghost takes Scrooge to see Old Fezziwig at his warehouse, invoking a memory of Scrooge's apprenticeship.",
+    "source_id": [
+      "carol_chunk_28"
+    ]
+  },
+  "Master Scrooge||Warehouse": {
+    "source": "Master Scrooge",
+    "target": "Warehouse",
+    "keywords": [
+      "apprenticeship",
+      "employment"
+    ],
+    "description": "Master Scrooge was apprenticed at the warehouse, as he recognizes when the Ghost brings him there.",
+    "source_id": [
+      "carol_chunk_28"
+    ]
+  },
+  "Master Scrooge||Old Fezziwig": {
+    "source": "Master Scrooge",
+    "target": "Old Fezziwig",
+    "keywords": [
+      "recognition",
+      "past"
+    ],
+    "description": "Master Scrooge recognizes Old Fezziwig as his former employer and expresses excitement at seeing him alive again.",
+    "source_id": [
+      "carol_chunk_28"
+    ]
+  },
+  "Ebenezer Scrooge||Fezziwig": {
+    "source": "Ebenezer Scrooge",
+    "target": "Fezziwig",
+    "keywords": [
+      "employment",
+      "mentorship"
+    ],
+    "description": "Ebenezer Scrooge was an apprentice under Fezziwig, and he fondly remembers the Christmas Eve party Fezziwig hosted.",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "Fezziwig||Mrs. Fezziwig": {
+    "source": "Fezziwig",
+    "target": "Mrs. Fezziwig",
+    "keywords": [
+      "marriage",
+      "family",
+      "co-hosting"
+    ],
+    "description": "Fezziwig is married to Mrs. Fezziwig, who attends the party with a warm smile. | Fezziwig and Mrs. Fezziwig are married and jointly host the domestic ball.",
+    "source_id": [
+      "carol_chunk_29",
+      "carol_chunk_31"
+    ]
+  },
+  "Fezziwig||Three Miss Fezziwigs": {
+    "source": "Fezziwig",
+    "target": "Three Miss Fezziwigs",
+    "keywords": [
+      "paternity",
+      "family"
+    ],
+    "description": "Fezziwig is the father of the Three Miss Fezziwigs, who are present at the party.",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "Fezziwig||Warehouse": {
+    "source": "Fezziwig",
+    "target": "Warehouse",
+    "keywords": [
+      "ownership",
+      "location"
+    ],
+    "description": "Fezziwig's warehouse is the venue for the Christmas Eve party, transformed into a ballroom.",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "Fiddler||Warehouse": {
+    "source": "Fiddler",
+    "target": "Warehouse",
+    "keywords": [
+      "performance",
+      "entertainment"
+    ],
+    "description": "The fiddler sets up in the warehouse and provides music for the party.",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "Fezziwig||Party Attendees": {
+    "source": "Fezziwig",
+    "target": "Party Attendees",
+    "keywords": [
+      "hosting",
+      "celebration"
+    ],
+    "description": "Fezziwig hosts the Christmas Eve party and welcomes all the attendees into his warehouse.",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "Ebenezer Scrooge||Ghost of Christmas Past": {
+    "source": "Ebenezer Scrooge",
+    "target": "Ghost of Christmas Past",
+    "keywords": [
+      "spiritual guidance",
+      "memory"
+    ],
+    "description": "The Ghost of Christmas Past shows Ebenezer Scrooge scenes from his past, including the Fezziwig Christmas party.",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "Dance Event||Old Fezziwig": {
+    "source": "Old Fezziwig",
+    "target": "Dance Event",
+    "keywords": [
+      "hosting",
+      "leading"
+    ],
+    "description": "Old Fezziwig organized and led the dance event, clapping hands to stop dances and encouraging participants.",
+    "source_id": [
+      "carol_chunk_30"
+    ]
+  },
+  "Mrs. Fezziwig||Old Fezziwig": {
+    "source": "Mrs. Fezziwig",
+    "target": "Old Fezziwig",
+    "keywords": [
+      "partner",
+      "dancing"
+    ],
+    "description": "Mrs. Fezziwig was Old Fezziwig's partner in dancing, showing competence and partnership.",
+    "source_id": [
+      "carol_chunk_30"
+    ]
+  },
+  "Fiddler||Sir Roger de Coverley": {
+    "source": "Fiddler",
+    "target": "Sir Roger de Coverley",
+    "keywords": [
+      "playing",
+      "music"
+    ],
+    "description": "The fiddler played the tune 'Sir Roger de Coverley' to start the main dance.",
+    "source_id": [
+      "carol_chunk_30"
+    ]
+  },
+  "Dance Event||Fiddler": {
+    "source": "Fiddler",
+    "target": "Dance Event",
+    "keywords": [
+      "musical entertainment"
+    ],
+    "description": "The fiddler provided music during the dance event, playing continuously.",
+    "source_id": [
+      "carol_chunk_30"
+    ]
+  },
+  "Dance Event||Negus": {
+    "source": "Negus",
+    "target": "Dance Event",
+    "keywords": [
+      "refreshment"
+    ],
+    "description": "Negus was one of the beverages served at the dance event.",
+    "source_id": [
+      "carol_chunk_30"
+    ]
+  },
+  "Cold Roast||Dance Event": {
+    "source": "Cold Roast",
+    "target": "Dance Event",
+    "keywords": [
+      "food served"
+    ],
+    "description": "Cold Roast was a dish provided at the dance event.",
+    "source_id": [
+      "carol_chunk_30"
+    ]
+  },
+  "Cold Boiled||Dance Event": {
+    "source": "Cold Boiled",
+    "target": "Dance Event",
+    "keywords": [
+      "food served"
+    ],
+    "description": "Cold Boiled was a dish provided at the dance event.",
+    "source_id": [
+      "carol_chunk_30"
+    ]
+  },
+  "Dance Event||Mince-Pies": {
+    "source": "Mince-Pies",
+    "target": "Dance Event",
+    "keywords": [
+      "food served"
+    ],
+    "description": "Mince-pies were a dessert at the dance event.",
+    "source_id": [
+      "carol_chunk_30"
+    ]
+  },
+  "Fezziwig||The Two Apprentices": {
+    "source": "Fezziwig",
+    "target": "The Two Apprentices",
+    "keywords": [
+      "employer",
+      "influence",
+      "praise"
+    ],
+    "description": "Fezziwig is the employer of the apprentices and is praised by them for his kind treatment and ability to make them happy.",
+    "source_id": [
+      "carol_chunk_31"
+    ]
+  },
+  "The Domestic Ball||The Two Apprentices": {
+    "source": "The Two Apprentices",
+    "target": "The Domestic Ball",
+    "keywords": [
+      "attendance",
+      "celebration"
+    ],
+    "description": "The apprentices attend the domestic ball hosted by Fezziwig and his wife.",
+    "source_id": [
+      "carol_chunk_31"
+    ]
+  },
+  "Fezziwig||Scrooge": {
+    "source": "Scrooge",
+    "target": "Fezziwig",
+    "keywords": [
+      "memory",
+      "nostalgia",
+      "admiration"
+    ],
+    "description": "Scrooge remembers Fezziwig positively, recognizing the value of his kindness and generosity.",
+    "source_id": [
+      "carol_chunk_31"
+    ]
+  },
+  "Fezziwig||The Ghost": {
+    "source": "The Ghost",
+    "target": "Fezziwig",
+    "keywords": [
+      "observation",
+      "critique"
+    ],
+    "description": "The Ghost points out Fezziwig's actions and questions the extent of his generosity.",
+    "source_id": [
+      "carol_chunk_31"
+    ]
+  },
+  "Scrooge||Young Girl": {
+    "source": "Scrooge",
+    "target": "Young Girl",
+    "keywords": [
+      "broken engagement",
+      "wealth vs love",
+      "observation",
+      "longing"
+    ],
+    "description": "The Young Girl confronts Scrooge's former self about how his growing obsession with wealth has displaced their love and broken their contract. | Scrooge observes the young girl and feels a deep longing to be part of the scene.",
+    "source_id": [
+      "carol_chunk_32",
+      "carol_chunk_34"
+    ]
+  },
+  "He||She": {
+    "source": "She",
+    "target": "He",
+    "keywords": [
+      "release",
+      "engagement",
+      "breakup"
+    ],
+    "description": "She releases him from their engagement, stating that they have become different people.",
+    "source_id": [
+      "carol_chunk_33"
+    ]
+  },
+  "He||The Beautiful Young Girl": {
+    "source": "The Beautiful Young Girl",
+    "target": "He",
+    "keywords": [
+      "similarity",
+      "memory"
+    ],
+    "description": "The beautiful young girl is so like the previous girl that Scrooge believes she is the same person.",
+    "source_id": [
+      "carol_chunk_33"
+    ]
+  },
+  "Scrooge||The Beautiful Young Girl": {
+    "source": "Scrooge",
+    "target": "The Beautiful Young Girl",
+    "keywords": [
+      "recognition",
+      "memory"
+    ],
+    "description": "Scrooge believes the girl is the same as the previous one, indicating she is connected to his memories.",
+    "source_id": [
+      "carol_chunk_33"
+    ]
+  },
+  "Scrooge||She": {
+    "source": "She",
+    "target": "Scrooge",
+    "keywords": [
+      "memory",
+      "emotional connection"
+    ],
+    "description": "She is part of Scrooge's memory that he is forced to witness, causing him emotional distress.",
+    "source_id": [
+      "carol_chunk_33"
+    ]
+  },
+  "Comely Matron||Young Girl": {
+    "source": "Young Girl",
+    "target": "Comely Matron",
+    "keywords": [
+      "family relation"
+    ],
+    "description": "The young girl is the daughter of the comely matron, as they sit opposite each other.",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "Daughter||Mother": {
+    "source": "Mother",
+    "target": "Daughter",
+    "keywords": [
+      "family relation"
+    ],
+    "description": "The mother laughs heartily with her daughter, enjoying the children's activities.",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "Daughter||Father": {
+    "source": "Daughter",
+    "target": "Father",
+    "keywords": [
+      "family relation"
+    ],
+    "description": "The daughter greets her father when he comes home.",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "Children||Porter": {
+    "source": "Porter",
+    "target": "Children",
+    "keywords": [
+      "delivery",
+      "playful attack"
+    ],
+    "description": "The porter is attacked by the children as they try to get the parcels he carries. | The children scale the porter, dive into his pockets, and despoil him of parcels.",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "Father||Porter": {
+    "source": "Father",
+    "target": "Porter",
+    "keywords": [
+      "attendance",
+      "delivery"
+    ],
+    "description": "The father comes home attended by the porter, who carries toys and presents.",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "Children||Daughter": {
+    "source": "Children",
+    "target": "Daughter",
+    "keywords": [
+      "playful interaction"
+    ],
+    "description": "The children pillage the daughter's belongings and engage in rough play with her.",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "Children||Christmas Toys": {
+    "source": "Christmas Toys",
+    "target": "Children",
+    "keywords": [
+      "gift giving"
+    ],
+    "description": "The Christmas toys are given to the children as presents.",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "Ghost||Scrooge": {
+    "source": "Ghost",
+    "target": "Scrooge",
+    "keywords": [
+      "supernatural guidance",
+      "time travel",
+      "emotional confrontation",
+      "guidance",
+      "journey"
+    ],
+    "description": "The Ghost shows Scrooge shadows of the past, causing Scrooge emotional distress and leading to a struggle. | The Ghost guides Scrooge through various scenes, showing him places and people. | The Ghost leads Scrooge on a journey, showing him various scenes related to Christmas.",
+    "source_id": [
+      "carol_chunk_35",
+      "carol_chunk_49",
+      "carol_chunk_50"
+    ]
+  },
+  "Master of the House||Scrooge": {
+    "source": "Scrooge",
+    "target": "Master of the House",
+    "keywords": [
+      "past friendship",
+      "contrast of lives",
+      "reflection"
+    ],
+    "description": "The Master of the House is an old friend of Scrooge, and the happiness of his family contrasts with Scrooge's loneliness.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "Belle||Master of the House": {
+    "source": "Master of the House",
+    "target": "Belle",
+    "keywords": [
+      "marriage",
+      "family",
+      "conversation"
+    ],
+    "description": "The Master of the House tells his wife Belle about seeing Scrooge that afternoon.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "Belle||Scrooge": {
+    "source": "Belle",
+    "target": "Scrooge",
+    "keywords": [
+      "old acquaintance",
+      "recognition",
+      "pity"
+    ],
+    "description": "Belle recognizes Scrooge as an old friend and remarks on his lonely state.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "Scrooge||Scrooge's Partner": {
+    "source": "Scrooge",
+    "target": "Scrooge's Partner",
+    "keywords": [
+      "business connection",
+      "death",
+      "solitude"
+    ],
+    "description": "Scrooge's partner lies on the point of death, and Scrooge is left alone, highlighting his isolation.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "Master of the House||Scrooge's Office": {
+    "source": "Master of the House",
+    "target": "Scrooge's Office",
+    "keywords": [
+      "observation",
+      "location",
+      "encounter"
+    ],
+    "description": "The Master of the House passes by Scrooge's office and sees him sitting alone with a candle.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "Scrooge||The Extinguisher-Cap": {
+    "source": "Scrooge",
+    "target": "The Extinguisher-Cap",
+    "keywords": [
+      "usage",
+      "attempt to control"
+    ],
+    "description": "Scrooge seizes and presses the extinguisher-cap down on the Ghost, but fails to hide the light.",
+    "source_id": [
+      "carol_chunk_36"
+    ]
+  },
+  "Scrooge||The Second Spirit": {
+    "source": "Scrooge",
+    "target": "The Second Spirit",
+    "keywords": [
+      "anticipation",
+      "meeting"
+    ],
+    "description": "Scrooge prepares to meet the Second Spirit, which is sent to him through Jacob Marley's intervention.",
+    "source_id": [
+      "carol_chunk_36"
+    ]
+  },
+  "Jacob Marley||The Second Spirit": {
+    "source": "Jacob Marley",
+    "target": "The Second Spirit",
+    "keywords": [
+      "intervention",
+      "messenger"
+    ],
+    "description": "The Second Spirit was despatched to Scrooge through Jacob Marley's intervention.",
+    "source_id": [
+      "carol_chunk_36"
+    ]
+  },
+  "Ghostly Light||Scrooge": {
+    "source": "Scrooge",
+    "target": "Ghostly Light",
+    "keywords": [
+      "fear",
+      "confusion",
+      "mystery"
+    ],
+    "description": "Scrooge is alarmed and confused by the ghostly light in his room, which he cannot explain and which frightens him more than ghosts would.",
+    "source_id": [
+      "carol_chunk_37"
+    ]
+  },
+  "Adjoining Room||Scrooge": {
+    "source": "Scrooge",
+    "target": "Adjoining Room",
+    "keywords": [
+      "investigation",
+      "curiosity"
+    ],
+    "description": "Scrooge traces the source of the ghostly light to the adjoining room and decides to enter it.",
+    "source_id": [
+      "carol_chunk_37"
+    ]
+  },
+  "Adjoining Room||The Feast": {
+    "source": "Adjoining Room",
+    "target": "The Feast",
+    "keywords": [
+      "transformation",
+      "festive display"
+    ],
+    "description": "The adjoining room is transformed with living greenery and an extravagant display of food, making it look like a perfect grove with a throne made of provisions.",
+    "source_id": [
+      "carol_chunk_37"
+    ]
+  },
+  "Scrooge||Spontaneous Combustion": {
+    "source": "Scrooge",
+    "target": "Spontaneous Combustion",
+    "keywords": [
+      "fear",
+      "apprehension"
+    ],
+    "description": "Scrooge briefly fears he might be undergoing spontaneous combustion as an explanation for the light.",
+    "source_id": [
+      "carol_chunk_37"
+    ]
+  },
+  "Ghost of Christmas Present||Scrooge": {
+    "source": "Ghost of Christmas Present",
+    "target": "Scrooge",
+    "keywords": [
+      "supernatural visitation",
+      "teaching",
+      "guidance"
+    ],
+    "description": "The Ghost of Christmas Present visits Scrooge and offers to guide him and teach him lessons.",
+    "source_id": [
+      "carol_chunk_38"
+    ]
+  },
+  "Ghost of Christmas Present||Plenty's Horn": {
+    "source": "Ghost of Christmas Present",
+    "target": "Plenty's Horn",
+    "keywords": [
+      "symbolism",
+      "torch"
+    ],
+    "description": "The Ghost of Christmas Present holds a torch shaped like Plenty's Horn to spread light.",
+    "source_id": [
+      "carol_chunk_38"
+    ]
+  },
+  "Christmas Morning||Scrooge": {
+    "source": "Scrooge",
+    "target": "Christmas Morning",
+    "keywords": [
+      "setting",
+      "transition"
+    ],
+    "description": "Scrooge and the Ghost stand in the city streets on Christmas morning after the magical transition.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "City Streets||Snow": {
+    "source": "Snow",
+    "target": "City Streets",
+    "keywords": [
+      "weather",
+      "environment"
+    ],
+    "description": "Snow covers the streets and rooftops, contributing to the festive atmosphere.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "Chestnuts||Fruiterers' Shops": {
+    "source": "Chestnuts",
+    "target": "Fruiterers' Shops",
+    "keywords": [
+      "display",
+      "commerce"
+    ],
+    "description": "Chestnuts are displayed in baskets at the fruiterers' shops.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "Fruiterers' Shops||Spanish Onions": {
+    "source": "Spanish Onions",
+    "target": "Fruiterers' Shops",
+    "keywords": [
+      "display",
+      "commerce"
+    ],
+    "description": "Spanish onions are displayed at the fruiterers' shops.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "Girls||Spanish Onions": {
+    "source": "Spanish Onions",
+    "target": "Girls",
+    "keywords": [
+      "winking",
+      "flirtation"
+    ],
+    "description": "Spanish onions are described as winking at the girls as they pass by.",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Girls||Mistletoe": {
+    "source": "Girls",
+    "target": "Mistletoe",
+    "keywords": [
+      "glancing",
+      "holiday"
+    ],
+    "description": "Girls glance demurely at the hung-up mistletoe.",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Grapes||Shopkeepers": {
+    "source": "Grapes",
+    "target": "Shopkeepers",
+    "keywords": [
+      "display",
+      "enticement"
+    ],
+    "description": "Grapes were made by shopkeepers to dangle from conspicuous hooks to entice passersby.",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Norfolk Biffins||Oranges And Lemons": {
+    "source": "Norfolk Biffins",
+    "target": "Oranges And Lemons",
+    "keywords": [
+      "visual contrast"
+    ],
+    "description": "Norfolk Biffins set off the yellow of the oranges and lemons.",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Tea And Coffee||The Grocers'": {
+    "source": "Tea And Coffee",
+    "target": "The Grocers'",
+    "keywords": [
+      "scent",
+      "atmosphere"
+    ],
+    "description": "The blended scents of tea and coffee are grateful to the nose in the Grocers'.",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Candied Fruits||Coldest Lookers-On": {
+    "source": "Candied Fruits",
+    "target": "Coldest Lookers-On",
+    "keywords": [
+      "effect",
+      "desire"
+    ],
+    "description": "Candied fruits are so caked and spotted with molten sugar that they make the coldest lookers-on feel faint.",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Bakers' Shops||Spirit": {
+    "source": "Spirit",
+    "target": "Bakers' Shops",
+    "keywords": [
+      "location",
+      "presence"
+    ],
+    "description": "The Spirit stands with Scrooge in a baker's doorway and sprinkles incense on dinners as bearers pass.",
+    "source_id": [
+      "carol_chunk_41"
+    ]
+  },
+  "Spirit||The Torch": {
+    "source": "Spirit",
+    "target": "The Torch",
+    "keywords": [
+      "possession",
+      "use"
+    ],
+    "description": "The Spirit uses the torch to sprinkle drops of water and incense on dinners.",
+    "source_id": [
+      "carol_chunk_41"
+    ]
+  },
+  "Spirit||Water Drops": {
+    "source": "Spirit",
+    "target": "Water Drops",
+    "keywords": [
+      "use",
+      "effect"
+    ],
+    "description": "The Spirit sheds water drops from the torch on quarreling dinner-carriers, restoring their good humor.",
+    "source_id": [
+      "carol_chunk_41"
+    ]
+  },
+  "Incense||Spirit": {
+    "source": "Spirit",
+    "target": "Incense",
+    "keywords": [
+      "use",
+      "offering"
+    ],
+    "description": "The Spirit sprinkles incense on dinners from the torch.",
+    "source_id": [
+      "carol_chunk_41"
+    ]
+  },
+  "Christmas Day||Spirit": {
+    "source": "Christmas Day",
+    "target": "Spirit",
+    "keywords": [
+      "context",
+      "relevance"
+    ],
+    "description": "The Spirit and his actions are associated with the celebration of Christmas Day.",
+    "source_id": [
+      "carol_chunk_41"
+    ]
+  },
+  "Bakers' Shops||Grocer": {
+    "source": "Grocer",
+    "target": "Bakers' Shops",
+    "keywords": [
+      "related business",
+      "context"
+    ],
+    "description": "The grocer's shop is mentioned alongside the bakers' shops in the description of Christmas shopping.",
+    "source_id": [
+      "carol_chunk_41"
+    ]
+  },
+  "Bob Cratchit||The Spirit": {
+    "source": "The Spirit",
+    "target": "Bob Cratchit",
+    "keywords": [
+      "blessing",
+      "visit"
+    ],
+    "description": "The Spirit blesses Bob Cratchit's dwelling with the sprinklings of his torch.",
+    "source_id": [
+      "carol_chunk_42"
+    ]
+  },
+  "Bob Cratchit||Scrooge": {
+    "source": "Scrooge",
+    "target": "Bob Cratchit",
+    "keywords": [
+      "employment",
+      "relationship",
+      "toast",
+      "respect",
+      "loyalty",
+      "observation",
+      "empathy",
+      "gift",
+      "reconciliation",
+      "salary raise",
+      "generosity"
+    ],
+    "description": "Scrooge is the employer of Bob Cratchit, who works as his clerk. | Bob Cratchit proposes a toast to Scrooge, calling him the Founder of the Feast, despite his wife's objections. | Scrooge observes the Cratchit family, seeking tenderness connected with a death. | Scrooge sends an anonymous gift of the turkey to Bob Cratchit as a generous act. | Scrooge confronts Bob for being late but then decides to raise his salary and support his family.",
+    "source_id": [
+      "carol_chunk_42",
+      "carol_chunk_47",
+      "carol_chunk_66",
+      "carol_chunk_72",
+      "carol_chunk_75"
+    ]
+  },
+  "Bob Cratchit||The Cratchit Dwelling": {
+    "source": "Bob Cratchit",
+    "target": "The Cratchit Dwelling",
+    "keywords": [
+      "residence"
+    ],
+    "description": "Bob Cratchit lives in the four-roomed house known as the Cratchit dwelling.",
+    "source_id": [
+      "carol_chunk_42"
+    ]
+  },
+  "Bob Cratchit||Master Peter Cratchit": {
+    "source": "Bob Cratchit",
+    "target": "Master Peter Cratchit",
+    "keywords": [
+      "family",
+      "inheritance"
+    ],
+    "description": "Master Peter Cratchit is Bob's son and heir, who wears Bob's shirt-collar.",
+    "source_id": [
+      "carol_chunk_42"
+    ]
+  },
+  "Scrooge||The Seventh Day": {
+    "source": "Scrooge",
+    "target": "The Seventh Day",
+    "keywords": [
+      "discussion",
+      "concern"
+    ],
+    "description": "Scrooge discusses the Seventh Day with the Spirit, expressing concern about depriving people of dining.",
+    "source_id": [
+      "carol_chunk_42"
+    ]
+  },
+  "Bob Cratchit||Mrs. Cratchit": {
+    "source": "Bob Cratchit",
+    "target": "Mrs. Cratchit",
+    "keywords": [
+      "marriage",
+      "family",
+      "support",
+      "shared grief",
+      "love",
+      "family affection"
+    ],
+    "description": "Bob Cratchit is the husband of Mrs. Cratchit. | Bob and Mrs. Cratchit share a close bond, supporting each other through the loss of Tiny Tim. | Bob and Mrs. Cratchit are married and share affection, often working together around the fire. | Mrs. Cratchit kisses Bob Cratchit in a moment of family happiness.",
+    "source_id": [
+      "carol_chunk_43",
+      "carol_chunk_67",
+      "carol_chunk_68",
+      "carol_chunk_69"
+    ]
+  },
+  "Bob Cratchit||Martha Cratchit": {
+    "source": "Bob Cratchit",
+    "target": "Martha Cratchit",
+    "keywords": [
+      "father-daughter",
+      "reunion",
+      "family",
+      "affection"
+    ],
+    "description": "Bob Cratchit is initially disappointed that Martha is not coming, then joyfully embraces her when she appears. | Bob Cratchit hugs Martha after she comes out from behind the closet door.",
+    "source_id": [
+      "carol_chunk_43",
+      "carol_chunk_44"
+    ]
+  },
+  "Peter Cratchit||The Fire": {
+    "source": "Peter Cratchit",
+    "target": "The Fire",
+    "keywords": [
+      "household chore",
+      "cooking"
+    ],
+    "description": "Peter Cratchit blows the fire to cook the potatoes.",
+    "source_id": [
+      "carol_chunk_43"
+    ]
+  },
+  "The Goose||The Two Young Cratchits": {
+    "source": "The Two Young Cratchits",
+    "target": "The Goose",
+    "keywords": [
+      "anticipation",
+      "food"
+    ],
+    "description": "The young Cratchits smell the goose at the baker's and recognize it as their own.",
+    "source_id": [
+      "carol_chunk_43"
+    ]
+  },
+  "The Baker's||The Goose": {
+    "source": "The Goose",
+    "target": "The Baker's",
+    "keywords": [
+      "cooking",
+      "location"
+    ],
+    "description": "The goose is cooked at the baker's.",
+    "source_id": [
+      "carol_chunk_43"
+    ]
+  },
+  "Peter Cratchit||The Parks": {
+    "source": "Peter Cratchit",
+    "target": "The Parks",
+    "keywords": [
+      "desire",
+      "display"
+    ],
+    "description": "Peter Cratchit yearns to show his new shirt-collar in the fashionable Parks.",
+    "source_id": [
+      "carol_chunk_43"
+    ]
+  },
+  "Mrs. Cratchit||Tiny Tim": {
+    "source": "Mrs. Cratchit",
+    "target": "Tiny Tim",
+    "keywords": [
+      "care",
+      "inquiry",
+      "grief",
+      "memory",
+      "maternal love"
+    ],
+    "description": "Mrs. Cratchit asks how Tiny Tim behaved, showing her concern for him. | Mrs. Cratchit recalls how Bob used to walk with Tiny Tim on his shoulder, expressing her sadness over Tiny Tim's absence.",
+    "source_id": [
+      "carol_chunk_44",
+      "carol_chunk_67"
+    ]
+  },
+  "Mrs. Cratchit||The Goose": {
+    "source": "Mrs. Cratchit",
+    "target": "The Goose",
+    "keywords": [
+      "cooking",
+      "preparation"
+    ],
+    "description": "Mrs. Cratchit prepares and carves the goose for the Christmas dinner. | Mrs. Cratchit prepared and served the Christmas goose.",
+    "source_id": [
+      "carol_chunk_44",
+      "carol_chunk_45"
+    ]
+  },
+  "Master Peter Cratchit||The Goose": {
+    "source": "Master Peter Cratchit",
+    "target": "The Goose",
+    "keywords": [
+      "helping",
+      "meal preparation"
+    ],
+    "description": "Master Peter helps fetch the goose and prepares it by mashing potatoes.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "Miss Belinda Cratchit||The Goose": {
+    "source": "Miss Belinda Cratchit",
+    "target": "The Goose",
+    "keywords": [
+      "helping",
+      "meal preparation"
+    ],
+    "description": "Miss Belinda helps with the meal by sweetening the apple sauce.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "Tiny Tim||Two Young Cratchits": {
+    "source": "Two Young Cratchits",
+    "target": "Tiny Tim",
+    "keywords": [
+      "care",
+      "carrying"
+    ],
+    "description": "The two young Cratchits hustle Tiny Tim to the wash-house and later set chairs for him.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "Christmas Day||Tiny Tim": {
+    "source": "Tiny Tim",
+    "target": "Christmas Day",
+    "keywords": [
+      "wish",
+      "reflection"
+    ],
+    "description": "Tiny Tim hopes that people remember on Christmas Day the miracle of healing, reflecting on his own condition.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "Christmas Day||The Goose": {
+    "source": "The Goose",
+    "target": "Christmas Day",
+    "keywords": [
+      "celebration",
+      "meal"
+    ],
+    "description": "The goose is the main dish of the Christmas meal, central to the family's celebration.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "Mrs. Cratchit||The Pudding": {
+    "source": "Mrs. Cratchit",
+    "target": "The Pudding",
+    "keywords": [
+      "preparation",
+      "cooking",
+      "doubt",
+      "quality"
+    ],
+    "description": "Mrs. Cratchit prepared and presented the Christmas pudding. | Mrs. Cratchit made the pudding and had doubts about the quantity of flour, but the pudding was not considered small.",
+    "source_id": [
+      "carol_chunk_45",
+      "carol_chunk_46"
+    ]
+  },
+  "The Goose||Tiny Tim": {
+    "source": "Tiny Tim",
+    "target": "The Goose",
+    "keywords": [
+      "celebration",
+      "enjoyment"
+    ],
+    "description": "Tiny Tim expressed excitement and joy during the serving of the goose.",
+    "source_id": [
+      "carol_chunk_45"
+    ]
+  },
+  "Bob Cratchit||The Goose": {
+    "source": "Bob Cratchit",
+    "target": "The Goose",
+    "keywords": [
+      "approval",
+      "admiration"
+    ],
+    "description": "Bob Cratchit praised the goose as the best ever cooked.",
+    "source_id": [
+      "carol_chunk_45"
+    ]
+  },
+  "Bob Cratchit||The Pudding": {
+    "source": "Bob Cratchit",
+    "target": "The Pudding",
+    "keywords": [
+      "approval",
+      "admiration"
+    ],
+    "description": "Bob Cratchit regarded the pudding as the greatest success achieved by Mrs. Cratchit since their marriage.",
+    "source_id": [
+      "carol_chunk_45"
+    ]
+  },
+  "Belinda||Mrs. Cratchit": {
+    "source": "Belinda",
+    "target": "Mrs. Cratchit",
+    "keywords": [
+      "assistance",
+      "family support"
+    ],
+    "description": "Belinda assisted Mrs. Cratchit by changing plates during the meal.",
+    "source_id": [
+      "carol_chunk_45"
+    ]
+  },
+  "Christmas Dinner||The Cratchit Family": {
+    "source": "Christmas Dinner",
+    "target": "The Cratchit Family",
+    "keywords": [
+      "celebration",
+      "gathering"
+    ],
+    "description": "The Christmas dinner was the festive meal shared by the Cratchit family.",
+    "source_id": [
+      "carol_chunk_45"
+    ]
+  },
+  "Scrooge||Tiny Tim": {
+    "source": "Tiny Tim",
+    "target": "Scrooge",
+    "keywords": [
+      "concern",
+      "pity",
+      "fate",
+      "indifference",
+      "family unity",
+      "observation",
+      "focus",
+      "compassion",
+      "transformation"
+    ],
+    "description": "Scrooge becomes concerned about Tiny Tim's health and asks the Ghost if Tiny Tim will live. | Tiny Tim drinks the toast to Scrooge last and shows indifference to it. | Scrooge observes Tiny Tim with his eye until the last, showing a special interest in him. | Scrooge's encounter with Tiny Tim's spirit elicits a compassionate response, indicating a potential change in Scrooge.",
+    "source_id": [
+      "carol_chunk_46",
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_69"
+    ]
+  },
+  "The Ghost||Tiny Tim": {
+    "source": "The Ghost",
+    "target": "Tiny Tim",
+    "keywords": [
+      "prophecy",
+      "death",
+      "future"
+    ],
+    "description": "The Ghost predicts that Tiny Tim will die if the future remains unaltered.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Cratchit Family||The Pudding": {
+    "source": "Cratchit Family",
+    "target": "The Pudding",
+    "keywords": [
+      "Christmas dinner",
+      "consumption",
+      "approval"
+    ],
+    "description": "The Cratchit family consumed the pudding as part of their Christmas dinner, and no one criticized it.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Bob Cratchit||Cratchit Family": {
+    "source": "Bob Cratchit",
+    "target": "Cratchit Family",
+    "keywords": [
+      "family gathering",
+      "toast",
+      "leadership"
+    ],
+    "description": "Bob Cratchit leads the family gathering around the hearth and proposes a Christmas toast.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Scrooge||The Cratchit Family": {
+    "source": "Scrooge",
+    "target": "The Cratchit Family",
+    "keywords": [
+      "family dynamics",
+      "disdain"
+    ],
+    "description": "Scrooge is viewed negatively by the Cratchit family, who see him as an ogre and his name casts a shadow on their party.",
+    "source_id": [
+      "carol_chunk_47"
+    ]
+  },
+  "Mrs. Cratchit||Scrooge": {
+    "source": "Mrs. Cratchit",
+    "target": "Scrooge",
+    "keywords": [
+      "condemnation",
+      "disapproval"
+    ],
+    "description": "Mrs. Cratchit expresses strong disapproval of Scrooge, calling him odious, stingy, hard, and unfeeling.",
+    "source_id": [
+      "carol_chunk_47"
+    ]
+  },
+  "Bob Cratchit||Master Peter": {
+    "source": "Bob Cratchit",
+    "target": "Master Peter",
+    "keywords": [
+      "employment opportunity",
+      "family support"
+    ],
+    "description": "Bob Cratchit tells the family about a job situation for Master Peter that would bring in five-and-sixpence weekly.",
+    "source_id": [
+      "carol_chunk_47"
+    ]
+  },
+  "Martha Cratchit||The Cratchit Family": {
+    "source": "Martha Cratchit",
+    "target": "The Cratchit Family",
+    "keywords": [
+      "work",
+      "holiday",
+      "rest"
+    ],
+    "description": "Martha Cratchit, as an apprentice, shares details of her work and her plans to rest on the holiday.",
+    "source_id": [
+      "carol_chunk_47"
+    ]
+  },
+  "A Lost Child Travelling in the Snow||Tiny Tim": {
+    "source": "Tiny Tim",
+    "target": "A Lost Child Travelling in the Snow",
+    "keywords": [
+      "singing",
+      "performance"
+    ],
+    "description": "Tiny Tim sings a song about a lost child travelling in the snow.",
+    "source_id": [
+      "carol_chunk_48"
+    ]
+  },
+  "Peter||The Lord": {
+    "source": "Peter",
+    "target": "The Lord",
+    "keywords": [
+      "comparison",
+      "reaction"
+    ],
+    "description": "The lord's height was compared to Peter, prompting Peter's reaction of pulling up his collar.",
+    "source_id": [
+      "carol_chunk_48"
+    ]
+  },
+  "The Spirit||The Spirit's Torch": {
+    "source": "The Spirit",
+    "target": "The Spirit's Torch",
+    "keywords": [
+      "use",
+      "illumination"
+    ],
+    "description": "The Spirit uses its torch to create bright sprinklings that make the family appear happier at parting.",
+    "source_id": [
+      "carol_chunk_48"
+    ]
+  },
+  "Ghost||Lamplighter": {
+    "source": "Ghost",
+    "target": "Lamplighter",
+    "keywords": [
+      "reaction",
+      "supernatural"
+    ],
+    "description": "The lamplighter laughs as the Ghost passes, though he does not know the Ghost is there.",
+    "source_id": [
+      "carol_chunk_49"
+    ]
+  },
+  "Ghost||Miners": {
+    "source": "Ghost",
+    "target": "Miners",
+    "keywords": [
+      "knowledge",
+      "visitation"
+    ],
+    "description": "The Ghost indicates that the miners know him, and later shows them to Scrooge.",
+    "source_id": [
+      "carol_chunk_49"
+    ]
+  },
+  "Christmas||Ghost": {
+    "source": "Ghost",
+    "target": "Christmas",
+    "keywords": [
+      "spread",
+      "spirit"
+    ],
+    "description": "The Ghost spreads Christmas spirit and mirth.",
+    "source_id": [
+      "carol_chunk_49"
+    ]
+  },
+  "Moor||Scrooge": {
+    "source": "Scrooge",
+    "target": "Moor",
+    "keywords": [
+      "location",
+      "exploration"
+    ],
+    "description": "Scrooge is taken to the moor by the Ghost and asks what place it is.",
+    "source_id": [
+      "carol_chunk_49"
+    ]
+  },
+  "Scrooge||Sea": {
+    "source": "Scrooge",
+    "target": "Sea",
+    "keywords": [
+      "destination",
+      "fear"
+    ],
+    "description": "Scrooge is taken to the sea, which horrifies him.",
+    "source_id": [
+      "carol_chunk_49"
+    ]
+  },
+  "Hut||Miners": {
+    "source": "Miners",
+    "target": "Hut",
+    "keywords": [
+      "dwelling",
+      "gathering"
+    ],
+    "description": "The miners and their families are gathered in a hut on the moor.",
+    "source_id": [
+      "carol_chunk_49"
+    ]
+  },
+  "Miners||Old Man": {
+    "source": "Old Man",
+    "target": "Miners",
+    "keywords": [
+      "family",
+      "celebration"
+    ],
+    "description": "The old man is part of the mining family and sings a Christmas song to them.",
+    "source_id": [
+      "carol_chunk_49"
+    ]
+  },
+  "Scrooge's Nephew||Spirit": {
+    "source": "Spirit",
+    "target": "Scrooge's Nephew",
+    "keywords": [
+      "approval",
+      "observation"
+    ],
+    "description": "The Spirit looks at the nephew with approving affability. | The Spirit stands by Scrooge's side looking at Scrooge's nephew with approving affability.",
+    "source_id": [
+      "carol_chunk_50",
+      "carol_chunk_51"
+    ]
+  },
+  "Lighthouse||Two Men (Lighthouse)": {
+    "source": "Two Men (Lighthouse)",
+    "target": "Lighthouse",
+    "keywords": [
+      "watch",
+      "service"
+    ],
+    "description": "The two men watch the lighthouse light and make a fire to shed brightness on the sea.",
+    "source_id": [
+      "carol_chunk_50"
+    ]
+  },
+  "Ship||Ship Crew": {
+    "source": "Ship",
+    "target": "Ship Crew",
+    "keywords": [
+      "celebration",
+      "Christmas"
+    ],
+    "description": "Every man on the ship shares Christmas thoughts and greetings, remembering those at a distance.",
+    "source_id": [
+      "carol_chunk_50"
+    ]
+  },
+  "Scrooge||Scrooge's Niece": {
+    "source": "Scrooge's Niece",
+    "target": "Scrooge",
+    "keywords": [
+      "family",
+      "criticism",
+      "indignation",
+      "music",
+      "memory",
+      "surprise"
+    ],
+    "description": "Scrooge's niece expresses indignation towards Scrooge, saying 'more shame for him' after hearing he called Christmas a humbug. | Scrooge is emotionally affected by the harp playing of his niece, which reminds him of his past as shown by the Ghost of Christmas Past. | Scrooge surprises his niece by marriage when he arrives at Fred's house.",
+    "source_id": [
+      "carol_chunk_51",
+      "carol_chunk_53",
+      "carol_chunk_74"
+    ]
+  },
+  "Assembled Friends||Scrooge's Nephew": {
+    "source": "Assembled Friends",
+    "target": "Scrooge's Nephew",
+    "keywords": [
+      "social gathering",
+      "shared laughter"
+    ],
+    "description": "The assembled friends laugh heartily along with Scrooge's nephew, sharing in the general good humor.",
+    "source_id": [
+      "carol_chunk_51"
+    ]
+  },
+  "Fred||Scrooge's Niece": {
+    "source": "Fred",
+    "target": "Scrooge's Niece",
+    "keywords": [
+      "marriage",
+      "affection",
+      "household"
+    ],
+    "description": "Fred is married to Scrooge's niece and they share in the family gathering and merriment. | Fred is married to Scrooge's niece, and they host dinner together.",
+    "source_id": [
+      "carol_chunk_52",
+      "carol_chunk_74"
+    ]
+  },
+  "Plump Sister||Topper": {
+    "source": "Topper",
+    "target": "Plump Sister",
+    "keywords": [
+      "attraction",
+      "courtship"
+    ],
+    "description": "Topper has his eye on the plump sister, causing her to blush when he mentions his bachelor status.",
+    "source_id": [
+      "carol_chunk_52"
+    ]
+  },
+  "Fred||Topper": {
+    "source": "Fred",
+    "target": "Topper",
+    "keywords": [
+      "conversation",
+      "banter"
+    ],
+    "description": "Fred engages Topper in a discussion about housekeeping, prompting Topper's reply about bachelors.",
+    "source_id": [
+      "carol_chunk_52"
+    ]
+  },
+  "Plump Sister in the Lace Tucker||Topper": {
+    "source": "Topper",
+    "target": "Plump Sister in the Lace Tucker",
+    "keywords": [
+      "game",
+      "pursuit",
+      "deception"
+    ],
+    "description": "Topper deliberately goes after the plump sister during blind man's-buff, knowing her location and feigning attempts to catch others.",
+    "source_id": [
+      "carol_chunk_53"
+    ]
+  },
+  "Scrooge's Nephew||Topper": {
+    "source": "Topper",
+    "target": "Scrooge's Nephew",
+    "keywords": [
+      "collusion",
+      "game",
+      "plan"
+    ],
+    "description": "Topper and Scrooge's nephew appear to have arranged the outcome of the blind man's-buff game, with Topper targeting the plump sister.",
+    "source_id": [
+      "carol_chunk_53"
+    ]
+  },
+  "Harp||Scrooge's Niece": {
+    "source": "Scrooge's Niece",
+    "target": "Harp",
+    "keywords": [
+      "skill",
+      "music",
+      "performance"
+    ],
+    "description": "Scrooge's niece plays the harp well, performing a simple air that is meaningful to Scrooge.",
+    "source_id": [
+      "carol_chunk_53"
+    ]
+  },
+  "Ghost of Christmas Present||Topper": {
+    "source": "Ghost of Christmas Present",
+    "target": "Topper",
+    "keywords": [
+      "knowledge",
+      "supernatural",
+      "game"
+    ],
+    "description": "The Ghost of Christmas Present is implied to be aware of the arrangement between Topper and Scrooge's nephew in the blind man's-buff game.",
+    "source_id": [
+      "carol_chunk_53"
+    ]
+  },
+  "Ghost of Christmas Present||Scrooge's Nephew": {
+    "source": "Ghost of Christmas Present",
+    "target": "Scrooge's Nephew",
+    "keywords": [
+      "awareness",
+      "game",
+      "knowledge"
+    ],
+    "description": "The Ghost of Christmas Present is implied to know about the collusion between the nephew and Topper during the game.",
+    "source_id": [
+      "carol_chunk_53"
+    ]
+  },
+  "Scrooge||The Party": {
+    "source": "Scrooge",
+    "target": "The Party",
+    "keywords": [
+      "participation",
+      "observation"
+    ],
+    "description": "Scrooge joins in the games and is interested in the activities at the party.",
+    "source_id": [
+      "carol_chunk_54"
+    ]
+  },
+  "The Ghost||The Party": {
+    "source": "The Ghost",
+    "target": "The Party",
+    "keywords": [
+      "observation",
+      "supernatural presence"
+    ],
+    "description": "The Ghost observes the party and Scrooge's participation in it.",
+    "source_id": [
+      "carol_chunk_54"
+    ]
+  },
+  "The Plump Sister||Topper": {
+    "source": "Topper",
+    "target": "The Plump Sister",
+    "keywords": [
+      "courtship",
+      "game"
+    ],
+    "description": "Topper pursues the plump sister during the blind man's buff game.",
+    "source_id": [
+      "carol_chunk_54"
+    ]
+  },
+  "Scrooge's Niece||The Party": {
+    "source": "Scrooge's Niece",
+    "target": "The Party",
+    "keywords": [
+      "participation",
+      "games"
+    ],
+    "description": "Scrooge's niece participates in the games and is seated near Scrooge and the Ghost.",
+    "source_id": [
+      "carol_chunk_54"
+    ]
+  },
+  "Scrooge's Nephew||The Party": {
+    "source": "Scrooge's Nephew",
+    "target": "The Party",
+    "keywords": [
+      "hosting",
+      "participation"
+    ],
+    "description": "Scrooge's nephew participates in the party games, including thinking of an animal in Yes and No.",
+    "source_id": [
+      "carol_chunk_54"
+    ]
+  },
+  "Fred||Uncle Scrooge": {
+    "source": "Fred",
+    "target": "Uncle Scrooge",
+    "keywords": [
+      "nephew",
+      "family",
+      "toast"
+    ],
+    "description": "Fred is Scrooge's nephew who proposes a toast to him despite Scrooge's previous rejection.",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "Fred||Plump Sister": {
+    "source": "Plump Sister",
+    "target": "Fred",
+    "keywords": [
+      "family",
+      "identification"
+    ],
+    "description": "The plump sister correctly guesses that the animal is Uncle Scrooge, addressing Fred in her excitement.",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "The Animal||Uncle Scrooge": {
+    "source": "Uncle Scrooge",
+    "target": "The Animal",
+    "keywords": [
+      "metaphorical identity",
+      "riddle"
+    ],
+    "description": "Uncle Scrooge is the answer to the riddle about the animal, drawing a metaphorical connection between him and the described traits.",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "Fred||The Animal": {
+    "source": "Fred",
+    "target": "The Animal",
+    "keywords": [
+      "riddle",
+      "questioning"
+    ],
+    "description": "Fred questions the animal about its characteristics, driving the guessing game.",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "The Ghost||Uncle Scrooge": {
+    "source": "The Ghost",
+    "target": "Uncle Scrooge",
+    "keywords": [
+      "supernatural guidance",
+      "transformation"
+    ],
+    "description": "The Ghost shows Scrooge various scenes of life, contributing to his internal change.",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "London||The Animal": {
+    "source": "The Animal",
+    "target": "London",
+    "keywords": [
+      "habitat",
+      "location"
+    ],
+    "description": "The animal is described as living in London and walking about the streets.",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "Fred||Mulled Wine": {
+    "source": "Fred",
+    "target": "Mulled Wine",
+    "keywords": [
+      "toast",
+      "celebration"
+    ],
+    "description": "Fred uses a glass of mulled wine to propose a toast to Uncle Scrooge.",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "The Boy||The Ghost": {
+    "source": "The Ghost",
+    "target": "The Boy",
+    "keywords": [
+      "reveals",
+      "guardianship"
+    ],
+    "description": "The Ghost brings forth the boy from under its robe and presents him to Scrooge.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "The Ghost||The Girl": {
+    "source": "The Ghost",
+    "target": "The Girl",
+    "keywords": [
+      "reveals",
+      "guardianship"
+    ],
+    "description": "The Ghost brings forth the girl from under its robe and presents her to Scrooge.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "Almshouse||The Ghost": {
+    "source": "The Ghost",
+    "target": "Almshouse",
+    "keywords": [
+      "blessing",
+      "presence"
+    ],
+    "description": "The Ghost leaves his blessing in almshouses.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "Hospital||The Ghost": {
+    "source": "The Ghost",
+    "target": "Hospital",
+    "keywords": [
+      "blessing",
+      "presence"
+    ],
+    "description": "The Ghost leaves his blessing in hospitals.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "Gaol||The Ghost": {
+    "source": "The Ghost",
+    "target": "Gaol",
+    "keywords": [
+      "blessing",
+      "presence"
+    ],
+    "description": "The Ghost leaves his blessing in gaols.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "Scrooge||Twelfth-Night": {
+    "source": "Scrooge",
+    "target": "Twelfth-Night",
+    "keywords": [
+      "attendance",
+      "observation"
+    ],
+    "description": "Scrooge attends a Twelfth-Night party with the Ghost and observes the Ghost's aging.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "Ignorance||The Spirit": {
+    "source": "The Spirit",
+    "target": "Ignorance",
+    "keywords": [
+      "shows",
+      "warns",
+      "children"
+    ],
+    "description": "The Spirit shows Scrooge the boy Ignorance and warns that he is dangerous because Doom is written on his brow.",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "The Spirit||Want": {
+    "source": "The Spirit",
+    "target": "Want",
+    "keywords": [
+      "shows",
+      "children"
+    ],
+    "description": "The Spirit shows Scrooge the girl Want as another child clinging to the Spirit.",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "Ignorance||Scrooge": {
+    "source": "Scrooge",
+    "target": "Ignorance",
+    "keywords": [
+      "questioning",
+      "concern"
+    ],
+    "description": "Scrooge asks about the children's refuge, indicating concern for Ignorance and Want.",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "Scrooge||The Ghost of Christmas Yet to Come": {
+    "source": "Scrooge",
+    "target": "The Ghost of Christmas Yet to Come",
+    "keywords": [
+      "encounter",
+      "prophecy",
+      "guides",
+      "shows future"
+    ],
+    "description": "Scrooge encounters the Ghost of Christmas Yet to Come, which appears after the spirit departs, and Scrooge addresses it. | The Ghost of Christmas Yet to Come is set to show Scrooge shadows of things that will happen in the future.",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "Doom||Ignorance": {
+    "source": "Ignorance",
+    "target": "Doom",
+    "keywords": [
+      "warning",
+      "danger"
+    ],
+    "description": "Ignorance has Doom written on his brow, a warning of dire consequences if not erased.",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "Ghost of the Future||Scrooge": {
+    "source": "Scrooge",
+    "target": "Ghost of the Future",
+    "keywords": [
+      "fear",
+      "guidance",
+      "companionship"
+    ],
+    "description": "Scrooge fears the Ghost of the Future but acknowledges its purpose to do him good and agrees to follow it.",
+    "source_id": [
+      "carol_chunk_58"
+    ]
+  },
+  "Ghost of the Future||The City": {
+    "source": "Ghost of the Future",
+    "target": "The City",
+    "keywords": [
+      "arrival",
+      "setting"
+    ],
+    "description": "The Ghost of the Future leads Scrooge into the City, which seems to spring up about them.",
+    "source_id": [
+      "carol_chunk_58"
+    ]
+  },
+  "Scrooge||The City": {
+    "source": "Scrooge",
+    "target": "The City",
+    "keywords": [
+      "journey",
+      "observation"
+    ],
+    "description": "Scrooge follows the Spirit through the City, observing the merchants and their activities.",
+    "source_id": [
+      "carol_chunk_58"
+    ]
+  },
+  "Business Men||Ghost of the Future": {
+    "source": "Ghost of the Future",
+    "target": "Business Men",
+    "keywords": [
+      "observation",
+      "guidance"
+    ],
+    "description": "The Spirit stops beside a knot of business men and points to them, prompting Scrooge to listen to their conversation.",
+    "source_id": [
+      "carol_chunk_58"
+    ]
+  },
+  "Deceased Man||First Speaker": {
+    "source": "First Speaker",
+    "target": "Deceased Man",
+    "keywords": [
+      "funeral",
+      "acquaintance"
+    ],
+    "description": "The first speaker discusses the deceased man's funeral and suggests organizing a party to attend it.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "Deceased Man||Red-Faced Gentleman": {
+    "source": "Red-Faced Gentleman",
+    "target": "Deceased Man",
+    "keywords": [
+      "money",
+      "inquiry"
+    ],
+    "description": "The red-faced gentleman asks about what the deceased man did with his money.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "Deceased Man||Man with Large Chin": {
+    "source": "Man with Large Chin",
+    "target": "Deceased Man",
+    "keywords": [
+      "inheritance",
+      "will"
+    ],
+    "description": "The man with the large chin speculates that the deceased left his money to his company, implying it was not left to him.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "First Business Man||Second Business Man": {
+    "source": "First Business Man",
+    "target": "Second Business Man",
+    "keywords": [
+      "business exchange",
+      "greeting"
+    ],
+    "description": "The two businessmen exchange brief greetings and remarks about the deceased, emphasizing their strictly business relationship.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "First Business Man||Scrooge": {
+    "source": "Scrooge",
+    "target": "First Business Man",
+    "keywords": [
+      "business esteem",
+      "observation"
+    ],
+    "description": "Scrooge knows the businessmen and has always sought their esteem strictly in a business point of view.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "Scrooge||Second Business Man": {
+    "source": "Scrooge",
+    "target": "Second Business Man",
+    "keywords": [
+      "business esteem",
+      "observation"
+    ],
+    "description": "Scrooge knows the businessmen and has always sought their esteem strictly in a business point of view.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "Jacob||Scrooge": {
+    "source": "Scrooge",
+    "target": "Jacob",
+    "keywords": [
+      "past partnership",
+      "death"
+    ],
+    "description": "Jacob was Scrooge's old partner whose death is mentioned, though not the focus of the current lesson.",
+    "source_id": [
+      "carol_chunk_60"
+    ]
+  },
+  "The Future||The Spirit": {
+    "source": "The Spirit",
+    "target": "The Future",
+    "keywords": [
+      "revelation",
+      "supernatural"
+    ],
+    "description": "The Spirit reveals scenes from the future to Scrooge for his moral improvement.",
+    "source_id": [
+      "carol_chunk_60"
+    ]
+  },
+  "Scrooge||The Porch": {
+    "source": "Scrooge",
+    "target": "The Porch",
+    "keywords": [
+      "habit",
+      "change"
+    ],
+    "description": "Scrooge's usual corner at the Porch is occupied by another man, indicating his intended change of life.",
+    "source_id": [
+      "carol_chunk_60"
+    ]
+  },
+  "Scrooge||The Obscure Quarter": {
+    "source": "Scrooge",
+    "target": "The Obscure Quarter",
+    "keywords": [
+      "new discovery",
+      "moral lesson"
+    ],
+    "description": "Scrooge is taken to an unfamiliar, squalid part of town, highlighting the consequences of neglect.",
+    "source_id": [
+      "carol_chunk_60"
+    ]
+  },
+  "The Low-Browed Shop||The Obscure Quarter": {
+    "source": "The Obscure Quarter",
+    "target": "The Low-Browed Shop",
+    "keywords": [
+      "location",
+      "descent"
+    ],
+    "description": "The shop is situated deep within the squalid quarter, representing the depths of decay and secrecy.",
+    "source_id": [
+      "carol_chunk_60"
+    ]
+  },
+  "Old Joe||Old Joe's Shop": {
+    "source": "Old Joe",
+    "target": "Old Joe's Shop",
+    "keywords": [
+      "ownership",
+      "occupation"
+    ],
+    "description": "Old Joe is the proprietor of the shop dealing in old iron and refuse.",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "Old Joe||Parlour": {
+    "source": "Old Joe",
+    "target": "Parlour",
+    "keywords": [
+      "space",
+      "invitation"
+    ],
+    "description": "Old Joe invites the group into the parlour behind the screen of rags.",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "Charwoman||Laundress": {
+    "source": "Charwoman",
+    "target": "Laundress",
+    "keywords": [
+      "acquaintance",
+      "mutual recognition"
+    ],
+    "description": "The charwoman and laundress recognize each other and are startled by their meeting.",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "Charwoman||Undertaker's Man": {
+    "source": "Charwoman",
+    "target": "Undertaker's Man",
+    "keywords": [
+      "acquaintance",
+      "mutual recognition"
+    ],
+    "description": "The charwoman and undertaker's man recognize each other, part of the three who meet.",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "Laundress||Undertaker's Man": {
+    "source": "Laundress",
+    "target": "Undertaker's Man",
+    "keywords": [
+      "acquaintance",
+      "mutual recognition"
+    ],
+    "description": "The laundress and undertaker's man recognize each other, part of the three who meet.",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "Charwoman||Old Joe": {
+    "source": "Old Joe",
+    "target": "Charwoman",
+    "keywords": [
+      "business encounter",
+      "deal"
+    ],
+    "description": "Old Joe receives the charwoman and her bundle in his shop.",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "Laundress||Old Joe": {
+    "source": "Old Joe",
+    "target": "Laundress",
+    "keywords": [
+      "business encounter",
+      "deal"
+    ],
+    "description": "Old Joe receives the laundress and her bundle in his shop.",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "Old Joe||Undertaker's Man": {
+    "source": "Old Joe",
+    "target": "Undertaker's Man",
+    "keywords": [
+      "business encounter",
+      "deal"
+    ],
+    "description": "Old Joe receives the undertaker's man in his shop.",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "Parlour||Rags": {
+    "source": "Parlour",
+    "target": "Rags",
+    "keywords": [
+      "physical barrier",
+      "privacy"
+    ],
+    "description": "The parlour is separated from the shop by a screen made of rags.",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "Mrs. Dilber||The Woman": {
+    "source": "The Woman",
+    "target": "Mrs. Dilber",
+    "keywords": [
+      "partnership",
+      "conspiracy"
+    ],
+    "description": "The Woman and Mrs. Dilber together participate in the plunder of the dead man's belongings.",
+    "source_id": [
+      "carol_chunk_62"
+    ]
+  },
+  "Joe||Mrs. Dilber": {
+    "source": "Mrs. Dilber",
+    "target": "Joe",
+    "keywords": [
+      "transaction",
+      "appraisal"
+    ],
+    "description": "Mrs. Dilber sells her plundered items to Joe, who appraises and totals the account.",
+    "source_id": [
+      "carol_chunk_62"
+    ]
+  },
+  "Joe||The Man in Faded Black": {
+    "source": "The Man in Faded Black",
+    "target": "Joe",
+    "keywords": [
+      "transaction",
+      "appraisal"
+    ],
+    "description": "The Man in Faded Black sells his plundered items to Joe, who appraises them.",
+    "source_id": [
+      "carol_chunk_62"
+    ]
+  },
+  "The Dead Man||The Woman": {
+    "source": "The Woman",
+    "target": "The Dead Man",
+    "keywords": [
+      "criticism",
+      "judgment"
+    ],
+    "description": "The Woman criticizes the Dead Man for his lack of naturalness and claims his fate is a judgment.",
+    "source_id": [
+      "carol_chunk_62"
+    ]
+  },
+  "Mrs. Dilber||The Dead Man": {
+    "source": "Mrs. Dilber",
+    "target": "The Dead Man",
+    "keywords": [
+      "judgment",
+      "criticism"
+    ],
+    "description": "Mrs. Dilber agrees that the dead man's fate is a judgment on him.",
+    "source_id": [
+      "carol_chunk_62"
+    ]
+  },
+  "First Woman||Old Joe": {
+    "source": "Old Joe",
+    "target": "First Woman",
+    "keywords": [
+      "transaction",
+      "negotiation"
+    ],
+    "description": "Old Joe negotiates with the first woman over the price of goods.",
+    "source_id": [
+      "carol_chunk_63"
+    ]
+  },
+  "First Woman||He": {
+    "source": "First Woman",
+    "target": "He",
+    "keywords": [
+      "stole belongings",
+      "deceased"
+    ],
+    "description": "The first woman took items from the deceased man's body and is now selling them.",
+    "source_id": [
+      "carol_chunk_63"
+    ]
+  },
+  "Old Joe||Scrooge": {
+    "source": "Scrooge",
+    "target": "Old Joe",
+    "keywords": [
+      "observation",
+      "disgust"
+    ],
+    "description": "Scrooge watches Old Joe's dealings and feels detestation.",
+    "source_id": [
+      "carol_chunk_63"
+    ]
+  },
+  "First Woman||Scrooge": {
+    "source": "Scrooge",
+    "target": "First Woman",
+    "keywords": [
+      "observation",
+      "disgust"
+    ],
+    "description": "Scrooge views the first woman with disgust as she sells the stolen goods.",
+    "source_id": [
+      "carol_chunk_63"
+    ]
+  },
+  "Scrooge||The Phantom": {
+    "source": "Scrooge",
+    "target": "The Phantom",
+    "keywords": [
+      "guidance",
+      "supernatural"
+    ],
+    "description": "Scrooge is guided by the Phantom through visions of the dead man's fate.",
+    "source_id": [
+      "carol_chunk_64"
+    ]
+  },
+  "Scrooge||The Corpse": {
+    "source": "Scrooge",
+    "target": "The Corpse",
+    "keywords": [
+      "reflection",
+      "mortality"
+    ],
+    "description": "Scrooge sees the corpse and reflects that the man's fate might be his own.",
+    "source_id": [
+      "carol_chunk_64"
+    ]
+  },
+  "Old Joe||The Woman": {
+    "source": "Old Joe",
+    "target": "The Woman",
+    "keywords": [
+      "distribution of money",
+      "greed"
+    ],
+    "description": "Old Joe and the woman are involved in dividing the dead man's money.",
+    "source_id": [
+      "carol_chunk_64"
+    ]
+  },
+  "The Corpse||The Lamp": {
+    "source": "The Corpse",
+    "target": "The Lamp",
+    "keywords": [
+      "lighting",
+      "scene"
+    ],
+    "description": "The lamp provides light over the corpse.",
+    "source_id": [
+      "carol_chunk_64"
+    ]
+  },
+  "The Dead Man||The Ghost": {
+    "source": "The Ghost",
+    "target": "The Dead Man",
+    "keywords": [
+      "revelation",
+      "pointing"
+    ],
+    "description": "The Ghost points to the Dead Man's head, indicating the significance of his death.",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "Scrooge||The Dead Man": {
+    "source": "Scrooge",
+    "target": "The Dead Man",
+    "keywords": [
+      "reflection",
+      "moral awakening"
+    ],
+    "description": "Scrooge reflects on the Dead Man's life and feels the need to avoid a similar fate.",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "Caroline||Caroline's Husband": {
+    "source": "Caroline",
+    "target": "Caroline's Husband",
+    "keywords": [
+      "marriage",
+      "news sharing",
+      "communication"
+    ],
+    "description": "Caroline and her husband share the news of the Dead Man's death, bringing them relief and hope. | Caroline's husband tells Caroline about the dead man's death, bringing her relief.",
+    "source_id": [
+      "carol_chunk_65",
+      "carol_chunk_66"
+    ]
+  },
+  "Caroline||The Dead Man": {
+    "source": "Caroline",
+    "target": "The Dead Man",
+    "keywords": [
+      "relief",
+      "hope",
+      "emotional reaction"
+    ],
+    "description": "Caroline is relieved by the Dead Man's death, seeing hope for her family's future. | Caroline feels thankful and relieved at the death of the man, which she perceives as a miracle.",
+    "source_id": [
+      "carol_chunk_65",
+      "carol_chunk_66"
+    ]
+  },
+  "Caroline's Husband||The Dead Man": {
+    "source": "Caroline's Husband",
+    "target": "The Dead Man",
+    "keywords": [
+      "debt",
+      "relief",
+      "creditor"
+    ],
+    "description": "Caroline's Husband reports the Dead Man's death, which relieves them from ruin. | Caroline's husband learns of the dead man's death, which was their creditor.",
+    "source_id": [
+      "carol_chunk_65",
+      "carol_chunk_66"
+    ]
+  },
+  "Caroline||The Ghost": {
+    "source": "The Ghost",
+    "target": "Caroline",
+    "keywords": [
+      "revealing scene"
+    ],
+    "description": "The Ghost reveals Caroline and her family to Scrooge as a person affected by the Dead Man's death.",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "The Cat||The Dark Empty House": {
+    "source": "The Cat",
+    "target": "The Dark Empty House",
+    "keywords": [
+      "presence",
+      "desolation"
+    ],
+    "description": "The Cat is in the dark house, tearing at the door, indicating neglect and decay.",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "The Dark Empty House||The Rats": {
+    "source": "The Rats",
+    "target": "The Dark Empty House",
+    "keywords": [
+      "presence",
+      "decay"
+    ],
+    "description": "The Rats gnaw beneath the hearthstone, adding to the desolate atmosphere of the house.",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "Scrooge||The Lesson": {
+    "source": "Scrooge",
+    "target": "The Lesson",
+    "keywords": [
+      "moral resolution"
+    ],
+    "description": "Scrooge vows to keep the lesson from the death scene, indicating a resolve to change.",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "Caroline's Husband||Half-Drunken Woman": {
+    "source": "Half-Drunken Woman",
+    "target": "Caroline's Husband",
+    "keywords": [
+      "information",
+      "warning"
+    ],
+    "description": "The half-drunken woman told Caroline's husband that the man was ill and dying.",
+    "source_id": [
+      "carol_chunk_66"
+    ]
+  },
+  "Cratchit's Wife||Tiny Tim": {
+    "source": "Cratchit's Wife",
+    "target": "Tiny Tim",
+    "keywords": [
+      "grief",
+      "motherhood"
+    ],
+    "description": "Cratchit's wife reacts emotionally to the mention of Tiny Tim's illness or death.",
+    "source_id": [
+      "carol_chunk_66"
+    ]
+  },
+  "Peter||The Children": {
+    "source": "Peter",
+    "target": "The Children",
+    "keywords": [
+      "reading",
+      "family"
+    ],
+    "description": "Peter reads a book to the gathered children.",
+    "source_id": [
+      "carol_chunk_66"
+    ]
+  },
+  "The Formerly Dark Chamber||The Ghost": {
+    "source": "The Ghost",
+    "target": "The Formerly Dark Chamber",
+    "keywords": [
+      "connection",
+      "memory"
+    ],
+    "description": "Scrooge refers to the dark chamber he was shown earlier, expressing it will be ever present.",
+    "source_id": [
+      "carol_chunk_66"
+    ]
+  },
+  "Caroline's Husband||The Debt": {
+    "source": "Caroline's Husband",
+    "target": "The Debt",
+    "keywords": [
+      "financial obligation",
+      "repayment"
+    ],
+    "description": "Caroline's husband discusses the debt and plans to pay it with the money.",
+    "source_id": [
+      "carol_chunk_66"
+    ]
+  },
+  "The Dead Man||The Debt": {
+    "source": "The Dead Man",
+    "target": "The Debt",
+    "keywords": [
+      "creditor",
+      "debt"
+    ],
+    "description": "The dead man was a creditor to whom the debt was owed.",
+    "source_id": [
+      "carol_chunk_66"
+    ]
+  },
+  "Peter Cratchit||Tiny Tim": {
+    "source": "Peter Cratchit",
+    "target": "Tiny Tim",
+    "keywords": [
+      "grief",
+      "memory",
+      "sibling love"
+    ],
+    "description": "Peter remembers walking with Tiny Tim and shares his grief over his brother's death.",
+    "source_id": [
+      "carol_chunk_67"
+    ]
+  },
+  "The Cratchit Family||Tiny Tim": {
+    "source": "The Cratchit Family",
+    "target": "Tiny Tim",
+    "keywords": [
+      "love",
+      "grief",
+      "remembrance"
+    ],
+    "description": "The entire Cratchit family mourns the loss of Tiny Tim and remembers him with love and sorrow.",
+    "source_id": [
+      "carol_chunk_67"
+    ]
+  },
+  "Bob Cratchit||Peter Cratchit": {
+    "source": "Bob Cratchit",
+    "target": "Peter Cratchit",
+    "keywords": [
+      "father-son",
+      "concern"
+    ],
+    "description": "Bob expresses hope that Peter will receive a better situation through the kindness of Mr. Scrooge's nephew.",
+    "source_id": [
+      "carol_chunk_68"
+    ]
+  },
+  "Bob Cratchit||Mr. Scrooge's Nephew": {
+    "source": "Bob Cratchit",
+    "target": "Mr. Scrooge's Nephew",
+    "keywords": [
+      "kindness",
+      "gratitude"
+    ],
+    "description": "Bob appreciates the kindness of Mr. Scrooge's nephew, who offered help and gave his card.",
+    "source_id": [
+      "carol_chunk_68"
+    ]
+  },
+  "Mr. Scrooge's Nephew||Mrs. Cratchit": {
+    "source": "Mrs. Cratchit",
+    "target": "Mr. Scrooge's Nephew",
+    "keywords": [
+      "gratitude",
+      "admiration"
+    ],
+    "description": "Mrs. Cratchit expresses admiration for Mr. Scrooge's nephew, calling him a good soul.",
+    "source_id": [
+      "carol_chunk_68"
+    ]
+  },
+  "Mr. Scrooge's Nephew||Peter Cratchit": {
+    "source": "Peter Cratchit",
+    "target": "Mr. Scrooge's Nephew",
+    "keywords": [
+      "potential opportunity"
+    ],
+    "description": "Peter might benefit from a better situation due to the kindness of Mr. Scrooge's nephew.",
+    "source_id": [
+      "carol_chunk_68"
+    ]
+  },
+  "Ghost of Christmas Yet to Come||Scrooge": {
+    "source": "Scrooge",
+    "target": "Ghost of Christmas Yet to Come",
+    "keywords": [
+      "guidance",
+      "future revelation"
+    ],
+    "description": "The Ghost of Christmas Yet to Come guides Scrooge through visions of the future, including his potential death.",
+    "source_id": [
+      "carol_chunk_69"
+    ]
+  },
+  "Churchyard||Ghost of Christmas Yet to Come": {
+    "source": "Ghost of Christmas Yet to Come",
+    "target": "Churchyard",
+    "keywords": [
+      "location",
+      "symbolic revelation"
+    ],
+    "description": "The Ghost takes Scrooge to a churchyard to show him a grave, indicating an important future revelation.",
+    "source_id": [
+      "carol_chunk_69"
+    ]
+  },
+  "Ghost of Christmas Yet to Come||The Grave": {
+    "source": "Ghost of Christmas Yet to Come",
+    "target": "The Grave",
+    "keywords": [
+      "pointing",
+      "destination"
+    ],
+    "description": "The Ghost points down to a specific grave in the churchyard, which is central to Scrooge's future.",
+    "source_id": [
+      "carol_chunk_69"
+    ]
+  },
+  "Scrooge||Scrooge's Office": {
+    "source": "Scrooge",
+    "target": "Scrooge's Office",
+    "keywords": [
+      "occupational connection"
+    ],
+    "description": "Scrooge identifies the office as his place of occupation and observes it in the future, noting changes.",
+    "source_id": [
+      "carol_chunk_69"
+    ]
+  },
+  "Ebenezer Scrooge||Scrooge": {
+    "source": "Scrooge",
+    "target": "Ebenezer Scrooge",
+    "keywords": [
+      "identity",
+      "fate"
+    ],
+    "description": "Scrooge reads his own name on the grave, realizing the identity of the man in the vision.",
+    "source_id": [
+      "carol_chunk_70"
+    ]
+  },
+  "A Christmas Carol||Scrooge": {
+    "source": "A Christmas Carol",
+    "target": "Scrooge",
+    "keywords": [
+      "character portrayal"
+    ],
+    "description": "A Christmas Carol features Scrooge as the protagonist and his journey toward redemption.",
+    "source_id": [
+      "carol_chunk_70"
+    ]
+  },
+  "Ebenezer Scrooge||The Ghost": {
+    "source": "Ebenezer Scrooge",
+    "target": "The Ghost",
+    "keywords": [
+      "revelation",
+      "fear"
+    ],
+    "description": "The grave with Ebenezer Scrooge's name is shown by the Ghost, causing Scrooge's fear and plea.",
+    "source_id": [
+      "carol_chunk_70"
+    ]
+  },
+  "Christmas Time||Scrooge": {
+    "source": "Scrooge",
+    "target": "Christmas Time",
+    "keywords": [
+      "celebration",
+      "joy"
+    ],
+    "description": "Scrooge praises Christmas Time, expressing joy and good intentions.",
+    "source_id": [
+      "carol_chunk_71"
+    ]
+  },
+  "Ghost Of Christmas Present||Scrooge": {
+    "source": "Scrooge",
+    "target": "Ghost Of Christmas Present",
+    "keywords": [
+      "spiritual visitation",
+      "memory"
+    ],
+    "description": "Scrooge remembers that the Ghost of Christmas Present sat in the corner of the room.",
+    "source_id": [
+      "carol_chunk_71"
+    ]
+  },
+  "Bed Curtains||Scrooge": {
+    "source": "Scrooge",
+    "target": "Bed Curtains",
+    "keywords": [
+      "possession",
+      "reassurance"
+    ],
+    "description": "Scrooge holds the bed curtains and affirms they are not torn down, indicating relief about his reality.",
+    "source_id": [
+      "carol_chunk_71"
+    ]
+  },
+  "Scrooge||The Window": {
+    "source": "Scrooge",
+    "target": "The Window",
+    "keywords": [
+      "observation",
+      "light"
+    ],
+    "description": "Scrooge sees wandering Spirits from the window and later opens it to view the bright outside.",
+    "source_id": [
+      "carol_chunk_71"
+    ]
+  },
+  "Scrooge||The Prize Turkey": {
+    "source": "Scrooge",
+    "target": "The Prize Turkey",
+    "keywords": [
+      "purchase",
+      "gift"
+    ],
+    "description": "Scrooge buys the big prize turkey to send to Bob Cratchit's family.",
+    "source_id": [
+      "carol_chunk_72"
+    ]
+  },
+  "Boy||Scrooge": {
+    "source": "Scrooge",
+    "target": "Boy",
+    "keywords": [
+      "errand",
+      "commission"
+    ],
+    "description": "Scrooge instructs the Boy to buy the turkey and bring it back.",
+    "source_id": [
+      "carol_chunk_72"
+    ]
+  },
+  "Scrooge||The Spirits": {
+    "source": "Scrooge",
+    "target": "The Spirits",
+    "keywords": [
+      "transformation",
+      "gratitude"
+    ],
+    "description": "Scrooge acknowledges the Spirits' role in his change and that they achieved it in one night.",
+    "source_id": [
+      "carol_chunk_72"
+    ]
+  },
+  "Christmas Day||Scrooge": {
+    "source": "Scrooge",
+    "target": "Christmas Day",
+    "keywords": [
+      "celebration",
+      "joy"
+    ],
+    "description": "Scrooge rejoices that it is Christmas Day and that he hasn't missed it.",
+    "source_id": [
+      "carol_chunk_72"
+    ]
+  },
+  "Scrooge||The Knocker": {
+    "source": "Scrooge",
+    "target": "The Knocker",
+    "keywords": [
+      "appreciation",
+      "sentiment"
+    ],
+    "description": "Scrooge professes love for the knocker, reflecting his changed attitude.",
+    "source_id": [
+      "carol_chunk_72"
+    ]
+  },
+  "Scrooge||The Turkey": {
+    "source": "Scrooge",
+    "target": "The Turkey",
+    "keywords": [
+      "purchase",
+      "generosity",
+      "Christmas"
+    ],
+    "description": "Scrooge buys a turkey and sends it to Camden Town, showing his generosity.",
+    "source_id": [
+      "carol_chunk_73"
+    ]
+  },
+  "Scrooge||The Boy": {
+    "source": "Scrooge",
+    "target": "The Boy",
+    "keywords": [
+      "compensation",
+      "delivery"
+    ],
+    "description": "Scrooge recompenses the boy for his services likely related to the turkey delivery.",
+    "source_id": [
+      "carol_chunk_73"
+    ]
+  },
+  "Scrooge||The Portly Gentleman": {
+    "source": "Scrooge",
+    "target": "The Portly Gentleman",
+    "keywords": [
+      "apology",
+      "reconciliation"
+    ],
+    "description": "Scrooge apologizes to the gentleman and asks for his pardon.",
+    "source_id": [
+      "carol_chunk_73"
+    ]
+  },
+  "Camden Town||Scrooge": {
+    "source": "Scrooge",
+    "target": "Camden Town",
+    "keywords": [
+      "delivery",
+      "location"
+    ],
+    "description": "Scrooge sends the turkey to Camden Town.",
+    "source_id": [
+      "carol_chunk_73"
+    ]
+  },
+  "Scrooge||The Gentleman": {
+    "source": "Scrooge",
+    "target": "The Gentleman",
+    "keywords": [
+      "charitable donation",
+      "reconciliation"
+    ],
+    "description": "Scrooge gives a generous donation to the gentleman's charity, including back-payments.",
+    "source_id": [
+      "carol_chunk_74"
+    ]
+  },
+  "Scrooge||The Office": {
+    "source": "Scrooge",
+    "target": "The Office",
+    "keywords": [
+      "workplace",
+      "context"
+    ],
+    "description": "Scrooge is at the office early to confront Bob, indicating his role as an employer.",
+    "source_id": [
+      "carol_chunk_75"
+    ]
+  },
+  "Bob Cratchit||The Tank": {
+    "source": "Bob Cratchit",
+    "target": "The Tank",
+    "keywords": [
+      "workspace",
+      "employment"
+    ],
+    "description": "Bob Cratchit works in the tank, which is his designated space in the office.",
+    "source_id": [
+      "carol_chunk_75"
+    ]
+  },
+  "The Party||Topper": {
+    "source": "Topper",
+    "target": "The Party",
+    "keywords": [
+      "participation",
+      "social gathering"
+    ],
+    "description": "Topper attends the party, contributing to the festive atmosphere.",
+    "source_id": [
+      "carol_chunk_75"
+    ]
+  },
+  "Plump Sister||The Party": {
+    "source": "Plump Sister",
+    "target": "The Party",
+    "keywords": [
+      "participation",
+      "social gathering"
+    ],
+    "description": "The plump sister attends the party, contributing to the festive atmosphere.",
+    "source_id": [
+      "carol_chunk_75"
+    ]
+  },
+  "Dinner||The Party": {
+    "source": "Dinner",
+    "target": "The Party",
+    "keywords": [
+      "festivity",
+      "celebration"
+    ],
+    "description": "Dinner is a part of the party, highlighting the celebratory nature of the gathering.",
+    "source_id": [
+      "carol_chunk_75"
+    ]
+  },
+  "Ebenezer Scrooge||Tiny Tim": {
+    "source": "Ebenezer Scrooge",
+    "target": "Tiny Tim",
+    "keywords": [
+      "father figure",
+      "care"
+    ],
+    "description": "Scrooge becomes a second father to Tiny Tim, who did not die.",
+    "source_id": [
+      "carol_chunk_76"
+    ]
+  },
+  "Ebenezer Scrooge||Total-Abstinence Principle": {
+    "source": "Ebenezer Scrooge",
+    "target": "Total-Abstinence Principle",
+    "keywords": [
+      "lifestyle",
+      "transformation"
+    ],
+    "description": "Scrooge lived upon the Total-Abstinence Principle after his change.",
+    "source_id": [
+      "carol_chunk_76"
+    ]
+  },
+  "Christmas||Ebenezer Scrooge": {
+    "source": "Ebenezer Scrooge",
+    "target": "Christmas",
+    "keywords": [
+      "observation",
+      "celebration"
+    ],
+    "description": "Scrooge learned to keep Christmas well after his transformation.",
+    "source_id": [
+      "carol_chunk_76"
+    ]
+  },
+  "A Christmas Carol||Ebenezer Scrooge": {
+    "source": "A Christmas Carol",
+    "target": "Ebenezer Scrooge",
+    "keywords": [
+      "character",
+      "narrative"
+    ],
+    "description": "A Christmas Carol features Ebenezer Scrooge as its protagonist.",
+    "source_id": [
+      "carol_chunk_76"
+    ]
+  },
+  "A Christmas Carol||Bob Cratchit": {
+    "source": "A Christmas Carol",
+    "target": "Bob Cratchit",
+    "keywords": [
+      "character",
+      "narrative"
+    ],
+    "description": "Bob Cratchit is a character in A Christmas Carol.",
+    "source_id": [
+      "carol_chunk_76"
+    ]
+  },
+  "A Christmas Carol||Tiny Tim": {
+    "source": "A Christmas Carol",
+    "target": "Tiny Tim",
+    "keywords": [
+      "character",
+      "narrative"
+    ],
+    "description": "Tiny Tim is a character in A Christmas Carol.",
+    "source_id": [
+      "carol_chunk_76"
+    ]
+  },
+  "Project Gutenberg||Project Gutenberg Trademark": {
+    "source": "Project Gutenberg",
+    "target": "Project Gutenberg Trademark",
+    "keywords": [
+      "ownership",
+      "trademark"
+    ],
+    "description": "Project Gutenberg holds a registered trademark that governs its name and associated works.",
+    "source_id": [
+      "carol_chunk_77"
+    ]
+  },
+  "Project Gutenberg Electronic Work||Project Gutenberg Trademark": {
+    "source": "Project Gutenberg Electronic Work",
+    "target": "Project Gutenberg Trademark",
+    "keywords": [
+      "association",
+      "trademark use"
+    ],
+    "description": "Project Gutenberg electronic works are associated with the Project Gutenberg trademark and subject to its license.",
+    "source_id": [
+      "carol_chunk_77"
+    ]
+  },
+  "Free Distribution of Electronic Works||Project Gutenberg": {
+    "source": "Project Gutenberg",
+    "target": "Free Distribution of Electronic Works",
+    "keywords": [
+      "mission",
+      "promotion"
+    ],
+    "description": "Project Gutenberg's mission is to promote the free distribution of electronic works.",
+    "source_id": [
+      "carol_chunk_77"
+    ]
+  },
+  "Full Project Gutenberg License||Project Gutenberg Electronic Work": {
+    "source": "Full Project Gutenberg License",
+    "target": "Project Gutenberg Electronic Work",
+    "keywords": [
+      "terms",
+      "compliance"
+    ],
+    "description": "The Full Project Gutenberg License outlines the terms that users must comply with when using or distributing Project Gutenberg electronic works.",
+    "source_id": [
+      "carol_chunk_77"
+    ]
+  },
+  "Project Gutenberg Electronic Work||United States Copyright Law": {
+    "source": "Project Gutenberg Electronic Work",
+    "target": "United States Copyright Law",
+    "keywords": [
+      "legal compliance",
+      "public domain"
+    ],
+    "description": "Project Gutenberg electronic works are subject to United States copyright law, which determines permitted uses.",
+    "source_id": [
+      "carol_chunk_77"
+    ]
+  },
+  "Project Gutenberg Trademark||Trademark License": {
+    "source": "Project Gutenberg Trademark",
+    "target": "Trademark License",
+    "keywords": [
+      "permission",
+      "royalties"
+    ],
+    "description": "The Project Gutenberg trademark is used under a trademark license that may require royalty payments for commercial use.",
+    "source_id": [
+      "carol_chunk_77"
+    ]
+  },
+  "Project Gutenberg Electronic Works||Project Gutenberg Literary Archive Foundation": {
+    "source": "Project Gutenberg Literary Archive Foundation",
+    "target": "Project Gutenberg Electronic Works",
+    "keywords": [
+      "ownership",
+      "compilation copyright",
+      "royalty payments"
+    ],
+    "description": "The Foundation owns a compilation copyright over the collection of Project Gutenberg electronic works. | Royalty fees for the use of Project Gutenberg Electronic Works are paid to the Foundation.",
+    "source_id": [
+      "carol_chunk_78",
+      "carol_chunk_80"
+    ]
+  },
+  "Project Gutenberg Electronic Works||Project Gutenberg License": {
+    "source": "Project Gutenberg Electronic Works",
+    "target": "Project Gutenberg License",
+    "keywords": [
+      "distribution",
+      "terms of use",
+      "legal terms"
+    ],
+    "description": "Project Gutenberg electronic works are distributed under the terms of the Project Gutenberg License, which governs their use. | The Project Gutenberg License outlines the terms under which Project Gutenberg Electronic Works can be distributed.",
+    "source_id": [
+      "carol_chunk_78",
+      "carol_chunk_80"
+    ]
+  },
+  "Project Gutenberg Literary Archive Foundation||Public Domain": {
+    "source": "Project Gutenberg Literary Archive Foundation",
+    "target": "Public Domain",
+    "keywords": [
+      "copyright status",
+      "free access"
+    ],
+    "description": "The Foundation states that nearly all individual works in the collection are in the public domain in the United States.",
+    "source_id": [
+      "carol_chunk_78"
+    ]
+  },
+  "Project Gutenberg Electronic Works||United States": {
+    "source": "Project Gutenberg Electronic Works",
+    "target": "United States",
+    "keywords": [
+      "copyright jurisdiction",
+      "public domain"
+    ],
+    "description": "The copyright status of Project Gutenberg electronic works is defined by U.S. copyright law, and the Foundation makes no claims for countries other than the United States.",
+    "source_id": [
+      "carol_chunk_78"
+    ]
+  },
+  "Derivative Works||Public Domain": {
+    "source": "Public Domain",
+    "target": "Derivative Works",
+    "keywords": [
+      "permitted use",
+      "adaptation"
+    ],
+    "description": "Works in the public domain allow the creation of derivative works, as long as all references to Project Gutenberg are removed.",
+    "source_id": [
+      "carol_chunk_78"
+    ]
+  },
+  "Project Gutenberg™||Project Gutenberg™ License": {
+    "source": "Project Gutenberg™",
+    "target": "Project Gutenberg™ License",
+    "keywords": [
+      "governance",
+      "terms of use"
+    ],
+    "description": "Project Gutenberg™ provides a license that governs the use and distribution of its electronic works.",
+    "source_id": [
+      "carol_chunk_79"
+    ]
+  },
+  "Project Gutenberg™ License||Project Gutenberg™ electronic work": {
+    "source": "Project Gutenberg™ electronic work",
+    "target": "Project Gutenberg™ License",
+    "keywords": [
+      "subject to",
+      "compliance"
+    ],
+    "description": "Project Gutenberg™ electronic works are distributed and used under the terms of the Project Gutenberg™ License.",
+    "source_id": [
+      "carol_chunk_79"
+    ]
+  },
+  "Project Gutenberg™ electronic work||United States": {
+    "source": "Project Gutenberg™ electronic work",
+    "target": "United States",
+    "keywords": [
+      "distribution",
+      "legal compliance"
+    ],
+    "description": "Project Gutenberg™ electronic works can be copied and distributed in the United States under certain conditions, subject to U.S. laws.",
+    "source_id": [
+      "carol_chunk_79"
+    ]
+  },
+  "Project Gutenberg™ electronic work||U.S. copyright law": {
+    "source": "Project Gutenberg™ electronic work",
+    "target": "U.S. copyright law",
+    "keywords": [
+      "copyright status",
+      "legal basis"
+    ],
+    "description": "The copyright status of a Project Gutenberg™ electronic work is determined by U.S. copyright law, which affects its distribution.",
+    "source_id": [
+      "carol_chunk_79"
+    ]
+  },
+  "Plain Vanilla ASCII Format||Project Gutenberg License": {
+    "source": "Project Gutenberg License",
+    "target": "Plain Vanilla ASCII Format",
+    "keywords": [
+      "format requirement"
+    ],
+    "description": "The License specifies that alternate formats must provide access to the work in Plain Vanilla ASCII format.",
+    "source_id": [
+      "carol_chunk_80"
+    ]
+  },
+  "Plain Vanilla ASCII Format||Project Gutenberg Electronic Works": {
+    "source": "Project Gutenberg Electronic Works",
+    "target": "Plain Vanilla ASCII Format",
+    "keywords": [
+      "standard format"
+    ],
+    "description": "Project Gutenberg Electronic Works are provided in Plain Vanilla ASCII format as the standard.",
+    "source_id": [
+      "carol_chunk_80"
+    ]
+  },
+  "Project Gutenberg Literary Archive Foundation||Project Gutenberg Trademark Owner": {
+    "source": "Project Gutenberg Trademark Owner",
+    "target": "Project Gutenberg Literary Archive Foundation",
+    "keywords": [
+      "royalty donation"
+    ],
+    "description": "The trademark owner has agreed to donate royalty fees to the Project Gutenberg Literary Archive Foundation.",
+    "source_id": [
+      "carol_chunk_80"
+    ]
+  },
+  "Project Gutenberg||Project Gutenberg Literary Archive Foundation": {
+    "source": "Project Gutenberg Literary Archive Foundation",
+    "target": "Project Gutenberg",
+    "keywords": [
+      "management",
+      "trademark ownership",
+      "support",
+      "funding",
+      "donations"
+    ],
+    "description": "The Project Gutenberg Literary Archive Foundation manages the Project Gutenberg trademark. | The foundation supports Project Gutenberg by accepting donations and maintaining compliance. | Project Gutenberg provides information on how to make donations to the Project Gutenberg Literary Archive Foundation.",
+    "source_id": [
+      "carol_chunk_81",
+      "carol_chunk_84",
+      "carol_chunk_85"
+    ]
+  },
+  "Project Gutenberg||Project Gutenberg Electronic Works": {
+    "source": "Project Gutenberg",
+    "target": "Project Gutenberg Electronic Works",
+    "keywords": [
+      "distribution",
+      "creation"
+    ],
+    "description": "Project Gutenberg creates and distributes electronic works.",
+    "source_id": [
+      "carol_chunk_81"
+    ]
+  },
+  "Copyright||Project Gutenberg Electronic Works": {
+    "source": "Project Gutenberg Electronic Works",
+    "target": "Copyright",
+    "keywords": [
+      "legal compliance",
+      "intellectual property"
+    ],
+    "description": "Project Gutenberg electronic works may contain copyright or other intellectual property infringements.",
+    "source_id": [
+      "carol_chunk_81"
+    ]
+  },
+  "Agreement||Project Gutenberg": {
+    "source": "Project Gutenberg",
+    "target": "Agreement",
+    "keywords": [
+      "legal terms",
+      "distribution"
+    ],
+    "description": "The agreement sets forth terms for free distribution of Project Gutenberg works.",
+    "source_id": [
+      "carol_chunk_81"
+    ]
+  },
+  "Agreement||You": {
+    "source": "Agreement",
+    "target": "You",
+    "keywords": [
+      "legal contract",
+      "obligations"
+    ],
+    "description": "The Agreement binds the receiver, 'You', to its terms, including the indemnity clause.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Agreement||Publisher": {
+    "source": "Agreement",
+    "target": "Publisher",
+    "keywords": [
+      "legal contract",
+      "obligations"
+    ],
+    "description": "The Agreement binds the Publisher to its terms, including the liability limitation and warranty disclaimer.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Defective Work||Replacement Copy": {
+    "source": "Defective Work",
+    "target": "Replacement Copy",
+    "keywords": [
+      "replacement",
+      "defect remedy"
+    ],
+    "description": "A defective work may be replaced by a replacement copy provided by the supplier.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Defective Work||Refund": {
+    "source": "Defective Work",
+    "target": "Refund",
+    "keywords": [
+      "refund",
+      "defect remedy"
+    ],
+    "description": "A user may receive a refund for a defective work if requested in writing.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Defective Work||Second Opportunity": {
+    "source": "Defective Work",
+    "target": "Second Opportunity",
+    "keywords": [
+      "electronic delivery",
+      "defect remedy"
+    ],
+    "description": "For electronically delivered defective works, a second opportunity to receive the work may be provided instead of a refund.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Defective Work||You": {
+    "source": "You",
+    "target": "Defective Work",
+    "keywords": [
+      "purchase",
+      "defect notification"
+    ],
+    "description": "The user discovers a defect in the work and may request a refund or replacement.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Refund||You": {
+    "source": "You",
+    "target": "Refund",
+    "keywords": [
+      "financial remedy",
+      "user rights"
+    ],
+    "description": "The user is entitled to a refund if the work is defective and not replaced.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Replacement Copy||You": {
+    "source": "You",
+    "target": "Replacement Copy",
+    "keywords": [
+      "remedy",
+      "user rights"
+    ],
+    "description": "The user may receive a replacement copy instead of a refund.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Written Explanation||You": {
+    "source": "You",
+    "target": "Written Explanation",
+    "keywords": [
+      "correspondence",
+      "user action"
+    ],
+    "description": "The user must provide a written explanation to request a refund or replacement.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Project Gutenberg Electronic Works||You": {
+    "source": "You",
+    "target": "Project Gutenberg Electronic Works",
+    "keywords": [
+      "use",
+      "distribution"
+    ],
+    "description": "The user agrees to indemnify the Foundation for any distribution of Project Gutenberg works.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Publisher||User": {
+    "source": "Publisher",
+    "target": "User",
+    "keywords": [
+      "agreement",
+      "rights and obligations"
+    ],
+    "description": "The Publisher and User are parties to the Agreement, with the Publisher providing the work.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Project Gutenberg Literary Archive Foundation||Project Gutenberg™": {
+    "source": "Project Gutenberg Literary Archive Foundation",
+    "target": "Project Gutenberg™",
+    "keywords": [
+      "support",
+      "foundation"
+    ],
+    "description": "The Project Gutenberg Literary Archive Foundation was created to provide a secure and permanent future for Project Gutenberg™.",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "Internal Revenue Service||Project Gutenberg Literary Archive Foundation": {
+    "source": "Internal Revenue Service",
+    "target": "Project Gutenberg Literary Archive Foundation",
+    "keywords": [
+      "tax exemption",
+      "regulation"
+    ],
+    "description": "The Internal Revenue Service granted tax exempt status to the Project Gutenberg Literary Archive Foundation.",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "Free Distribution||Project Gutenberg™": {
+    "source": "Project Gutenberg™",
+    "target": "Free Distribution",
+    "keywords": [
+      "mission",
+      "core goal"
+    ],
+    "description": "Project Gutenberg™ aims to achieve free distribution of electronic works.",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "Michael S. Hart||Project Gutenberg": {
+    "source": "Michael S. Hart",
+    "target": "Project Gutenberg",
+    "keywords": [
+      "concept",
+      "origin"
+    ],
+    "description": "Michael S. Hart originated the concept of Project Gutenberg and produced eBooks for it.",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "Project Gutenberg||Public Domain Works": {
+    "source": "Project Gutenberg",
+    "target": "Public Domain Works",
+    "keywords": [
+      "distribution",
+      "content"
+    ],
+    "description": "Project Gutenberg distributes public domain works in machine-readable form.",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "Machine-Readable Form||Project Gutenberg": {
+    "source": "Project Gutenberg",
+    "target": "Machine-Readable Form",
+    "keywords": [
+      "format",
+      "accessibility"
+    ],
+    "description": "Project Gutenberg makes works available in machine-readable form accessible by various equipment.",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "Project Gutenberg Literary Archive Foundation||Tax Exempt Status": {
+    "source": "Project Gutenberg Literary Archive Foundation",
+    "target": "Tax Exempt Status",
+    "keywords": [
+      "compliance",
+      "IRS"
+    ],
+    "description": "The foundation maintains tax-exempt status with the IRS.",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "IRS||Tax Exempt Status": {
+    "source": "IRS",
+    "target": "Tax Exempt Status",
+    "keywords": [
+      "regulation",
+      "status"
+    ],
+    "description": "IRS grants and regulates tax-exempt status.",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "Project Gutenberg Literary Archive Foundation||United States": {
+    "source": "Project Gutenberg Literary Archive Foundation",
+    "target": "United States",
+    "keywords": [
+      "compliance",
+      "law"
+    ],
+    "description": "The foundation complies with laws in all 50 states of the United States.",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "Project Gutenberg Literary Archive Foundation||Written Confirmation of Compliance": {
+    "source": "Project Gutenberg Literary Archive Foundation",
+    "target": "Written Confirmation of Compliance",
+    "keywords": [
+      "solicitation",
+      "compliance"
+    ],
+    "description": "The foundation requires written confirmation of compliance before soliciting donations.",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "Project Gutenberg Literary Archive Foundation||Unsolicited Donations": {
+    "source": "Project Gutenberg Literary Archive Foundation",
+    "target": "Unsolicited Donations",
+    "keywords": [
+      "donations",
+      "acceptance"
+    ],
+    "description": "The foundation accepts unsolicited donations from donors in states where compliance is not met.",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "International Donations||Project Gutenberg Literary Archive Foundation": {
+    "source": "Project Gutenberg Literary Archive Foundation",
+    "target": "International Donations",
+    "keywords": [
+      "donations",
+      "acceptance"
+    ],
+    "description": "The foundation accepts international donations but makes no tax treatment statements.",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "Donation Methods||Project Gutenberg Literary Archive Foundation": {
+    "source": "Project Gutenberg Literary Archive Foundation",
+    "target": "Donation Methods",
+    "keywords": [
+      "donations",
+      "process"
+    ],
+    "description": "The foundation accepts donations through various methods, including checks and online payments.",
+    "source_id": [
+      "carol_chunk_84"
+    ]
+  },
+  "Project Gutenberg||Website": {
+    "source": "Website",
+    "target": "Project Gutenberg",
+    "keywords": [
+      "information",
+      "digital platform"
+    ],
+    "description": "The website includes information about Project Gutenberg, including how to donate and subscribe to the newsletter.",
+    "source_id": [
+      "carol_chunk_85"
+    ]
+  },
+  "Email Newsletter||Project Gutenberg": {
+    "source": "Project Gutenberg",
+    "target": "Email Newsletter",
+    "keywords": [
+      "subscription",
+      "communication"
+    ],
+    "description": "Project Gutenberg offers an email newsletter subscription to hear about new eBooks.",
+    "source_id": [
+      "carol_chunk_85"
+    ]
+  }
+}

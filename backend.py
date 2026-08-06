@@ -43,10 +43,22 @@ async def api_llm(system: str, prompt: str) -> str:
         ],
         max_tokens=4096,
         timeout=EXTRACTION_TIMEOUT,
+        extra_body={"thinking": {"type": "disabled"}},
     )
-    return resp.choices[0].message.content
+
+    choice = resp.choices[0]
+    content = choice.message.content
+
+    if not content:
+        print("[api_llm] empty content", flush=True)
+        print(f"[api_llm] finish_reason: {choice.finish_reason}", flush=True)
+        print(f"[api_llm] usage: {resp.usage}", flush=True)
+        print(f"[api_llm] message: {choice.message}", flush=True)
+
+    return content
 
 llm_func = api_llm if LLM_BACKEND == "api" else ollama_llm
+
 
 async def embed_func(text: str) -> list[float]:
     async with httpx.AsyncClient() as client:

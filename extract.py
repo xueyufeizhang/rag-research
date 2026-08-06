@@ -145,26 +145,36 @@ async def extract(chunks: list[str], llm_func: Callable, file_id: str, con_num: 
                             input_text=chunk, max_total_records=50, max_entity_records=20
                         )
                     )
+                    if not response:
+                        raise ValueError("empty LLM response")
+                    
                     entities, relations = _parse_response(response, str(idx), file_id)
 
                     done_count += 1
                     elapsed = time.time() - start
                     eta = elapsed / done_count * (chunks_num - done_count)
-                    print(f"[extract] {done_count}/{chunks_num} (chunk {idx})"
-                          f"+{len(entities)}ent +{len(relations)}rel"
-                          f"chunk {time.time()-t0:.1f}s  elapsed {elapsed:.0f}s  eta {eta:.0f}s",
+                    print(f"[extract] {done_count}/{chunks_num} (chunk {idx}) "
+                          f"+{len(entities)}ent +{len(relations)}rel "
+                          f"chunk {time.time()-t0:.1f}s elapsed {elapsed:.0f}s eta {eta:.0f}s",
                           flush=True)
                     return entities, relations
 
                 except Exception as e:
                     last_err = e
-                    wait = 2 ** attempt * 5
-                    print(f"[extract] chunk {idx} failed ({type(e).__name__}: {e})"
-                          f"Retry after {wait}s {attempt+1}/5", flush=True)
-                    await asyncio.sleep(wait)
+                    if attempt < 4:
+                        wait = 2 ** attempt * 5
+                        print(f"[extract] chunk {idx} failed ({type(e).__name__}: {e}) "
+                              f"Retry after {wait}s {attempt+1}/5", flush=True)
+                        await asyncio.sleep(wait)
+                    else:
+                        print(f"[extract] chunk {idx} failed ({type(e).__name__}: {e}) "
+                              f"No retries left", flush=True)
 
-            print(f"[extract] chunk {idx} failed after 5 times retry, skipping it. "
-                  f"last error: {last_err}", flush=True)
+            done_count += 1
+            elapsed = time.time() - start
+            eta = elapsed / done_count * (chunks_num - done_count)
+            print(f"[extract] {done_count}/{chunks_num} (chunk {idx}) failed after 5 retries. "
+                  f"elapsed {elapsed:.0f}s eta {eta:.0f}s last error: {last_err}", flush=True)
             return None
 
     results = await asyncio.gather(
