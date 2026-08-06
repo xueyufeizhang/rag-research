@@ -84,10 +84,11 @@ def summarize_mode(mode: str, mode_results: list[dict]) -> dict:
     }
 
 async def eval_retrieval() -> tuple[list[dict], list[dict]]:
-    lightrag = LightRAG(os.getenv("WORKING_DIR", "./dickens"), llm_func, CON_NUM, embed_func)
+    lightrag = LightRAG(os.getenv("WORKING_DIR", "./dickens_fixed_size"), llm_func, CON_NUM, embed_func)
     with open("./carol.txt", "r", encoding="utf-8")as f: 
         await lightrag.construct(f.read(), "carol")
-    with open("./eval/carol_eval_set_semantic.json", "r", encoding="utf-8") as f:
+    eval_set_path = os.getenv("EVAL_SET", "./eval/carol_eval_set_fixed_size.json")
+    with open(eval_set_path, "r", encoding="utf-8") as f:
         eval_questions = json.load(f).get("questions", [])
 
     results = []

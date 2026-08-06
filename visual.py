@@ -1,8 +1,15 @@
 import json
+import os
+from dotenv import load_dotenv
 import networkx as nx
 from pyvis.network import Network
 
-with open("./dickens/graph.json") as f:
+load_dotenv()
+
+working_dir = os.getenv("WORKING_DIR", "./dickens_fixed_size")
+graph_path = os.path.join(working_dir, "graph.json")
+
+with open(graph_path, encoding="utf-8") as f:
     G = nx.node_link_graph(json.load(f))
 
 # # Remove the isolated nodes from visualization
