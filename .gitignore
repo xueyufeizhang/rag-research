@@ -54,6 +54,7 @@ cover/
 # Evaluation outputs
 eval/runs/
 test/
+*.html
 
 # Local report drafts and generated deliverables
 reports/
