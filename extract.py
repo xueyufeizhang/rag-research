@@ -88,39 +88,6 @@ def _parse_response(response: str, chunk_id: str, file_id: str) -> tuple[list[En
     return entities, relations
 
 
-# async def extract(chunks: list[str], llm_func: Callable, file_id: str) -> tuple[list[Entity], list[Relation]]:
-#     all_entites = []
-#     all_relations = []
-#     chunks_num = len(chunks)
-#     start = time.time()
-#     for idx, chunk in enumerate(chunks, start=1):
-#         t0 = time.time()
-#         response = await llm_func(
-#             system=PROMPTS["entity_extraction_system_prompt"].format(
-#                 entity_types_guidance=PROMPTS["default_entity_types_guidance"],
-#                 examples=PROMPTS["entity_extraction_examples"],
-#                 max_total_records=50, max_entity_records=20
-#             ),
-#             prompt=PROMPTS["entity_extraction_user_prompt"].format(
-#                 entity_types_guidance=PROMPTS["default_entity_types_guidance"],
-#                 input_text=chunk, max_total_records=50, max_entity_records=20
-#             )
-#         )
-#         entities, relations = _parse_response(response, str(idx), file_id)
-#         all_entites.extend(entities)
-#         all_relations.extend(relations)
-
-#         elapsed = time.time() - start
-#         eta = elapsed / idx * (chunks_num - idx)
-#         print(f"[extract] {idx}/{chunks_num}  "
-#             f"+{len(entities)}ent +{len(relations)}rel  "
-#             f"chunk {time.time()-t0:.1f}s  elapsed {elapsed:.0f}s  eta {eta:.0f}s",
-#             flush=True)
-        
-#     return all_entites, all_relations
-
-
-
 async def extract(chunks: list[str], llm_func: Callable, file_id: str, con_num: int) -> tuple[list[Entity], list[Relation]]:
     chunks_num = len(chunks)
     sem = asyncio.Semaphore(con_num)
