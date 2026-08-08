@@ -1,0 +1,3074 @@
+{
+  "A Christmas Carol": {
+    "name": "A Christmas Carol",
+    "type": "Content",
+    "description": "A Christmas Carol is an ebook published by Project Gutenberg, authored by Charles Dickens and illustrated by Arthur Rackham. It is a ghostly little book that aims to raise the Ghost of an Idea. | A Christmas Carol is the book that contains the characters and staves listed. | A literary work by Charles Dickens (implied), from which the excerpt is taken.",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_3",
+      "carol_chunk_79"
+    ]
+  },
+  "Charles Dickens": {
+    "name": "Charles Dickens",
+    "type": "Person",
+    "description": "Charles Dickens is the author of A Christmas Carol.",
+    "source_id": [
+      "carol_chunk_1"
+    ]
+  },
+  "Arthur Rackham": {
+    "name": "Arthur Rackham",
+    "type": "Person",
+    "description": "Arthur Rackham is the illustrator of A Christmas Carol.",
+    "source_id": [
+      "carol_chunk_1"
+    ]
+  },
+  "Project Gutenberg": {
+    "name": "Project Gutenberg",
+    "type": "Organization",
+    "description": "Project Gutenberg is the publisher of the ebook A Christmas Carol, making it available freely to the public. | An organization that publishes and distributes electronic works, including public domain texts, with a mission to promote free access. | Project Gutenberg is synonymous with the free distribution of electronic works in formats readable by the widest variety of computers. It depends on volunteers and donations to carry out its mission of increasing the number of public domain and licensed works that can be freely distributed. | Project Gutenberg is a digital library of electronic works (eBooks) that can be freely shared. It provides a website for access and information.",
+    "source_id": [
+      "carol_chunk_1",
+      "carol_chunk_79",
+      "carol_chunk_82",
+      "carol_chunk_83"
+    ]
+  },
+  "J. B. Lippincott Company": {
+    "name": "J. B. Lippincott Company",
+    "type": "Organization",
+    "description": "J. B. Lippincott Company is the original publisher of the 1915 edition of A Christmas Carol.",
+    "source_id": [
+      "carol_chunk_1"
+    ]
+  },
+  "Ghost of an Idea": {
+    "name": "Ghost of an Idea",
+    "type": "Concept",
+    "description": "The Ghost of an Idea is a concept that Charles Dickens aims to raise through the book, suggesting a metaphorical haunting of readers.",
+    "source_id": [
+      "carol_chunk_1"
+    ]
+  },
+  "Ebenezer Scrooge": {
+    "name": "Ebenezer Scrooge",
+    "type": "Person",
+    "description": "Ebenezer Scrooge is a grasping, covetous old man and the surviving partner of the firm of Scrooge and Marley. | Ebenezer Scrooge was the former business partner of Jacob Marley and later became his sole executor, administrator, and heir. | Ebenezer Scrooge is a miserly, indignant man who despises Christmas and treats his nephew with hostility. | Ebenezer Scrooge is a man who is visited by the ghost of Jacob Marley, who warns him of his fate and the coming of Three Spirits. | Ebenezer Scrooge is the main character in this passage, following the Phantom and listening to business men talk about a dead man.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_5",
+      "carol_chunk_8",
+      "carol_chunk_18",
+      "carol_chunk_54"
+    ]
+  },
+  "Bob Cratchit": {
+    "name": "Bob Cratchit",
+    "type": "Person",
+    "description": "Bob Cratchit is a clerk to Ebenezer Scrooge. | Bob Cratchit is a character who slides down on Cornhill in honour of Christmas Eve. | Bob Cratchit is Scrooge's clerk who is overworked and underpaid, and celebrates Christmas Eve by playing outside. | Bob Cratchit is Scrooge's clerk, who earns fifteen shillings a week and lives with his family in a modest four-roomed house. | Bob Cratchit is the father of the Cratchit family, who praises the pudding and proposes a Christmas toast, expressing love and concern for his son Tiny Tim. | Bob Cratchit is the father of the Cratchit family, who proposes a toast to Mr. Scrooge as the Founder of the Feast, and shares news about a potential job for his son Peter. | Bob Cratchit is a character who is not directly present in the scene but is the head of the household that Scrooge visits, where the family is mourning in quiet. | Bob Cratchit is the father of the Cratchit family, a cheerful and hardworking man who is comforted by his family. | Bob Cratchit is the intended recipient of the turkey that Scrooge sends anonymously, and is associated with Tiny Tim. | Bob Cratchit is an employee at Scrooge's office who arrives late after enjoying Christmas festivities and is met with a salary raise rather than punishment.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_3",
+      "carol_chunk_11",
+      "carol_chunk_41",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_63",
+      "carol_chunk_65",
+      "carol_chunk_74",
+      "carol_chunk_78"
+    ]
+  },
+  "Tiny Tim": {
+    "name": "Tiny Tim",
+    "type": "Person",
+    "description": "Tiny Tim is the youngest son of Bob Cratchit, a cripple. | Tiny Tim is Bob Cratchit's young son, who is mentioned as being absent at the time of the dinner. | Tiny Tim is the young, disabled son of Bob Cratchit, who uses a crutch and iron frame, is carried by his father, and thoughtfully reflects on being seen in church as a cripple. | Tiny Tim is the sickly young son of Bob Cratchit, who sits close to his father and declares 'God bless us every one!' during the Christmas toast. | Tiny Tim is a child in the Cratchit family, who drinks the toast reluctantly and later sings a song about a lost child. | Tiny Tim is the sickly child of the Cratchit family, referenced as being carried by his father. | Tiny Tim is the young Cratchit child, who is ill and whose memory the family honors. | Tiny Tim is mentioned as a reference point for the size of the turkey that Scrooge sends to Bob Cratchit's household. | Tiny Tim is Bob Cratchit's son who does not die after Scrooge's transformation, and becomes like a second father to him. | A minor character who is quoted as observing, 'God bless Us, Every One!'",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_41",
+      "carol_chunk_42",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_64",
+      "carol_chunk_67",
+      "carol_chunk_74",
+      "carol_chunk_78",
+      "carol_chunk_79"
+    ]
+  },
+  "Ghost of Christmas Past": {
+    "name": "Ghost of Christmas Past",
+    "type": "Creature",
+    "description": "Ghost of Christmas Past is a phantom showing things past. | The Ghost of Christmas Past is a supernatural entity that appears to Scrooge, described as a strange figure with features of both a child and an old man, wearing a white tunic and carrying a holly branch. | The Ghost of Christmas Past is a supernatural entity that shows Scrooge scenes from his past, including the moment when his sister Fan came to take him home. | The Ghost of Christmas Past is a spectral figure whose light illuminates scenes as Scrooge revisits his past. | The Ghost of Christmas Past is a spirit that reminded Scrooge of his childhood memories, including the simple air played by his niece.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_22",
+      "carol_chunk_26",
+      "carol_chunk_32",
+      "carol_chunk_50"
+    ]
+  },
+  "Ghost of Christmas Present": {
+    "name": "Ghost of Christmas Present",
+    "type": "Creature",
+    "description": "Ghost of Christmas Present is a spirit of a kind, generous, and hearty nature. | The Ghost of Christmas Present is a jolly, giant spirit who appears in a transformed chamber, clothed in a green robe with white fur and bearing a torch shaped like Plenty's horn. | The Ghost of Christmas Present is a spectral figure who has more than eighteen hundred brothers. He instructs Scrooge to touch his robe, leading them to the city streets on Christmas morning. | The Ghost of Christmas Present is a supernatural being who sprinkles a flavour from a torch and leads Scrooge to observe the Cratchit family's dinner. | The Ghost of Christmas Present is a spirit that is present at the party and is pleased with Scrooge's participation. | The Ghost of Christmas Present appears earlier and presents the children Want and Ignorance, warning Scrooge of their significance. | The Ghost of Christmas Present is a spirit who sat in a corner of Scrooge's sitting-room. | A spiritual being that had earlier shown Scrooge the people pouring forth in the streets, as recalled by Scrooge.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_41",
+      "carol_chunk_50",
+      "carol_chunk_53",
+      "carol_chunk_71",
+      "carol_chunk_75"
+    ]
+  },
+  "Ghost of Christmas Yet to Come": {
+    "name": "Ghost of Christmas Yet to Come",
+    "type": "Creature",
+    "description": "Ghost of Christmas Yet to Come is an apparition showing the shadows of things which yet may happen. | The Ghost of Christmas Yet to Come is a silent, shrouded phantom that shows Scrooge future events, inspiring fear and reflection. | The Ghost of Christmas Yet to Come is a spectral being that shows Scrooge visions of the future.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_53",
+      "carol_chunk_68"
+    ]
+  },
+  "Ghost of Jacob Marley": {
+    "name": "Ghost of Jacob Marley",
+    "type": "Creature",
+    "description": "Ghost of Jacob Marley is a spectre of Scrooge's former partner in business. | The Ghost of Jacob Marley is a spirit who entered through a door in Scrooge's sitting-room.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_71"
+    ]
+  },
+  "Fred": {
+    "name": "Fred",
+    "type": "Person",
+    "description": "Fred is Scrooge's nephew. | Fred is the nephew of Scrooge, to whom Scrooge speaks about coming to dinner. | Fred is Scrooge's nephew who cheerfully greets Scrooge with 'Merry Christmas' and questions Scrooge's negative attitude. | Fred is Scrooge's nephew who proposes a toast to his uncle and expresses admiration and merriment. | Fred is Scrooge's nephew, who is surprised by Scrooge's arrival and welcomes him heartily.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_4",
+      "carol_chunk_7",
+      "carol_chunk_51",
+      "carol_chunk_77"
+    ]
+  },
+  "Mr. Fezziwig": {
+    "name": "Mr. Fezziwig",
+    "type": "Person",
+    "description": "Mr. Fezziwig is a kind-hearted, jovial old merchant. | Mr. Fezziwig is a character who hosts a Christmas party and personally wishes every guest a Merry Christmas as they leave.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_31"
+    ]
+  },
+  "Belle": {
+    "name": "Belle",
+    "type": "Person",
+    "description": "Belle is a comely matron and an old sweetheart of Scrooge's. | Belle is the wife of the master of the house, who recognizes Scrooge as an old friend.",
+    "source_id": [
+      "carol_chunk_2",
+      "carol_chunk_36"
+    ]
+  },
+  "Fezziwig": {
+    "name": "Fezziwig",
+    "type": "Person",
+    "description": "Fezziwig is a character in the book, who dances with Mrs. Fezziwig and is associated with a Christmas party. | Fezziwig is an old gentleman, a former employer of Scrooge, who is joyfully celebrating and appears in the remembered scene. | Fezziwig is Scrooge's former employer, who joyfully hosts a Christmas Eve party in his warehouse. | Fezziwig is the host of a domestic ball and is an excellent dancer who performs with Mrs. Fezziwig.",
+    "source_id": [
+      "carol_chunk_3",
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_30"
+    ]
+  },
+  "Scrooge": {
+    "name": "Scrooge",
+    "type": "Person",
+    "description": "Scrooge is a character who appears in the illustrations and speaks in the text. | Scrooge is a character who is the uncle of Fred and is involved in a conversation about attending dinner. He is also associated with the death of Marley. | Scrooge is a miserly, cold-hearted old man who works in a counting-house and is known for his harsh demeanor and dislike of Christmas. | Scrooge is an uncle who dismisses Christmas as humbug and expresses a negative view of the world. | Scrooge is a central character who is cold-hearted and dismissive towards Christmas and charitable appeals. | Scrooge is a character who refuses to donate to charity, expresses a wish to be left alone, and holds dismissive views about the poor. | Scrooge is a miserly businessman who is cold-hearted and dismissive towards Christmas and his clerk. | Scrooge is a man who is cautious and not easily frightened, as he checks behind doors and walks through his rooms after returning home. | Scrooge is a character who secures his room, prepares his gruel, and experiences eerie phenomena involving bells and the ghost of Marley. | Scrooge is a skeptical and caustic man who is visited by the ghost of his former business partner. | Ebenezer Scrooge is a character who is confronted by the ghost of his former business partner, Jacob Marley, and is learning about the consequences of his own actions. | Scrooge is a character who is contemplative and business-like, interacting with the Ghost of Jacob Marley about the consequences of a life focused on money. | Scrooge is a character who is being confronted by the Ghost of Jacob Marley about his past indifference to mankind. | Scrooge is a character who experiences a supernatural visitation and is warned to remember the encounter. | The protagonist who observes the phantoms and is deeply affected, ultimately experiencing fatigue and seeking rest. | Scrooge is a character who experiences confusion and anxiety about the time, and who is visited by the Ghost. | Scrooge is a character who encounters a supernatural visitor in his bedroom and engages in dialogue with the spirit. | Scrooge is an old man who is visited by the Ghost of Christmas Past and experiences a journey through his childhood memories. | A man who weeps upon seeing his neglected childhood self and reacts with ecstasy to the appearance of fictional characters from his reading. | Scrooge is a character who expresses emotional reactions and memories about a parrot and a boy, reflecting on his past with pity. | Scrooge is the main character who is experiencing a supernatural visitation from the Ghost of Christmas Past and revisiting memories of his childhood. | Scrooge is the main character, a boy at the time of the scene, who is being taken home by his sister Fan after receiving permission from their father. | Scrooge is a character who recalls his childhood and apprenticeship, expressing unease when discussing his nephew. | Scrooge is the main character, reflecting on his past as a young man and recalling his former employer Fezziwig and fellow apprentice Dick Wilkins. | Scrooge is a character who observes the Fezziwig Christmas scene with deep emotion, remembering and enjoying everything, and is later addressed by the Ghost. | Scrooge is a man who reflects on the influence of a young man and expresses a wish to speak with his clerk. | A man witnessing the painful scene, pleading with the Ghost to stop showing him such distressing visions. | Scrooge is a man who expresses a desire not to see a particular vision, but is forced by the Ghost to observe a domestic scene. | Scrooge is a character who observes the family scene with deep emotion, reflecting on missed opportunities in his own life. | Scrooge is the protagonist who is visited by spirits and experiences emotional distress during the ghostly visitations. | Scrooge is the main character who enters the chamber and encounters the Ghost of Christmas Present, showing a change in demeanor from his previous dogged self. | Scrooge is a character who is being guided by the Ghost of Christmas Present. He expresses regret for not having walked with his younger family members and shows a willingness to learn from the spirit. | A character who stands with the Spirit in a baker's doorway, observing the scene. | Scrooge is a central character who converses with the Ghost of Christmas Present about the merits of Christmas and the Seventh Day observances. | Scrooge is an observer of the Cratchit family scene, who expresses a newfound interest and penitence when asking the Ghost about Tiny Tim's fate. | Scrooge is a character who is being guided by the Ghost of Christmas Present, observing the scenes shown to him and asking questions about the places they visit. | Scrooge is a character experiencing horror during a sea voyage and later finds himself in a room with his nephew. | Scrooge is depicted as a wealthy but unpleasant elderly man, the subject of discussion between his nephew and niece. | Scrooge is a miserly individual who is the subject of conversation among his relatives. | Scrooge is a character who participates in the family gathering, enjoys the music and games, and is softened by the memory of the Ghost of Christmas Past. | Scrooge is the uncle of Fred and the main character, who becomes gay and light-hearted after being visited by the Ghost, and discusses the brevity of spirits' lives. | Scrooge is a person who converses with the Spirit and reacts with shock and pity to the two children revealed. | Scrooge is the main character who encounters the Ghost of Christmas Yet to Come and is being shown the consequences of his ways. | Scrooge is a character who observes the conversations and seeks explanations from the Spirit about the events he witnesses. | Scrooge is a central character who is observing conversations and scenes in the town with the Ghost. | Scrooge is an observer listening to a dialogue about the disposal of a corpse's belongings, feeling detestation and disgust. | Scrooge is a character who is observing a scene of death and reflecting on his own life, feeling terrified and remorseful about his potential fate. | Scrooge is a central character who is being shown visions by a ghost and reacts with emotional distress to the scenes of death and its aftermath. | Scrooge is a character who overhears a biblical quotation and observes the Cratchit family. | Scrooge is the main character, who speaks to the Spirit of Tiny Tim near the end of the text. | Scrooge is the main character who is being guided by the Ghost of Christmas Yet to Come and is observing scenes from his potential future. | A man confronting the vision of his own neglected grave, pleading for a chance to change his fate. | Scrooge is a character who wakes up in his own bed, expressing joy and good intentions to live in the Past, Present, and Future. | Scrooge is a character who undergoes a joyful transformation, laughing and crying, and expresses festive greetings. | Scrooge is a man who has recently experienced a positive transformation, laughing heartily and expressing joy and childlike wonder. | Scrooge is a character who wakes up on Christmas Day, initially unaware of the date, and expresses joy upon learning it is Christmas. | Scrooge is a character who, after a change of heart, decides to buy a large turkey, send it to Bob Cratchit's house anonymously, and expresses affection for his door knocker. | Scrooge is a character who shows a transformation from a miserly demeanor to a joyful and generous one, as he buys a turkey, takes a cab, and greets passersby with delight. | Scrooge is a man who visits his nephew Fred's home and asks to be let in for dinner. | Scrooge is Bob Cratchit's employer, who transforms from a stern taskmaster to a generous benefactor, raising Bob's salary and assisting his family.",
+    "source_id": [
+      "carol_chunk_3",
+      "carol_chunk_4",
+      "carol_chunk_6",
+      "carol_chunk_7",
+      "carol_chunk_9",
+      "carol_chunk_10",
+      "carol_chunk_11",
+      "carol_chunk_12",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_16",
+      "carol_chunk_17",
+      "carol_chunk_19",
+      "carol_chunk_20",
+      "carol_chunk_21",
+      "carol_chunk_22",
+      "carol_chunk_23",
+      "carol_chunk_24",
+      "carol_chunk_25",
+      "carol_chunk_26",
+      "carol_chunk_27",
+      "carol_chunk_28",
+      "carol_chunk_29",
+      "carol_chunk_31",
+      "carol_chunk_32",
+      "carol_chunk_34",
+      "carol_chunk_35",
+      "carol_chunk_36",
+      "carol_chunk_37",
+      "carol_chunk_38",
+      "carol_chunk_39",
+      "carol_chunk_40",
+      "carol_chunk_41",
+      "carol_chunk_44",
+      "carol_chunk_46",
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_49",
+      "carol_chunk_50",
+      "carol_chunk_51",
+      "carol_chunk_52",
+      "carol_chunk_53",
+      "carol_chunk_55",
+      "carol_chunk_56",
+      "carol_chunk_61",
+      "carol_chunk_62",
+      "carol_chunk_63",
+      "carol_chunk_64",
+      "carol_chunk_67",
+      "carol_chunk_68",
+      "carol_chunk_69",
+      "carol_chunk_70",
+      "carol_chunk_71",
+      "carol_chunk_72",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75",
+      "carol_chunk_77",
+      "carol_chunk_78"
+    ]
+  },
+  "Mrs. Fezziwig": {
+    "name": "Mrs. Fezziwig",
+    "type": "Person",
+    "description": "Mrs. Fezziwig is a character who dances with old Fezziwig. | Mrs. Fezziwig is Fezziwig's wife, described as one vast substantial smile, attending the party. | Mrs. Fezziwig is Fezziwig's dance partner and is described as worthy to be his partner in every sense. | Mrs. Fezziwig is a character who, alongside Mr. Fezziwig, takes a station by the door to shake hands with each guest and wish them a Merry Christmas.",
+    "source_id": [
+      "carol_chunk_3",
+      "carol_chunk_29",
+      "carol_chunk_30",
+      "carol_chunk_31"
+    ]
+  },
+  "Marley's Ghost": {
+    "name": "Marley's Ghost",
+    "type": "Creature",
+    "description": "Marley's Ghost is a spirit that appears in the first stave of the book. | Marley's Ghost is a ghostly entity referenced in the text, likely the spirit of Marley appearing after his death. | Marley's Ghost is the apparition of Jacob Marley, who appears before Scrooge wearing chains made of cash-boxes, keys, padlocks, ledgers, deeds, and purses, with a transparent body. | Marley's Ghost is the spectral form of Jacob Marley, bound in chains, who confronts Scrooge to urge him to change his ways. | Marley's Ghost is a spectral apparition that communicates with Scrooge and issues a warning about future visits. | A ghost that serves as a reference for the appearance of the phantoms, who are described as being chained like Marley's Ghost. | Marley's Ghost is a supernatural entity that bothers Scrooge and has warned him of a visitation.",
+    "source_id": [
+      "carol_chunk_3",
+      "carol_chunk_4",
+      "carol_chunk_13",
+      "carol_chunk_14",
+      "carol_chunk_19",
+      "carol_chunk_20",
+      "carol_chunk_21"
+    ]
+  },
+  "The First of the Three Spirits": {
+    "name": "The First of the Three Spirits",
+    "type": "Creature",
+    "description": "The First of the Three Spirits is the entity that appears in Stave Two.",
+    "source_id": [
+      "carol_chunk_3"
+    ]
+  },
+  "The Second of the Three Spirits": {
+    "name": "The Second of the Three Spirits",
+    "type": "Creature",
+    "description": "The Second of the Three Spirits is the entity that appears in Stave Three.",
+    "source_id": [
+      "carol_chunk_3"
+    ]
+  },
+  "The Last of the Spirits": {
+    "name": "The Last of the Spirits",
+    "type": "Creature",
+    "description": "The Last of the Spirits is the entity that appears in Stave Four.",
+    "source_id": [
+      "carol_chunk_3"
+    ]
+  },
+  "Cornhill": {
+    "name": "Cornhill",
+    "type": "Location",
+    "description": "Cornhill is a location where Bob Cratchit goes down a slide. | Cornhill is a street in London where Bob Cratchit goes down a slide in celebration of Christmas Eve.",
+    "source_id": [
+      "carol_chunk_3",
+      "carol_chunk_11"
+    ]
+  },
+  "Christmas Eve": {
+    "name": "Christmas Eve",
+    "type": "Event",
+    "description": "Christmas Eve is the evening before Christmas, celebrated by characters in the book. | Christmas Eve is the day when the story takes place, a time of cold, foggy weather and festive greetings. | Christmas Eve is the day when the story's events occur, highlighting the contrast between celebration and Scrooge's miserliness. | Christmas Eve is the occasion of Fezziwig's festive party, where the events described take place.",
+    "source_id": [
+      "carol_chunk_3",
+      "carol_chunk_6",
+      "carol_chunk_11",
+      "carol_chunk_29"
+    ]
+  },
+  "Marley": {
+    "name": "Marley",
+    "type": "Person",
+    "description": "Marley is a deceased character whose burial was registered, and his death is confirmed as factual in the narrative. | Marley is Scrooge's deceased business partner whose face appears in the door knocker, foreshadowing supernatural events. | Marley is a person whose pigtail Scrooge half expects to see, indicating a previous association.",
+    "source_id": [
+      "carol_chunk_4",
+      "carol_chunk_11",
+      "carol_chunk_12"
+    ]
+  },
+  "The Register of Marley's Burial": {
+    "name": "The Register of Marley's Burial",
+    "type": "Content",
+    "description": "The register of Marley's burial is a document that records the burial details, signed by several individuals including Scrooge.",
+    "source_id": [
+      "carol_chunk_4"
+    ]
+  },
+  "The Clergyman": {
+    "name": "The Clergyman",
+    "type": "Person",
+    "description": "The clergyman signed the register of Marley's burial.",
+    "source_id": [
+      "carol_chunk_4"
+    ]
+  },
+  "The Clerk": {
+    "name": "The Clerk",
+    "type": "Person",
+    "description": "The clerk signed the register of Marley's burial. | The Clerk is an employee of Scrooge who involuntarily applauds the nephew's speech but is immediately scolded by Scrooge.",
+    "source_id": [
+      "carol_chunk_4",
+      "carol_chunk_8"
+    ]
+  },
+  "The Undertaker": {
+    "name": "The Undertaker",
+    "type": "Person",
+    "description": "The undertaker signed the register of Marley's burial.",
+    "source_id": [
+      "carol_chunk_4"
+    ]
+  },
+  "The Chief Mourner": {
+    "name": "The Chief Mourner",
+    "type": "Person",
+    "description": "The chief mourner signed the register of Marley's burial.",
+    "source_id": [
+      "carol_chunk_4"
+    ]
+  },
+  "Jacob Marley": {
+    "name": "Jacob Marley",
+    "type": "Person",
+    "description": "Jacob Marley was the deceased business partner of Ebenezer Scrooge, whose funeral and legacy are central to the story. | Jacob Marley is the deceased business partner of Scrooge, who appears as a ghost to warn him about the consequences of his worldly ways. | Jacob Marley is Scrooge's deceased business partner who returns as a ghost to warn Scrooge about the consequences of his selfishness. | Jacob Marley is a ghost who appears to Scrooge, burdened by chains and remorse for a life spent in money-changing without spiritual growth. | Jacob Marley is a ghost who appears before Scrooge in a visible shape, having previously sat invisible beside him. He warns Scrooge of the chance to escape his own fate and tells him he will be haunted by Three Spirits. | Jacob Marley is a deceased partner of Scrooge, who intervened to send the second messenger to Scrooge. | Jacob Marley is the deceased partner of Scrooge who predicted the coming of the Ghost of Christmas Yet to Come. | Jacob Marley is a deceased character invoked by Scrooge in a prayer of gratitude.",
+    "source_id": [
+      "carol_chunk_5",
+      "carol_chunk_14",
+      "carol_chunk_15",
+      "carol_chunk_16",
+      "carol_chunk_18",
+      "carol_chunk_37",
+      "carol_chunk_53",
+      "carol_chunk_70"
+    ]
+  },
+  "Scrooge And Marley": {
+    "name": "Scrooge And Marley",
+    "type": "Organization",
+    "description": "Scrooge and Marley was the name of the firm run by Ebenezer Scrooge and Jacob Marley, even after Marley's death.",
+    "source_id": [
+      "carol_chunk_5"
+    ]
+  },
+  "Marley's Funeral": {
+    "name": "Marley's Funeral",
+    "type": "Event",
+    "description": "Marley's funeral was the event that Scrooge attended and where he conducted an undoubted bargain.",
+    "source_id": [
+      "carol_chunk_5"
+    ]
+  },
+  "Scrooge's Clerk": {
+    "name": "Scrooge's Clerk",
+    "type": "Person",
+    "description": "Scrooge's clerk is an employee in Scrooge's counting-house, working in a small dismal cell with a very small fire, trying to warm himself. | The clerk is an employee of Scrooge who warmly returns the season's greetings despite his low wages and cold working conditions.",
+    "source_id": [
+      "carol_chunk_6",
+      "carol_chunk_9"
+    ]
+  },
+  "Scrooge's Nephew": {
+    "name": "Scrooge's Nephew",
+    "type": "Person",
+    "description": "Scrooge's nephew is a cheerful young man who visits Scrooge on Christmas Eve, greeting him with good wishes, which Scrooge rejects. | Scrooge's nephew is a kind-hearted, optimistic man who defends Christmas and persistently invites Scrooge to dinner despite being rebuffed. | Scrooge's nephew is a cheerful and persistent relative who wishes Scrooge a Merry Christmas despite his uncle's rebuff. | Scrooge's nephew, named Fred, laughs heartily and believes in Christmas, calling out Scrooge's skepticism. | Scrooge's nephew finds Scrooge comical and believes his offences carry their own punishment, showing a tolerant attitude. | Scrooge's nephew is a cheerful, good-natured man who expresses pity for Scrooge and offers him a chance to join his family gatherings every year. | Scrooge's nephew organizes the games, including Yes and No, and is secretly delighted by his sister's performance in the game of How, When, and Where.",
+    "source_id": [
+      "carol_chunk_6",
+      "carol_chunk_8",
+      "carol_chunk_9",
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_49",
+      "carol_chunk_50"
+    ]
+  },
+  "Scrooge's Counting-House": {
+    "name": "Scrooge's Counting-House",
+    "type": "Location",
+    "description": "Scrooge's counting-house is his place of business, characterized as cold, bleak, and with a small fire for himself.",
+    "source_id": [
+      "carol_chunk_6"
+    ]
+  },
+  "Christmas": {
+    "name": "Christmas",
+    "type": "Concept",
+    "description": "Christmas is a holiday that Scrooge dismisses as a time of financial burden, while his nephew regards it as a good time of kindness and charity. | The festive season that is central to the narrative, representing goodwill and charity. | The holiday during which the story is set, central to the charitable appeals and Scrooge's disdain. | Christmas is the holiday during which Fan and Scrooge are to be together and have a merry time. | Christmas is the holiday being celebrated by the Cratchit family, marked by a toast and the sharing of a pudding. | A concept that Scrooge vows to honor in his heart and keep throughout the year as part of his reformation. | Christmas is the festive occasion during which the interaction between Mr. Scrooge and the gentleman occurs.",
+    "source_id": [
+      "carol_chunk_8",
+      "carol_chunk_9",
+      "carol_chunk_10",
+      "carol_chunk_27",
+      "carol_chunk_44",
+      "carol_chunk_69",
+      "carol_chunk_76"
+    ]
+  },
+  "Parliament": {
+    "name": "Parliament",
+    "type": "Organization",
+    "description": "Parliament is mentioned by Scrooge sarcastically as an appropriate place for his nephew's speaking abilities.",
+    "source_id": [
+      "carol_chunk_8"
+    ]
+  },
+  "Portly Gentlemen": {
+    "name": "Portly Gentlemen",
+    "type": "Person",
+    "description": "Two charitable individuals who visit Scrooge to solicit donations for the poor and destitute at Christmas time.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Mr. Marley": {
+    "name": "Mr. Marley",
+    "type": "Person",
+    "description": "The deceased former partner of Scrooge, who died seven years ago and is referenced in the business name.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Scrooge and Marley": {
+    "name": "Scrooge and Marley",
+    "type": "Organization",
+    "description": "The business firm of Scrooge and Marley, now run solely by Scrooge after Marley's death.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Poor Law": {
+    "name": "Poor Law",
+    "type": "Concept",
+    "description": "A legal framework mentioned as being in operation, which Scrooge approves of as a substitute for personal charity.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Bedlam": {
+    "name": "Bedlam",
+    "type": "Location",
+    "description": "A historical psychiatric hospital referenced by Scrooge in a derogatory manner.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Prisons": {
+    "name": "Prisons",
+    "type": "Location",
+    "description": "Institutions mentioned by Scrooge as alternatives for providing relief to the poor.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Union Workhouses": {
+    "name": "Union Workhouses",
+    "type": "Location",
+    "description": "Poorhouses in operation that Scrooge supports as a solution for the indigent.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Treadmill": {
+    "name": "Treadmill",
+    "type": "Artifact",
+    "description": "A penal labor device mentioned by Scrooge as another form of poor relief.",
+    "source_id": [
+      "carol_chunk_9"
+    ]
+  },
+  "Gentlemen": {
+    "name": "Gentlemen",
+    "type": "Person",
+    "description": "Two gentlemen who visit Scrooge to solicit donations for the poor and are rebuffed by him.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Lord Mayor": {
+    "name": "Lord Mayor",
+    "type": "Person",
+    "description": "The Lord Mayor orders his household to keep Christmas in a grand manner, indicating his wealth and authority.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Tailor": {
+    "name": "Tailor",
+    "type": "Person",
+    "description": "A poor tailor who, despite having been fined for drunkenness, prepares Christmas pudding with his family.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Lean Wife": {
+    "name": "Lean Wife",
+    "type": "Person",
+    "description": "The tailor's wife, who goes out with the baby to buy beef for the Christmas meal.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Baby": {
+    "name": "Baby",
+    "type": "Person",
+    "description": "The baby of the tailor and his wife, who accompanies the mother to purchase beef. | The baby is a young child in the family, who was suspected of swallowing a toy turkey but was found to be safe.",
+    "source_id": [
+      "carol_chunk_10",
+      "carol_chunk_36"
+    ]
+  },
+  "The Poor": {
+    "name": "The Poor",
+    "type": "Concept",
+    "description": "The poor are people in need whom Scrooge dismisses, saying they should die to decrease the surplus population.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Mansion House": {
+    "name": "Mansion House",
+    "type": "Location",
+    "description": "The official residence of the Lord Mayor, depicted as a stronghold.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Church Tower": {
+    "name": "Church Tower",
+    "type": "Location",
+    "description": "An ancient church tower that becomes invisible in the fog and strikes the hours.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Gothic Window": {
+    "name": "Gothic Window",
+    "type": "Artifact",
+    "description": "A Gothic window in the church tower from which the bell seems to peep down at Scrooge.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Brazier": {
+    "name": "Brazier",
+    "type": "Artifact",
+    "description": "A portable heater used by laborers, around which ragged men and boys gather for warmth.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Gas-Pipes": {
+    "name": "Gas-Pipes",
+    "type": "Artifact",
+    "description": "Gas pipes being repaired by laborers in the main street.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Water-Plug": {
+    "name": "Water-Plug",
+    "type": "Artifact",
+    "description": "A water plug whose overflow freezes into ice in the intense cold.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Shops": {
+    "name": "Shops",
+    "type": "Location",
+    "description": "Bright shops with holly decorations that make passersby look healthy.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Holly Sprigs and Berries": {
+    "name": "Holly Sprigs and Berries",
+    "type": "NaturalObject",
+    "description": "Christmas decorations in shop windows that crackle in the lamp heat.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "Fifty Cooks and Butlers": {
+    "name": "Fifty Cooks and Butlers",
+    "type": "Person",
+    "description": "The Lord Mayor's large staff ordered to keep Christmas in a grand fashion.",
+    "source_id": [
+      "carol_chunk_10"
+    ]
+  },
+  "St. Dunstan": {
+    "name": "St. Dunstan",
+    "type": "Person",
+    "description": "St. Dunstan is a historical figure referenced in the narrative for his legend of pinching the devil's nose.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "The Christmas Carol Singer": {
+    "name": "The Christmas Carol Singer",
+    "type": "Person",
+    "description": "The Christmas Carol Singer is an unnamed child who attempts to sing a carol at Scrooge's keyhole but is frightened away.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "The Counting-House": {
+    "name": "The Counting-House",
+    "type": "Location",
+    "description": "The Counting-House is Scrooge's place of business where he works and interacts with his clerk.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "Camden Town": {
+    "name": "Camden Town",
+    "type": "Location",
+    "description": "Camden Town is the residential area where Bob Cratchit runs home to play blind man's buff. | A place in London where Scrooge sends the turkey, mentioned as a destination requiring a cab.",
+    "source_id": [
+      "carol_chunk_11",
+      "carol_chunk_75"
+    ]
+  },
+  "Scrooge's Chambers": {
+    "name": "Scrooge's Chambers",
+    "type": "Location",
+    "description": "Scrooge's Chambers are a gloomy suite of rooms that once belonged to Marley, where Scrooge lives.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "The Door Knocker": {
+    "name": "The Door Knocker",
+    "type": "Artifact",
+    "description": "The Door Knocker is a large knocker on Scrooge's door that transforms into Marley's face. | The door knocker is an object on Scrooge's door that Scrooge expresses love for, reflecting his changed feelings.",
+    "source_id": [
+      "carol_chunk_11",
+      "carol_chunk_74"
+    ]
+  },
+  "The City of London": {
+    "name": "The City of London",
+    "type": "Location",
+    "description": "The City of London is the broader setting for the story, including the corporation, aldermen, and livery.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "The Fog": {
+    "name": "The Fog",
+    "type": "NaturalObject",
+    "description": "The Fog is the cold weather condition that pervades the setting, intensifying the atmosphere.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "The Frost": {
+    "name": "The Frost",
+    "type": "NaturalObject",
+    "description": "The Frost is the freezing cold that compounds the harsh weather, affecting the characters. | The Frost is the ice on the window that Scrooge rubs off to see outside.",
+    "source_id": [
+      "carol_chunk_11",
+      "carol_chunk_21"
+    ]
+  },
+  "The Genius of the Weather": {
+    "name": "The Genius of the Weather",
+    "type": "Concept",
+    "description": "The Genius of the Weather is a personification of the weather, depicted as sitting in mournful meditation at Scrooge's gateway.",
+    "source_id": [
+      "carol_chunk_11"
+    ]
+  },
+  "The Door": {
+    "name": "The Door",
+    "type": "Artifact",
+    "description": "The door is a physical entrance that Scrooge shuts and fastens, with a knocker attached by screws and nuts.",
+    "source_id": [
+      "carol_chunk_12"
+    ]
+  },
+  "The House": {
+    "name": "The House",
+    "type": "Location",
+    "description": "The house is Scrooge's residence, with rooms above and wine-merchant's cellars below, where sounds echo.",
+    "source_id": [
+      "carol_chunk_12"
+    ]
+  },
+  "Candle": {
+    "name": "Candle",
+    "type": "Artifact",
+    "description": "A candle is used by Scrooge for light as he ascends the stairs, trimming it as he goes.",
+    "source_id": [
+      "carol_chunk_12"
+    ]
+  },
+  "The Fire": {
+    "name": "The Fire",
+    "type": "NaturalObject",
+    "description": "A low fire in the grate that Scrooge sits close to for warmth on a bitter night; it leaps up when Marley's Ghost enters.",
+    "source_id": [
+      "carol_chunk_13"
+    ]
+  },
+  "The Bell": {
+    "name": "The Bell",
+    "type": "Artifact",
+    "description": "A disused bell in Scrooge's room that begins to swing and ring loudly, triggering the ringing of all bells in the house. | The Bell is the bell that tolls the hours, including the one that announces the visitation.",
+    "source_id": [
+      "carol_chunk_13",
+      "carol_chunk_21"
+    ]
+  },
+  "The Chain": {
+    "name": "The Chain",
+    "type": "Artifact",
+    "description": "A chain clasped about Marley's Ghost, made of cash-boxes, keys, padlocks, ledgers, deeds, and heavy purses wrought in steel. | The Chain is an artifact worn by Marley's Ghost, symbolizing the burdens of his past sins and selfishness.",
+    "source_id": [
+      "carol_chunk_13",
+      "carol_chunk_14"
+    ]
+  },
+  "Dutch Tiles": {
+    "name": "Dutch Tiles",
+    "type": "Artifact",
+    "description": "Quaint tiles around the old fireplace, designed to illustrate Scriptural scenes, but they fail to divert Scrooge's thoughts from Marley's face.",
+    "source_id": [
+      "carol_chunk_13"
+    ]
+  },
+  "The Spirit": {
+    "name": "The Spirit",
+    "type": "Concept",
+    "description": "The Spirit represents the inner moral essence of a person that must venture forth among others in life to avoid punishment after death. | The Spirit, also referred to as the Ghost, is the supernatural guide who transports Scrooge through time to revisit his past. | Another name for the Ghost, which points to Scrooge's younger self and triggers memories. | The Spirit is an entity that asks Scrooge what is the matter, indicating a dialogue between them. | The Spirit is a supernatural being accompanying Scrooge, whose torch brightens the Cratchit family as they fade from view. | The Spirit is a supernatural being showing the children to Scrooge, identifying them as belonging to Man. | The Spirit is a supernatural being that guides Scrooge through visions of people and events. | The Spirit is a supernatural being accompanying Scrooge during his observation of the Cratchit family. | The Spirit is another name for the Ghost of Christmas Yet to Come, guiding Scrooge through the future.",
+    "source_id": [
+      "carol_chunk_14",
+      "carol_chunk_23",
+      "carol_chunk_24",
+      "carol_chunk_25",
+      "carol_chunk_45",
+      "carol_chunk_52",
+      "carol_chunk_55",
+      "carol_chunk_64",
+      "carol_chunk_68"
+    ]
+  },
+  "Ghost": {
+    "name": "Ghost",
+    "type": "Creature",
+    "description": "The Ghost is the spirit of Jacob Marley who appears to Scrooge, warning him about the chain he has forged through his life choices. | A spiritual apparition that takes Scrooge to see his past, leading him through a school and showing him memories of his childhood. | The Ghost is a supernatural entity that accompanies Scrooge in revisiting his past. | The Ghost is a spectral figure that physically restrains and compels Scrooge to observe scenes, acting as a guide in the narrative. | The Ghost is one of the spirits that shows Scrooge shadows of the past, and is later extinguished by Scrooge. | The Ghost is a supernatural entity that guides Scrooge on a journey over the sea and to a ship.",
+    "source_id": [
+      "carol_chunk_15",
+      "carol_chunk_24",
+      "carol_chunk_29",
+      "carol_chunk_35",
+      "carol_chunk_37",
+      "carol_chunk_47"
+    ]
+  },
+  "Chain": {
+    "name": "Chain",
+    "type": "Artifact",
+    "description": "The chain is a physical representation of the burdens and consequences that Marley and Scrooge have created through their actions in life. | The chain is a symbolic artifact that Jacob Marley clanks, representing the burden of his remorse and the consequences of his past actions. | The chain is a physical object carried by the ghost, symbolizing the burdens of a life spent on selfish pursuits.",
+    "source_id": [
+      "carol_chunk_15",
+      "carol_chunk_16",
+      "carol_chunk_17"
+    ]
+  },
+  "Christmas Eves": {
+    "name": "Christmas Eves",
+    "type": "Event",
+    "description": "Christmas Eves are the specific evenings when Marley's chain was formed and when Scrooge is confronted with the weight of his own chain.",
+    "source_id": [
+      "carol_chunk_15"
+    ]
+  },
+  "Counting-House": {
+    "name": "Counting-House",
+    "type": "Location",
+    "description": "The counting-house is the workplace where Scrooge and Marley conducted money-changing activities, symbolizing a narrow, profit-focused existence.",
+    "source_id": [
+      "carol_chunk_16"
+    ]
+  },
+  "Remorse": {
+    "name": "Remorse",
+    "type": "Concept",
+    "description": "Remorse is a central theme, described as an incessant torture experienced by Marley's ghost due to his wasted life.",
+    "source_id": [
+      "carol_chunk_16"
+    ]
+  },
+  "Ghost Of Jacob Marley": {
+    "name": "Ghost Of Jacob Marley",
+    "type": "Person",
+    "description": "The Ghost of Jacob Marley is a spectre who was Scrooge's former business partner and who now warns Scrooge about the consequences of a life focused only on trade.",
+    "source_id": [
+      "carol_chunk_17"
+    ]
+  },
+  "Business": {
+    "name": "Business",
+    "type": "Concept",
+    "description": "Business is a concept that the ghost redefines as encompassing mankind, common welfare, charity, mercy, forbearance, and benevolence, contrasting with Scrooge's narrow view.",
+    "source_id": [
+      "carol_chunk_17"
+    ]
+  },
+  "Three Spirits": {
+    "name": "Three Spirits",
+    "type": "Concept",
+    "description": "The Three Spirits are supernatural entities that Jacob Marley says will haunt Scrooge on consecutive nights, and whose visits are necessary for Scrooge to avoid the path Marley treads.",
+    "source_id": [
+      "carol_chunk_18"
+    ]
+  },
+  "Phantoms": {
+    "name": "Phantoms",
+    "type": "Creature",
+    "description": "Restless spirits that wander in haste, wearing chains, and mourning their inability to interfere in human matters for good.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "The Old Ghost": {
+    "name": "The Old Ghost",
+    "type": "Creature",
+    "description": "A ghost with a white waistcoat and a monstrous iron safe attached to its ankle, crying piteously at being unable to help a wretched woman and her infant.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "The Wretched Woman": {
+    "name": "The Wretched Woman",
+    "type": "Person",
+    "description": "A woman seen on a doorstep with an infant; she is the object of the old ghost's pity but cannot be assisted by him.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "The Invisible World": {
+    "name": "The Invisible World",
+    "type": "Concept",
+    "description": "The spiritual realm glimpsed by Scrooge, contributing to his fatigue and emotional state.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "The Ghost": {
+    "name": "The Ghost",
+    "type": "Creature",
+    "description": "A ghost that converses with Scrooge, part of the supernatural events affecting him. | The Ghost is a supernatural being who observes and comments on the scene, referring to Fan as a delicate creature with a large heart. | The Ghost is a spectral figure that takes Scrooge to visit scenes from his past, including a school and a warehouse. | The Ghost is a supernatural entity that observes Scrooge during the scene and comments on the Fezziwigs' behavior. | A supernatural being that shows Scrooge visions of the past, insisting on showing him one more shadow despite Scrooge's objections. | The Ghost is a supernatural being who shows Scrooge the Cratchit family and warns that Tiny Tim will die if the future remains unaltered, quoting Scrooge's own words back to him. | The Ghost is a spirit that travels with Scrooge, visiting various homes, and grows older as they travel, with its life ending at midnight. | The Ghost is a spirit that accompanies Scrooge, representing the future and guiding him through the town. | The Ghost is a supernatural being that guides Scrooge through various scenes, pointing to the head of a dead man and revealing the reactions of others to his death.",
+    "source_id": [
+      "carol_chunk_20",
+      "carol_chunk_27",
+      "carol_chunk_28",
+      "carol_chunk_31",
+      "carol_chunk_34",
+      "carol_chunk_44",
+      "carol_chunk_51",
+      "carol_chunk_56",
+      "carol_chunk_63"
+    ]
+  },
+  "The Church Chimes": {
+    "name": "The Church Chimes",
+    "type": "Artifact",
+    "description": "Sounds from a neighboring church that strike the four quarters, marking the time when Scrooge awakens.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "The First Of The Three Spirits": {
+    "name": "The First Of The Three Spirits",
+    "type": "Event",
+    "description": "The beginning of Scrooge's encounter with the first of three spirits, signifying the start of his supernatural experiences.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "Scrooge's Chamber": {
+    "name": "Scrooge's Chamber",
+    "type": "Location",
+    "description": "The room where Scrooge wakes up in darkness, with walls and windows barely distinguishable.",
+    "source_id": [
+      "carol_chunk_20"
+    ]
+  },
+  "The Clock": {
+    "name": "The Clock",
+    "type": "Artifact",
+    "description": "The Clock is a heavy bell that strikes from six to twelve and stops, leading Scrooge to believe he has slept through a day.",
+    "source_id": [
+      "carol_chunk_21"
+    ]
+  },
+  "The Repeater": {
+    "name": "The Repeater",
+    "type": "Artifact",
+    "description": "The Repeater is a pocket watch that Scrooge touches to correct the clock, but it also strikes twelve and stops.",
+    "source_id": [
+      "carol_chunk_21"
+    ]
+  },
+  "The Window": {
+    "name": "The Window",
+    "type": "Artifact",
+    "description": "The Window is the window through which Scrooge looks to observe the weather and the world outside. | The window is a physical feature of the room that the Spirit moves towards, leading to their passage through the wall.",
+    "source_id": [
+      "carol_chunk_21",
+      "carol_chunk_23"
+    ]
+  },
+  "Scrooge's Bed": {
+    "name": "Scrooge's Bed",
+    "type": "Artifact",
+    "description": "Scrooge's bed is the location where the curtains are drawn aside by the spirit's hand.",
+    "source_id": [
+      "carol_chunk_22"
+    ]
+  },
+  "The Curtains": {
+    "name": "The Curtains",
+    "type": "Artifact",
+    "description": "The curtains of Scrooge's bed are drawn aside by an unseen hand, revealing the ghost to Scrooge.",
+    "source_id": [
+      "carol_chunk_22"
+    ]
+  },
+  "The Cap (Extinguisher)": {
+    "name": "The Cap (Extinguisher)",
+    "type": "Artifact",
+    "description": "A cap resembling an extinguisher that the Ghost uses to cover its light.",
+    "source_id": [
+      "carol_chunk_22"
+    ]
+  },
+  "The Light": {
+    "name": "The Light",
+    "type": "Concept",
+    "description": "The light emanating from the Ghost's head is a source of illumination and significance, central to the spirit's appearance and dialogue.",
+    "source_id": [
+      "carol_chunk_22"
+    ]
+  },
+  "The Belt": {
+    "name": "The Belt",
+    "type": "Artifact",
+    "description": "A lustrous belt worn by the Ghost, whose sheen is beautiful and sparkles and glitters.",
+    "source_id": [
+      "carol_chunk_22"
+    ]
+  },
+  "The Holly Branch": {
+    "name": "The Holly Branch",
+    "type": "Artifact",
+    "description": "A branch of fresh green holly held by the Ghost, symbolizing winter.",
+    "source_id": [
+      "carol_chunk_22"
+    ]
+  },
+  "The Weather": {
+    "name": "The Weather",
+    "type": "Other",
+    "description": "The weather conditions described include freezing temperatures and snow, which contrast with Scrooge's initial comfort.",
+    "source_id": [
+      "carol_chunk_23"
+    ]
+  },
+  "The Wall": {
+    "name": "The Wall",
+    "type": "Other",
+    "description": "The wall is a physical boundary that the Spirit and Scrooge pass through to reach an open country road.",
+    "source_id": [
+      "carol_chunk_23"
+    ]
+  },
+  "The Country Road": {
+    "name": "The Country Road",
+    "type": "Location",
+    "description": "The country road is the setting where Scrooge and the Spirit arrive after leaving the city, surrounded by fields.",
+    "source_id": [
+      "carol_chunk_23"
+    ]
+  },
+  "The City": {
+    "name": "The City",
+    "type": "Location",
+    "description": "The city is the place Scrooge and the Spirit depart from, vanishing entirely when they pass through the wall. | The City is a bustling urban area with shops, streets, and evening lights, where they view Fezziwig's warehouse. | The City is the setting where Scrooge and the Phantom appear, specifically in the area of 'Change among merchants.",
+    "source_id": [
+      "carol_chunk_23",
+      "carol_chunk_28",
+      "carol_chunk_54"
+    ]
+  },
+  "The Market Town": {
+    "name": "The Market Town",
+    "type": "Location",
+    "description": "The market town appears in the distance with a bridge, church, and winding river, and is where Scrooge recalls his childhood.",
+    "source_id": [
+      "carol_chunk_23"
+    ]
+  },
+  "The Boyhood Memories": {
+    "name": "The Boyhood Memories",
+    "type": "Concept",
+    "description": "The boyhood memories are the recollections Scrooge experiences of his youth, triggered by the scents and sights of his old home.",
+    "source_id": [
+      "carol_chunk_23"
+    ]
+  },
+  "The Boys": {
+    "name": "The Boys",
+    "type": "Creature",
+    "description": "The boys are a group of young people riding ponies and in carts, representing the joy of Christmas in the past.",
+    "source_id": [
+      "carol_chunk_23"
+    ]
+  },
+  "The Farmers": {
+    "name": "The Farmers",
+    "type": "Person",
+    "description": "The farmers are adults driving carts, participating in the cheerful scene of the market town.",
+    "source_id": [
+      "carol_chunk_23"
+    ]
+  },
+  "The School": {
+    "name": "The School",
+    "type": "Location",
+    "description": "A large, decaying mansion of dull red brick with broken windows and gates, where a solitary child is left neglected. | The School is a place from Scrooge's past, which they leave behind to enter the city streets.",
+    "source_id": [
+      "carol_chunk_24",
+      "carol_chunk_28"
+    ]
+  },
+  "Lonely Boy": {
+    "name": "Lonely Boy",
+    "type": "Person",
+    "description": "Scrooge's younger self, a solitary child reading near a feeble fire in the school, neglected by friends.",
+    "source_id": [
+      "carol_chunk_24"
+    ]
+  },
+  "Ali Baba": {
+    "name": "Ali Baba",
+    "type": "Person",
+    "description": "A fictional character from 'One Thousand and One Nights' appearing to the young Scrooge, carrying an axe and leading an ass laden with wood.",
+    "source_id": [
+      "carol_chunk_24"
+    ]
+  },
+  "Valentine": {
+    "name": "Valentine",
+    "type": "Person",
+    "description": "A fictional character referenced by Scrooge, seemingly part of a story, accompanied by his wild brother Orson.",
+    "source_id": [
+      "carol_chunk_24"
+    ]
+  },
+  "Orson": {
+    "name": "Orson",
+    "type": "Person",
+    "description": "A fictional character referenced by Scrooge, the wild brother of Valentine.",
+    "source_id": [
+      "carol_chunk_24"
+    ]
+  },
+  "Sultan's Groom": {
+    "name": "Sultan's Groom",
+    "type": "Person",
+    "description": "A fictional character who is turned upside down by the Genii, as recalled by Scrooge.",
+    "source_id": [
+      "carol_chunk_24"
+    ]
+  },
+  "Genii": {
+    "name": "Genii",
+    "type": "Creature",
+    "description": "A supernatural being from a story referenced by Scrooge, who turns the Sultan's Groom upside down.",
+    "source_id": [
+      "carol_chunk_24"
+    ]
+  },
+  "The Princess": {
+    "name": "The Princess",
+    "type": "Person",
+    "description": "The Princess is a royal person mentioned by Scrooge in a rhetorical question about marriage.",
+    "source_id": [
+      "carol_chunk_25"
+    ]
+  },
+  "The Parrot": {
+    "name": "The Parrot",
+    "type": "Creature",
+    "description": "The Parrot, named Robin Crusoe by Scrooge, is a green and yellow bird with a crest resembling a lettuce; it greeted its owner upon his return.",
+    "source_id": [
+      "carol_chunk_25"
+    ]
+  },
+  "Friday": {
+    "name": "Friday",
+    "type": "Person",
+    "description": "Friday is a character referenced by Scrooge while describing the parrot's story, running towards a creek.",
+    "source_id": [
+      "carol_chunk_25"
+    ]
+  },
+  "Fan": {
+    "name": "Fan",
+    "type": "Person",
+    "description": "Fan is Scrooge's younger sister who arrives to bring him home for the holidays, expressing great joy at the prospect. | Fan is the young sister of Scrooge, who comes to fetch him from boarding school, displays childish joy and affection, and tells him he may come home for Christmas.",
+    "source_id": [
+      "carol_chunk_26",
+      "carol_chunk_27"
+    ]
+  },
+  "The Boy": {
+    "name": "The Boy",
+    "type": "Person",
+    "description": "The Boy is Scrooge's former self as a child, who was left alone at school during the holidays and is visited by his sister Fan. | The Boy is a passerby in Sunday clothes who informs Scrooge that today is Christmas Day. | The boy is a young lad who provides information about the turkey at the poulterer's and is sent by Scrooge to purchase it. | A boy who is recompensed by Scrooge, likely for fetching the turkey or the cab.",
+    "source_id": [
+      "carol_chunk_26",
+      "carol_chunk_73",
+      "carol_chunk_74",
+      "carol_chunk_75"
+    ]
+  },
+  "Christmas Carol Singer": {
+    "name": "Christmas Carol Singer",
+    "type": "Person",
+    "description": "A boy who sang a Christmas carol at Scrooge's door the night before, which made Scrooge wish he had given him something.",
+    "source_id": [
+      "carol_chunk_26"
+    ]
+  },
+  "Father": {
+    "name": "Father",
+    "type": "Person",
+    "description": "Father is the parent of Fan and Scrooge, who has become kinder and grants permission for Scrooge to come home.",
+    "source_id": [
+      "carol_chunk_27"
+    ]
+  },
+  "Schoolmaster": {
+    "name": "Schoolmaster",
+    "type": "Person",
+    "description": "Schoolmaster is the head of the boarding school, who treats Scrooge with condescension and provides refreshments to the children.",
+    "source_id": [
+      "carol_chunk_27"
+    ]
+  },
+  "Home": {
+    "name": "Home",
+    "type": "Location",
+    "description": "Home refers to the Scrooge family residence, which Fan describes as heaven-like because of their father's newfound kindness.",
+    "source_id": [
+      "carol_chunk_27"
+    ]
+  },
+  "Parlour": {
+    "name": "Parlour",
+    "type": "Location",
+    "description": "Parlour is a cold, shivering room in the school where the schoolmaster brings the children and offers them food and drink.",
+    "source_id": [
+      "carol_chunk_27"
+    ]
+  },
+  "Decanter of Light Wine": {
+    "name": "Decanter of Light Wine",
+    "type": "Artifact",
+    "description": "A decanter of curiously light wine produced by the schoolmaster as a refreshment.",
+    "source_id": [
+      "carol_chunk_27"
+    ]
+  },
+  "Block of Heavy Cake": {
+    "name": "Block of Heavy Cake",
+    "type": "Artifact",
+    "description": "A block of curiously heavy cake produced by the schoolmaster as a refreshment.",
+    "source_id": [
+      "carol_chunk_27"
+    ]
+  },
+  "The Nephew": {
+    "name": "The Nephew",
+    "type": "Person",
+    "description": "The Nephew is the child of Scrooge's sister, mentioned in conversation between the Ghost and Scrooge.",
+    "source_id": [
+      "carol_chunk_28"
+    ]
+  },
+  "The Warehouse": {
+    "name": "The Warehouse",
+    "type": "Location",
+    "description": "The Warehouse is the place where Scrooge was apprenticed, now showing Fezziwig at work.",
+    "source_id": [
+      "carol_chunk_28"
+    ]
+  },
+  "Christmas-Time": {
+    "name": "Christmas-Time",
+    "type": "Event",
+    "description": "Christmas-time is an annual holiday season, indicated by the dressing of the shops in the city.",
+    "source_id": [
+      "carol_chunk_28"
+    ]
+  },
+  "Dick Wilkins": {
+    "name": "Dick Wilkins",
+    "type": "Person",
+    "description": "Dick Wilkins is Scrooge's fellow apprentice, who was very attached to Scrooge and is fondly remembered.",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "The Three Miss Fezziwigs": {
+    "name": "The Three Miss Fezziwigs",
+    "type": "Person",
+    "description": "The three Miss Fezziwigs are the daughters of Fezziwig, beaming and lovable, attending the party.",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "Fiddler": {
+    "name": "Fiddler",
+    "type": "Person",
+    "description": "The fiddler is a musician who provides music for the dance at Fezziwig's party.",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "Warehouse": {
+    "name": "Warehouse",
+    "type": "Location",
+    "description": "Warehouse is Fezziwig's business premises, which is transformed into a ballroom for the Christmas party.",
+    "source_id": [
+      "carol_chunk_29"
+    ]
+  },
+  "The Fiddler": {
+    "name": "The Fiddler",
+    "type": "Person",
+    "description": "The Fiddler is an artful musician who plays dance music, including 'Sir Roger de Coverley'.",
+    "source_id": [
+      "carol_chunk_30"
+    ]
+  },
+  "Sir Roger de Coverley": {
+    "name": "Sir Roger de Coverley",
+    "type": "Content",
+    "description": "'Sir Roger de Coverley' is a dance tune played by the fiddler during the ball.",
+    "source_id": [
+      "carol_chunk_30"
+    ]
+  },
+  "Fezziwig's Ball": {
+    "name": "Fezziwig's Ball",
+    "type": "Event",
+    "description": "Fezziwig's ball is a domestic dance event that features various dances, food, and drinks and concludes at eleven o'clock.",
+    "source_id": [
+      "carol_chunk_30"
+    ]
+  },
+  "Dick": {
+    "name": "Dick",
+    "type": "Person",
+    "description": "Dick is a character who appears alongside Scrooge's former self in the scene, and together they are depicted with bright faces.",
+    "source_id": [
+      "carol_chunk_31"
+    ]
+  },
+  "The Apprentices": {
+    "name": "The Apprentices",
+    "type": "Person",
+    "description": "The apprentices are two young men who are left alone after the party and later praise Fezziwig warmly.",
+    "source_id": [
+      "carol_chunk_31"
+    ]
+  },
+  "Spirit": {
+    "name": "Spirit",
+    "type": "Person",
+    "description": "The Spirit is a supernatural guide who accompanies Scrooge and insists on understanding his reactions. | A supernatural being, likely the Ghost of Christmas Present, who observes the poor revellers and sprinkles incense on their dinners from his torch.",
+    "source_id": [
+      "carol_chunk_32",
+      "carol_chunk_40"
+    ]
+  },
+  "Young Girl": {
+    "name": "Young Girl",
+    "type": "Person",
+    "description": "A fair young girl in mourning dress who sits beside Scrooge in a past scene and speaks softly.",
+    "source_id": [
+      "carol_chunk_32"
+    ]
+  },
+  "Clerk": {
+    "name": "Clerk",
+    "type": "Person",
+    "description": "The clerk is Scrooge's employee to whom Scrooge wishes to say a word or two.",
+    "source_id": [
+      "carol_chunk_32"
+    ]
+  },
+  "Man": {
+    "name": "Man",
+    "type": "Person",
+    "description": "A man speaking with a former lover about her leaving him for another, and his pursuit of wealth.",
+    "source_id": [
+      "carol_chunk_33"
+    ]
+  },
+  "Woman": {
+    "name": "Woman",
+    "type": "Person",
+    "description": "A woman who has left her former lover for a golden idol, and expresses concern about his obsession with gain.",
+    "source_id": [
+      "carol_chunk_33"
+    ]
+  },
+  "The Girl": {
+    "name": "The Girl",
+    "type": "Person",
+    "description": "A dowerless girl who releases her lover from their engagement, reflecting on how his changed nature and guiding principles make their union impossible.",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "The Unnamed Lover": {
+    "name": "The Unnamed Lover",
+    "type": "Person",
+    "description": "The man to whom the Girl speaks; he has changed his nature and weighs everything by gain, which leads to the dissolution of their relationship.",
+    "source_id": [
+      "carol_chunk_34"
+    ]
+  },
+  "The Beautiful Young Girl": {
+    "name": "The Beautiful Young Girl",
+    "type": "Person",
+    "description": "A beautiful young girl sitting near the winter fire, resembling the woman Scrooge first believed was the same, but turns out to be her daughter.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "The Comely Matron": {
+    "name": "The Comely Matron",
+    "type": "Person",
+    "description": "A matron, now older, who sits opposite her daughter and laughs heartily with her, enjoying the children's activities.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "The Father": {
+    "name": "The Father",
+    "type": "Person",
+    "description": "The father who comes home to the family scene, accompanied by a man laden with Christmas toys and presents.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "The Porter": {
+    "name": "The Porter",
+    "type": "Person",
+    "description": "The porter is the man who carries the Christmas presents into the home and is mobbed by the children in affectionate chaos.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "The Children": {
+    "name": "The Children",
+    "type": "Person",
+    "description": "A group of children more numerous than Scrooge can count, each behaving with the energy of forty, contributing to the uproarious scene.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "The Room": {
+    "name": "The Room",
+    "type": "Location",
+    "description": "A comfortable room, not very large or handsome, but full of comfort, where the family scene takes place near a winter fire.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "Winter Fire": {
+    "name": "Winter Fire",
+    "type": "NaturalObject",
+    "description": "The fire that provides warmth and comfort in the room where the family gathers.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "Christmas Toys and Presents": {
+    "name": "Christmas Toys and Presents",
+    "type": "Artifact",
+    "description": "Items carried by the porter and brought by the father to the family home, likely for the children.",
+    "source_id": [
+      "carol_chunk_35"
+    ]
+  },
+  "Master Of The House": {
+    "name": "Master Of The House",
+    "type": "Person",
+    "description": "The master of the house is the husband of Belle and father of the children, sharing a warm family moment by the fireside.",
+    "source_id": [
+      "carol_chunk_36"
+    ]
+  },
+  "Children": {
+    "name": "Children",
+    "type": "Person",
+    "description": "The children are the offspring of the master and Belle, whose joyful reactions to packages and the baby incident are described.",
+    "source_id": [
+      "carol_chunk_36"
+    ]
+  },
+  "Family Fireside Scene": {
+    "name": "Family Fireside Scene",
+    "type": "Event",
+    "description": "A warm family gathering by the fireside where Scrooge observes and feels deep regret.",
+    "source_id": [
+      "carol_chunk_36"
+    ]
+  },
+  "The Second Spirit": {
+    "name": "The Second Spirit",
+    "type": "Creature",
+    "description": "The Second Spirit is the ghost of Christmas Present that appears to Scrooge after the first spirit is extinguished.",
+    "source_id": [
+      "carol_chunk_37"
+    ]
+  },
+  "Scrooge's Office": {
+    "name": "Scrooge's Office",
+    "type": "Location",
+    "description": "Scrooge's Office is the place where Scrooge was seen sitting alone with a candle while his partner lay dying. | Scrooge's office is the place of occupation that Scrooge identifies and inspects during the vision.",
+    "source_id": [
+      "carol_chunk_37",
+      "carol_chunk_68"
+    ]
+  },
+  "The Chamber": {
+    "name": "The Chamber",
+    "type": "Location",
+    "description": "The chamber has undergone a transformation, being hung with living green, holly, mistletoe, and ivy, with a great fire and a heaped-up throne of food.",
+    "source_id": [
+      "carol_chunk_38"
+    ]
+  },
+  "Holly Wreath": {
+    "name": "Holly Wreath",
+    "type": "Artifact",
+    "description": "The holly wreath is worn by the Ghost of Christmas Present on its head and is decorated with shining icicles.",
+    "source_id": [
+      "carol_chunk_38"
+    ]
+  },
+  "Torch": {
+    "name": "Torch",
+    "type": "Artifact",
+    "description": "The torch, shaped like Plenty's horn, is held by the Ghost of Christmas Present to shed light on Scrooge. | A special torch belonging to the Spirit that can sprinkle incense on dinners and also shed drops of water to restore good-humour. | The Torch is carried by the Ghost of Christmas Present and sprinkles a flavour that brings enjoyment, especially to poor dinners.",
+    "source_id": [
+      "carol_chunk_38",
+      "carol_chunk_40",
+      "carol_chunk_41"
+    ]
+  },
+  "The Feast": {
+    "name": "The Feast",
+    "type": "Event",
+    "description": "The feast is a display of food and drink, including turkeys, geese, mince-pies, and punch, heaped on the floor of the chamber.",
+    "source_id": [
+      "carol_chunk_38"
+    ]
+  },
+  "Christmas Morning": {
+    "name": "Christmas Morning",
+    "type": "Event",
+    "description": "Christmas Morning is the time setting where Scrooge and the Ghost observe the city streets, with people removing snow and shops displaying festive goods.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "City Streets": {
+    "name": "City Streets",
+    "type": "Location",
+    "description": "City Streets are the place where Scrooge and the Ghost stand, characterized by snowy weather, cheerful people, and vibrant shops.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "Grocers' Shops": {
+    "name": "Grocers' Shops",
+    "type": "Location",
+    "description": "The Grocers' shops are bustling with Christmas goods, rich with fruits, nuts, and other festive produce.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "Mistletoe": {
+    "name": "Mistletoe",
+    "type": "NaturalObject",
+    "description": "Mistletoe is a plant associated with Christmas celebrations, mentioned as part of the vanished scene and later seen hung up in shops.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "Snow": {
+    "name": "Snow",
+    "type": "NaturalObject",
+    "description": "Snow covers the rooftops and ground, contributing to the cheerful winter scene.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "Poulterers' Shops": {
+    "name": "Poulterers' Shops",
+    "type": "Location",
+    "description": "Poulterers' shops are semi-open, selling poultry and game for the Christmas feast.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "Fruiterers' Shops": {
+    "name": "Fruiterers' Shops",
+    "type": "Location",
+    "description": "Fruiterers' shops are radiant, displaying a variety of fruits including chestnuts, apples, pears, grapes, and citrus.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "Spanish Onions": {
+    "name": "Spanish Onions",
+    "type": "NaturalObject",
+    "description": "Spanish onions are large, brown-skinned onions displayed in the shops, described with a humorous comparison to Spanish friars.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "Norfolk Biffins": {
+    "name": "Norfolk Biffins",
+    "type": "NaturalObject",
+    "description": "Norfolk Biffins are a type of apple, squab and swarthy, prominently displayed in the fruiterers' shops.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "Gold and Silver Fish": {
+    "name": "Gold and Silver Fish",
+    "type": "Creature",
+    "description": "Gold and silver fish are kept in a bowl among the fruits, appearing excited about the festive activity.",
+    "source_id": [
+      "carol_chunk_39"
+    ]
+  },
+  "Grocers' Shop": {
+    "name": "Grocers' Shop",
+    "type": "Location",
+    "description": "A nearly closed grocery shop with glimpses of its contents, including scales, twine, canisters, and an array of festive food items.",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Customers": {
+    "name": "Customers",
+    "type": "Person",
+    "description": "People at the grocers' shop who are hurried and eager, tumbling into each other and making mistakes in their purchases but in good humour.",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Grocer": {
+    "name": "Grocer",
+    "type": "Person",
+    "description": "The grocer and his people are described as frank and fresh, with polished hearts on their aprons, suggesting genuine cheerfulness.",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Poor Revellers": {
+    "name": "Poor Revellers",
+    "type": "Person",
+    "description": "People carrying their dinners to the bakers' shops, who are of great interest to the Spirit.",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Bakers' Shops": {
+    "name": "Bakers' Shops",
+    "type": "Location",
+    "description": "Shops where people bring their dinners to be cooked, and where the Spirit and Scrooge observe the revellers.",
+    "source_id": [
+      "carol_chunk_40"
+    ]
+  },
+  "Mrs. Cratchit": {
+    "name": "Mrs. Cratchit",
+    "type": "Person",
+    "description": "Mrs. Cratchit is Bob's wife, who is dressed in a twice-turned gown but wears brave ribbons, and prepares the family dinner. | Mrs. Cratchit is the matriarch of the Cratchit family, who welcomes Martha home, prepares Christmas dinner, and shows concern for Tiny Tim's health. | Mrs. Cratchit is a member of the Cratchit family and the preparer of the Christmas pudding, which is regarded as her greatest success since her marriage. | Mrs. Cratchit is Bob's wife, who initially criticizes Mr. Scrooge but agrees to drink to his health for her husband's sake and the occasion. | Mrs. Cratchit is the wife of Bob Cratchit, who is engaged in work and organizes the family's care for her husband. | Mrs. Cratchit is Mr. Cratchit's wife, a supportive family member who shares in the household's sentiments.",
+    "source_id": [
+      "carol_chunk_41",
+      "carol_chunk_42",
+      "carol_chunk_44",
+      "carol_chunk_45",
+      "carol_chunk_65",
+      "carol_chunk_67"
+    ]
+  },
+  "Belinda Cratchit": {
+    "name": "Belinda Cratchit",
+    "type": "Person",
+    "description": "Belinda Cratchit is the second daughter of the Cratchit family, who assists her mother in laying the cloth.",
+    "source_id": [
+      "carol_chunk_41"
+    ]
+  },
+  "Master Peter Cratchit": {
+    "name": "Master Peter Cratchit",
+    "type": "Person",
+    "description": "Master Peter Cratchit is the eldest Cratchit child, who wears his father's shirt-collar and tends to the potatoes. | Master Peter Cratchit is the eldest son of the Cratchit family, who helps fetch the goose and mashes the potatoes with vigour.",
+    "source_id": [
+      "carol_chunk_41",
+      "carol_chunk_42"
+    ]
+  },
+  "Martha Cratchit": {
+    "name": "Martha Cratchit",
+    "type": "Person",
+    "description": "Martha Cratchit is the eldest daughter who arrives late due to work, and is greeted with excitement by the family. | Martha Cratchit is a daughter of the Cratchit family who hides as a joke upon her arrival, but then runs into her father's arms when she sees his disappointment. | Martha Cratchit is a poor apprentice at a milliner's, who shares stories about her work and a recent sighting of a countess and lord.",
+    "source_id": [
+      "carol_chunk_41",
+      "carol_chunk_42",
+      "carol_chunk_45"
+    ]
+  },
+  "Cratchit Family": {
+    "name": "Cratchit Family",
+    "type": "Organization",
+    "description": "The Cratchit family is a close-knit unit, including Bob, Mrs. Cratchit, their children, and Tiny Tim, who are seen preparing for their Christmas dinner. | The Cratchit family is a group of individuals including the mother, children, and Peter, who are depicted in a quiet, sorrowful scene after a death. | The Cratchit family is the household observed by Scrooge, consisting of the parents and children including Tiny Tim and Peter. | The Cratchit family is a close-knit family unit that supports each other emotionally and in daily tasks.",
+    "source_id": [
+      "carol_chunk_41",
+      "carol_chunk_63",
+      "carol_chunk_64",
+      "carol_chunk_65"
+    ]
+  },
+  "Mr. Bob Cratchit": {
+    "name": "Mr. Bob Cratchit",
+    "type": "Person",
+    "description": "Bob Cratchit is the father of the Cratchit family, returns from church with Tiny Tim on his shoulder, is initially disappointed by Martha's absence, and prepares the hot gin and lemon mixture.",
+    "source_id": [
+      "carol_chunk_42"
+    ]
+  },
+  "Miss Belinda Cratchit": {
+    "name": "Miss Belinda Cratchit",
+    "type": "Person",
+    "description": "Miss Belinda Cratchit is a daughter of the Cratchit family, who sweetens the apple sauce and changes the plates during dinner.",
+    "source_id": [
+      "carol_chunk_42"
+    ]
+  },
+  "The Two Young Cratchits": {
+    "name": "The Two Young Cratchits",
+    "type": "Person",
+    "description": "The two young Cratchits are the younger children of the Cratchit family, who are everywhere at once, help hide Martha, carry Tiny Tim, set chairs, and are steeped in sage and onion.",
+    "source_id": [
+      "carol_chunk_42"
+    ]
+  },
+  "The Goose": {
+    "name": "The Goose",
+    "type": "Artifact",
+    "description": "The goose is the main dish of the Christmas dinner, celebrated for its tenderness, flavour, size, and cheapness.",
+    "source_id": [
+      "carol_chunk_42"
+    ]
+  },
+  "The Pudding": {
+    "name": "The Pudding",
+    "type": "Artifact",
+    "description": "The pudding is a Christmas dessert that Mrs. Cratchit nervously prepares and brings in after the goose. | The pudding is a Christmas dessert prepared by Mrs. Cratchit, described as hard, firm, and blazing with brandy, and considered a great success by the family.",
+    "source_id": [
+      "carol_chunk_42",
+      "carol_chunk_44"
+    ]
+  },
+  "Christmas Day": {
+    "name": "Christmas Day",
+    "type": "Event",
+    "description": "Christmas Day is the holiday during which the Cratchit family gathers for dinner and reflects on their blessings. | Christmas Day is the holiday on which the Cratchit family gathers and toasts to Scrooge, despite mixed feelings. | Christmas Day is the holiday that the boy identifies as the current day, prompting Scrooge's joyful reaction.",
+    "source_id": [
+      "carol_chunk_42",
+      "carol_chunk_45",
+      "carol_chunk_73"
+    ]
+  },
+  "Two Young Cratchits": {
+    "name": "Two Young Cratchits",
+    "type": "Person",
+    "description": "The two young Cratchits are children of the Cratchit family who become frightened at the supposition that the pudding might be stolen.",
+    "source_id": [
+      "carol_chunk_43"
+    ]
+  },
+  "Pudding": {
+    "name": "Pudding",
+    "type": "Artifact",
+    "description": "The pudding is a food item being prepared for a meal, central to the scene's activity and the subject of the characters' fears and observations.",
+    "source_id": [
+      "carol_chunk_43"
+    ]
+  },
+  "The Cratchit Family": {
+    "name": "The Cratchit Family",
+    "type": "Organization",
+    "description": "The Cratchit family consists of Bob, Mrs. Cratchit, Tiny Tim, and other children, who gather around the hearth for a Christmas dinner and toast. | The Cratchit family is a humble, loving, and contented family, despite their poor clothing and shoes, who celebrate Christmas together.",
+    "source_id": [
+      "carol_chunk_44",
+      "carol_chunk_45"
+    ]
+  },
+  "The Ghost's Warning": {
+    "name": "The Ghost's Warning",
+    "type": "Event",
+    "description": "The Ghost's warning is a prophetic pronouncement that Tiny Tim will die if the future remains unaltered, leading to Scrooge's emotional reaction.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "The Hearth": {
+    "name": "The Hearth",
+    "type": "Location",
+    "description": "The hearth is the family gathering spot in the Cratchit home, where the family draws round and the fire is made up.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "The Jug": {
+    "name": "The Jug",
+    "type": "Artifact",
+    "description": "The jug contains a hot compound that is tasted and considered perfect, then served in two tumblers and a custard cup.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "The Compound": {
+    "name": "The Compound",
+    "type": "Artifact",
+    "description": "The compound is a drink in the jug that is tasted and considered perfect, and is served to the family.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "The Tumbler": {
+    "name": "The Tumbler",
+    "type": "Artifact",
+    "description": "The tumbler is a glass vessel used to hold the hot stuff from the jug, part of the family display of glass.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "The Custard Cup": {
+    "name": "The Custard Cup",
+    "type": "Artifact",
+    "description": "The custard cup is a handleless cup used to hold the hot stuff from the jug, part of the family display of glass.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "The Glass Display": {
+    "name": "The Glass Display",
+    "type": "Artifact",
+    "description": "The glass display consists of two tumblers and a custard cup, used to serve the hot drink.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "The Chestnuts": {
+    "name": "The Chestnuts",
+    "type": "NaturalObject",
+    "description": "The chestnuts are placed on the fire and sputter and crack as part of the family's Christmas gathering.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "The Apples and Oranges": {
+    "name": "The Apples and Oranges",
+    "type": "NaturalObject",
+    "description": "The apples and oranges are put on the table as part of the Christmas dinner.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "The Future": {
+    "name": "The Future",
+    "type": "Concept",
+    "description": "The Future is the time period that, if unaltered, will result in Tiny Tim's death.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "Heaven": {
+    "name": "Heaven",
+    "type": "Concept",
+    "description": "Heaven is the divine realm referenced by the Ghost in rebuking Scrooge about deciding who should live or die.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "The Surplus Population": {
+    "name": "The Surplus Population",
+    "type": "Concept",
+    "description": "The surplus population is a phrase Scrooge used earlier, which the Ghost quotes to rebuke him about the value of human life.",
+    "source_id": [
+      "carol_chunk_44"
+    ]
+  },
+  "Mr. Scrooge": {
+    "name": "Mr. Scrooge",
+    "type": "Person",
+    "description": "Mr. Scrooge is a stingy, hard, unfeeling man, perceived as the Ogre of the family, whose name casts a dark shadow over the Cratchit family's Christmas party. | Mr. Scrooge is a character who shows generosity by offering a donation and expresses gratitude and happiness during the Christmas season.",
+    "source_id": [
+      "carol_chunk_45",
+      "carol_chunk_76"
+    ]
+  },
+  "Master Peter": {
+    "name": "Master Peter",
+    "type": "Person",
+    "description": "Master Peter is the eldest Cratchit child, who is the subject of a potential job opportunity that would bring in five-and-sixpence weekly, and is teased by his siblings.",
+    "source_id": [
+      "carol_chunk_45"
+    ]
+  },
+  "The Song About a Lost Child": {
+    "name": "The Song About a Lost Child",
+    "type": "Content",
+    "description": "The song, about a lost child traveling in the snow, is sung by Tiny Tim and is noted for his plaintive voice.",
+    "source_id": [
+      "carol_chunk_45"
+    ]
+  },
+  "Ghost Of Christmas Present": {
+    "name": "Ghost Of Christmas Present",
+    "type": "Creature",
+    "description": "The Ghost of Christmas Present is a spiritual being that shows Scrooge various scenes of holiday gatherings and miners' homes, spreading mirth and goodwill.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Guests": {
+    "name": "Guests",
+    "type": "Person",
+    "description": "Guests are individuals assembling for friendly gatherings in the scenes shown by the Ghost, adding to the festive atmosphere.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Girls": {
+    "name": "Girls",
+    "type": "Person",
+    "description": "Girls are a group of handsome, chattering young women who trip lightly to a neighbour's house for a gathering.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Single Man": {
+    "name": "Single Man",
+    "type": "Person",
+    "description": "The Single Man is a character who sees the girls enter the house, and the narrator warns him of the 'artful witches'.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Lamplighter": {
+    "name": "Lamplighter",
+    "type": "Person",
+    "description": "The Lamplighter is a worker who dots the dusky street with specks of light and laughs as the Spirit passes.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Moor": {
+    "name": "Moor",
+    "type": "Location",
+    "description": "The Moor is a bleak and desert landscape featuring monstrous masses of rude stone, water held prisoner by frost, and sparse vegetation.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Hut": {
+    "name": "Hut",
+    "type": "Location",
+    "description": "The Hut is a dwelling with a window that shines light, where miners live with their families.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Miners": {
+    "name": "Miners",
+    "type": "Person",
+    "description": "Miners are individuals who labour in the bowels of the earth and live in the moor region.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Old Man": {
+    "name": "Old Man",
+    "type": "Person",
+    "description": "The Old Man is an elderly miner who sings a Christmas song to his family with a voice that seldom rises above the wind.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Old Woman": {
+    "name": "Old Woman",
+    "type": "Person",
+    "description": "The Old Woman is an elderly miner's wife, part of the cheerful company assembled round the fire.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Children And Descendants": {
+    "name": "Children And Descendants",
+    "type": "Person",
+    "description": "Children and descendants are the family members of the old couple, all dressed in holiday attire and joining in the Christmas song.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Christmas Song": {
+    "name": "Christmas Song",
+    "type": "Content",
+    "description": "Christmas Song is a very old song that the old man sings, with the family joining in the chorus.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Holiday Attire": {
+    "name": "Holiday Attire",
+    "type": "Artifact",
+    "description": "Holiday Attire refers to the gaily decked out clothing worn by the family for the festive occasion.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Frost": {
+    "name": "Frost",
+    "type": "NaturalObject",
+    "description": "Frost is the natural condition that holds water prisoner on the moor, preventing it from spreading.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Moss, Furze, And Coarse Rank Grass": {
+    "name": "Moss, Furze, And Coarse Rank Grass",
+    "type": "NaturalObject",
+    "description": "Moss, Furze, And Coarse Rank Grass are the only vegetation that grows on the barren moor.",
+    "source_id": [
+      "carol_chunk_46"
+    ]
+  },
+  "Lighthouse": {
+    "name": "Lighthouse",
+    "type": "Artifact",
+    "description": "A solitary lighthouse stands on a reef, emitting light through a loophole, and is tended by two men.",
+    "source_id": [
+      "carol_chunk_47"
+    ]
+  },
+  "Two Men": {
+    "name": "Two Men",
+    "type": "Person",
+    "description": "Two men who watch the light at the lighthouse, share a can of grog, and wish each other Merry Christmas.",
+    "source_id": [
+      "carol_chunk_47"
+    ]
+  },
+  "Ship": {
+    "name": "Ship",
+    "type": "Artifact",
+    "description": "A ship at sea where the crew members hum Christmas tunes and share kind words.",
+    "source_id": [
+      "carol_chunk_47"
+    ]
+  },
+  "Helmsman": {
+    "name": "Helmsman",
+    "type": "Person",
+    "description": "The helmsman is a crew member at the ship's wheel.",
+    "source_id": [
+      "carol_chunk_47"
+    ]
+  },
+  "Scrooge's Niece": {
+    "name": "Scrooge's Niece",
+    "type": "Person",
+    "description": "Scrooge's niece by marriage, who laughs heartily and supports Fred's Christmas sentiment. | Scrooge's niece hints that Scrooge is very rich, based on what her husband often tells her. | Scrooge's niece is a woman who expresses impatience with Scrooge and encourages her husband to continue speaking. | Scrooge's niece plays the harp and participates in the forfeits, joining in the games with enthusiasm.",
+    "source_id": [
+      "carol_chunk_47",
+      "carol_chunk_48",
+      "carol_chunk_49",
+      "carol_chunk_50"
+    ]
+  },
+  "Topper": {
+    "name": "Topper",
+    "type": "Person",
+    "description": "Topper is a bachelor who has his eye on one of Scrooge's niece's sisters and expresses an opinion on bachelorhood. | Topper is a member of the family gathering known for his bass singing and his playful pursuit of the plump sister during blind man's buff. | Topper is a guest at Fred's dinner party.",
+    "source_id": [
+      "carol_chunk_49",
+      "carol_chunk_50",
+      "carol_chunk_77"
+    ]
+  },
+  "Scrooge's Niece's Sister (Plump)": {
+    "name": "Scrooge's Niece's Sister (Plump)",
+    "type": "Person",
+    "description": "Scrooge's niece's sister is the plump one with the lace tucker, who blushes when Topper looks at her.",
+    "source_id": [
+      "carol_chunk_49"
+    ]
+  },
+  "Scrooge's Niece's Sister (Roses)": {
+    "name": "Scrooge's Niece's Sister (Roses)",
+    "type": "Person",
+    "description": "Scrooge's niece's sister is the one with the roses, who is not the plump sister and is part of the family group.",
+    "source_id": [
+      "carol_chunk_49"
+    ]
+  },
+  "Plump Sister": {
+    "name": "Plump Sister",
+    "type": "Person",
+    "description": "The plump sister is a guest at the party who is pursued by Topper during blind man's buff and later identifies the animal in the Yes and No game. | Plump sister is a guest at Fred's dinner party.",
+    "source_id": [
+      "carol_chunk_50",
+      "carol_chunk_77"
+    ]
+  },
+  "The Harp": {
+    "name": "The Harp",
+    "type": "Artifact",
+    "description": "The harp is played by Scrooge's niece during the musical part of the evening.",
+    "source_id": [
+      "carol_chunk_50"
+    ]
+  },
+  "The Simple Air": {
+    "name": "The Simple Air",
+    "type": "Content",
+    "description": "The simple air is a tune played by Scrooge's niece that reminds Scrooge of his childhood and softens his mood.",
+    "source_id": [
+      "carol_chunk_50"
+    ]
+  },
+  "The Game of Yes and No": {
+    "name": "The Game of Yes and No",
+    "type": "Event",
+    "description": "The game of Yes and No is a guessing game played at the party, where Scrooge's nephew thinks of an animal and answers yes or no to questions.",
+    "source_id": [
+      "carol_chunk_50"
+    ]
+  },
+  "The Game of Blind Man's Buff": {
+    "name": "The Game of Blind Man's Buff",
+    "type": "Event",
+    "description": "The game of blind man's buff is an active game played at the party, with Topper pretending to be blind to pursue the plump sister.",
+    "source_id": [
+      "carol_chunk_50"
+    ]
+  },
+  "The Game of Forfeits": {
+    "name": "The Game of Forfeits",
+    "type": "Event",
+    "description": "The game of forfeits is played after the music, allowing the guests to act like children during Christmas.",
+    "source_id": [
+      "carol_chunk_50"
+    ]
+  },
+  "The Game of How, When, and Where": {
+    "name": "The Game of How, When, and Where",
+    "type": "Event",
+    "description": "The game of How, When, and Where is played, and Scrooge's niece beats her sisters hollow.",
+    "source_id": [
+      "carol_chunk_50"
+    ]
+  },
+  "Christmas Holidays": {
+    "name": "Christmas Holidays",
+    "type": "Event",
+    "description": "The Christmas holidays are celebrated in the scene, with a toast to Scrooge and visits to various homes, appearing to be condensed into the time Scrooge and the Ghost travel together.",
+    "source_id": [
+      "carol_chunk_51"
+    ]
+  },
+  "Mulled Wine": {
+    "name": "Mulled Wine",
+    "type": "Artifact",
+    "description": "Mulled wine is a warm alcoholic beverage that Fred has ready for the toast to Scrooge.",
+    "source_id": [
+      "carol_chunk_51"
+    ]
+  },
+  "Ignorance": {
+    "name": "Ignorance",
+    "type": "Concept",
+    "description": "Ignorance is the name given to the boy child revealed by the Spirit, symbolizing the societal failure of ignorance. | Ignorance is a child figure alongside Want, representing willful blindness and ignorance, also to be feared.",
+    "source_id": [
+      "carol_chunk_52",
+      "carol_chunk_53"
+    ]
+  },
+  "The Girl Child": {
+    "name": "The Girl Child",
+    "type": "Person",
+    "description": "The girl child is one of the two children shown by the Spirit, representing Want or similar social ill.",
+    "source_id": [
+      "carol_chunk_52"
+    ]
+  },
+  "The Boy Child": {
+    "name": "The Boy Child",
+    "type": "Person",
+    "description": "The boy child is one of the two children, identified by the Spirit as Ignorance.",
+    "source_id": [
+      "carol_chunk_52"
+    ]
+  },
+  "Want": {
+    "name": "Want",
+    "type": "Person",
+    "description": "Want is a child figure mentioned by the Ghost of Christmas Present, representing poverty and suffering, and is to be feared.",
+    "source_id": [
+      "carol_chunk_53"
+    ]
+  },
+  "City": {
+    "name": "City",
+    "type": "Location",
+    "description": "The city is the location where the Ghost of Christmas Present points while warning about the children.",
+    "source_id": [
+      "carol_chunk_53"
+    ]
+  },
+  "The Phantom": {
+    "name": "The Phantom",
+    "type": "Person",
+    "description": "The Phantom is a spirit that leads Scrooge through the city, pointing to groups of people. | The Phantom is another reference to the Spirit accompanying Scrooge, with an outstretched hand. | The Phantom is a spirit guiding Scrooge, pointing to the head of the deceased man on the bed. | A spectral figure standing among the graves, pointing to a specific tombstone, and showing Scrooge a potential future.",
+    "source_id": [
+      "carol_chunk_54",
+      "carol_chunk_56",
+      "carol_chunk_62",
+      "carol_chunk_69"
+    ]
+  },
+  "Business Men": {
+    "name": "Business Men",
+    "type": "Person",
+    "description": "A group of merchants in the City who discuss the death of an unnamed man. | Two wealthy and important businessmen who greet each other and discuss the death of an acquaintance, implying satisfaction.",
+    "source_id": [
+      "carol_chunk_54",
+      "carol_chunk_55"
+    ]
+  },
+  "Great Fat Man": {
+    "name": "Great Fat Man",
+    "type": "Person",
+    "description": "A great fat man with a monstrous chin, who is one of the business men and first states that the dead man is dead.",
+    "source_id": [
+      "carol_chunk_54"
+    ]
+  },
+  "Second Merchant": {
+    "name": "Second Merchant",
+    "type": "Person",
+    "description": "A business man who asks when the dead man died.",
+    "source_id": [
+      "carol_chunk_54"
+    ]
+  },
+  "Third Merchant": {
+    "name": "Third Merchant",
+    "type": "Person",
+    "description": "A business man who takes snuff and expresses surprise that the dead man died.",
+    "source_id": [
+      "carol_chunk_54"
+    ]
+  },
+  "Red-Faced Gentleman": {
+    "name": "Red-Faced Gentleman",
+    "type": "Person",
+    "description": "A business man with a red face and a nose excrescence, who asks what the dead man did with his money.",
+    "source_id": [
+      "carol_chunk_54"
+    ]
+  },
+  "The Dead Man": {
+    "name": "The Dead Man",
+    "type": "Person",
+    "description": "An unnamed man who is the subject of the merchants' conversation, reportedly died last night. | The dead man is the former owner of the possessions being discussed; he died alone and is described as a 'wicked old screw'.",
+    "source_id": [
+      "carol_chunk_54",
+      "carol_chunk_58"
+    ]
+  },
+  "Gentleman With The Excrescence On His Nose": {
+    "name": "Gentleman With The Excrescence On His Nose",
+    "type": "Person",
+    "description": "A gentleman with a growth on his nose who participates in a conversation about attending a funeral, joking about needing lunch.",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "First Speaker": {
+    "name": "First Speaker",
+    "type": "Person",
+    "description": "The first speaker is a man who mocks the deceased, claims to be a particular friend, and offers to attend the funeral if others do.",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "The Deceased": {
+    "name": "The Deceased",
+    "type": "Person",
+    "description": "The deceased is the person whose funeral is being discussed; the men speak of him with no apparent affection.",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "Funeral": {
+    "name": "Funeral",
+    "type": "Event",
+    "description": "The funeral is an event being discussed by the speakers, who consider it a cheap one with no attendees.",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "Business Dealings": {
+    "name": "Business Dealings",
+    "type": "Concept",
+    "description": "Business dealings refers to the commercial transactions that Scrooge maintains to stand well in the esteem of the businessmen.",
+    "source_id": [
+      "carol_chunk_55"
+    ]
+  },
+  "Jacob": {
+    "name": "Jacob",
+    "type": "Person",
+    "description": "Jacob is Scrooge's deceased former partner, whose death is referenced as being in the past.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "Old Joe": {
+    "name": "Old Joe",
+    "type": "Person",
+    "description": "Old Joe is a grey-haired man around seventy years old, the proprietor of a shop dealing in various second-hand goods. | Old Joe is the recipient of the bundle, asked by the woman to open and assess its value. | Old Joe is a character who participates in the dialogue and produces a flannel bag with money, counting out gains.",
+    "source_id": [
+      "carol_chunk_56",
+      "carol_chunk_58",
+      "carol_chunk_61"
+    ]
+  },
+  "The Charwoman": {
+    "name": "The Charwoman",
+    "type": "Person",
+    "description": "The Charwoman is a woman who enters the shop carrying a heavy bundle, and is one of the three who meet unexpectedly.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "The Laundress": {
+    "name": "The Laundress",
+    "type": "Person",
+    "description": "The Laundress is a woman who enters the shop similarly laden and is one of the three who meet unexpectedly.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "The Undertaker's Man": {
+    "name": "The Undertaker's Man",
+    "type": "Person",
+    "description": "The Undertaker's Man is a man in faded black who enters the shop and is one of the three who meet unexpectedly.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "The Town": {
+    "name": "The Town",
+    "type": "Location",
+    "description": "The Town is the setting where Scrooge and the Ghost travel through, including an obscure part with a bad reputation.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "The Shop": {
+    "name": "The Shop",
+    "type": "Location",
+    "description": "The Shop is old Joe's place where second-hand goods are bought and sold, and where the three characters meet. | The shop is a physical space where the interaction takes place, containing a screen of rags, a parlour, and a rusty door.",
+    "source_id": [
+      "carol_chunk_56",
+      "carol_chunk_57"
+    ]
+  },
+  "The Porch": {
+    "name": "The Porch",
+    "type": "Location",
+    "description": "The Porch is a location within the town where Scrooge sees no likeness of himself among the multitudes.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "The Unseen Eyes": {
+    "name": "The Unseen Eyes",
+    "type": "Concept",
+    "description": "The Unseen Eyes represent a perceived watchful presence looking at Scrooge, causing him to shudder.",
+    "source_id": [
+      "carol_chunk_56"
+    ]
+  },
+  "The Old Man": {
+    "name": "The Old Man",
+    "type": "Person",
+    "description": "The old man is the owner of the shop and welcomes the others into the parlour, showing familiarity with the place and its fittings.",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "The Woman": {
+    "name": "The Woman",
+    "type": "Person",
+    "description": "The woman is a character who has a bundle and sits down in a bold, defiant manner, indicating a confrontational attitude. | The woman is a participant in the conversation, defending the act of taking a dead man's possessions and expressing bitterness about the deceased's character. | The woman is a pragmatic and unsentimental character who removed the bed-curtains and blankets from a deceased man and discusses them with Joe. | The Woman is a character who took a shirt off the corpse and discusses the waste of burying him in it, laughing about it.",
+    "source_id": [
+      "carol_chunk_57",
+      "carol_chunk_58",
+      "carol_chunk_60",
+      "carol_chunk_61"
+    ]
+  },
+  "The Parlour": {
+    "name": "The Parlour",
+    "type": "Location",
+    "description": "The parlour is a room behind the screen of rags, where the group gathers and the old man tends the fire.",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "The Screen of Rags": {
+    "name": "The Screen of Rags",
+    "type": "Artifact",
+    "description": "The screen of rags is a makeshift partition within the shop, separating the parlour from the main area.",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "The Old Stair-Rod": {
+    "name": "The Old Stair-Rod",
+    "type": "Artifact",
+    "description": "The old stair-rod is a metal rod used by the old man to rake the fire.",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "The Smoky Lamp": {
+    "name": "The Smoky Lamp",
+    "type": "Artifact",
+    "description": "The smoky lamp is a light source trimmed by the old man with the stem of his pipe.",
+    "source_id": [
+      "carol_chunk_57"
+    ]
+  },
+  "Mrs. Dilber": {
+    "name": "Mrs. Dilber",
+    "type": "Person",
+    "description": "Mrs. Dilber is a laundress involved in a conversation about the belongings of a dead man, showing a pragmatic and somewhat callous attitude. | Mrs. Dilber is a woman who brings items including sheets, towels, clothing, teaspoons, sugar-tongs, and boots to sell.",
+    "source_id": [
+      "carol_chunk_58",
+      "carol_chunk_59"
+    ]
+  },
+  "The Man": {
+    "name": "The Man",
+    "type": "Person",
+    "description": "The man is present in the scene, agreeing with Mrs. Dilber and the woman about their right to the dead man's belongings.",
+    "source_id": [
+      "carol_chunk_58"
+    ]
+  },
+  "The Bundle": {
+    "name": "The Bundle",
+    "type": "Artifact",
+    "description": "The bundle contains the dead man's belongings, which the woman asks Old Joe to appraise.",
+    "source_id": [
+      "carol_chunk_58"
+    ]
+  },
+  "Joe": {
+    "name": "Joe",
+    "type": "Person",
+    "description": "Joe is an appraiser who examines and values items brought by his clients, noting prices on the wall. | Joe is an old man who engages in a conversation with a woman about the removal of bed-curtains and shows concern about the deceased man's belongings.",
+    "source_id": [
+      "carol_chunk_59",
+      "carol_chunk_60"
+    ]
+  },
+  "The First Woman": {
+    "name": "The First Woman",
+    "type": "Person",
+    "description": "The first woman is a client who brings a bundle for Joe to appraise, suggesting the items are from a deceased person.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "The Man in Faded Black": {
+    "name": "The Man in Faded Black",
+    "type": "Person",
+    "description": "The man in faded black is a client who brings items including seals, a pencil-case, sleeve-buttons, and a brooch.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "A Bundle": {
+    "name": "A Bundle",
+    "type": "Artifact",
+    "description": "A bundle is a package of items brought by the first woman, later opened by Joe to appraise.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "A Pair of Sleeve-Buttons": {
+    "name": "A Pair of Sleeve-Buttons",
+    "type": "Artifact",
+    "description": "A pair of sleeve-buttons is an item among the man in faded black's goods, appraised by Joe.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "A Brooch": {
+    "name": "A Brooch",
+    "type": "Artifact",
+    "description": "A brooch is an item of no great value among the man in faded black's goods, appraised by Joe.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "Sheets and Towels": {
+    "name": "Sheets and Towels",
+    "type": "Artifact",
+    "description": "Sheets and towels are items brought by Mrs. Dilber for appraisal.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "Two Old Fashioned Silver Teaspoons": {
+    "name": "Two Old Fashioned Silver Teaspoons",
+    "type": "Artifact",
+    "description": "Two old fashioned silver teaspoons are items brought by Mrs. Dilber for appraisal.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "A Pair of Sugar-Tongs": {
+    "name": "A Pair of Sugar-Tongs",
+    "type": "Artifact",
+    "description": "A pair of sugar-tongs is an item brought by Mrs. Dilber for appraisal.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "A Few Boots": {
+    "name": "A Few Boots",
+    "type": "Artifact",
+    "description": "A few boots are items brought by Mrs. Dilber for appraisal.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "A Large Heavy Roll of Dark Stuff": {
+    "name": "A Large Heavy Roll of Dark Stuff",
+    "type": "Artifact",
+    "description": "A large heavy roll of dark stuff is an item from the first woman's bundle, revealed when opened.",
+    "source_id": [
+      "carol_chunk_59"
+    ]
+  },
+  "The Deceased Man": {
+    "name": "The Deceased Man",
+    "type": "Person",
+    "description": "The deceased man is the former owner of the bed-curtains and blankets, who is not named in the text.",
+    "source_id": [
+      "carol_chunk_60"
+    ]
+  },
+  "Bed-Curtains": {
+    "name": "Bed-Curtains",
+    "type": "Artifact",
+    "description": "The bed-curtains are items removed from the deceased man's bed by the woman, which she plans to sell.",
+    "source_id": [
+      "carol_chunk_60"
+    ]
+  },
+  "Oil": {
+    "name": "Oil",
+    "type": "NaturalObject",
+    "description": "Oil is a substance the woman warns Joe not to drop on the blankets.",
+    "source_id": [
+      "carol_chunk_60"
+    ]
+  },
+  "Blankets": {
+    "name": "Blankets",
+    "type": "Artifact",
+    "description": "The blankets belonged to the deceased man and are now in the woman's possession.",
+    "source_id": [
+      "carol_chunk_60"
+    ]
+  },
+  "The Corpse": {
+    "name": "The Corpse",
+    "type": "Person",
+    "description": "The Corpse is the deceased individual whose belongings are being pilfered and discussed; the body is referred to in the dialogue.",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "Shirt": {
+    "name": "Shirt",
+    "type": "Artifact",
+    "description": "The Shirt is an article of clothing that the woman took from the corpse, describing it as the best he had and a fine one.",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "Flannel Bag": {
+    "name": "Flannel Bag",
+    "type": "Artifact",
+    "description": "The Flannel Bag is a bag produced by Old Joe containing money, used to count out the gains.",
+    "source_id": [
+      "carol_chunk_61"
+    ]
+  },
+  "The Unhappy Man": {
+    "name": "The Unhappy Man",
+    "type": "Person",
+    "description": "The Unhappy Man is the deceased person Scrooge observes, whose life was marked by greed and isolation, and who died alone.",
+    "source_id": [
+      "carol_chunk_62"
+    ]
+  },
+  "Death": {
+    "name": "Death",
+    "type": "Concept",
+    "description": "Death is personified as a powerful entity that claims dominion in the room, highlighting the contrast between the man's outer death and inner good deeds.",
+    "source_id": [
+      "carol_chunk_62"
+    ]
+  },
+  "Caroline": {
+    "name": "Caroline",
+    "type": "Person",
+    "description": "Caroline is a woman who is awaiting her husband's news and expresses relief and thankfulness upon hearing of the death of the man who was their creditor.",
+    "source_id": [
+      "carol_chunk_63"
+    ]
+  },
+  "Caroline's Husband": {
+    "name": "Caroline's Husband",
+    "type": "Person",
+    "description": "Caroline's husband is a man who brings news of the creditor's death, showing a mixture of embarrassment and relief, and discusses their financial situation with Caroline.",
+    "source_id": [
+      "carol_chunk_63"
+    ]
+  },
+  "Peter": {
+    "name": "Peter",
+    "type": "Person",
+    "description": "Peter is a child in the Cratchit family who is reading a book while the rest of the family sits quietly around the fire. | Peter is the eldest son of the Cratchit family, who comments on his father's slower walking pace.",
+    "source_id": [
+      "carol_chunk_63",
+      "carol_chunk_64"
+    ]
+  },
+  "Debt": {
+    "name": "Debt",
+    "type": "Concept",
+    "description": "Debt is a financial obligation that Caroline and her husband owe to the deceased man, and they are concerned about its transfer and their ability to repay it.",
+    "source_id": [
+      "carol_chunk_63"
+    ]
+  },
+  "Cratchit's Wife": {
+    "name": "Cratchit's Wife",
+    "type": "Person",
+    "description": "Cratchit's wife is the mother of the Cratchit children, who expresses concern about her weak eyes and speaks of Tiny Tim.",
+    "source_id": [
+      "carol_chunk_64"
+    ]
+  },
+  "Young Cratchits": {
+    "name": "Young Cratchits",
+    "type": "Person",
+    "description": "The young Cratchits are the children of Bob and Mrs. Cratchit, who show affection and comfort to their father.",
+    "source_id": [
+      "carol_chunk_65"
+    ]
+  },
+  "Bob": {
+    "name": "Bob",
+    "type": "Person",
+    "description": "Bob is a character who expresses deep emotion about visiting a green place and about his child, and he shares an encounter with Mr. Scrooge's nephew.",
+    "source_id": [
+      "carol_chunk_66"
+    ]
+  },
+  "Bob's Child": {
+    "name": "Bob's Child",
+    "type": "Person",
+    "description": "Bob's child is a young child who appears to be ill or deceased, as indicated by Bob's grief and the presence of a chair beside the child.",
+    "source_id": [
+      "carol_chunk_66"
+    ]
+  },
+  "Mr. Scrooge's Nephew": {
+    "name": "Mr. Scrooge's Nephew",
+    "type": "Person",
+    "description": "Mr. Scrooge's nephew is a kind gentleman who showed extraordinary kindness to Bob, inquiring about Bob's distress.",
+    "source_id": [
+      "carol_chunk_66"
+    ]
+  },
+  "Mr. Cratchit": {
+    "name": "Mr. Cratchit",
+    "type": "Person",
+    "description": "Mr. Cratchit is a family man who relates the kind words and offers of a benefactor to his family.",
+    "source_id": [
+      "carol_chunk_67"
+    ]
+  },
+  "Peter Cratchit": {
+    "name": "Peter Cratchit",
+    "type": "Person",
+    "description": "Peter Cratchit is the eldest son of the Cratchit family, who is mentioned as a potential recipient of a better situation.",
+    "source_id": [
+      "carol_chunk_67"
+    ]
+  },
+  "The Spirit of Tiny Tim": {
+    "name": "The Spirit of Tiny Tim",
+    "type": "Creature",
+    "description": "The Spirit of Tiny Tim is a supernatural entity embodying Tiny Tim's essence, which Scrooge addresses.",
+    "source_id": [
+      "carol_chunk_67"
+    ]
+  },
+  "Grave of Ebenezer Scrooge": {
+    "name": "Grave of Ebenezer Scrooge",
+    "type": "Location",
+    "description": "A neglected grave in the churchyard bearing the name of Scrooge, symbolizing a death that may be avoided.",
+    "source_id": [
+      "carol_chunk_69"
+    ]
+  },
+  "Churchyard": {
+    "name": "Churchyard",
+    "type": "Location",
+    "description": "A burial ground overrun by weeds, walled in by houses, where the grave of Scrooge is located.",
+    "source_id": [
+      "carol_chunk_69"
+    ]
+  },
+  "The Spirits": {
+    "name": "The Spirits",
+    "type": "Creature",
+    "description": "The Spirits are supernatural beings representing the Past, Present, and Future, who have influenced Scrooge's transformation. | The Spirits are supernatural beings that visited Scrooge during his night of transformation, leading to his changed attitude. | The Spirits are supernatural beings who, according to Scrooge, accomplished all their work in one night, making Christmas Day possible.",
+    "source_id": [
+      "carol_chunk_70",
+      "carol_chunk_72",
+      "carol_chunk_73"
+    ]
+  },
+  "Bedpost": {
+    "name": "Bedpost",
+    "type": "Artifact",
+    "description": "The bedpost is Scrooge's own bedpost, which he realizes is his own upon waking from his encounter with the Spirits.",
+    "source_id": [
+      "carol_chunk_70"
+    ]
+  },
+  "Time": {
+    "name": "Time",
+    "type": "Concept",
+    "description": "Time is an abstract concept that Scrooge now sees as his own, to make amends in the Past, Present, and Future.",
+    "source_id": [
+      "carol_chunk_70"
+    ]
+  },
+  "Spirits": {
+    "name": "Spirits",
+    "type": "Creature",
+    "description": "The wandering Spirits are supernatural beings that Scrooge saw through a window in his sitting-room.",
+    "source_id": [
+      "carol_chunk_71"
+    ]
+  },
+  "Sitting Room": {
+    "name": "Sitting Room",
+    "type": "Location",
+    "description": "The sitting-room is where Scrooge experiences his joyful outburst and recalls visions of the spirits.",
+    "source_id": [
+      "carol_chunk_71"
+    ]
+  },
+  "The Bells": {
+    "name": "The Bells",
+    "type": "Artifact",
+    "description": "The Bells are church bells that ring out loud peals, contributing to the festive atmosphere.",
+    "source_id": [
+      "carol_chunk_73"
+    ]
+  },
+  "The Prize Turkey": {
+    "name": "The Prize Turkey",
+    "type": "Artifact",
+    "description": "The prize turkey is a large bird hanging at the poulterer's that Scrooge buys to send to Bob Cratchit.",
+    "source_id": [
+      "carol_chunk_74"
+    ]
+  },
+  "The Poulterer's Shop": {
+    "name": "The Poulterer's Shop",
+    "type": "Location",
+    "description": "The poulterer's shop is the place where the prize turkey is located and from which Scrooge orders the turkey to be delivered.",
+    "source_id": [
+      "carol_chunk_74"
+    ]
+  },
+  "Turkey": {
+    "name": "Turkey",
+    "type": "Creature",
+    "description": "A large turkey that Scrooge purchases and decides to send to Camden Town, due to its size.",
+    "source_id": [
+      "carol_chunk_75"
+    ]
+  },
+  "The Portly Gentleman": {
+    "name": "The Portly Gentleman",
+    "type": "Person",
+    "description": "A gentleman who had visited Scrooge's counting-house the previous day and greets him with a reference to 'Scrooge and Marley's'.",
+    "source_id": [
+      "carol_chunk_75"
+    ]
+  },
+  "The Gentleman": {
+    "name": "The Gentleman",
+    "type": "Person",
+    "description": "The gentleman is a recipient of Mr. Scrooge's generosity and expresses surprise and gratitude for the offer.",
+    "source_id": [
+      "carol_chunk_76"
+    ]
+  },
+  "Fred's Niece": {
+    "name": "Fred's Niece",
+    "type": "Person",
+    "description": "Fred's niece is the wife of Fred and is startled when Scrooge arrives.",
+    "source_id": [
+      "carol_chunk_77"
+    ]
+  },
+  "Fred's Home": {
+    "name": "Fred's Home",
+    "type": "Location",
+    "description": "Fred's home is the location where the dinner gathering takes place.",
+    "source_id": [
+      "carol_chunk_77"
+    ]
+  },
+  "Dinner Party": {
+    "name": "Dinner Party",
+    "type": "Event",
+    "description": "A dinner party hosted by Fred, attended by Scrooge and other guests.",
+    "source_id": [
+      "carol_chunk_77"
+    ]
+  },
+  "He": {
+    "name": "He",
+    "type": "Person",
+    "description": "A character who experiences joy and resolves to live upon the Total-Abstinence Principle, known for keeping Christmas well.",
+    "source_id": [
+      "carol_chunk_79"
+    ]
+  },
+  "Total-Abstinence Principle": {
+    "name": "Total-Abstinence Principle",
+    "type": "Concept",
+    "description": "A principle of refraining from certain indulgences, adopted by the character after his encounters with spirits.",
+    "source_id": [
+      "carol_chunk_79"
+    ]
+  },
+  "Project Gutenberg Literary Archive Foundation": {
+    "name": "Project Gutenberg Literary Archive Foundation",
+    "type": "Organization",
+    "description": "The foundation (PGLAF) that owns a compilation copyright in the collection of Project Gutenberg electronic works. | The Project Gutenberg Literary Archive Foundation is the designated recipient of royalty donations derived from fees charged for Project Gutenberg™ works. | The Project Gutenberg Literary Archive Foundation is the organization that manages the Project Gutenberg trademark and receives royalty payments and donations. It is the owner of the Project Gutenberg trademark and party to the license agreement. | The Project Gutenberg Literary Archive Foundation is a non-profit 501(c)(3) educational corporation organized under the laws of Mississippi and granted tax exempt status by the Internal Revenue Service. It was created in 2001 to provide a secure and permanent future for Project Gutenberg and future generations. | The Project Gutenberg Literary Archive Foundation is the entity that receives donations for Project Gutenberg.",
+    "source_id": [
+      "carol_chunk_79",
+      "carol_chunk_80",
+      "carol_chunk_81",
+      "carol_chunk_82",
+      "carol_chunk_83"
+    ]
+  },
+  "United States": {
+    "name": "United States",
+    "type": "Location",
+    "description": "The country referenced regarding copyright laws and the free distribution of public domain works. | The United States is the country where copyright laws are referenced and where Project Gutenberg™ works can be used without fee under certain conditions.",
+    "source_id": [
+      "carol_chunk_79",
+      "carol_chunk_80"
+    ]
+  },
+  "Project Gutenberg™ License": {
+    "name": "Project Gutenberg™ License",
+    "type": "Artifact",
+    "description": "The Project Gutenberg™ License is the legal agreement governing the use, copying, distribution, and modification of Project Gutenberg™ electronic works. | The Project Gutenberg™ License is the legal agreement governing the use and distribution of Project Gutenberg electronic works. It includes terms for refunds, warranties, and limitations of liability.",
+    "source_id": [
+      "carol_chunk_80",
+      "carol_chunk_81"
+    ]
+  },
+  "Project Gutenberg™": {
+    "name": "Project Gutenberg™",
+    "type": "Organization",
+    "description": "Project Gutenberg™ is the entity that publishes and distributes electronic works under the stated license terms.",
+    "source_id": [
+      "carol_chunk_80"
+    ]
+  },
+  "Plain Vanilla ASCII": {
+    "name": "Plain Vanilla ASCII",
+    "type": "Concept",
+    "description": "Plain Vanilla ASCII is the official format of Project Gutenberg™ works, which must be provided or made available when distributing alternate formats.",
+    "source_id": [
+      "carol_chunk_80"
+    ]
+  },
+  "Project Gutenberg™ Electronic Work": {
+    "name": "Project Gutenberg™ Electronic Work",
+    "type": "Artifact",
+    "description": "A Project Gutenberg™ Electronic Work is a digital work distributed under the Project Gutenberg License. It may contain defects, and its use is subject to the terms of the agreement.",
+    "source_id": [
+      "carol_chunk_81"
+    ]
+  },
+  "Defect": {
+    "name": "Defect",
+    "type": "Concept",
+    "description": "A Defect refers to any flaw in a Project Gutenberg electronic work, such as incomplete or corrupt data, transcription errors, or intellectual property infringement, which may trigger rights of refund or replacement. | Defect is a concept in the indemnity section, referring to any defect that the user causes, which is a condition for indemnification.",
+    "source_id": [
+      "carol_chunk_81",
+      "carol_chunk_82"
+    ]
+  },
+  "Limited Right of Replacement or Refund": {
+    "name": "Limited Right of Replacement or Refund",
+    "type": "Concept",
+    "description": "The Limited Right of Replacement or Refund is a clause in the Project Gutenberg License that allows users to receive a refund or replacement copy if a defect is discovered within 90 days of receipt.",
+    "source_id": [
+      "carol_chunk_81"
+    ]
+  },
+  "Project Gutenberg™ Trademark": {
+    "name": "Project Gutenberg™ Trademark",
+    "type": "Concept",
+    "description": "The Project Gutenberg™ Trademark is a trademark owned by the Project Gutenberg Literary Archive Foundation, which grants permission for its use under the license.",
+    "source_id": [
+      "carol_chunk_81"
+    ]
+  },
+  "Royalty Payment": {
+    "name": "Royalty Payment",
+    "type": "Concept",
+    "description": "Royalty Payment refers to the payment made to the Project Gutenberg Literary Archive Foundation for the use of Project Gutenberg works, which must be clearly marked and sent to the specified address.",
+    "source_id": [
+      "carol_chunk_81"
+    ]
+  },
+  "Full Refund": {
+    "name": "Full Refund",
+    "type": "Concept",
+    "description": "Full Refund is a remedy available to users who do not agree to the terms of the Project Gutenberg License or who discover a defect in a work within 90 days. It requires the return or destruction of all copies.",
+    "source_id": [
+      "carol_chunk_81"
+    ]
+  },
+  "AS-IS Warranty Disclaimer": {
+    "name": "AS-IS Warranty Disclaimer",
+    "type": "Concept",
+    "description": "The AS-IS Warranty Disclaimer is a clause stating that Project Gutenberg works are provided AS-IS with no other warranties, except for the limited right of replacement or refund.",
+    "source_id": [
+      "carol_chunk_81"
+    ]
+  },
+  "Internal Revenue Service": {
+    "name": "Internal Revenue Service",
+    "type": "Organization",
+    "description": "The Internal Revenue Service is the U.S. government agency that granted tax exempt status to the Project Gutenberg Literary Archive Foundation.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Mississippi": {
+    "name": "Mississippi",
+    "type": "Location",
+    "description": "Mississippi is the state under whose laws the Project Gutenberg Literary Archive Foundation is organized.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Salt Lake City": {
+    "name": "Salt Lake City",
+    "type": "Location",
+    "description": "Salt Lake City is the location of the business office of the Project Gutenberg Literary Archive Foundation, at 809 North 1500 West, Salt Lake City, UT 84116.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Donation": {
+    "name": "Donation",
+    "type": "Concept",
+    "description": "Donation is the act of giving financial support, which is critical to the survival of Project Gutenberg and maintaining tax exempt status.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Tax Exemption": {
+    "name": "Tax Exemption",
+    "type": "Concept",
+    "description": "Tax exemption is the status granted by the IRS to the Project Gutenberg Literary Archive Foundation, allowing contributions to be tax deductible.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Project Gutenberg Electronic Works": {
+    "name": "Project Gutenberg Electronic Works",
+    "type": "Artifact",
+    "description": "Project Gutenberg Electronic Works are digital works distributed by Project Gutenberg, subject to the indemnity and free distribution terms.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Volunteers": {
+    "name": "Volunteers",
+    "type": "Person",
+    "description": "Volunteers are individuals who contribute to the production, promotion, and distribution of Project Gutenberg electronic works and are associated with the Foundation.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Foundation's Website": {
+    "name": "Foundation's Website",
+    "type": "Artifact",
+    "description": "The Foundation's website is the official online presence at www.gutenberg.org, providing contact information and donation pages.",
+    "source_id": [
+      "carol_chunk_82"
+    ]
+  },
+  "Professor Michael S. Hart": {
+    "name": "Professor Michael S. Hart",
+    "type": "Person",
+    "description": "Professor Michael S. Hart was the originator of the Project Gutenberg concept and produced and distributed Project Gutenberg eBooks for forty years with volunteer support.",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "Project Gutenberg Concept": {
+    "name": "Project Gutenberg Concept",
+    "type": "Concept",
+    "description": "The Project Gutenberg concept is the idea of a library of electronic works that could be freely shared with anyone, originated by Professor Michael S. Hart.",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "Project Gutenberg eBooks": {
+    "name": "Project Gutenberg eBooks",
+    "type": "Content",
+    "description": "Project Gutenberg eBooks are electronic versions of books distributed by Project Gutenberg, often created from several printed editions, and are not protected by copyright in the U.S. unless a copyright notice is included.",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "www.gutenberg.org": {
+    "name": "www.gutenberg.org",
+    "type": "Location",
+    "description": "www.gutenberg.org is the website that hosts Project Gutenberg's main search facility and provides information about the project and donations.",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "www.gutenberg.org/donate": {
+    "name": "www.gutenberg.org/donate",
+    "type": "Location",
+    "description": "www.gutenberg.org/donate is the web page where donations to Project Gutenberg can be made.",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  },
+  "Donations": {
+    "name": "Donations",
+    "type": "Data",
+    "description": "Donations to Project Gutenberg are accepted in several ways, including checks, online payments, and credit card donations.",
+    "source_id": [
+      "carol_chunk_83"
+    ]
+  }
+}
