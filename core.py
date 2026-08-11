@@ -29,17 +29,23 @@ class LightRAGConfig:
     chunk_top_k: int = int(os.getenv("CHUNK_TOP_K", 5))
     entity_top_k: int = int(os.getenv("ENTITY_TOP_K", 5))
     relation_top_k: int = int(os.getenv("RELATION_TOP_K", 5))
+    relation_candidate_top_k: int = int(os.getenv("RELATION_CANDIDATE_TOP_K", 20))
 
 
 class LightRAG:
 
-    def __init__(self, working_dir, llm_func, con_num, embed_func, config=None):
+    def __init__(self, working_dir, llm_func, con_num, embed_func, config=None, reranker=None):
         self.working_dir = working_dir
         self.llm_func = llm_func
         self.con_num = int(con_num)
         self.embed_func = embed_func
         self.config = config or LightRAGConfig()
         os.makedirs(working_dir, exist_ok=True)
+
+        if reranker is None:
+            raise ValueError("reranker must be provided when reranking is enabled")
+        self.reranker = reranker
+
 
         self.entity_kv = KVStore(os.path.join(working_dir, "entities.json"))
         self.relation_kv = KVStore(os.path.join(working_dir, "relations.json"))
@@ -93,8 +99,9 @@ class LightRAG:
             parts.append("-----Chunks-----\n" + chunk_lines)
         return "\n\n".join(parts)
 
-    def _get_relations_from_entities(self, entities: list[dict]) -> list[dict]:
-        relations = []
+    def _get_relations_from_entities(self, query: str, emb: list[float], entities: list[dict]) -> list[dict]:
+        candidate_vidx = VectorIndex(os.path.join(self.working_dir, "temporary_local_relation_vectors"))
+        candidate_relations = {}
         seen = set()
 
         for entity in entities:
@@ -107,10 +114,50 @@ class LightRAG:
                 if relation_key in seen:
                     continue
                 relation = self.relation_kv.get(relation_key)
-                if relation:
-                    relations.append(relation)
-                    seen.add(relation_key)
-        return relations
+                vector = self.relation_vidx.get_vector(relation_key)
+                if relation is None or vector is None:
+                    continue
+                candidate_vidx.add(relation_key, vector)
+                candidate_relations[relation_key] = relation
+                seen.add(relation_key)
+
+        dense_hits = candidate_vidx.query(emb, self.config.relation_candidate_top_k)
+        shortlist = [
+            (relation_key, candidate_relations[relation_key])
+            for relation_key, _ in dense_hits
+            if relation_key in candidate_relations
+        ]
+        if not shortlist:
+            return []
+
+        def relation_to_text(relation: dict) -> str:
+            source = relation.get("source", "")
+            target = relation.get("target", "")
+            keywords = ", ".join(relation.get("keywords", []))
+            description = relation.get("description", "")
+
+            return (
+                f"source: {source}; "
+                f"target: {target}; "
+                f"keywords: {keywords}; "
+                f"description: {description}"
+            )
+
+        pairs = [(query, relation_to_text(relation)) for _, relation in shortlist]
+        rerank_scores = self.reranker.predict(pairs)
+
+        ranked_relations = sorted(
+            zip(shortlist, rerank_scores),
+            key=lambda item: float(item[1]),
+            reverse=True,
+        )
+
+        return [
+            relation
+            for (_, relation), _ in ranked_relations[
+                :self.config.relation_top_k
+            ]
+        ]
 
     def _get_entities_from_relations(self, relations: list[dict]) -> list[dict]:
         entities = []
@@ -159,7 +206,7 @@ class LightRAG:
         emb = await self.embed_func(query)
         hits = self.entity_vidx.query(emb, self.config.entity_top_k)
         entities = [self.entity_kv.get(k) for k, _ in hits if self.entity_kv.get(k)]
-        relations = self._get_relations_from_entities(entities)
+        relations = self._get_relations_from_entities(query, emb, entities)
 
         source_ids = []
         for e in entities:

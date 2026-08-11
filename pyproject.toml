@@ -13,4 +13,5 @@ dependencies = [
     "python-dotenv>=1.2.2",
     "pyvis>=0.3.2",
     "tqdm>=4.69.0",
+    "sentence-transformers>=3.0.0",
 ]

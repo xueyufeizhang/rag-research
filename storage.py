@@ -83,6 +83,14 @@ class VectorIndex:
             self._vectors = new if self._vectors is None else np.vstack([self._vectors, new])
             self._pending = []
 
+    def get_vector(self, key: str):
+        self._build()
+        try:
+            index = self._ids.index(key)
+        except ValueError:
+            return None
+        return self._vectors[index]
+
     def query(self, query: list[float], top_k: int):
         self._build()
         if self._vectors is not None:

@@ -1,5 +1,6 @@
 import os
 import httpx
+from sentence_transformers import CrossEncoder
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
@@ -16,6 +17,9 @@ OLLAMA_MODEL = os.getenv("LLM_MODEL", "")
 
 EMBED_MODEL = os.getenv("EMBED_MODEL", "")
 EXTRACTION_TIMEOUT = int(os.getenv("EXTRACTION_TIMEOUT", 600))
+
+RERANK_MODEL = os.getenv("RERANK_MODEL", "mixedbread-ai/mxbai-rerank-base-v1")
+reranker = CrossEncoder(RERANK_MODEL, cache_folder="./models")
 
 api_client = AsyncOpenAI(base_url=API_BASE_URL, api_key=API_KEY) if LLM_BACKEND == "api" else None
 

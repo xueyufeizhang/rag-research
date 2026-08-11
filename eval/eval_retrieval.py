@@ -8,7 +8,7 @@ import json, os
 from tqdm import tqdm
 from dotenv import load_dotenv
 from core import LightRAG
-from backend import llm_func, embed_func
+from backend import llm_func, embed_func, reranker
 
 load_dotenv()
 CON_NUM = os.getenv("CON_NUM", 5)
@@ -84,7 +84,13 @@ def summarize_mode(mode: str, mode_results: list[dict]) -> dict:
     }
 
 async def eval_retrieval() -> tuple[list[dict], list[dict]]:
-    lightrag = LightRAG(os.getenv("WORKING_DIR", "./dickens_fixed_size"), llm_func, CON_NUM, embed_func)
+    lightrag = LightRAG(
+        working_dir=os.getenv("WORKING_DIR", "./dickens_fixed_size"),
+        llm_func=llm_func,
+        con_num=CON_NUM,
+        embed_func=embed_func,
+        reranker=reranker,
+    )
     with open("./carol.txt", "r", encoding="utf-8")as f: 
         await lightrag.construct(f.read(), "carol")
     eval_set_path = os.getenv("EVAL_SET", "./eval/carol_eval_set_fixed_size.json")
