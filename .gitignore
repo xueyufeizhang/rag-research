@@ -51,14 +51,13 @@ coverage.xml
 .pytest_cache/
 cover/
 
-# Evaluation outputs
-eval/runs/
-test/
-*.html
+# Generated experiment outputs
+artifacts/evaluations/
+artifacts/visualizations/
+scratch/
 
 # Local report drafts and generated deliverables
 reports/
-scripts/build_experiment_report_docx.py
 
 # Translations
 *.mo

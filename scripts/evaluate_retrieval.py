@@ -2,13 +2,13 @@ import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 import json, os
 from tqdm import tqdm
 from dotenv import load_dotenv
-from core import LightRAG
-from backend import llm_func, embed_func, reranker
+from rag_research.core import LightRAG
+from rag_research.backends import llm_func, embed_func, reranker
 
 load_dotenv()
 CON_NUM = os.getenv("CON_NUM", 5)
@@ -85,15 +85,15 @@ def summarize_mode(mode: str, mode_results: list[dict]) -> dict:
 
 async def eval_retrieval() -> tuple[list[dict], list[dict]]:
     lightrag = LightRAG(
-        working_dir=os.getenv("WORKING_DIR", "./dickens_fixed_size"),
+        working_dir=os.getenv("WORKING_DIR", "./artifacts/stores/dickens_fixed_size"),
         llm_func=llm_func,
         con_num=CON_NUM,
         embed_func=embed_func,
         reranker=reranker,
     )
-    with open("./carol.txt", "r", encoding="utf-8")as f: 
+    with open("./data/raw/a_christmas_carol.txt", "r", encoding="utf-8")as f:
         await lightrag.construct(f.read(), "carol")
-    eval_set_path = os.getenv("EVAL_SET", "./eval/carol_eval_set_fixed_size.json")
+    eval_set_path = os.getenv("EVAL_SET", "./data/evaluation/carol_fixed_size.json")
     with open(eval_set_path, "r", encoding="utf-8") as f:
         eval_questions = json.load(f).get("questions", [])
 
@@ -157,9 +157,8 @@ if __name__ == "__main__":
     import asyncio
     results, summaries = asyncio.run(eval_retrieval())
 
-    os.makedirs("./eval/runs", exist_ok=True)
-    with open("./eval/runs/retrieval_eval_results.json", "w", encoding="utf-8") as f:
+    os.makedirs("./artifacts/evaluations", exist_ok=True)
+    with open("./artifacts/evaluations/retrieval_eval_results.json", "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
-    with open("./eval/runs/retrieval_eval_results_summaries.json", "w", encoding="utf-8") as f:
+    with open("./artifacts/evaluations/retrieval_eval_results_summaries.json", "w", encoding="utf-8") as f:
         json.dump(summaries, f, ensure_ascii=False, indent=2)
-

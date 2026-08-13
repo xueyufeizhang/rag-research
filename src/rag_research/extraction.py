@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from prompt import PROMPTS
+from rag_research.prompts import PROMPTS
 import re
 import json
 import time

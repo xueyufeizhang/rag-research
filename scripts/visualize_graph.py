@@ -6,7 +6,7 @@ from pyvis.network import Network
 
 load_dotenv()
 
-working_dir = os.getenv("WORKING_DIR", "./dickens_fixed_size")
+working_dir = os.getenv("WORKING_DIR", "./artifacts/stores/dickens_fixed_size")
 graph_path = os.path.join(working_dir, "graph.json")
 
 with open(graph_path, encoding="utf-8") as f:
@@ -48,4 +48,5 @@ for u, v, attrs in G.edges(data=True):
 
 net = Network(height="900px", width="100%", notebook=False)
 net.from_nx(G)
-net.show("./knowledge_graph.html", notebook=False)
+os.makedirs("./artifacts/visualizations", exist_ok=True)
+net.show("./artifacts/visualizations/knowledge_graph.html", notebook=False)

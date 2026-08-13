@@ -5,8 +5,8 @@
   "description": "A manually annotated evaluation set on A Christmas Carol, with gold chunks aligned to the semantic chunking store.",
   "annotation_schema": {
     "gold_entities": "Core entity names that should be retrieved or used to answer the question.",
-    "gold_relations": "Core relation keys from dickens_semantic/relations.json. Relation keys are unordered source||target pairs.",
-    "gold_chunks": "Core supporting chunk ids from dickens_semantic/chunks.json.",
+    "gold_relations": "Core relation keys from artifacts/stores/dickens_semantic/relations.json. Relation keys are unordered source||target pairs.",
+    "gold_chunks": "Core supporting chunk ids from artifacts/stores/dickens_semantic/chunks.json.",
     "gold_answer_points": "Atomic facts expected in a grounded answer.",
     "expected_keyword_groups": "Keyword or synonym groups for lightweight answer coverage scoring. A group is satisfied if any item appears."
   },

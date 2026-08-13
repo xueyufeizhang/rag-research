@@ -1,11 +1,11 @@
-from chunk import chunk_async, ChunkConfig
-from extract import extract
+from rag_research.chunking import chunk_async, ChunkConfig
+from rag_research.extraction import extract
 from dataclasses import dataclass, field
 from dotenv import load_dotenv
-from storage import KVStore, GraphStore, VectorIndex
+from rag_research.storage import KVStore, GraphStore, VectorIndex
 from typing import Any
 import json
-from prompt import PROMPTS
+from rag_research.prompts import PROMPTS
 import os
 
 load_dotenv()
@@ -99,8 +99,7 @@ class LightRAG:
             parts.append("-----Chunks-----\n" + chunk_lines)
         return "\n\n".join(parts)
 
-    def _get_relations_from_entities(self, query: str, emb: list[float], entities: list[dict]) -> list[dict]:
-        candidate_vidx = VectorIndex(os.path.join(self.working_dir, "temporary_local_relation_vectors"))
+    def _get_relation_candidates_from_entities(self, entities: list[dict]) -> dict[str, dict]:
         candidate_relations = {}
         seen = set()
 
@@ -114,12 +113,19 @@ class LightRAG:
                 if relation_key in seen:
                     continue
                 relation = self.relation_kv.get(relation_key)
-                vector = self.relation_vidx.get_vector(relation_key)
-                if relation is None or vector is None:
+                if relation is None:
                     continue
-                candidate_vidx.add(relation_key, vector)
                 candidate_relations[relation_key] = relation
                 seen.add(relation_key)
+        return candidate_relations
+
+    def _rerank_relations(self, query: str, emb: list[float], candidate_relations: dict[str, dict]) -> list[dict]:
+        candidate_vidx = VectorIndex(os.path.join(self.working_dir, "temporary_local_relation_vectors"))
+        for key in candidate_relations.keys():
+            vector = self.relation_vidx.get_vector(key)
+            if vector is None:
+                continue
+            candidate_vidx.add(key, vector)
 
         dense_hits = candidate_vidx.query(emb, self.config.relation_candidate_top_k)
         shortlist = [
@@ -135,7 +141,6 @@ class LightRAG:
             target = relation.get("target", "")
             keywords = ", ".join(relation.get("keywords", []))
             description = relation.get("description", "")
-
             return (
                 f"source: {source}; "
                 f"target: {target}; "
@@ -145,7 +150,6 @@ class LightRAG:
 
         pairs = [(query, relation_to_text(relation)) for _, relation in shortlist]
         rerank_scores = self.reranker.predict(pairs)
-
         ranked_relations = sorted(
             zip(shortlist, rerank_scores),
             key=lambda item: float(item[1]),
@@ -158,6 +162,7 @@ class LightRAG:
                 :self.config.relation_top_k
             ]
         ]
+
 
     def _get_entities_from_relations(self, relations: list[dict]) -> list[dict]:
         entities = []
@@ -187,6 +192,9 @@ class LightRAG:
                 })
                 seen.add(sid)
         return chunks
+
+    def _rerank_chunks(self, candidate_chunks: list[dict]) -> list[dict]:
+        return
     
     async def _naive_retrieve(self, query: str) -> list[dict]:
         emb = await self.embed_func(query)
@@ -206,14 +214,15 @@ class LightRAG:
         emb = await self.embed_func(query)
         hits = self.entity_vidx.query(emb, self.config.entity_top_k)
         entities = [self.entity_kv.get(k) for k, _ in hits if self.entity_kv.get(k)]
-        relations = self._get_relations_from_entities(query, emb, entities)
+        candidate_relations = self._get_relation_candidates_from_entities(entities)
+        relations = self._rerank_relations(query, emb, candidate_relations)
 
         source_ids = []
         for e in entities:
             source_ids.extend(e.get("source_id", []))
         for r in relations:
             source_ids.extend(r.get("source_id", []))
-        chunks = self._get_chunks_by_source_ids(source_ids)
+        candidate_chunks = self._get_chunks_by_source_ids(source_ids)
         return entities, relations, chunks
 
     async def _global_retrieve(self, query: str) -> tuple[list[dict], list[dict], list[dict]]:
