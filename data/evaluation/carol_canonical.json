@@ -1,0 +1,2366 @@
+{
+  "schema_version": "1.0",
+  "dataset": "A Christmas Carol canonical retrieval gold",
+  "source": {
+    "path": "data/raw/a_christmas_carol.txt",
+    "sha256": "b94f0fb2f26c4f993ef5b823e630ef2dd50521a28c65d0f395cd2483a3bee118",
+    "character_count": 185067,
+    "sentence_count": 1681
+  },
+  "segmentation": {
+    "sentence_ids_are_one_based": true,
+    "sentence_end_is_inclusive": true,
+    "char_offsets_are_zero_based_half_open": true,
+    "rule": "Shortest text ending in ., !, or ? followed by whitespace; final residual text is one sentence; surrounding whitespace is excluded."
+  },
+  "annotation": {
+    "gold_unit": "source evidence span",
+    "chunk_independent": true,
+    "evidence_policy": "Each answer point must be supported by at least one source span. Spans identify the relevant scene rather than a particular chunk boundary.",
+    "graph_label_policy": "Entity and relation names describe canonical story facts and do not copy the output of any extraction run."
+  },
+  "entity_aliases": {
+    "Ebenezer Scrooge": "Scrooge",
+    "Marley": "Jacob Marley",
+    "Marley's Ghost": "Jacob Marley",
+    "The Chain": "Marley's Chain",
+    "Chain": "Marley's Chain",
+    "The Ghost of Christmas Yet to Come": "Ghost of Christmas Yet to Come",
+    "Ghost of Christmas Future": "Ghost of Christmas Yet to Come",
+    "The Prize Turkey": "Prize Turkey",
+    "The Grave": "Scrooge's Grave",
+    "Master of the House": "Belle's Husband",
+    "Mankind's Welfare": "Mankind"
+  },
+  "questions": [
+    {
+      "id": "carol_easy_001",
+      "difficulty": "easy",
+      "question_type": "entity",
+      "question": "Who is Jacob Marley, and why is he important to Scrooge?",
+      "gold_entities": [
+        "Jacob Marley",
+        "Scrooge",
+        "Marley's Chain"
+      ],
+      "gold_relations": [
+        "Jacob Marley||Marley's Chain",
+        "Jacob Marley||Scrooge"
+      ],
+      "gold_answer_points": [
+        "Jacob Marley is Scrooge's dead former business partner.",
+        "Marley appears as a ghost to warn Scrooge.",
+        "Marley's chain symbolizes the consequences of his life and choices.",
+        "Marley tells Scrooge he still has a chance to escape the same fate."
+      ],
+      "expected_keyword_groups": [
+        [
+          "partner",
+          "business partner"
+        ],
+        [
+          "ghost",
+          "spectre"
+        ],
+        [
+          "chain"
+        ],
+        [
+          "warn",
+          "chance",
+          "hope"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_easy_001_e01",
+          "sentence_start": 279,
+          "sentence_end": 279,
+          "char_start": 32628,
+          "char_end": 32743,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "33932312969097a05f0a65928045a460b6e774f3e5f79c71d4634f4e8427788b",
+          "text_preview": "'In life I was your partner, Jacob Marley.' 'Can you--can you sit down?' asked Scrooge, looking doubtfully at him."
+        },
+        {
+          "evidence_id": "carol_easy_001_e02",
+          "sentence_start": 269,
+          "sentence_end": 270,
+          "char_start": 31465,
+          "char_end": 31690,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "5d4cc7657aa8be813a3416ac3af39e8f68e353d6e93cde37be599491b2b53a62",
+          "text_preview": "The chain he drew was clasped about his middle. It was long, and wound about him like a tail; and it was made (for Scrooge observed it closely) of cash-boxes, keys, padlocks, ledgers, deeds, and heavy purses wrought in steel."
+        },
+        {
+          "evidence_id": "carol_easy_001_e03",
+          "sentence_start": 351,
+          "sentence_end": 356,
+          "char_start": 40022,
+          "char_end": 40576,
+          "supports_answer_points": [
+            2,
+            4
+          ],
+          "text_sha256": "49cdc96e9a18285dcca8774c33a467de9c93235d3663a0834cf815af7a373849",
+          "text_preview": "'I am here to-night to warn you that you have yet a chance and hope of escaping my fate. A chance and hope of my procuring, Ebenezer.' 'You were always a good friend to me,' said Scrooge. 'Thankee!' 'You will be haunted,' resumed the Ghost,"
+        }
+      ]
+    },
+    {
+      "id": "carol_easy_002",
+      "difficulty": "easy",
+      "question_type": "entity",
+      "question": "Who is Bob Cratchit in relation to Scrooge?",
+      "gold_entities": [
+        "Bob Cratchit",
+        "Scrooge",
+        "Tiny Tim"
+      ],
+      "gold_relations": [
+        "Bob Cratchit||Scrooge",
+        "Bob Cratchit||Tiny Tim",
+        "Scrooge||Tiny Tim"
+      ],
+      "gold_answer_points": [
+        "Bob Cratchit is Scrooge's clerk.",
+        "Bob works in cold and poor conditions under Scrooge.",
+        "Bob is Tiny Tim's father.",
+        "After Scrooge changes, Scrooge raises Bob's salary and treats him better."
+      ],
+      "expected_keyword_groups": [
+        [
+          "clerk"
+        ],
+        [
+          "cold",
+          "coal"
+        ],
+        [
+          "Tiny Tim"
+        ],
+        [
+          "salary",
+          "raise"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_easy_002_e01",
+          "sentence_start": 13,
+          "sentence_end": 13,
+          "char_start": 1880,
+          "char_end": 1958,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "77c54b487feee6a1a78e09116454caad7cab53c43a9415d86cf551d189208119",
+          "text_preview": "_December, 1843._ CHARACTERS Bob Cratchit, clerk to Ebenezer Scrooge."
+        },
+        {
+          "evidence_id": "carol_easy_002_e02",
+          "sentence_start": 102,
+          "sentence_end": 105,
+          "char_start": 11804,
+          "char_end": 12424,
+          "supports_answer_points": [
+            2
+          ],
+          "text_sha256": "b8f3b710b71a453272ddcfc7d2c8a104a3d7f52006679d9460595f4f4303fccc",
+          "text_preview": "The door of Scrooge's counting-house was open, that he might keep his eye upon his clerk, who in a dismal little cell beyond, a sort of tank, was copying letters. Scrooge had a very small fire, but the clerk's fire was so very much smaller "
+        },
+        {
+          "evidence_id": "carol_easy_002_e03",
+          "sentence_start": 790,
+          "sentence_end": 801,
+          "char_start": 93965,
+          "char_end": 95542,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "87a5cd19c2d3622056852a2542128d1ba0ec5fac9ac2dedf6c36c7c7d4684f6f",
+          "text_preview": "'Hide, Martha, hide!' So Martha hid herself, and in came little Bob, the father, with at least three feet of comforter, exclusive of the fringe, hanging down before him, and his threadbare clothes darned up and brushed to look seasonable, a"
+        },
+        {
+          "evidence_id": "carol_easy_002_e04",
+          "sentence_start": 1543,
+          "sentence_end": 1550,
+          "char_start": 164291,
+          "char_end": 165395,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "c8835b2aaea8bd68ab23c2b34482f2edea4fdd6c13040e9c63cb69f24360a170",
+          "text_preview": "And therefore,' he continued, leaping from his stool, and giving Bob such a dig in the waistcoat that he staggered back into the tank again--'and therefore I am about to raise your salary!' Bob trembled, and got a little nearer to the ruler"
+        }
+      ]
+    },
+    {
+      "id": "carol_easy_003",
+      "difficulty": "easy",
+      "question_type": "relation",
+      "question": "How does Fred treat Scrooge despite Scrooge's hostility?",
+      "gold_entities": [
+        "Fred",
+        "Scrooge"
+      ],
+      "gold_relations": [
+        "Fred||Scrooge"
+      ],
+      "gold_answer_points": [
+        "Fred invites Scrooge to Christmas dinner despite being rejected.",
+        "Fred remains cheerful and good-natured toward Scrooge.",
+        "Fred's household later welcomes Scrooge warmly.",
+        "Fred's conduct contrasts with Scrooge's isolation and bitterness."
+      ],
+      "expected_keyword_groups": [
+        [
+          "invite",
+          "dinner"
+        ],
+        [
+          "cheerful",
+          "good-natured"
+        ],
+        [
+          "welcome",
+          "let me in"
+        ],
+        [
+          "contrast"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_easy_003_e01",
+          "sentence_start": 137,
+          "sentence_end": 150,
+          "char_start": 15559,
+          "char_end": 16660,
+          "supports_answer_points": [
+            1,
+            2,
+            4
+          ],
+          "text_sha256": "e9ec414d49671fb4cd7b7204b9de03c147c3a23910284268d7fe92cd438ce677",
+          "text_preview": "Dine with us to-morrow.' Scrooge said that he would see him----Yes, indeed he did. He went the whole length of the expression, and said that he would see him in that extremity first. 'But why?' cried Scrooge's nephew. 'Why?' 'Why did you ge"
+        },
+        {
+          "evidence_id": "carol_easy_003_e02",
+          "sentence_start": 944,
+          "sentence_end": 963,
+          "char_start": 112264,
+          "char_end": 114618,
+          "supports_answer_points": [
+            2,
+            4
+          ],
+          "text_sha256": "ecc4d3c93862978fbb4e3d020a068ba787df5d573c2420b6887b8bf902a5a4e8",
+          "text_preview": "'Oh, I have!' said Scrooge's nephew. 'I am sorry for him; I couldn't be angry with him if I tried. Who suffers by his ill whims? Himself always. Here he takes it into his head to dislike us, and he won't come and dine with us. What's the co"
+        },
+        {
+          "evidence_id": "carol_easy_003_e03",
+          "sentence_start": 1508,
+          "sentence_end": 1521,
+          "char_start": 162628,
+          "char_end": 163184,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "40d47744b14872584da6495d088b24f66d389b4da50b3c62f1078b5de20658fc",
+          "text_preview": "'Why, bless my soul!' cried Fred, 'who's that?' [Illustration: _\"It's I, your uncle Scrooge. I have come to dinner. Will you let me in, Fred?\"_] 'It's I. Your uncle Scrooge. I have come to dinner. Will you let me in, Fred?' Let him in! It i"
+        }
+      ]
+    },
+    {
+      "id": "carol_easy_004",
+      "difficulty": "easy",
+      "question_type": "entity",
+      "question": "What kind of employer is Fezziwig in Scrooge's memory?",
+      "gold_entities": [
+        "Fezziwig",
+        "Scrooge",
+        "Dick Wilkins"
+      ],
+      "gold_relations": [
+        "Dick Wilkins||Fezziwig",
+        "Fezziwig||Scrooge"
+      ],
+      "gold_answer_points": [
+        "Fezziwig is Scrooge's former employer.",
+        "Fezziwig stops work for Christmas Eve and hosts a joyful celebration.",
+        "Fezziwig treats his apprentices warmly.",
+        "The memory makes Scrooge think about how he treats his own clerk."
+      ],
+      "expected_keyword_groups": [
+        [
+          "employer",
+          "master"
+        ],
+        [
+          "Christmas Eve"
+        ],
+        [
+          "dance",
+          "ball",
+          "celebration"
+        ],
+        [
+          "clerk"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_easy_004_e01",
+          "sentence_start": 533,
+          "sentence_end": 556,
+          "char_start": 61098,
+          "char_end": 63123,
+          "supports_answer_points": [
+            1,
+            2,
+            3
+          ],
+          "text_sha256": "5ff416158dd56fa159d56d1e4cd2bd9f7feeeffd00935869ba5d3754a18eb625",
+          "text_preview": "'Was I apprenticed here?' They went in. At sight of an old gentleman in a Welsh wig, sitting behind such a high desk, that if he had been two inches taller, he must have knocked his head against the ceiling, Scrooge cried in great excitemen"
+        },
+        {
+          "evidence_id": "carol_easy_004_e02",
+          "sentence_start": 586,
+          "sentence_end": 590,
+          "char_start": 66367,
+          "char_end": 66808,
+          "supports_answer_points": [
+            2,
+            3
+          ],
+          "text_sha256": "128337ea1fd2e8b58ef016cf1587d21b4e61debb129ff67bc0347f396642dcad",
+          "text_preview": "When the clock struck eleven, this domestic ball broke up. Mr. and Mrs. Fezziwig took their stations, one on either side the door, and, shaking hands with every person individually as he or she went out, wished him or her a Merry Christmas."
+        },
+        {
+          "evidence_id": "carol_easy_004_e03",
+          "sentence_start": 595,
+          "sentence_end": 608,
+          "char_start": 67290,
+          "char_end": 68406,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "90bc1e5f48731024cf16b625050e65e017bf950944f4cc9f096e06ac5cf2455f",
+          "text_preview": "'A small matter,' said the Ghost, 'to make these silly folks so full of gratitude.' 'Small!' echoed Scrooge. The Spirit signed to him to listen to the two apprentices, who were pouring out their hearts in praise of Fezziwig; and when he had"
+        }
+      ]
+    },
+    {
+      "id": "carol_easy_005",
+      "difficulty": "easy",
+      "question_type": "entity",
+      "question": "What are Ignorance and Want, and what warning do they carry?",
+      "gold_entities": [
+        "Ignorance",
+        "Want",
+        "Ghost of Christmas Present",
+        "Mankind"
+      ],
+      "gold_relations": [
+        "Ghost of Christmas Present||Ignorance",
+        "Ghost of Christmas Present||Want",
+        "Ignorance||Mankind",
+        "Mankind||Want"
+      ],
+      "gold_answer_points": [
+        "Ignorance and Want are two children revealed by the Ghost of Christmas Present.",
+        "They belong to mankind rather than to the Spirit personally.",
+        "The Spirit warns Scrooge to beware of both children, especially Ignorance.",
+        "Their appearance connects social neglect with future doom."
+      ],
+      "expected_keyword_groups": [
+        [
+          "Ignorance"
+        ],
+        [
+          "Want"
+        ],
+        [
+          "children"
+        ],
+        [
+          "beware",
+          "Doom"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_easy_005_e01",
+          "sentence_start": 1021,
+          "sentence_end": 1045,
+          "char_start": 122347,
+          "char_end": 124100,
+          "supports_answer_points": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "text_sha256": "15736c90b23c610f551c469c7507d4d4503f9f0a867cd3a3fc7bb088bb89b32f",
+          "text_preview": "'Look here!' From the foldings of its robe it brought two children, wretched, abject, frightful, hideous, miserable. They knelt down at its feet, and clung upon the outside of its garment. 'O Man! look here! Look, look down here!' exclaimed"
+        }
+      ]
+    },
+    {
+      "id": "carol_easy_006",
+      "difficulty": "easy",
+      "question_type": "entity",
+      "question": "What actions show that Scrooge has changed on Christmas morning?",
+      "gold_entities": [
+        "Scrooge",
+        "Bob Cratchit",
+        "Tiny Tim",
+        "Fred",
+        "Prize Turkey",
+        "Charity Collector"
+      ],
+      "gold_relations": [
+        "Bob Cratchit||Scrooge",
+        "Charity Collector||Scrooge",
+        "Fred||Scrooge",
+        "Prize Turkey||Scrooge",
+        "Scrooge||Tiny Tim"
+      ],
+      "gold_answer_points": [
+        "Scrooge wakes joyfully on Christmas Day.",
+        "Scrooge buys or sends a large turkey for the Cratchit family.",
+        "Scrooge makes amends through charitable giving and social warmth.",
+        "Scrooge raises Bob Cratchit's salary and becomes a second father to Tiny Tim."
+      ],
+      "expected_keyword_groups": [
+        [
+          "Christmas Day"
+        ],
+        [
+          "turkey"
+        ],
+        [
+          "charity",
+          "back-payments",
+          "munificence"
+        ],
+        [
+          "salary"
+        ],
+        [
+          "second father"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_easy_006_e01",
+          "sentence_start": 1378,
+          "sentence_end": 1392,
+          "char_start": 153743,
+          "char_end": 155069,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "40cce0f118ff1c4894beb10435cb69ab8dcb41e1a7726bcf11444f670583da8e",
+          "text_preview": "Best and happiest of all, the Time before him was his own, to make amends in! 'I will live in the Past, the Present, and the Future!' Scrooge repeated as he scrambled out of bed. 'The Spirits of all Three shall strive within me. O Jacob Mar"
+        },
+        {
+          "evidence_id": "carol_easy_006_e02",
+          "sentence_start": 1435,
+          "sentence_end": 1451,
+          "char_start": 157081,
+          "char_end": 158261,
+          "supports_answer_points": [
+            2
+          ],
+          "text_sha256": "5945aeae80fd0ac2b4835d446b8b2378239bfa32d3fb021106938d3fab4b96ce",
+          "text_preview": "Do you know whether they've sold the prize turkey that was hanging up there?--Not the little prize turkey: the big one?' 'What! the one as big as me?' returned the boy. 'What a delightful boy!' said Scrooge. 'It's a pleasure to talk to him."
+        },
+        {
+          "evidence_id": "carol_easy_006_e03",
+          "sentence_start": 1471,
+          "sentence_end": 1492,
+          "char_start": 159943,
+          "char_end": 161576,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "e9a5df72879a21c4554222aa935ba4a288908663d477f3d4d263bbeb8857cc3c",
+          "text_preview": "He had not gone far when, coming on towards him, he beheld the portly gentleman who had walked into his counting-house the day before, and said, 'Scrooge and Marley's, I believe?' It sent a pang across his heart to think how this old gentle"
+        },
+        {
+          "evidence_id": "carol_easy_006_e04",
+          "sentence_start": 1505,
+          "sentence_end": 1521,
+          "char_start": 162416,
+          "char_end": 163184,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "a0b84ee53ab24efbc54d5faef4025994372a844ef3c1074498a579215a9d605a",
+          "text_preview": "'Fred!' said Scrooge. Dear heart alive, how his niece by marriage started! Scrooge had forgotten, for the moment, about her sitting in the corner with the footstool, or he wouldn't have done it on any account. 'Why, bless my soul!' cried Fr"
+        },
+        {
+          "evidence_id": "carol_easy_006_e05",
+          "sentence_start": 1543,
+          "sentence_end": 1551,
+          "char_start": 164291,
+          "char_end": 165554,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "d17febe09fe6ffca4e5da2bf4d94d62759ea89bc176c6a88b6a0565f2445d0df",
+          "text_preview": "And therefore,' he continued, leaping from his stool, and giving Bob such a dig in the waistcoat that he staggered back into the tank again--'and therefore I am about to raise your salary!' Bob trembled, and got a little nearer to the ruler"
+        }
+      ]
+    },
+    {
+      "id": "carol_medium_001",
+      "difficulty": "medium",
+      "question_type": "entity",
+      "question": "How is Scrooge characterized before any supernatural visitations occur?",
+      "gold_entities": [
+        "Scrooge",
+        "Fred",
+        "Charity Collectors"
+      ],
+      "gold_relations": [
+        "Charity Collectors||Scrooge",
+        "Fred||Scrooge"
+      ],
+      "gold_answer_points": [
+        "Scrooge is described as tight-fisted, covetous, cold, and solitary.",
+        "He resists warmth, generosity, and social connection.",
+        "He rejects Fred's Christmas invitation.",
+        "He refuses charitable appeals for the poor."
+      ],
+      "expected_keyword_groups": [
+        [
+          "tight-fisted",
+          "covetous",
+          "miserly"
+        ],
+        [
+          "cold",
+          "solitary"
+        ],
+        [
+          "humbug",
+          "Christmas"
+        ],
+        [
+          "poor",
+          "charity"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_medium_001_e01",
+          "sentence_start": 80,
+          "sentence_end": 96,
+          "char_start": 9040,
+          "char_end": 10925,
+          "supports_answer_points": [
+            1,
+            2
+          ],
+          "text_sha256": "4764d0ac6c7a086d52f364a3136c09e25818aefdee2459a8147872b4cc000c25",
+          "text_preview": "but he was a tight-fisted hand at the grindstone, Scrooge! a squeezing, wrenching, grasping, scraping, clutching, covetous old sinner! Hard and sharp as flint, from which no steel had ever struck out generous fire; secret, and self-containe"
+        },
+        {
+          "evidence_id": "carol_medium_001_e02",
+          "sentence_start": 120,
+          "sentence_end": 150,
+          "char_start": 13365,
+          "char_end": 16660,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "7b5246585480e9bbe380a1e538abc2854e33de400f36dcb7410880dabdd25b14",
+          "text_preview": "'What else can I be,' returned the uncle, 'when I live in such a world of fools as this? Merry Christmas! Out upon merry Christmas! What's Christmas-time to you but a time for paying bills without money; a time for finding yourself a year o"
+        },
+        {
+          "evidence_id": "carol_medium_001_e03",
+          "sentence_start": 165,
+          "sentence_end": 184,
+          "char_start": 17902,
+          "char_end": 19989,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "9bb5660c14e0a80abf18a6fc583b391c5d34a817fe6fb1618f1ea4199087811e",
+          "text_preview": "Scrooge,' said the gentleman, taking up a pen, 'it is more than usually desirable that we should make some slight provision for the poor and destitute, who suffer greatly at the present time. Many thousands are in want of common necessaries"
+        }
+      ]
+    },
+    {
+      "id": "carol_medium_002",
+      "difficulty": "medium",
+      "question_type": "relation",
+      "question": "How does Scrooge respond to requests for charity, and what does this reveal about his worldview?",
+      "gold_entities": [
+        "Scrooge",
+        "Charity Collectors",
+        "The Poor",
+        "Prisons",
+        "Union Workhouses",
+        "Ghost of Christmas Present",
+        "Tiny Tim"
+      ],
+      "gold_relations": [
+        "Charity Collectors||Scrooge",
+        "Ghost of Christmas Present||Scrooge",
+        "Prisons||Scrooge",
+        "Scrooge||Tiny Tim",
+        "Scrooge||Union Workhouses"
+      ],
+      "gold_answer_points": [
+        "Scrooge refuses to contribute to charitable relief.",
+        "He points to prisons and workhouses as existing institutions for the poor.",
+        "He repeats or endorses language about reducing the surplus population.",
+        "The Ghost later turns these words back on him as moral criticism."
+      ],
+      "expected_keyword_groups": [
+        [
+          "charity",
+          "poor",
+          "destitute"
+        ],
+        [
+          "prisons"
+        ],
+        [
+          "workhouses"
+        ],
+        [
+          "surplus population"
+        ],
+        [
+          "rebuke"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_medium_002_e01",
+          "sentence_start": 165,
+          "sentence_end": 184,
+          "char_start": 17902,
+          "char_end": 19989,
+          "supports_answer_points": [
+            1,
+            2,
+            3
+          ],
+          "text_sha256": "9bb5660c14e0a80abf18a6fc583b391c5d34a817fe6fb1618f1ea4199087811e",
+          "text_preview": "Scrooge,' said the gentleman, taking up a pen, 'it is more than usually desirable that we should make some slight provision for the poor and destitute, who suffer greatly at the present time. Many thousands are in want of common necessaries"
+        },
+        {
+          "evidence_id": "carol_medium_002_e02",
+          "sentence_start": 848,
+          "sentence_end": 858,
+          "char_start": 100346,
+          "char_end": 101559,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "26c822ac1cefa77242ad99df4e781d5c31b9ceb50d43e571338595dddc985c1a",
+          "text_preview": "'Spirit,' said Scrooge, with an interest he had never felt before, 'tell me if Tiny Tim will live.' 'I see a vacant seat,' replied the Ghost, 'in the poor chimney corner, and a crutch without an owner, carefully preserved. If these shadows "
+        }
+      ]
+    },
+    {
+      "id": "carol_medium_003",
+      "difficulty": "medium",
+      "question_type": "relation",
+      "question": "Why does Marley's Ghost say Scrooge is in danger?",
+      "gold_entities": [
+        "Jacob Marley",
+        "Scrooge",
+        "Mankind"
+      ],
+      "gold_relations": [
+        "Jacob Marley||Mankind",
+        "Jacob Marley||Scrooge"
+      ],
+      "gold_answer_points": [
+        "Marley says every spirit must go among fellow humans and do good.",
+        "Marley suffers because he neglected mankind, charity, mercy, and benevolence.",
+        "Marley's fate is a warning about Scrooge's own worldly life.",
+        "The three Spirits are offered as Scrooge's chance and hope."
+      ],
+      "expected_keyword_groups": [
+        [
+          "mankind"
+        ],
+        [
+          "charity",
+          "mercy",
+          "benevolence"
+        ],
+        [
+          "remorse",
+          "penance"
+        ],
+        [
+          "Three Spirits",
+          "chance",
+          "hope"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_medium_003_e01",
+          "sentence_start": 302,
+          "sentence_end": 319,
+          "char_start": 35440,
+          "char_end": 37306,
+          "supports_answer_points": [
+            1,
+            2,
+            3
+          ],
+          "text_sha256": "15c8343b9ece96d8f48a993b812111b62817270ad91d50a8cfa91c88ca251c2e",
+          "text_preview": "But why do spirits walk the earth, and why do they come to me?' 'It is required of every man,' the Ghost returned, 'that the spirit within him should walk abroad among his fellow-men, and travel far and wide; and, if that spirit goes not fo"
+        },
+        {
+          "evidence_id": "carol_medium_003_e02",
+          "sentence_start": 335,
+          "sentence_end": 356,
+          "char_start": 38643,
+          "char_end": 40576,
+          "supports_answer_points": [
+            2,
+            3,
+            4
+          ],
+          "text_sha256": "eff556614acb341bfb120034e9755192775a913d9743d283ce595e8ec1071323",
+          "text_preview": "Oh, such was I!' 'But you were always a good man of business, Jacob,' faltered Scrooge, who now began to apply this to himself. 'Business!' cried the Ghost, wringing its hands again. 'Mankind was my business. The common welfare was my busin"
+        }
+      ]
+    },
+    {
+      "id": "carol_medium_004",
+      "difficulty": "medium",
+      "question_type": "entity",
+      "question": "What does the Ghost of Christmas Past reveal about Scrooge's childhood loneliness?",
+      "gold_entities": [
+        "Ghost of Christmas Past",
+        "Scrooge",
+        "Ali Baba",
+        "Fan"
+      ],
+      "gold_relations": [
+        "Ali Baba||Scrooge",
+        "Fan||Scrooge",
+        "Ghost of Christmas Past||Scrooge"
+      ],
+      "gold_answer_points": [
+        "The Ghost of Christmas Past takes Scrooge back to his old school.",
+        "Scrooge sees himself as a solitary child neglected by friends.",
+        "Scrooge remembers imaginary companions from books such as Ali Baba.",
+        "The memories soften him emotionally and expose his buried loneliness."
+      ],
+      "expected_keyword_groups": [
+        [
+          "Ghost of Christmas Past"
+        ],
+        [
+          "school"
+        ],
+        [
+          "solitary child",
+          "alone"
+        ],
+        [
+          "Ali Baba"
+        ],
+        [
+          "sobbed",
+          "gladness"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_medium_004_e01",
+          "sentence_start": 466,
+          "sentence_end": 477,
+          "char_start": 53143,
+          "char_end": 54892,
+          "supports_answer_points": [
+            1,
+            2,
+            4
+          ],
+          "text_sha256": "806aa35187e0395fa3652f07d90a7878b1b14b90615b8aafe8aa5287408038c0",
+          "text_preview": "'The school is not quite deserted,' said the Ghost. 'A solitary child, neglected by his friends, is left there still.' Scrooge said he knew it. And he sobbed. They left the high-road by a well-remembered lane and soon approached a mansion o"
+        },
+        {
+          "evidence_id": "carol_medium_004_e02",
+          "sentence_start": 479,
+          "sentence_end": 504,
+          "char_start": 54987,
+          "char_end": 57152,
+          "supports_answer_points": [
+            3,
+            4
+          ],
+          "text_sha256": "cfd6a5a3fa6033ae8cd057c93ca210ce191dd5fbd6a120b1f82c6b9fe1afb330",
+          "text_preview": "Suddenly a man in foreign garments, wonderfully real and distinct to look at, stood outside the window, with an axe stuck in his belt, and leading by the bridle an ass laden with wood. 'Why, it's Ali Baba!' Scrooge exclaimed in ecstasy. 'It"
+        }
+      ]
+    },
+    {
+      "id": "carol_medium_005",
+      "difficulty": "medium",
+      "question_type": "relation",
+      "question": "How does Belle's scene explain what Scrooge has lost?",
+      "gold_entities": [
+        "Belle",
+        "Scrooge",
+        "Belle's Husband",
+        "Belle's Family"
+      ],
+      "gold_relations": [
+        "Belle||Belle's Family",
+        "Belle||Belle's Husband",
+        "Belle||Scrooge"
+      ],
+      "gold_answer_points": [
+        "Belle releases Scrooge because his nature and priorities have changed.",
+        "The scene links Scrooge's emotional loss to his pursuit of wealth.",
+        "A later vision shows Belle in a warm family setting.",
+        "The contrast makes Scrooge confront the domestic happiness he forfeited."
+      ],
+      "expected_keyword_groups": [
+        [
+          "Belle"
+        ],
+        [
+          "release"
+        ],
+        [
+          "changed nature",
+          "altered spirit"
+        ],
+        [
+          "wealth",
+          "gold"
+        ],
+        [
+          "family",
+          "children"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_medium_005_e01",
+          "sentence_start": 615,
+          "sentence_end": 648,
+          "char_start": 68913,
+          "char_end": 72262,
+          "supports_answer_points": [
+            1,
+            2
+          ],
+          "text_sha256": "3aec6fccd24bc4ad78e8858e39527518073e02f44cdd941e64e90e3273a83c4f",
+          "text_preview": "There was an eager, greedy, restless motion in the eye, which showed the passion that had taken root, and where the shadow of the growing tree would fall. He was not alone, but sat by the side of a fair young girl in a mourning dress: in wh"
+        },
+        {
+          "evidence_id": "carol_medium_005_e02",
+          "sentence_start": 656,
+          "sentence_end": 683,
+          "char_start": 72582,
+          "char_end": 76642,
+          "supports_answer_points": [
+            3,
+            4
+          ],
+          "text_sha256": "e8f6b2c24a2a916cf39e03c828ffdaaa88c7a3c2d60444ec9d877fd4a0364b10",
+          "text_preview": "They were in another scene and place; a room, not very large or handsome, but full of comfort. Near to the winter fire sat a beautiful young girl, so like that last that Scrooge believed it was the same, until he saw _her_, now a comely mat"
+        }
+      ]
+    },
+    {
+      "id": "carol_medium_006",
+      "difficulty": "medium",
+      "question_type": "relation",
+      "question": "How does the Cratchit Christmas dinner affect Scrooge's view of poverty and family?",
+      "gold_entities": [
+        "Scrooge",
+        "Bob Cratchit",
+        "Tiny Tim",
+        "Mrs. Cratchit"
+      ],
+      "gold_relations": [
+        "Bob Cratchit||Mrs. Cratchit",
+        "Bob Cratchit||Tiny Tim",
+        "Scrooge||Tiny Tim"
+      ],
+      "gold_answer_points": [
+        "The Cratchits have limited means but share warmth and affection.",
+        "Tiny Tim's condition draws Scrooge's concern.",
+        "Bob toasts Scrooge as the Founder of the Feast despite Mrs. Cratchit's resentment.",
+        "The Ghost rebukes Scrooge by applying his own surplus population language to Tiny Tim."
+      ],
+      "expected_keyword_groups": [
+        [
+          "Cratchit"
+        ],
+        [
+          "Tiny Tim"
+        ],
+        [
+          "Founder of the Feast"
+        ],
+        [
+          "poor man's child"
+        ],
+        [
+          "surplus population"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_medium_006_e01",
+          "sentence_start": 771,
+          "sentence_end": 775,
+          "char_start": 91444,
+          "char_end": 92654,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "691635ebd71a946356d56ca8f233664752e7f48b98f14f53e33de6a3ef90e944",
+          "text_preview": "And perhaps it was the pleasure the good Spirit had in showing off this power of his, or else it was his own kind, generous, hearty nature, and his sympathy with all poor men, that led him straight to Scrooge's clerk's; for there he went, a"
+        },
+        {
+          "evidence_id": "carol_medium_006_e02",
+          "sentence_start": 790,
+          "sentence_end": 805,
+          "char_start": 93965,
+          "char_end": 96787,
+          "supports_answer_points": [
+            1,
+            2
+          ],
+          "text_sha256": "df0da6786be6a106ae2b97b99db29b314ebea94f3deb8049e0b2d04844a4c39b",
+          "text_preview": "'Hide, Martha, hide!' So Martha hid herself, and in came little Bob, the father, with at least three feet of comforter, exclusive of the fringe, hanging down before him, and his threadbare clothes darned up and brushed to look seasonable, a"
+        },
+        {
+          "evidence_id": "carol_medium_006_e03",
+          "sentence_start": 843,
+          "sentence_end": 858,
+          "char_start": 99965,
+          "char_end": 101559,
+          "supports_answer_points": [
+            2,
+            4
+          ],
+          "text_sha256": "4982e9adec4b27c8cb20300a510f90e184c9f2b8aaa53e77af0225a006342e68",
+          "text_preview": "Then Bob proposed: 'A merry Christmas to us all, my dears. God bless us!' Which all the family re-echoed. 'God bless us every one!' said Tiny Tim, the last of all. He sat very close to his father's side, upon his little stool. Bob held his "
+        },
+        {
+          "evidence_id": "carol_medium_006_e04",
+          "sentence_start": 863,
+          "sentence_end": 880,
+          "char_start": 101658,
+          "char_end": 102850,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "303468d4ea71f87114101447792a73a7dcbf580f455c473fc6f1c0baa2cde520",
+          "text_preview": "Scrooge, the Founder of the Feast!' 'The Founder of the Feast, indeed!' cried Mrs. Cratchit, reddening. 'I wish I had him here. I'd give him a piece of my mind to feast upon, and I hope he'd have a good appetite for it.' 'My dear,' said Bob"
+        },
+        {
+          "evidence_id": "carol_medium_006_e05",
+          "sentence_start": 887,
+          "sentence_end": 888,
+          "char_start": 104023,
+          "char_end": 104498,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "4cbcc9be25236b28912b47d2901742feac1447c0e156dc873b6ce72d8cdcdb37",
+          "text_preview": "They were not a handsome family; they were not well dressed; their shoes were far from being waterproof; their clothes were scanty; and Peter might have known, and very likely did, the inside of a pawnbroker's. But they were happy, grateful"
+        }
+      ]
+    },
+    {
+      "id": "carol_medium_007",
+      "difficulty": "medium",
+      "question_type": "theme",
+      "question": "What does Fred's Christmas party show Scrooge about social warmth?",
+      "gold_entities": [
+        "Fred",
+        "Scrooge",
+        "Fred's Household"
+      ],
+      "gold_relations": [
+        "Fred||Fred's Household",
+        "Fred||Scrooge"
+      ],
+      "gold_answer_points": [
+        "Fred's household is musical, playful, and welcoming.",
+        "Scrooge sees himself become the subject of a laughing guessing game.",
+        "The scene presents social joy without material gain.",
+        "Scrooge later returns to Fred's home and is warmly received."
+      ],
+      "expected_keyword_groups": [
+        [
+          "party",
+          "games",
+          "music"
+        ],
+        [
+          "Fred"
+        ],
+        [
+          "laughter"
+        ],
+        [
+          "welcome",
+          "dinner"
+        ],
+        [
+          "happiness"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_medium_007_e01",
+          "sentence_start": 919,
+          "sentence_end": 925,
+          "char_start": 109887,
+          "char_end": 110858,
+          "supports_answer_points": [
+            1,
+            3
+          ],
+          "text_sha256": "c2c3eafa40352665e2c553fc99e8b66eb0b549c391a75f2de3c51e11d40ca12e",
+          "text_preview": "It was a much greater surprise to Scrooge to recognise it as his own nephew's and to find himself in a bright, dry, gleaming room, with the Spirit standing smiling by his side, and looking at that same nephew with approving affability! 'Ha,"
+        },
+        {
+          "evidence_id": "carol_medium_007_e02",
+          "sentence_start": 936,
+          "sentence_end": 963,
+          "char_start": 111577,
+          "char_end": 114618,
+          "supports_answer_points": [
+            1,
+            3
+          ],
+          "text_sha256": "4bf9beed2fb3bc62468ff169a1cc38569597d45a966d61168a8d0d6e585d7b92",
+          "text_preview": "'He's a comical old fellow,' said Scrooge's nephew, 'that's the truth; and not so pleasant as he might be. However, his offences carry their own punishment, and I have nothing to say against him.' 'I'm sure he is very rich, Fred,' hinted Sc"
+        },
+        {
+          "evidence_id": "carol_medium_007_e03",
+          "sentence_start": 987,
+          "sentence_end": 1005,
+          "char_start": 117876,
+          "char_end": 120598,
+          "supports_answer_points": [
+            2,
+            3
+          ],
+          "text_sha256": "8f39b3d0318ab6e6da49e868f7145e5553dbab7b632d56c4288fe0505832eef8",
+          "text_preview": "There might have been twenty people there, young and old, but they all played, and so did Scrooge; for wholly forgetting, in the interest he had in what was going on, that his voice made no sound in their ears, he sometimes came out with hi"
+        },
+        {
+          "evidence_id": "carol_medium_007_e04",
+          "sentence_start": 1505,
+          "sentence_end": 1521,
+          "char_start": 162416,
+          "char_end": 163184,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "a0b84ee53ab24efbc54d5faef4025994372a844ef3c1074498a579215a9d605a",
+          "text_preview": "'Fred!' said Scrooge. Dear heart alive, how his niece by marriage started! Scrooge had forgotten, for the moment, about her sitting in the corner with the footstool, or he wouldn't have done it on any account. 'Why, bless my soul!' cried Fr"
+        }
+      ]
+    },
+    {
+      "id": "carol_medium_008",
+      "difficulty": "medium",
+      "question_type": "relation",
+      "question": "How does the Ghost of Christmas Yet to Come differ from the earlier spirits?",
+      "gold_entities": [
+        "Scrooge",
+        "Ghost of Christmas Yet to Come",
+        "Scrooge's Grave"
+      ],
+      "gold_relations": [
+        "Ghost of Christmas Yet to Come||Scrooge",
+        "Ghost of Christmas Yet to Come||Scrooge's Grave",
+        "Scrooge||Scrooge's Grave"
+      ],
+      "gold_answer_points": [
+        "The Ghost of Christmas Yet to Come is silent and frightening.",
+        "It shows Scrooge future scenes rather than explaining them directly.",
+        "The scenes lead Scrooge toward the truth of his own death.",
+        "Scrooge is terrified but seeks to learn whether the future can change."
+      ],
+      "expected_keyword_groups": [
+        [
+          "silent",
+          "dusky",
+          "shroud"
+        ],
+        [
+          "Future"
+        ],
+        [
+          "grave"
+        ],
+        [
+          "fear",
+          "trembled"
+        ],
+        [
+          "change"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_medium_008_e01",
+          "sentence_start": 1048,
+          "sentence_end": 1070,
+          "char_start": 124367,
+          "char_end": 126629,
+          "supports_answer_points": [
+            1,
+            2
+          ],
+          "text_sha256": "3daeec798d44bbbd2164e0e3335b0cceb4fa24e741d4e6c3acce8ef1b1e05be4",
+          "text_preview": "STAVE FOUR THE LAST OF THE SPIRITS The Phantom slowly, gravely, silently approached. When it came near him, Scrooge bent down upon his knee; for in the very air through which this Spirit moved it seemed to scatter gloom and mystery. It was "
+        },
+        {
+          "evidence_id": "carol_medium_008_e02",
+          "sentence_start": 1076,
+          "sentence_end": 1094,
+          "char_start": 127299,
+          "char_end": 128902,
+          "supports_answer_points": [
+            2
+          ],
+          "text_sha256": "9389aabb22599de0792a4efda8de1e62fc1db331eecd869bc01a47190697bd34",
+          "text_preview": "'No,' said a great fat man with a monstrous chin, 'I don't know much about it either way. I only know he's dead.' 'When did he die?' inquired another. 'Last night, I believe.' 'Why, what was the matter with him?' asked a third, taking a vas"
+        },
+        {
+          "evidence_id": "carol_medium_008_e03",
+          "sentence_start": 1342,
+          "sentence_end": 1370,
+          "char_start": 151206,
+          "char_end": 153322,
+          "supports_answer_points": [
+            3,
+            4
+          ],
+          "text_sha256": "a91b0fa3884611ec2c91920f3c6f3cbb7312f060343a786f0d2b8644bd53ed1c",
+          "text_preview": "A churchyard. Here, then, the wretched man, whose name he had now to learn, lay underneath the ground. It was a worthy place. Walled in by houses; overrun by grass and weeds, the growth of vegetation's death, not life; choked up with too mu"
+        }
+      ]
+    },
+    {
+      "id": "carol_hard_001",
+      "difficulty": "hard",
+      "question_type": "multi-hop",
+      "question": "How do Marley's warning and the three Spirits together push Scrooge toward moral change?",
+      "gold_entities": [
+        "Scrooge",
+        "Jacob Marley",
+        "Ghost of Christmas Past",
+        "Ghost of Christmas Present",
+        "Ghost of Christmas Yet to Come"
+      ],
+      "gold_relations": [
+        "Ghost of Christmas Past||Scrooge",
+        "Ghost of Christmas Present||Scrooge",
+        "Ghost of Christmas Yet to Come||Scrooge",
+        "Jacob Marley||Scrooge"
+      ],
+      "gold_answer_points": [
+        "Marley frames Scrooge's danger as spiritual and moral.",
+        "The Ghost of Christmas Past exposes Scrooge's earlier loneliness and lost affections.",
+        "The Ghost of Christmas Present reveals living communities, poverty, and social responsibility.",
+        "The Ghost of Christmas Yet to Come shows the consequences of Scrooge's current path.",
+        "Together these visions make Scrooge repent and choose a different course."
+      ],
+      "expected_keyword_groups": [
+        [
+          "Marley"
+        ],
+        [
+          "Past"
+        ],
+        [
+          "Present"
+        ],
+        [
+          "Yet to Come",
+          "Future"
+        ],
+        [
+          "repent",
+          "change",
+          "altered life"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_hard_001_e01",
+          "sentence_start": 337,
+          "sentence_end": 356,
+          "char_start": 38828,
+          "char_end": 40576,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "6250c3236524bd87ecc7bb93104bdbf2940315b694ca5a16bde7a64f8641f8c4",
+          "text_preview": "'Mankind was my business. The common welfare was my business; charity, mercy, forbearance, and benevolence were, all, my business. The dealings of my trade were but a drop of water in the comprehensive ocean of my business!' It held up its "
+        },
+        {
+          "evidence_id": "carol_hard_001_e02",
+          "sentence_start": 466,
+          "sentence_end": 477,
+          "char_start": 53143,
+          "char_end": 54892,
+          "supports_answer_points": [
+            2
+          ],
+          "text_sha256": "806aa35187e0395fa3652f07d90a7878b1b14b90615b8aafe8aa5287408038c0",
+          "text_preview": "'The school is not quite deserted,' said the Ghost. 'A solitary child, neglected by his friends, is left there still.' Scrooge said he knew it. And he sobbed. They left the high-road by a well-remembered lane and soon approached a mansion o"
+        },
+        {
+          "evidence_id": "carol_hard_001_e03",
+          "sentence_start": 499,
+          "sentence_end": 504,
+          "char_start": 56453,
+          "char_end": 57152,
+          "supports_answer_points": [
+            2
+          ],
+          "text_sha256": "dfdeaab5c706d3e15449f42a1054533a9009022457aaaba30e46cf9598415578",
+          "text_preview": "Halloo!' Then, with a rapidity of transition very foreign to his usual character, he said, in pity for his former self, 'Poor boy!' and cried again. 'I wish,' Scrooge muttered, putting his hand in his pocket, and looking about him, after dr"
+        },
+        {
+          "evidence_id": "carol_hard_001_e04",
+          "sentence_start": 619,
+          "sentence_end": 648,
+          "char_start": 69317,
+          "char_end": 72262,
+          "supports_answer_points": [
+            2
+          ],
+          "text_sha256": "d9d2dbba86dfd0215ed1c12312290e4438c766ea2093bceed0225d1323da174b",
+          "text_preview": "Another idol has displaced me; and, if it can cheer and comfort you in time to come as I would have tried to do, I have no just cause to grieve.' 'What Idol has displaced you?' he rejoined. 'A golden one.' 'This is the even-handed dealing o"
+        },
+        {
+          "evidence_id": "carol_hard_001_e05",
+          "sentence_start": 675,
+          "sentence_end": 683,
+          "char_start": 75611,
+          "char_end": 76642,
+          "supports_answer_points": [
+            2
+          ],
+          "text_sha256": "2408221b2411a00f4bdbb8e91ff2f7cd04ccff71ecb7f609a2b7434a653dd79c",
+          "text_preview": "And now Scrooge looked on more attentively than ever, when the master of the house, having his daughter leaning fondly on him, sat down with her and her mother at his own fireside; and when he thought that such another creature, quite as gr"
+        },
+        {
+          "evidence_id": "carol_hard_001_e06",
+          "sentence_start": 771,
+          "sentence_end": 775,
+          "char_start": 91444,
+          "char_end": 92654,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "691635ebd71a946356d56ca8f233664752e7f48b98f14f53e33de6a3ef90e944",
+          "text_preview": "And perhaps it was the pleasure the good Spirit had in showing off this power of his, or else it was his own kind, generous, hearty nature, and his sympathy with all poor men, that led him straight to Scrooge's clerk's; for there he went, a"
+        },
+        {
+          "evidence_id": "carol_hard_001_e07",
+          "sentence_start": 790,
+          "sentence_end": 801,
+          "char_start": 93965,
+          "char_end": 95542,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "87a5cd19c2d3622056852a2542128d1ba0ec5fac9ac2dedf6c36c7c7d4684f6f",
+          "text_preview": "'Hide, Martha, hide!' So Martha hid herself, and in came little Bob, the father, with at least three feet of comforter, exclusive of the fringe, hanging down before him, and his threadbare clothes darned up and brushed to look seasonable, a"
+        },
+        {
+          "evidence_id": "carol_hard_001_e08",
+          "sentence_start": 843,
+          "sentence_end": 858,
+          "char_start": 99965,
+          "char_end": 101559,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "4982e9adec4b27c8cb20300a510f90e184c9f2b8aaa53e77af0225a006342e68",
+          "text_preview": "Then Bob proposed: 'A merry Christmas to us all, my dears. God bless us!' Which all the family re-echoed. 'God bless us every one!' said Tiny Tim, the last of all. He sat very close to his father's side, upon his little stool. Bob held his "
+        },
+        {
+          "evidence_id": "carol_hard_001_e09",
+          "sentence_start": 887,
+          "sentence_end": 888,
+          "char_start": 104023,
+          "char_end": 104498,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "4cbcc9be25236b28912b47d2901742feac1447c0e156dc873b6ce72d8cdcdb37",
+          "text_preview": "They were not a handsome family; they were not well dressed; their shoes were far from being waterproof; their clothes were scanty; and Peter might have known, and very likely did, the inside of a pawnbroker's. But they were happy, grateful"
+        },
+        {
+          "evidence_id": "carol_hard_001_e10",
+          "sentence_start": 1021,
+          "sentence_end": 1045,
+          "char_start": 122347,
+          "char_end": 124100,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "15736c90b23c610f551c469c7507d4d4503f9f0a867cd3a3fc7bb088bb89b32f",
+          "text_preview": "'Look here!' From the foldings of its robe it brought two children, wretched, abject, frightful, hideous, miserable. They knelt down at its feet, and clung upon the outside of its garment. 'O Man! look here! Look, look down here!' exclaimed"
+        },
+        {
+          "evidence_id": "carol_hard_001_e11",
+          "sentence_start": 1076,
+          "sentence_end": 1094,
+          "char_start": 127299,
+          "char_end": 128902,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "9389aabb22599de0792a4efda8de1e62fc1db331eecd869bc01a47190697bd34",
+          "text_preview": "'No,' said a great fat man with a monstrous chin, 'I don't know much about it either way. I only know he's dead.' 'When did he die?' inquired another. 'Last night, I believe.' 'Why, what was the matter with him?' asked a third, taking a vas"
+        },
+        {
+          "evidence_id": "carol_hard_001_e12",
+          "sentence_start": 1161,
+          "sentence_end": 1215,
+          "char_start": 134865,
+          "char_end": 139806,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "cbee88fc66ea48425608c4e13dc42644fda841e7e1f6456ac636a28b1cb4b207",
+          "text_preview": "'If he wanted to keep 'em after he was dead, a wicked old screw,' pursued the woman, 'why wasn't he natural in his lifetime? If he had been, he'd have had somebody to look after him when he was struck with Death, instead of lying gasping ou"
+        },
+        {
+          "evidence_id": "carol_hard_001_e13",
+          "sentence_start": 1342,
+          "sentence_end": 1370,
+          "char_start": 151206,
+          "char_end": 153322,
+          "supports_answer_points": [
+            4,
+            5
+          ],
+          "text_sha256": "a91b0fa3884611ec2c91920f3c6f3cbb7312f060343a786f0d2b8644bd53ed1c",
+          "text_preview": "A churchyard. Here, then, the wretched man, whose name he had now to learn, lay underneath the ground. It was a worthy place. Walled in by houses; overrun by grass and weeds, the growth of vegetation's death, not life; choked up with too mu"
+        },
+        {
+          "evidence_id": "carol_hard_001_e14",
+          "sentence_start": 1378,
+          "sentence_end": 1392,
+          "char_start": 153743,
+          "char_end": 155069,
+          "supports_answer_points": [
+            5
+          ],
+          "text_sha256": "40cce0f118ff1c4894beb10435cb69ab8dcb41e1a7726bcf11444f670583da8e",
+          "text_preview": "Best and happiest of all, the Time before him was his own, to make amends in! 'I will live in the Past, the Present, and the Future!' Scrooge repeated as he scrambled out of bed. 'The Spirits of all Three shall strive within me. O Jacob Mar"
+        }
+      ]
+    },
+    {
+      "id": "carol_hard_002",
+      "difficulty": "hard",
+      "question_type": "multi-hop",
+      "question": "Compare the emotional lessons Scrooge learns from Fezziwig, Belle, and the Cratchit family.",
+      "gold_entities": [
+        "Scrooge",
+        "Fezziwig",
+        "Belle",
+        "Bob Cratchit",
+        "Tiny Tim"
+      ],
+      "gold_relations": [
+        "Belle||Scrooge",
+        "Bob Cratchit||Tiny Tim",
+        "Fezziwig||Scrooge",
+        "Scrooge||Tiny Tim"
+      ],
+      "gold_answer_points": [
+        "Fezziwig teaches that kindness from an employer can create real happiness.",
+        "Belle shows Scrooge what he sacrificed by choosing wealth over love.",
+        "The Cratchit family shows affection, gratitude, and vulnerability despite poverty.",
+        "Together these scenes connect personal memory with social responsibility."
+      ],
+      "expected_keyword_groups": [
+        [
+          "Fezziwig"
+        ],
+        [
+          "Belle"
+        ],
+        [
+          "Cratchit"
+        ],
+        [
+          "kindness",
+          "happiness"
+        ],
+        [
+          "wealth",
+          "love"
+        ],
+        [
+          "responsibility"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_hard_002_e01",
+          "sentence_start": 595,
+          "sentence_end": 608,
+          "char_start": 67290,
+          "char_end": 68406,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "90bc1e5f48731024cf16b625050e65e017bf950944f4cc9f096e06ac5cf2455f",
+          "text_preview": "'A small matter,' said the Ghost, 'to make these silly folks so full of gratitude.' 'Small!' echoed Scrooge. The Spirit signed to him to listen to the two apprentices, who were pouring out their hearts in praise of Fezziwig; and when he had"
+        },
+        {
+          "evidence_id": "carol_hard_002_e02",
+          "sentence_start": 619,
+          "sentence_end": 648,
+          "char_start": 69317,
+          "char_end": 72262,
+          "supports_answer_points": [
+            2
+          ],
+          "text_sha256": "d9d2dbba86dfd0215ed1c12312290e4438c766ea2093bceed0225d1323da174b",
+          "text_preview": "Another idol has displaced me; and, if it can cheer and comfort you in time to come as I would have tried to do, I have no just cause to grieve.' 'What Idol has displaced you?' he rejoined. 'A golden one.' 'This is the even-handed dealing o"
+        },
+        {
+          "evidence_id": "carol_hard_002_e03",
+          "sentence_start": 675,
+          "sentence_end": 683,
+          "char_start": 75611,
+          "char_end": 76642,
+          "supports_answer_points": [
+            2
+          ],
+          "text_sha256": "2408221b2411a00f4bdbb8e91ff2f7cd04ccff71ecb7f609a2b7434a653dd79c",
+          "text_preview": "And now Scrooge looked on more attentively than ever, when the master of the house, having his daughter leaning fondly on him, sat down with her and her mother at his own fireside; and when he thought that such another creature, quite as gr"
+        },
+        {
+          "evidence_id": "carol_hard_002_e04",
+          "sentence_start": 771,
+          "sentence_end": 775,
+          "char_start": 91444,
+          "char_end": 92654,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "691635ebd71a946356d56ca8f233664752e7f48b98f14f53e33de6a3ef90e944",
+          "text_preview": "And perhaps it was the pleasure the good Spirit had in showing off this power of his, or else it was his own kind, generous, hearty nature, and his sympathy with all poor men, that led him straight to Scrooge's clerk's; for there he went, a"
+        },
+        {
+          "evidence_id": "carol_hard_002_e05",
+          "sentence_start": 790,
+          "sentence_end": 801,
+          "char_start": 93965,
+          "char_end": 95542,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "87a5cd19c2d3622056852a2542128d1ba0ec5fac9ac2dedf6c36c7c7d4684f6f",
+          "text_preview": "'Hide, Martha, hide!' So Martha hid herself, and in came little Bob, the father, with at least three feet of comforter, exclusive of the fringe, hanging down before him, and his threadbare clothes darned up and brushed to look seasonable, a"
+        },
+        {
+          "evidence_id": "carol_hard_002_e06",
+          "sentence_start": 843,
+          "sentence_end": 858,
+          "char_start": 99965,
+          "char_end": 101559,
+          "supports_answer_points": [
+            3,
+            4
+          ],
+          "text_sha256": "4982e9adec4b27c8cb20300a510f90e184c9f2b8aaa53e77af0225a006342e68",
+          "text_preview": "Then Bob proposed: 'A merry Christmas to us all, my dears. God bless us!' Which all the family re-echoed. 'God bless us every one!' said Tiny Tim, the last of all. He sat very close to his father's side, upon his little stool. Bob held his "
+        },
+        {
+          "evidence_id": "carol_hard_002_e07",
+          "sentence_start": 887,
+          "sentence_end": 888,
+          "char_start": 104023,
+          "char_end": 104498,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "4cbcc9be25236b28912b47d2901742feac1447c0e156dc873b6ce72d8cdcdb37",
+          "text_preview": "They were not a handsome family; they were not well dressed; their shoes were far from being waterproof; their clothes were scanty; and Peter might have known, and very likely did, the inside of a pawnbroker's. But they were happy, grateful"
+        }
+      ]
+    },
+    {
+      "id": "carol_hard_003",
+      "difficulty": "hard",
+      "question_type": "theme",
+      "question": "How does the story use cold and warmth to contrast Scrooge's character with Christmas generosity?",
+      "gold_entities": [
+        "Scrooge",
+        "Ghost of Christmas Present",
+        "Bob Cratchit",
+        "Tiny Tim"
+      ],
+      "gold_relations": [
+        "Bob Cratchit||Tiny Tim",
+        "Ghost of Christmas Present||Scrooge",
+        "Scrooge||Tiny Tim"
+      ],
+      "gold_answer_points": [
+        "Early Scrooge is associated with coldness, hardness, and lack of warmth.",
+        "His office and clerk's fire reflect his emotional stinginess.",
+        "The Ghost of Christmas Present appears amid abundant festive warmth.",
+        "The Cratchit household is materially poor but emotionally warm.",
+        "Christmas morning reverses the cold imagery with brightness and joy."
+      ],
+      "expected_keyword_groups": [
+        [
+          "cold",
+          "frost",
+          "flint"
+        ],
+        [
+          "fire",
+          "coal"
+        ],
+        [
+          "abundance",
+          "plum-puddings",
+          "torch"
+        ],
+        [
+          "Cratchit"
+        ],
+        [
+          "bright",
+          "jovial"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_hard_003_e01",
+          "sentence_start": 80,
+          "sentence_end": 105,
+          "char_start": 9040,
+          "char_end": 12424,
+          "supports_answer_points": [
+            1,
+            2
+          ],
+          "text_sha256": "639b057d5091f3dc9fd1a687ed78d85fb5a5dc28747f1533726bbd95f54a1d1e",
+          "text_preview": "but he was a tight-fisted hand at the grindstone, Scrooge! a squeezing, wrenching, grasping, scraping, clutching, covetous old sinner! Hard and sharp as flint, from which no steel had ever struck out generous fire; secret, and self-containe"
+        },
+        {
+          "evidence_id": "carol_hard_003_e02",
+          "sentence_start": 709,
+          "sentence_end": 733,
+          "char_start": 81246,
+          "char_end": 83846,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "3a4aba0f8f25f9d131000fc0169b8af7a755b0815b050e718970a4b74f8621de",
+          "text_preview": "Heaped up on the floor, to form a kind of throne, were turkeys, geese, game, poultry, brawn, great joints of meat, sucking-pigs, long wreaths of sausages, mince-pies, plum-puddings, barrels of oysters, red-hot chestnuts, cherry-cheeked appl"
+        },
+        {
+          "evidence_id": "carol_hard_003_e03",
+          "sentence_start": 771,
+          "sentence_end": 775,
+          "char_start": 91444,
+          "char_end": 92654,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "691635ebd71a946356d56ca8f233664752e7f48b98f14f53e33de6a3ef90e944",
+          "text_preview": "And perhaps it was the pleasure the good Spirit had in showing off this power of his, or else it was his own kind, generous, hearty nature, and his sympathy with all poor men, that led him straight to Scrooge's clerk's; for there he went, a"
+        },
+        {
+          "evidence_id": "carol_hard_003_e04",
+          "sentence_start": 838,
+          "sentence_end": 845,
+          "char_start": 99268,
+          "char_end": 100131,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "d5163fe1f9a7fe08da16c21654a644e3b4c85bb4b7bc854b5af59baeb06c39c2",
+          "text_preview": "[Illustration: WITH THE PUDDING] At last the dinner was all done, the cloth was cleared, the hearth swept, and the fire made up. The compound in the jug being tasted and considered perfect, apples and oranges were put upon the table, and a "
+        },
+        {
+          "evidence_id": "carol_hard_003_e05",
+          "sentence_start": 887,
+          "sentence_end": 888,
+          "char_start": 104023,
+          "char_end": 104498,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "4cbcc9be25236b28912b47d2901742feac1447c0e156dc873b6ce72d8cdcdb37",
+          "text_preview": "They were not a handsome family; they were not well dressed; their shoes were far from being waterproof; their clothes were scanty; and Peter might have known, and very likely did, the inside of a pawnbroker's. But they were happy, grateful"
+        },
+        {
+          "evidence_id": "carol_hard_003_e06",
+          "sentence_start": 1412,
+          "sentence_end": 1418,
+          "char_start": 155920,
+          "char_end": 156367,
+          "supports_answer_points": [
+            5
+          ],
+          "text_sha256": "ed5c5919070ee474062bd77d7e319d524ad0d61f0e4748a9fae1796bb72483cb",
+          "text_preview": "Hallo here!' He was checked in his transports by the churches ringing out the lustiest peals he had ever heard. Clash, clash, hammer; ding, dong, bell! Bell, dong, ding; hammer, clash, clash! Oh, glorious, glorious! Running to the window, h"
+        }
+      ]
+    },
+    {
+      "id": "carol_hard_004",
+      "difficulty": "hard",
+      "question_type": "multi-hop",
+      "question": "How does Tiny Tim function as a moral test for Scrooge?",
+      "gold_entities": [
+        "Tiny Tim",
+        "Scrooge",
+        "Bob Cratchit",
+        "Ghost of Christmas Present"
+      ],
+      "gold_relations": [
+        "Bob Cratchit||Tiny Tim",
+        "Ghost of Christmas Present||Tiny Tim",
+        "Scrooge||Tiny Tim"
+      ],
+      "gold_answer_points": [
+        "Tiny Tim's frailty awakens Scrooge's concern.",
+        "The Ghost of Christmas Present rebukes Scrooge with his own harsh logic about surplus population.",
+        "The future vision of Tiny Tim's absence deepens the moral stakes.",
+        "After changing, Scrooge becomes a second father to Tiny Tim."
+      ],
+      "expected_keyword_groups": [
+        [
+          "Tiny Tim"
+        ],
+        [
+          "cripple",
+          "frail"
+        ],
+        [
+          "surplus population"
+        ],
+        [
+          "future",
+          "absence",
+          "death"
+        ],
+        [
+          "second father"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_hard_004_e01",
+          "sentence_start": 790,
+          "sentence_end": 801,
+          "char_start": 93965,
+          "char_end": 95542,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "87a5cd19c2d3622056852a2542128d1ba0ec5fac9ac2dedf6c36c7c7d4684f6f",
+          "text_preview": "'Hide, Martha, hide!' So Martha hid herself, and in came little Bob, the father, with at least three feet of comforter, exclusive of the fringe, hanging down before him, and his threadbare clothes darned up and brushed to look seasonable, a"
+        },
+        {
+          "evidence_id": "carol_hard_004_e02",
+          "sentence_start": 848,
+          "sentence_end": 858,
+          "char_start": 100346,
+          "char_end": 101559,
+          "supports_answer_points": [
+            1,
+            2
+          ],
+          "text_sha256": "26c822ac1cefa77242ad99df4e781d5c31b9ceb50d43e571338595dddc985c1a",
+          "text_preview": "'Spirit,' said Scrooge, with an interest he had never felt before, 'tell me if Tiny Tim will live.' 'I see a vacant seat,' replied the Ghost, 'in the poor chimney corner, and a crutch without an owner, carefully preserved. If these shadows "
+        },
+        {
+          "evidence_id": "carol_hard_004_e03",
+          "sentence_start": 1259,
+          "sentence_end": 1277,
+          "char_start": 144562,
+          "char_end": 145875,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "6ce784d7afba2cf30898e66643a84c4495d91645db25cae2b51f19ba1cbd8d17",
+          "text_preview": "They entered poor Bob Cratchit's house; the dwelling he had visited before; and found the mother and the children seated round the fire. Quiet. Very quiet. The noisy little Cratchits were as still as statues in one corner, and sat looking u"
+        },
+        {
+          "evidence_id": "carol_hard_004_e04",
+          "sentence_start": 1294,
+          "sentence_end": 1302,
+          "char_start": 146895,
+          "char_end": 147550,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "4702f2d8ea19a455eb00296456e2456e2284d2c76fe08a25d317114f2e9f0c57",
+          "text_preview": "I promised him that I would walk there on a Sunday. My little, little child!' cried Bob. 'My little child!' He broke down all at once. He couldn't help it. If he could have helped it, he and his child would have been farther apart, perhaps,"
+        },
+        {
+          "evidence_id": "carol_hard_004_e05",
+          "sentence_start": 1322,
+          "sentence_end": 1326,
+          "char_start": 149215,
+          "char_end": 149913,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "2ab1c1f5e06dbfee104ed2aa66adf176f76e06ee5f3d0da8ff3255c7096c3c6c",
+          "text_preview": "But, however and whenever we part from one another, I am sure we shall none of us forget poor Tiny Tim--shall we--or this first parting that there was among us?' 'Never, father!' cried they all. 'And I know,' said Bob, 'I know, my dears, th"
+        },
+        {
+          "evidence_id": "carol_hard_004_e06",
+          "sentence_start": 1547,
+          "sentence_end": 1550,
+          "char_start": 164879,
+          "char_end": 165395,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "304baa404cda416809130ca574c4a23d3f78e82da8b99d9fa429329ef017bafa",
+          "text_preview": "I'll raise your salary, and endeavour to assist your struggling family, and we will discuss your affairs this very afternoon, over a Christmas bowl of smoking bishop, Bob! Make up the fires and buy another coal-scuttle before you dot anothe"
+        }
+      ]
+    },
+    {
+      "id": "carol_hard_005",
+      "difficulty": "hard",
+      "question_type": "theme",
+      "question": "How does Dickens connect private greed with public social harm?",
+      "gold_entities": [
+        "Scrooge",
+        "Jacob Marley",
+        "Mankind",
+        "Ignorance",
+        "Want",
+        "Ghost of Christmas Present",
+        "Charity Collectors",
+        "The Poor"
+      ],
+      "gold_relations": [
+        "Charity Collectors||Scrooge",
+        "Ghost of Christmas Present||Ignorance",
+        "Ghost of Christmas Present||Want",
+        "Ignorance||Mankind",
+        "Jacob Marley||Mankind",
+        "Mankind||Want"
+      ],
+      "gold_answer_points": [
+        "Scrooge treats poverty as someone else's institutional problem.",
+        "Marley frames neglect of mankind as a spiritual failure.",
+        "The Ghost of Christmas Present exposes Ignorance and Want as human responsibilities.",
+        "The narrative criticizes wealth without compassion as socially destructive."
+      ],
+      "expected_keyword_groups": [
+        [
+          "greed",
+          "wealth"
+        ],
+        [
+          "poor",
+          "destitute"
+        ],
+        [
+          "mankind"
+        ],
+        [
+          "Ignorance"
+        ],
+        [
+          "Want"
+        ],
+        [
+          "workhouses",
+          "prisons"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_hard_005_e01",
+          "sentence_start": 165,
+          "sentence_end": 184,
+          "char_start": 17902,
+          "char_end": 19989,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "9bb5660c14e0a80abf18a6fc583b391c5d34a817fe6fb1618f1ea4199087811e",
+          "text_preview": "Scrooge,' said the gentleman, taking up a pen, 'it is more than usually desirable that we should make some slight provision for the poor and destitute, who suffer greatly at the present time. Many thousands are in want of common necessaries"
+        },
+        {
+          "evidence_id": "carol_hard_005_e02",
+          "sentence_start": 302,
+          "sentence_end": 339,
+          "char_start": 35440,
+          "char_end": 39190,
+          "supports_answer_points": [
+            2,
+            4
+          ],
+          "text_sha256": "ec09422feb564ce5c17d0eb91a5122632d67fdfbb95c543e4c88a4b357b1946d",
+          "text_preview": "But why do spirits walk the earth, and why do they come to me?' 'It is required of every man,' the Ghost returned, 'that the spirit within him should walk abroad among his fellow-men, and travel far and wide; and, if that spirit goes not fo"
+        },
+        {
+          "evidence_id": "carol_hard_005_e03",
+          "sentence_start": 1021,
+          "sentence_end": 1045,
+          "char_start": 122347,
+          "char_end": 124100,
+          "supports_answer_points": [
+            3,
+            4
+          ],
+          "text_sha256": "15736c90b23c610f551c469c7507d4d4503f9f0a867cd3a3fc7bb088bb89b32f",
+          "text_preview": "'Look here!' From the foldings of its robe it brought two children, wretched, abject, frightful, hideous, miserable. They knelt down at its feet, and clung upon the outside of its garment. 'O Man! look here! Look, look down here!' exclaimed"
+        }
+      ]
+    },
+    {
+      "id": "carol_hard_006",
+      "difficulty": "hard",
+      "question_type": "multi-hop",
+      "question": "How do the future visions show Scrooge the consequences of being unloved?",
+      "gold_entities": [
+        "Scrooge",
+        "Businessmen",
+        "Old Joe",
+        "Charwoman",
+        "Bob Cratchit",
+        "Tiny Tim",
+        "Ghost of Christmas Yet to Come",
+        "Scrooge's Grave"
+      ],
+      "gold_relations": [
+        "Bob Cratchit||Tiny Tim",
+        "Businessmen||Scrooge",
+        "Charwoman||Old Joe",
+        "Ghost of Christmas Yet to Come||Scrooge",
+        "Scrooge||Scrooge's Grave"
+      ],
+      "gold_answer_points": [
+        "Businessmen speak of the dead man casually and without grief.",
+        "People strip and sell the dead man's belongings at Old Joe's shop.",
+        "The lonely corpse contrasts with the Cratchit family's grief over Tiny Tim.",
+        "Scrooge realizes the dead man's fate may be his own.",
+        "Seeing his own grave makes Scrooge beg to change his life."
+      ],
+      "expected_keyword_groups": [
+        [
+          "cheap funeral"
+        ],
+        [
+          "Old Joe"
+        ],
+        [
+          "bed-curtains",
+          "shirt"
+        ],
+        [
+          "lonely",
+          "unloved"
+        ],
+        [
+          "grave"
+        ],
+        [
+          "change"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_hard_006_e01",
+          "sentence_start": 1076,
+          "sentence_end": 1109,
+          "char_start": 127299,
+          "char_end": 129753,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "13a7cc16aae7699ecd7922b5dedeca57ac35c869185f135ad47352adeccb87f6",
+          "text_preview": "'No,' said a great fat man with a monstrous chin, 'I don't know much about it either way. I only know he's dead.' 'When did he die?' inquired another. 'Last night, I believe.' 'Why, what was the matter with him?' asked a third, taking a vas"
+        },
+        {
+          "evidence_id": "carol_hard_006_e02",
+          "sentence_start": 1161,
+          "sentence_end": 1215,
+          "char_start": 134865,
+          "char_end": 139806,
+          "supports_answer_points": [
+            2,
+            4
+          ],
+          "text_sha256": "cbee88fc66ea48425608c4e13dc42644fda841e7e1f6456ac636a28b1cb4b207",
+          "text_preview": "'If he wanted to keep 'em after he was dead, a wicked old screw,' pursued the woman, 'why wasn't he natural in his lifetime? If he had been, he'd have had somebody to look after him when he was struck with Death, instead of lying gasping ou"
+        },
+        {
+          "evidence_id": "carol_hard_006_e03",
+          "sentence_start": 1259,
+          "sentence_end": 1302,
+          "char_start": 144562,
+          "char_end": 147550,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "7484de5b7faf5db4a873d8e8f856e55161d510dcdc5cf2823d6a94e2973c1199",
+          "text_preview": "They entered poor Bob Cratchit's house; the dwelling he had visited before; and found the mother and the children seated round the fire. Quiet. Very quiet. The noisy little Cratchits were as still as statues in one corner, and sat looking u"
+        },
+        {
+          "evidence_id": "carol_hard_006_e04",
+          "sentence_start": 1322,
+          "sentence_end": 1326,
+          "char_start": 149215,
+          "char_end": 149913,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "2ab1c1f5e06dbfee104ed2aa66adf176f76e06ee5f3d0da8ff3255c7096c3c6c",
+          "text_preview": "But, however and whenever we part from one another, I am sure we shall none of us forget poor Tiny Tim--shall we--or this first parting that there was among us?' 'Never, father!' cried they all. 'And I know,' said Bob, 'I know, my dears, th"
+        },
+        {
+          "evidence_id": "carol_hard_006_e05",
+          "sentence_start": 1342,
+          "sentence_end": 1370,
+          "char_start": 151206,
+          "char_end": 153322,
+          "supports_answer_points": [
+            4,
+            5
+          ],
+          "text_sha256": "a91b0fa3884611ec2c91920f3c6f3cbb7312f060343a786f0d2b8644bd53ed1c",
+          "text_preview": "A churchyard. Here, then, the wretched man, whose name he had now to learn, lay underneath the ground. It was a worthy place. Walled in by houses; overrun by grass and weeds, the growth of vegetation's death, not life; choked up with too mu"
+        }
+      ]
+    },
+    {
+      "id": "carol_hard_007",
+      "difficulty": "hard",
+      "question_type": "relation",
+      "question": "Why is the contrast between Bob Cratchit's toast and Mrs. Cratchit's reaction important?",
+      "gold_entities": [
+        "Bob Cratchit",
+        "Mrs. Cratchit",
+        "Scrooge",
+        "Tiny Tim"
+      ],
+      "gold_relations": [
+        "Bob Cratchit||Mrs. Cratchit",
+        "Bob Cratchit||Scrooge",
+        "Bob Cratchit||Tiny Tim"
+      ],
+      "gold_answer_points": [
+        "Bob calls Scrooge the Founder of the Feast.",
+        "Mrs. Cratchit resents Scrooge because of his treatment of the family.",
+        "Bob tries to preserve Christmas goodwill despite hardship.",
+        "The contrast shows both Bob's generosity and the real harm caused by Scrooge."
+      ],
+      "expected_keyword_groups": [
+        [
+          "Founder of the Feast"
+        ],
+        [
+          "Mrs. Cratchit"
+        ],
+        [
+          "resent",
+          "piece of my mind"
+        ],
+        [
+          "Christmas Day"
+        ],
+        [
+          "goodwill"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_hard_007_e01",
+          "sentence_start": 843,
+          "sentence_end": 880,
+          "char_start": 99965,
+          "char_end": 102850,
+          "supports_answer_points": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "text_sha256": "cb82729ff78050b3fe003d7b8dac3e29c377cae29a0c54ebc5e05f40cf14ad0b",
+          "text_preview": "Then Bob proposed: 'A merry Christmas to us all, my dears. God bless us!' Which all the family re-echoed. 'God bless us every one!' said Tiny Tim, the last of all. He sat very close to his father's side, upon his little stool. Bob held his "
+        }
+      ]
+    },
+    {
+      "id": "carol_hard_008",
+      "difficulty": "hard",
+      "question_type": "theme",
+      "question": "How does Scrooge's understanding of business change across the story?",
+      "gold_entities": [
+        "Scrooge",
+        "Jacob Marley",
+        "Mankind",
+        "Fezziwig",
+        "Bob Cratchit"
+      ],
+      "gold_relations": [
+        "Bob Cratchit||Scrooge",
+        "Fezziwig||Scrooge",
+        "Jacob Marley||Mankind",
+        "Jacob Marley||Scrooge"
+      ],
+      "gold_answer_points": [
+        "At first Scrooge treats business as money-making and control.",
+        "Marley says mankind was his business, challenging Scrooge's narrow view.",
+        "Fezziwig shows that an employer's small kindness can create great happiness.",
+        "Scrooge eventually changes how he treats Bob Cratchit as an employer."
+      ],
+      "expected_keyword_groups": [
+        [
+          "business"
+        ],
+        [
+          "mankind"
+        ],
+        [
+          "Fezziwig"
+        ],
+        [
+          "employer",
+          "master"
+        ],
+        [
+          "salary",
+          "Bob Cratchit"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_hard_008_e01",
+          "sentence_start": 80,
+          "sentence_end": 105,
+          "char_start": 9040,
+          "char_end": 12424,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "639b057d5091f3dc9fd1a687ed78d85fb5a5dc28747f1533726bbd95f54a1d1e",
+          "text_preview": "but he was a tight-fisted hand at the grindstone, Scrooge! a squeezing, wrenching, grasping, scraping, clutching, covetous old sinner! Hard and sharp as flint, from which no steel had ever struck out generous fire; secret, and self-containe"
+        },
+        {
+          "evidence_id": "carol_hard_008_e02",
+          "sentence_start": 181,
+          "sentence_end": 184,
+          "char_start": 19706,
+          "char_end": 19989,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "f7c220b045b89d4c6d7fc0f4f7f7b1d5c13648f045280dee455a5e8a638ce263",
+          "text_preview": "'It's not my business,' Scrooge returned. 'It's enough for a man to understand his own business, and not to interfere with other people's. Mine occupies me constantly. Good afternoon, gentlemen!' Seeing clearly that it would be useless to p"
+        },
+        {
+          "evidence_id": "carol_hard_008_e03",
+          "sentence_start": 335,
+          "sentence_end": 339,
+          "char_start": 38643,
+          "char_end": 39190,
+          "supports_answer_points": [
+            2
+          ],
+          "text_sha256": "c3bba8e0387ec46f3f400a9d114a3f7b2ca6c61881ec8630a90cb7e08254c6b5",
+          "text_preview": "Oh, such was I!' 'But you were always a good man of business, Jacob,' faltered Scrooge, who now began to apply this to himself. 'Business!' cried the Ghost, wringing its hands again. 'Mankind was my business. The common welfare was my busin"
+        },
+        {
+          "evidence_id": "carol_hard_008_e04",
+          "sentence_start": 595,
+          "sentence_end": 608,
+          "char_start": 67290,
+          "char_end": 68406,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "90bc1e5f48731024cf16b625050e65e017bf950944f4cc9f096e06ac5cf2455f",
+          "text_preview": "'A small matter,' said the Ghost, 'to make these silly folks so full of gratitude.' 'Small!' echoed Scrooge. The Spirit signed to him to listen to the two apprentices, who were pouring out their hearts in praise of Fezziwig; and when he had"
+        },
+        {
+          "evidence_id": "carol_hard_008_e05",
+          "sentence_start": 1543,
+          "sentence_end": 1551,
+          "char_start": 164291,
+          "char_end": 165554,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "d17febe09fe6ffca4e5da2bf4d94d62759ea89bc176c6a88b6a0565f2445d0df",
+          "text_preview": "And therefore,' he continued, leaping from his stool, and giving Bob such a dig in the waistcoat that he staggered back into the tank again--'and therefore I am about to raise your salary!' Bob trembled, and got a little nearer to the ruler"
+        }
+      ]
+    },
+    {
+      "id": "carol_hard_009",
+      "difficulty": "hard",
+      "question_type": "multi-hop",
+      "question": "How do Scrooge's memories of childhood and lost love prepare him for his later concern for Tiny Tim?",
+      "gold_entities": [
+        "Scrooge",
+        "Ghost of Christmas Past",
+        "Belle",
+        "Tiny Tim",
+        "Bob Cratchit"
+      ],
+      "gold_relations": [
+        "Belle||Scrooge",
+        "Bob Cratchit||Tiny Tim",
+        "Ghost of Christmas Past||Scrooge",
+        "Scrooge||Tiny Tim"
+      ],
+      "gold_answer_points": [
+        "The childhood scenes reveal Scrooge's own loneliness and vulnerability.",
+        "Belle's scene exposes the emotional cost of Scrooge's devotion to wealth.",
+        "These memories soften Scrooge before he sees the Cratchit family.",
+        "Tiny Tim's vulnerability becomes morally legible because Scrooge has reencountered his own buried feeling."
+      ],
+      "expected_keyword_groups": [
+        [
+          "childhood",
+          "solitary"
+        ],
+        [
+          "Belle"
+        ],
+        [
+          "wealth"
+        ],
+        [
+          "soften",
+          "emotion"
+        ],
+        [
+          "Tiny Tim"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_hard_009_e01",
+          "sentence_start": 466,
+          "sentence_end": 477,
+          "char_start": 53143,
+          "char_end": 54892,
+          "supports_answer_points": [
+            1,
+            4
+          ],
+          "text_sha256": "806aa35187e0395fa3652f07d90a7878b1b14b90615b8aafe8aa5287408038c0",
+          "text_preview": "'The school is not quite deserted,' said the Ghost. 'A solitary child, neglected by his friends, is left there still.' Scrooge said he knew it. And he sobbed. They left the high-road by a well-remembered lane and soon approached a mansion o"
+        },
+        {
+          "evidence_id": "carol_hard_009_e02",
+          "sentence_start": 499,
+          "sentence_end": 504,
+          "char_start": 56453,
+          "char_end": 57152,
+          "supports_answer_points": [
+            1,
+            4
+          ],
+          "text_sha256": "dfdeaab5c706d3e15449f42a1054533a9009022457aaaba30e46cf9598415578",
+          "text_preview": "Halloo!' Then, with a rapidity of transition very foreign to his usual character, he said, in pity for his former self, 'Poor boy!' and cried again. 'I wish,' Scrooge muttered, putting his hand in his pocket, and looking about him, after dr"
+        },
+        {
+          "evidence_id": "carol_hard_009_e03",
+          "sentence_start": 619,
+          "sentence_end": 648,
+          "char_start": 69317,
+          "char_end": 72262,
+          "supports_answer_points": [
+            2,
+            4
+          ],
+          "text_sha256": "d9d2dbba86dfd0215ed1c12312290e4438c766ea2093bceed0225d1323da174b",
+          "text_preview": "Another idol has displaced me; and, if it can cheer and comfort you in time to come as I would have tried to do, I have no just cause to grieve.' 'What Idol has displaced you?' he rejoined. 'A golden one.' 'This is the even-handed dealing o"
+        },
+        {
+          "evidence_id": "carol_hard_009_e04",
+          "sentence_start": 675,
+          "sentence_end": 683,
+          "char_start": 75611,
+          "char_end": 76642,
+          "supports_answer_points": [
+            2,
+            4
+          ],
+          "text_sha256": "2408221b2411a00f4bdbb8e91ff2f7cd04ccff71ecb7f609a2b7434a653dd79c",
+          "text_preview": "And now Scrooge looked on more attentively than ever, when the master of the house, having his daughter leaning fondly on him, sat down with her and her mother at his own fireside; and when he thought that such another creature, quite as gr"
+        },
+        {
+          "evidence_id": "carol_hard_009_e05",
+          "sentence_start": 790,
+          "sentence_end": 801,
+          "char_start": 93965,
+          "char_end": 95542,
+          "supports_answer_points": [
+            3,
+            4
+          ],
+          "text_sha256": "87a5cd19c2d3622056852a2542128d1ba0ec5fac9ac2dedf6c36c7c7d4684f6f",
+          "text_preview": "'Hide, Martha, hide!' So Martha hid herself, and in came little Bob, the father, with at least three feet of comforter, exclusive of the fringe, hanging down before him, and his threadbare clothes darned up and brushed to look seasonable, a"
+        },
+        {
+          "evidence_id": "carol_hard_009_e06",
+          "sentence_start": 848,
+          "sentence_end": 858,
+          "char_start": 100346,
+          "char_end": 101559,
+          "supports_answer_points": [
+            3,
+            4
+          ],
+          "text_sha256": "26c822ac1cefa77242ad99df4e781d5c31b9ceb50d43e571338595dddc985c1a",
+          "text_preview": "'Spirit,' said Scrooge, with an interest he had never felt before, 'tell me if Tiny Tim will live.' 'I see a vacant seat,' replied the Ghost, 'in the poor chimney corner, and a crutch without an owner, carefully preserved. If these shadows "
+        }
+      ]
+    },
+    {
+      "id": "carol_hard_010",
+      "difficulty": "hard",
+      "question_type": "theme",
+      "question": "What evidence shows that Scrooge's transformation is social rather than only private?",
+      "gold_entities": [
+        "Scrooge",
+        "Bob Cratchit",
+        "Tiny Tim",
+        "Fred",
+        "Prize Turkey",
+        "Charity Collector"
+      ],
+      "gold_relations": [
+        "Bob Cratchit||Scrooge",
+        "Charity Collector||Scrooge",
+        "Fred||Scrooge",
+        "Prize Turkey||Scrooge",
+        "Scrooge||Tiny Tim"
+      ],
+      "gold_answer_points": [
+        "Scrooge's joy immediately turns into action toward others.",
+        "He sends a turkey to the Cratchits.",
+        "He makes charitable amends to the gentleman collector.",
+        "He visits Fred and joins family fellowship.",
+        "He raises Bob Cratchit's salary and supports Tiny Tim."
+      ],
+      "expected_keyword_groups": [
+        [
+          "turkey"
+        ],
+        [
+          "charity",
+          "back-payments"
+        ],
+        [
+          "Fred"
+        ],
+        [
+          "salary"
+        ],
+        [
+          "Tiny Tim",
+          "second father"
+        ]
+      ],
+      "gold_evidence_spans": [
+        {
+          "evidence_id": "carol_hard_010_e01",
+          "sentence_start": 1378,
+          "sentence_end": 1392,
+          "char_start": 153743,
+          "char_end": 155069,
+          "supports_answer_points": [
+            1
+          ],
+          "text_sha256": "40cce0f118ff1c4894beb10435cb69ab8dcb41e1a7726bcf11444f670583da8e",
+          "text_preview": "Best and happiest of all, the Time before him was his own, to make amends in! 'I will live in the Past, the Present, and the Future!' Scrooge repeated as he scrambled out of bed. 'The Spirits of all Three shall strive within me. O Jacob Mar"
+        },
+        {
+          "evidence_id": "carol_hard_010_e02",
+          "sentence_start": 1435,
+          "sentence_end": 1451,
+          "char_start": 157081,
+          "char_end": 158261,
+          "supports_answer_points": [
+            2
+          ],
+          "text_sha256": "5945aeae80fd0ac2b4835d446b8b2378239bfa32d3fb021106938d3fab4b96ce",
+          "text_preview": "Do you know whether they've sold the prize turkey that was hanging up there?--Not the little prize turkey: the big one?' 'What! the one as big as me?' returned the boy. 'What a delightful boy!' said Scrooge. 'It's a pleasure to talk to him."
+        },
+        {
+          "evidence_id": "carol_hard_010_e03",
+          "sentence_start": 1471,
+          "sentence_end": 1492,
+          "char_start": 159943,
+          "char_end": 161576,
+          "supports_answer_points": [
+            3
+          ],
+          "text_sha256": "e9a5df72879a21c4554222aa935ba4a288908663d477f3d4d263bbeb8857cc3c",
+          "text_preview": "He had not gone far when, coming on towards him, he beheld the portly gentleman who had walked into his counting-house the day before, and said, 'Scrooge and Marley's, I believe?' It sent a pang across his heart to think how this old gentle"
+        },
+        {
+          "evidence_id": "carol_hard_010_e04",
+          "sentence_start": 1505,
+          "sentence_end": 1521,
+          "char_start": 162416,
+          "char_end": 163184,
+          "supports_answer_points": [
+            4
+          ],
+          "text_sha256": "a0b84ee53ab24efbc54d5faef4025994372a844ef3c1074498a579215a9d605a",
+          "text_preview": "'Fred!' said Scrooge. Dear heart alive, how his niece by marriage started! Scrooge had forgotten, for the moment, about her sitting in the corner with the footstool, or he wouldn't have done it on any account. 'Why, bless my soul!' cried Fr"
+        },
+        {
+          "evidence_id": "carol_hard_010_e05",
+          "sentence_start": 1543,
+          "sentence_end": 1551,
+          "char_start": 164291,
+          "char_end": 165554,
+          "supports_answer_points": [
+            5
+          ],
+          "text_sha256": "d17febe09fe6ffca4e5da2bf4d94d62759ea89bc176c6a88b6a0565f2445d0df",
+          "text_preview": "And therefore,' he continued, leaping from his stool, and giving Bob such a dig in the waistcoat that he staggered back into the tank again--'and therefore I am about to raise your salary!' Bob trembled, and got a little nearer to the ruler"
+        }
+      ]
+    }
+  ]
+}
