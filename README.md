@@ -66,9 +66,6 @@ artifacts/
 ├── stores/                        persisted stores for each chunking strategy
 ├── evaluations/                   generated evaluation results
 └── visualizations/                generated graph visualizations
-
-reports/                           experiment reports
-tests/                             project tests (when added)
 ```
 
 ## Setup
