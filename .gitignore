@@ -54,6 +54,7 @@ cover/
 # Generated experiment outputs
 artifacts/evaluations/
 scratch/
+artifacts/visualizations/
 
 # Local report drafts and generated deliverables
 reports/

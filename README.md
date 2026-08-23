@@ -64,8 +64,7 @@ data/
 
 artifacts/
 ├── stores/                        persisted stores for each chunking strategy
-├── evaluations/                   generated evaluation results
-└── visualizations/                generated graph visualizations
+└── evaluations/                   generated evaluation results
 ```
 
 ## Setup
