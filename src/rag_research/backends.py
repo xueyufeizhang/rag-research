@@ -19,7 +19,12 @@ EMBED_MODEL = os.getenv("EMBED_MODEL", "")
 EXTRACTION_TIMEOUT = int(os.getenv("EXTRACTION_TIMEOUT", 600))
 
 RERANK_MODEL = os.getenv("RERANK_MODEL", "mixedbread-ai/mxbai-rerank-base-v1")
-reranker = CrossEncoder(RERANK_MODEL, cache_folder="./models")
+ENABLE_RERANKER = os.getenv("ENABLE_RERANKER", "true").strip().lower() == "true"
+reranker = (
+    CrossEncoder(RERANK_MODEL, cache_folder="./models")
+    if ENABLE_RERANKER
+    else None
+)
 
 api_client = AsyncOpenAI(base_url=API_BASE_URL, api_key=API_KEY) if LLM_BACKEND == "api" else None
 

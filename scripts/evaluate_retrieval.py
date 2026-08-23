@@ -12,7 +12,16 @@ import os
 from dotenv import load_dotenv
 from tqdm import tqdm
 
-from rag_research.backends import embed_func, llm_func, reranker
+from rag_research.backends import (
+    API_MODEL,
+    EMBED_MODEL,
+    LLM_BACKEND,
+    OLLAMA_MODEL,
+    RERANK_MODEL,
+    embed_func,
+    llm_func,
+    reranker,
+)
 from rag_research.core import LightRAG
 from rag_research.evaluation import (
     build_chunk_evidence_map,
@@ -116,6 +125,10 @@ async def eval_retrieval() -> tuple[list[dict], list[dict]]:
         reranker=reranker,
     )
     await lightrag.construct(source, "carol")
+    chunking_strategy = lightrag.config.chunk_config.strategy
+    llm_model = API_MODEL if LLM_BACKEND == "api" else OLLAMA_MODEL
+    reranking_enabled = lightrag.reranker is not None
+    rerank_model = RERANK_MODEL if reranking_enabled else None
 
     eval_set_path = Path(os.getenv("EVAL_SET", "./data/evaluation/carol_canonical.json"))
     eval_data = json.loads(eval_set_path.read_text(encoding="utf-8"))
@@ -203,6 +216,12 @@ async def eval_retrieval() -> tuple[list[dict], list[dict]]:
                 "id": item.get("id"),
                 "mode": mode,
                 "question": question,
+                "chunking_strategy": chunking_strategy,
+                "llm_backend": LLM_BACKEND,
+                "llm_model": llm_model,
+                "embedding_model": EMBED_MODEL,
+                "reranking_enabled": reranking_enabled,
+                "rerank_model": rerank_model,
                 "metric_protocol": "canonical evidence coverage",
                 "entity_metrics": entity_metrics,
                 "relation_metrics": relation_metrics,
@@ -219,6 +238,14 @@ async def eval_retrieval() -> tuple[list[dict], list[dict]]:
             mode_results.append(row)
 
         summary = summarize_mode(mode, mode_results)
+        summary.update({
+            "chunking_strategy": chunking_strategy,
+            "llm_backend": LLM_BACKEND,
+            "llm_model": llm_model,
+            "embedding_model": EMBED_MODEL,
+            "reranking_enabled": reranking_enabled,
+            "rerank_model": rerank_model,
+        })
         summaries.append(summary)
         print_summary(summary)
 
@@ -230,11 +257,28 @@ if __name__ == "__main__":
 
     output_dir = PROJECT_ROOT / "artifacts/evaluations"
     output_dir.mkdir(parents=True, exist_ok=True)
-    (output_dir / "retrieval_eval_results.json").write_text(
+
+    run_summary = summaries[0] if summaries else {}
+    chunking_strategy = run_summary.get(
+        "chunking_strategy",
+        os.getenv("CHUNKING_STRATEGY", "unknown"),
+    )
+    rerank_label = (
+        "rerank"
+        if run_summary.get("reranking_enabled", reranker is not None)
+        else "dense_only"
+    )
+    experiment_name = f"{chunking_strategy}_{rerank_label}"
+    results_path = output_dir / f"retrieval_eval_{experiment_name}_results.json"
+    summaries_path = output_dir / f"retrieval_eval_{experiment_name}_summaries.json"
+
+    results_path.write_text(
         json.dumps(results, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
-    (output_dir / "retrieval_eval_results_summaries.json").write_text(
+    summaries_path.write_text(
         json.dumps(summaries, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
+    print(f"\nSaved results to {results_path}")
+    print(f"Saved summaries to {summaries_path}")

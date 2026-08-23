@@ -132,6 +132,18 @@ SEMANTIC_EMBEDDING_CONCURRENCY=4
 WORKING_DIR=./artifacts/stores/dickens_semantic
 ```
 
+### Optional reranking
+
+Set `ENABLE_RERANKER=true` to apply CrossEncoder reranking after dense candidate
+retrieval in naive, local, global, and hybrid modes. Set it to `false` for the dense-only
+baseline. Both paths use the same candidate pools and final top-k limits so the
+effect of CrossEncoder reranking can be compared directly.
+
+```env
+ENABLE_RERANKER=true
+RERANK_MODEL=mixedbread-ai/mxbai-rerank-base-v1
+```
+
 ## Usage
 
 Run the demo query:
@@ -169,8 +181,11 @@ evidence.
 
 The script evaluates `naive`, `local`, `global`, and `hybrid` modes with the question file configured by `EVAL_SET`, then writes:
 
-- `artifacts/evaluations/retrieval_eval_results.json`
-- `artifacts/evaluations/retrieval_eval_results_summaries.json`
+- `artifacts/evaluations/retrieval_eval_<chunking>_<rerank-state>_results.json`
+- `artifacts/evaluations/retrieval_eval_<chunking>_<rerank-state>_summaries.json`
+
+For example: `retrieval_eval_semantic_rerank_results.json` and
+`retrieval_eval_fixed_dense_only_summaries.json`.
 
 Render the graph for the configured `WORKING_DIR`:
 
