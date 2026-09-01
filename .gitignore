@@ -55,9 +55,14 @@ cover/
 artifacts/evaluations/
 scratch/
 artifacts/visualizations/
+artifacts/stores/**/chunking_cache/
+artifacts/stores/**/extraction_cache/
+artifacts/stores/multihop_*/
+data/raw/MultiHopRAG/
+models/
 
 # Local report drafts and generated deliverables
-reports/
+docs/
 
 # Translations
 *.mo

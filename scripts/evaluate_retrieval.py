@@ -11,6 +11,7 @@ import os
 
 from dotenv import load_dotenv
 from tqdm import tqdm
+from transformers import AutoTokenizer
 
 from rag_research.backends import (
     API_MODEL,
@@ -18,14 +19,17 @@ from rag_research.backends import (
     LLM_BACKEND,
     OLLAMA_MODEL,
     RERANK_MODEL,
+    create_reranker,
     embed_func,
+    embed_many_func,
     llm_func,
-    reranker,
 )
 from rag_research.core import LightRAG
+from rag_research.models import InputDocument
 from rag_research.evaluation import (
     build_chunk_evidence_map,
     build_entity_normalizer,
+    calc_context_efficiency_metrics,
     calc_evidence_metrics,
     calc_set_metrics,
     harmonic_mean,
@@ -38,6 +42,24 @@ from rag_research.evaluation import (
 load_dotenv()
 CON_NUM = int(os.getenv("CON_NUM", 5))
 DEFAULT_MODES = ["naive", "local", "global", "hybrid"]
+EVAL_TOKENIZER_MODEL = os.getenv("EVAL_TOKENIZER_MODEL", RERANK_MODEL)
+reranker = create_reranker()
+
+
+def load_evaluation_tokenizer():
+    if reranker is not None and EVAL_TOKENIZER_MODEL == RERANK_MODEL:
+        return reranker.tokenizer
+    return AutoTokenizer.from_pretrained(
+        EVAL_TOKENIZER_MODEL,
+        cache_dir="./models",
+    )
+
+
+EVAL_TOKENIZER = load_evaluation_tokenizer()
+
+
+def count_evaluation_tokens(text: str) -> int:
+    return len(EVAL_TOKENIZER.tokenize(text))
 
 
 def average(rows: list[dict], metric_group: str, metric: str) -> float:
@@ -46,6 +68,18 @@ def average(rows: list[dict], metric_group: str, metric: str) -> float:
 
 def summarize_mode(mode: str, mode_results: list[dict]) -> dict:
     total = len(mode_results)
+    retrieved_chars_total = sum(
+        row["chunk_metrics"].get("retrieved_chars", 0)
+        for row in mode_results
+    )
+    retrieved_tokens_total = sum(
+        row["chunk_metrics"].get("retrieved_tokens", 0)
+        for row in mode_results
+    )
+    covered_evidence_chars_total = sum(
+        row["chunk_metrics"].get("covered_evidence_chars", 0)
+        for row in mode_results
+    )
     summary = {
         "mode": mode,
         "count": total,
@@ -63,6 +97,12 @@ def summarize_mode(mode: str, mode_results: list[dict]) -> dict:
         "mean_reciprocal_rank": average(mode_results, "chunk_metrics", "reciprocal_rank"),
         "avg_ndcg_at_k": average(mode_results, "chunk_metrics", "ndcg_at_k"),
         "avg_chunk_redundancy_rate": average(mode_results, "chunk_metrics", "redundancy_rate"),
+        "avg_retrieved_chars": retrieved_chars_total / total if total else 0.0,
+        "avg_retrieved_tokens": retrieved_tokens_total / total if total else 0.0,
+        "evidence_density": (
+            covered_evidence_chars_total / retrieved_chars_total
+            if retrieved_chars_total else 0.0
+        ),
         "entity_hit_rate": average(mode_results, "entity_metrics", "hit"),
         "relation_hit_rate": average(mode_results, "relation_metrics", "hit"),
         "chunk_hit_rate": average(mode_results, "chunk_metrics", "chunk_hit"),
@@ -83,6 +123,10 @@ def summarize_mode(mode: str, mode_results: list[dict]) -> dict:
         "micro_coverage_f1": harmonic_mean(micro_precision, micro_recall),
         "micro_answer_point_recall": (
             answer_point_matched / answer_point_total if answer_point_total else 0.0
+        ),
+        "answer_points_per_1k_tokens": (
+            answer_point_matched * 1000.0 / retrieved_tokens_total
+            if retrieved_tokens_total else 0.0
         ),
     })
     return summary
@@ -108,6 +152,11 @@ def print_summary(summary: dict) -> None:
     print(f"  evidence recall (micro):  {summary['micro_evidence_recall']:.3f}")
     print(f"  coverage f1 (micro):      {summary['micro_coverage_f1']:.3f}\n")
 
+    print(f"  retrieved chars (avg):    {summary['avg_retrieved_chars']:.1f}")
+    print(f"  retrieved tokens (avg):   {summary['avg_retrieved_tokens']:.1f}")
+    print(f"  evidence density:         {summary['evidence_density']:.4f}")
+    print(f"  answer points / 1k tok:   {summary['answer_points_per_1k_tokens']:.3f}\n")
+
     print(f"  entity hit rate:          {summary['entity_hit_rate']:.3f}")
     print(f"  relation hit rate:        {summary['relation_hit_rate']:.3f}")
     print(f"  chunk hit rate:           {summary['chunk_hit_rate']:.3f}")
@@ -116,15 +165,22 @@ def print_summary(summary: dict) -> None:
 async def eval_retrieval() -> tuple[list[dict], list[dict]]:
     source_path = PROJECT_ROOT / "data/raw/a_christmas_carol.txt"
     source = source_path.read_text(encoding="utf-8")
-    working_dir = os.getenv("WORKING_DIR", "./artifacts/stores/dickens_fixed_size")
+    working_dir = os.getenv("WORKING_DIR", "./artifacts/stores/dickens_fixed")
     lightrag = LightRAG(
         working_dir=working_dir,
         llm_func=llm_func,
         con_num=CON_NUM,
         embed_func=embed_func,
+        embed_many_func=embed_many_func,
         reranker=reranker,
     )
-    await lightrag.construct(source, "carol")
+    await lightrag.construct((
+        InputDocument(
+            document_id="carol",
+            text=source,
+            metadata={"title": "A Christmas Carol"},
+        ),
+    ))
     chunking_strategy = lightrag.config.chunk_config.strategy
     llm_model = API_MODEL if LLM_BACKEND == "api" else OLLAMA_MODEL
     reranking_enabled = lightrag.reranker is not None
@@ -159,7 +215,8 @@ async def eval_retrieval() -> tuple[list[dict], list[dict]]:
                 "canonical evidence offsets do not match the source document: "
                 f"expected {expected_source_hash}, got {actual_source_hash}"
             )
-    chunk_intervals = locate_chunks_in_source(source, lightrag.chunk_kv.all())
+    stored_chunks = lightrag.chunk_kv.all()
+    chunk_intervals = locate_chunks_in_source(source, stored_chunks)
 
     requested_modes = [
         mode.strip()
@@ -211,6 +268,15 @@ async def eval_retrieval() -> tuple[list[dict], list[dict]]:
                 evidence_to_answer_points,
                 len(item.get("gold_answer_points", [])),
             )
+            chunk_metrics.update(calc_context_efficiency_metrics(
+                source=source,
+                retrieved_chunk_ids=retrieved_chunks,
+                chunks=stored_chunks,
+                chunk_intervals=chunk_intervals,
+                gold_evidence_spans=item.get("gold_evidence_spans", []),
+                matched_answer_point_count=chunk_metrics["matched_answer_point_count"],
+                token_counter=count_evaluation_tokens,
+            ))
 
             row = {
                 "id": item.get("id"),
@@ -223,6 +289,7 @@ async def eval_retrieval() -> tuple[list[dict], list[dict]]:
                 "reranking_enabled": reranking_enabled,
                 "rerank_model": rerank_model,
                 "metric_protocol": "canonical evidence coverage",
+                "evaluation_tokenizer": EVAL_TOKENIZER_MODEL,
                 "entity_metrics": entity_metrics,
                 "relation_metrics": relation_metrics,
                 "chunk_metrics": chunk_metrics,
@@ -245,6 +312,7 @@ async def eval_retrieval() -> tuple[list[dict], list[dict]]:
             "embedding_model": EMBED_MODEL,
             "reranking_enabled": reranking_enabled,
             "rerank_model": rerank_model,
+            "evaluation_tokenizer": EVAL_TOKENIZER_MODEL,
         })
         summaries.append(summary)
         print_summary(summary)

@@ -126,6 +126,84 @@ def calc_evidence_metrics(
     }
 
 
+def calc_context_efficiency_metrics(
+    source: str,
+    retrieved_chunk_ids: list[str],
+    chunks: dict[str, dict],
+    chunk_intervals: dict[str, tuple[int, int]],
+    gold_evidence_spans: list[dict],
+    matched_answer_point_count: int,
+    token_counter: Callable[[str], int],
+) -> dict:
+    """Measure evidence yield relative to the retrieved context budget.
+
+    Character counts use the chunks' source-aligned intervals. Overlapping
+    retrieved chunks count repeatedly in the context denominator, while covered
+    evidence characters are unioned so duplicated evidence is not rewarded.
+    Token counts use one fixed evaluation tokenizer over the retrieved chunk
+    texts joined in retrieval order.
+    """
+    retrieved = dedupe_preserving_order(retrieved_chunk_ids)
+    retrieved_texts = []
+    retrieved_chars = 0
+    covered_intervals = []
+
+    for chunk_id in retrieved:
+        chunk = chunks.get(chunk_id)
+        interval = chunk_intervals.get(chunk_id)
+        if chunk is None or interval is None:
+            raise ValueError(f"retrieved chunk is missing from the evaluation index: {chunk_id}")
+
+        chunk_start, chunk_end = interval
+        if chunk_start < 0 or chunk_end > len(source) or chunk_start >= chunk_end:
+            raise ValueError(f"invalid source interval for retrieved chunk {chunk_id}: {interval}")
+        retrieved_texts.append(chunk.get("text", ""))
+        retrieved_chars += chunk_end - chunk_start
+
+        for evidence in gold_evidence_spans:
+            evidence_start = evidence.get("char_start")
+            evidence_end = evidence.get("char_end")
+            if evidence_start is None or evidence_end is None:
+                continue
+            overlap_start = max(chunk_start, evidence_start)
+            overlap_end = min(chunk_end, evidence_end)
+            if overlap_start < overlap_end:
+                covered_intervals.append((overlap_start, overlap_end))
+
+    retrieved_text = "\n\n".join(retrieved_texts)
+    retrieved_tokens = token_counter(retrieved_text) if retrieved_text else 0
+    covered_evidence_chars = _merged_interval_length(covered_intervals)
+
+    return {
+        "retrieved_chars": retrieved_chars,
+        "retrieved_tokens": retrieved_tokens,
+        "covered_evidence_chars": covered_evidence_chars,
+        "evidence_density": (
+            covered_evidence_chars / retrieved_chars if retrieved_chars else 0.0
+        ),
+        "answer_points_per_1k_tokens": (
+            matched_answer_point_count * 1000.0 / retrieved_tokens
+            if retrieved_tokens else 0.0
+        ),
+    }
+
+
+def _merged_interval_length(intervals: Iterable[tuple[int, int]]) -> int:
+    ordered = sorted((start, end) for start, end in intervals if start < end)
+    if not ordered:
+        return 0
+
+    total = 0
+    current_start, current_end = ordered[0]
+    for start, end in ordered[1:]:
+        if start <= current_end:
+            current_end = max(current_end, end)
+            continue
+        total += current_end - current_start
+        current_start, current_end = start, end
+    return total + current_end - current_start
+
+
 def normalize_whitespace(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip()
 

@@ -6,7 +6,7 @@ from pyvis.network import Network
 
 load_dotenv()
 
-working_dir = os.getenv("WORKING_DIR", "./artifacts/stores/dickens_fixed_size")
+working_dir = os.getenv("WORKING_DIR", "./artifacts/stores/dickens_fixed")
 graph_path = os.path.join(working_dir, "graph.json")
 
 with open(graph_path, encoding="utf-8") as f:

@@ -14,14 +14,20 @@ Research code and experiment artifacts for a thesis project on retrieval-augment
 1. **Chunking** ([chunking.py](src/rag_research/chunking.py))
    Splits documents with one of three strategies:
    - `fixed`: character-based sliding windows.
-   - `sentence_window`: sentence-based windows with overlap.
    - `semantic`: sentence-level semantic boundary detection using embeddings.
+   - `agentic_ibm`: constrained LLM topic-boundary selection over numbered sentences.
 
 2. **Extraction** ([extraction.py](src/rag_research/extraction.py))
-   Runs concurrent LLM extraction over chunks, parses JSON entities and relationships, repairs malformed JSON when possible, and retries failed chunk calls.
+   Runs concurrent LLM extraction over chunks, parses and validates JSON entities
+   and relationships, enforces response limits and same-response relationship
+   endpoints, merges duplicates, rejects prompt-example leakage, and retries
+   failed chunk calls.
 
 3. **Index Construction** ([core.py](src/rag_research/core.py))
    Merges duplicate entities and relations, stores chunks/entities/relations, embeds each retrieval unit, and builds a graph representation.
+   Successful per-document chunking results and per-chunk extraction results are
+   checkpointed under the selected working directory. Re-running an interrupted
+   build reuses checkpoints only when the complete build fingerprint matches.
 
 4. **Storage** ([storage.py](src/rag_research/storage.py))
    Persists the experiment state to disk:
@@ -91,15 +97,25 @@ Set `LLM_BACKEND` to:
 
 Embeddings currently use the Ollama `/api/embed` endpoint through `EMBED_MODEL`.
 
+Index construction sends embeddings in bounded batches. `EMBEDDING_BATCH_SIZE`
+controls the number of texts in each Ollama request and
+`EMBEDDING_CONCURRENCY` limits simultaneous batch requests. The default values
+are 32 and 2. Reduce the batch size first if the embedding model exceeds the
+available memory. Semantic chunking uses the same batch backend and has its own
+`SEMANTIC_EMBEDDING_BATCH_SIZE` setting.
+
 ### Chunking
 
 Set `CHUNKING_STRATEGY` to one of:
 
 - `fixed`
-- `sentence_window`
 - `semantic`
+- `agentic_ibm`
 
-Use a separate `WORKING_DIR` for each strategy. Construction is skipped when a store already exists, so changing chunking settings while reusing the same directory will not rebuild the stored chunks. Every strategy is evaluated against the same canonical evidence file.
+Use a separate `WORKING_DIR` for each strategy. A completed store is reused only
+when its build fingerprint matches the corpus and complete pipeline provenance;
+a conflicting store is rejected instead of being silently overwritten. Every
+strategy is evaluated against the same canonical evidence file.
 
 Example fixed-size run:
 
@@ -107,16 +123,7 @@ Example fixed-size run:
 CHUNKING_STRATEGY=fixed
 FIXED_WINDOW_SIZE=2400
 FIXED_WINDOW_OVERLAP=200
-WORKING_DIR=./artifacts/stores/dickens_fixed_size
-```
-
-Example sentence-window run:
-
-```env
-CHUNKING_STRATEGY=sentence_window
-SENTENCE_WINDOW_SIZE=8
-SENTENCE_WINDOW_OVERLAP=2
-WORKING_DIR=./artifacts/stores/dickens_sentence_window
+WORKING_DIR=./artifacts/stores/dickens_fixed
 ```
 
 Example semantic run:
@@ -130,6 +137,31 @@ SEMANTIC_BUFFER_SIZE=1
 SEMANTIC_EMBEDDING_CONCURRENCY=4
 WORKING_DIR=./artifacts/stores/dickens_semantic
 ```
+
+Example IBM-style agentic run:
+
+```env
+CHUNKING_STRATEGY=agentic_ibm
+AGENTIC_BATCH_MAX_SENTENCES=60
+AGENTIC_BATCH_MAX_CHARS=12000
+AGENTIC_MIN_SENTENCES=4
+AGENTIC_MAX_SENTENCES=20
+AGENTIC_CONCURRENCY=4
+AGENTIC_RETRIES=2
+WORKING_DIR=./artifacts/stores/dickens_agentic_ibm
+```
+
+The LLM chooses contiguous topic boundaries within size-bounded macro-batches. It
+returns sentence indexes rather than rewritten text, and the implementation
+reconstructs chunks from the source sentences so canonical evidence offsets
+remain valid. Structurally invalid or incomplete responses are retried. A
+structurally valid response that violates the configured chunk sizes is
+deterministically projected onto the constraints while minimizing total boundary
+movement. Projection events are counted in the build result and stored with the
+per-document chunking checkpoint for auditability. If structural validation
+still fails after all attempts, construction stops instead of silently mixing
+fallback chunks into an agentic experiment. Completed documents remain in the
+chunking checkpoint and are reused when the same build is resumed.
 
 ### Optional reranking
 
@@ -173,6 +205,9 @@ With canonical evidence, the main retrieval metrics are:
 - **Answer-point Recall@K:** fraction of answer points supported by covered evidence.
 - **MRR and nDCG@K:** rank-sensitive retrieval quality.
 - **Chunk redundancy rate:** fraction of relevant returned chunks that add no new evidence coverage.
+- **Average retrieved characters/tokens:** mean source-aligned context budget returned per question. Token counts use the fixed `EVAL_TOKENIZER_MODEL` with no special tokens.
+- **Evidence density:** unique covered gold-evidence characters divided by all retrieved source characters; overlapping retrieved context is counted repeatedly only in the denominator.
+- **Answer points per 1K tokens:** matched answer points per 1,000 retrieved tokens.
 
 The evaluator writes both macro averages across questions and micro totals. It
 rejects evaluation files that do not contain chunk-independent canonical
@@ -196,8 +231,7 @@ uv run python scripts/visualize_graph.py
 
 The checked-in Dickens stores are snapshots for comparing chunking behavior:
 
-- `artifacts/stores/dickens_fixed_size`: fixed character windows.
-- `artifacts/stores/dickens_sentence_window`: sentence windows.
+- `artifacts/stores/dickens_fixed`: fixed character windows.
 - `artifacts/stores/dickens_semantic`: embedding-based semantic boundaries.
 
 Each store has the same file schema, so retrieval and visualization can be pointed at any of them by changing `WORKING_DIR`. The evaluator maps the single canonical gold set to the selected store automatically.
@@ -219,7 +253,7 @@ Map the same evidence spans to any persisted chunk store:
 
 ```bash
 python scripts/map_canonical_gold_to_chunks.py \
-  --chunks artifacts/stores/dickens_fixed_size/chunks.json \
+  --chunks artifacts/stores/dickens_fixed/chunks.json \
   --output artifacts/evaluations/carol_fixed_from_canonical.json
 ```
 

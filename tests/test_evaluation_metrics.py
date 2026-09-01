@@ -2,6 +2,7 @@ import unittest
 
 from rag_research.evaluation import (
     build_entity_normalizer,
+    calc_context_efficiency_metrics,
     calc_evidence_metrics,
     calc_set_metrics,
     normalize_relation_key,
@@ -49,6 +50,45 @@ class EvidenceMetricsTests(unittest.TestCase):
         self.assertEqual(metrics["reciprocal_rank"], 0.5)
         self.assertEqual(metrics["first_relevant_rank"], 2)
         self.assertLess(metrics["ndcg_at_k"], 1.0)
+
+    def test_context_efficiency_counts_unique_evidence_against_full_context(self):
+        source = "alpha beta gamma delta epsilon"
+        chunks = {
+            "c1": {"text": "alpha beta gamma"},
+            "c2": {"text": "gamma delta epsilon"},
+        }
+        chunk_intervals = {
+            "c1": (0, len("alpha beta gamma")),
+            "c2": (source.index("gamma"), len(source)),
+        }
+        evidence_spans = [
+            {
+                "evidence_id": "e1",
+                "char_start": source.index("beta"),
+                "char_end": source.index("gamma") + len("gamma"),
+            },
+            {
+                "evidence_id": "e2",
+                "char_start": source.index("delta"),
+                "char_end": source.index("delta") + len("delta"),
+            },
+        ]
+
+        metrics = calc_context_efficiency_metrics(
+            source=source,
+            retrieved_chunk_ids=["c1", "c2"],
+            chunks=chunks,
+            chunk_intervals=chunk_intervals,
+            gold_evidence_spans=evidence_spans,
+            matched_answer_point_count=2,
+            token_counter=lambda text: len(text.split()),
+        )
+
+        self.assertEqual(metrics["retrieved_chars"], 35)
+        self.assertEqual(metrics["retrieved_tokens"], 6)
+        self.assertEqual(metrics["covered_evidence_chars"], 15)
+        self.assertAlmostEqual(metrics["evidence_density"], 15 / 35)
+        self.assertAlmostEqual(metrics["answer_points_per_1k_tokens"], 2000 / 6)
 
 
 class EntityAndRelationNormalizationTests(unittest.TestCase):
