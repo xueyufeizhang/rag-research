@@ -1,4 +1,5 @@
 from rag_research.chunking import (
+    AGENTIC_CHUNKING_SYSTEM_PROMPT,
     CHUNKING_PIPELINE_VERSION,
     ChunkConfig,
     ChunkSpan,
@@ -24,7 +25,7 @@ import hashlib
 
 load_dotenv()
 
-CHUNKING_CACHE_SCHEMA_VERSION = 2
+CHUNKING_CACHE_SCHEMA_VERSION = 3
 
 @dataclass
 class LightRAGConfig:
@@ -75,8 +76,14 @@ class LightRAG:
         config=None,
         reranker=None,
         embed_many_func: BatchEmbeddingFunction | None = None,
+        cache_directory: str | os.PathLike[str] | None = None,
     ):
         self.working_dir = working_dir
+        self.cache_directory = os.fspath(
+            cache_directory
+            if cache_directory is not None
+            else os.path.join(working_dir, "pipeline_cache")
+        )
         self.llm_func = llm_func
         self.con_num = int(con_num)
         self.embed_func = embed_func
@@ -87,6 +94,7 @@ class LightRAG:
         if self.config.embedding_concurrency <= 0:
             raise ValueError("embedding concurrency must be positive")
         os.makedirs(working_dir, exist_ok=True)
+        os.makedirs(self.cache_directory, exist_ok=True)
 
         self.reranker = reranker
 
@@ -482,6 +490,25 @@ class LightRAG:
 
 
     def _make_build_provenance(self) -> dict[str, Any]:
+        chunking_strategy = self.config.chunk_config.strategy.lower()
+        chunking_provenance: dict[str, Any] = {
+            "strategy": chunking_strategy,
+            "pipeline_version": CHUNKING_PIPELINE_VERSION,
+        }
+        if chunking_strategy == "semantic":
+            chunking_provenance.update({
+                "embedding_backend": self.config.embedding_backend,
+                "embedding_model": self.config.embedding_model,
+            })
+        elif chunking_strategy == "agentic_ibm":
+            chunking_provenance.update({
+                "llm_backend": self.config.llm_backend,
+                "llm_model": self.config.llm_model,
+                "prompt_sha256": hashlib.sha256(
+                    AGENTIC_CHUNKING_SYSTEM_PROMPT.encode("utf-8")
+                ).hexdigest(),
+            })
+
         extraction_prompt = {
             key: PROMPTS[key]
             for key in (
@@ -499,9 +526,7 @@ class LightRAG:
         )
 
         return {
-            "chunking": {
-                "pipeline_version": CHUNKING_PIPELINE_VERSION,
-            },
+            "chunking": chunking_provenance,
             "extraction": {
                 "backend": self.config.llm_backend,
                 "model": self.config.llm_model,
@@ -515,6 +540,40 @@ class LightRAG:
                 "model": self.config.embedding_model,
             },
         }
+
+
+    @staticmethod
+    def _fingerprint_payload(payload: dict[str, Any]) -> str:
+        canonical_json = json.dumps(
+            payload,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        return hashlib.sha256(canonical_json.encode("utf-8")).hexdigest()
+
+
+    def _make_chunking_fingerprint(
+        self,
+        build_provenance: dict[str, Any] | None = None,
+    ) -> str:
+        provenance = build_provenance or self._make_build_provenance()
+        return self._fingerprint_payload({
+            "schema_version": 1,
+            "chunk_config": asdict(self.config.chunk_config),
+            "chunking_provenance": provenance["chunking"],
+        })
+
+
+    def _make_extraction_fingerprint(
+        self,
+        build_provenance: dict[str, Any] | None = None,
+    ) -> str:
+        provenance = build_provenance or self._make_build_provenance()
+        return self._fingerprint_payload({
+            "schema_version": 1,
+            "extraction_provenance": provenance["extraction"],
+        })
 
 
     def _make_build_fingerprint(
@@ -537,7 +596,7 @@ class LightRAG:
         )
 
         payload = {
-            "schema_version": 2,
+            "schema_version": 3,
             "documents": document_records,
             "chunk_config": asdict(
                 self.config.chunk_config
@@ -545,16 +604,7 @@ class LightRAG:
             "build_provenance": build_provenance or self._make_build_provenance(),
         }
 
-        canonical_json = json.dumps(
-            payload,
-            ensure_ascii=False,
-            sort_keys=True,
-            separators=(",", ":"),
-        )
-
-        return hashlib.sha256(
-            canonical_json.encode("utf-8")
-        ).hexdigest()
+        return self._fingerprint_payload(payload)
 
 
     async def _embed_into_index(
@@ -599,16 +649,19 @@ class LightRAG:
 
     def _chunk_cache_path(
         self,
-        build_fingerprint: str,
-        document_id: str,
+        chunking_fingerprint: str,
+        document: InputDocument,
     ) -> str:
+        text_sha256 = hashlib.sha256(
+            document.text.encode("utf-8")
+        ).hexdigest()
         document_digest = hashlib.sha256(
-            document_id.encode("utf-8")
+            f"{document.document_id}\0{text_sha256}".encode("utf-8")
         ).hexdigest()
         return os.path.join(
-            self.working_dir,
-            "chunking_cache",
-            build_fingerprint,
+            self.cache_directory,
+            "chunking",
+            chunking_fingerprint,
             "documents",
             f"{document_digest}.json",
         )
@@ -681,11 +734,11 @@ class LightRAG:
     def _load_cached_chunk_spans(
         self,
         document: InputDocument,
-        build_fingerprint: str,
+        chunking_fingerprint: str,
     ) -> tuple[list[ChunkSpan], list[dict[str, object]]] | None:
         cache_path = self._chunk_cache_path(
-            build_fingerprint,
-            document.document_id,
+            chunking_fingerprint,
+            document,
         )
         if not os.path.exists(cache_path):
             return None
@@ -697,7 +750,7 @@ class LightRAG:
             raise ValueError(f"invalid chunking cache record: {cache_path}")
         if payload.get("schema_version") != CHUNKING_CACHE_SCHEMA_VERSION:
             raise ValueError(f"unsupported chunking cache schema: {cache_path}")
-        if payload.get("build_fingerprint") != build_fingerprint:
+        if payload.get("chunking_fingerprint") != chunking_fingerprint:
             raise ValueError(f"chunking cache fingerprint mismatch: {cache_path}")
         if payload.get("document_id") != document.document_id:
             raise ValueError(f"chunking cache document ID mismatch: {cache_path}")
@@ -831,13 +884,13 @@ class LightRAG:
     def _save_chunk_spans(
         self,
         document: InputDocument,
-        build_fingerprint: str,
+        chunking_fingerprint: str,
         spans: list[ChunkSpan],
         projection_events: list[dict[str, object]],
     ) -> None:
         cache_path = self._chunk_cache_path(
-            build_fingerprint,
-            document.document_id,
+            chunking_fingerprint,
+            document,
         )
         validated_spans = self._validate_chunk_spans(
             document,
@@ -860,7 +913,7 @@ class LightRAG:
             "document",
             {
                 "schema_version": CHUNKING_CACHE_SCHEMA_VERSION,
-                "build_fingerprint": build_fingerprint,
+                "chunking_fingerprint": chunking_fingerprint,
                 "document_id": document.document_id,
                 "text_sha256": hashlib.sha256(
                     document.text.encode("utf-8")
@@ -876,11 +929,11 @@ class LightRAG:
     async def _chunk_document(
         self,
         document: InputDocument,
-        build_fingerprint: str,
+        chunking_fingerprint: str,
     ) -> tuple[list[ChunkRecord], bool, list[dict[str, object]]]:
         cached_result = self._load_cached_chunk_spans(
             document,
-            build_fingerprint,
+            chunking_fingerprint,
         )
         loaded_from_cache = cached_result is not None
         if cached_result is None:
@@ -895,7 +948,7 @@ class LightRAG:
             )
             self._save_chunk_spans(
                 document,
-                build_fingerprint,
+                chunking_fingerprint,
                 spans,
                 projection_events,
             )
@@ -991,6 +1044,12 @@ class LightRAG:
             documents,
             build_provenance,
         )
+        chunking_fingerprint = self._make_chunking_fingerprint(
+            build_provenance,
+        )
+        extraction_fingerprint = self._make_extraction_fingerprint(
+            build_provenance,
+        )
         cached_build = self._load_cached_build(build_fingerprint)
         if cached_build is not None:
             print("[construct] matching index already built, reuse")
@@ -1007,7 +1066,7 @@ class LightRAG:
                 projection_events,
             ) = await self._chunk_document(
                 document,
-                build_fingerprint,
+                chunking_fingerprint,
             )
             chunks.extend(document_chunks)
             cached_document_count += int(loaded_from_cache)
@@ -1025,8 +1084,12 @@ class LightRAG:
             chunks,
             self.llm_func,
             self.con_num,
-            cache_directory=os.path.join(self.working_dir, "extraction_cache"),
-            build_fingerprint=build_fingerprint,
+            cache_directory=os.path.join(
+                self.cache_directory,
+                "extraction",
+            ),
+            extraction_fingerprint=extraction_fingerprint,
+            cache_scope=build_fingerprint,
         )
 
         if extraction_results.failed_chunk_ids:
@@ -1120,6 +1183,8 @@ class LightRAG:
             relation_count=len(clean_relations),
             failed_chunk_ids=extraction_results.failed_chunk_ids,
             build_fingerprint=build_fingerprint,
+            chunking_fingerprint=chunking_fingerprint,
+            extraction_fingerprint=extraction_fingerprint,
             build_provenance=build_provenance,
             chunking_projection_count=chunking_projection_count,
         )

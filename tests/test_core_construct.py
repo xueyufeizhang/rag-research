@@ -93,10 +93,10 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(result.chunk_count, 2)
             self.assertEqual(result.chunking_projection_count, 1)
 
-            fingerprint = rag._make_build_fingerprint((document,))
+            fingerprint = rag._make_chunking_fingerprint()
             cache_path = Path(rag._chunk_cache_path(
                 fingerprint,
-                document.document_id,
+                document,
             ))
             cache_payload = json.loads(cache_path.read_text(encoding="utf-8"))
             self.assertEqual(
@@ -160,7 +160,7 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
 
             self.assertEqual(len(first_agentic_prompts), 2)
             cached_documents = list(
-                Path(directory, "chunking_cache").rglob("*.json")
+                Path(directory, "pipeline_cache", "chunking").rglob("*.json")
             )
             self.assertEqual(len(cached_documents), 1)
             self.assertFalse(Path(directory, "build_manifest.json").exists())
@@ -187,7 +187,9 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             self.assertIn("Beta document.", second_agentic_prompts[0])
             self.assertNotIn("Alpha document.", second_agentic_prompts[0])
             self.assertEqual(
-                len(list(Path(directory, "chunking_cache").rglob("*.json"))),
+                len(list(
+                    Path(directory, "pipeline_cache", "chunking").rglob("*.json")
+                )),
                 2,
             )
 
@@ -224,7 +226,7 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
                 embed_func=embed,
                 config=config,
             )
-            fingerprint = rag._make_build_fingerprint([document])
+            fingerprint = rag._make_chunking_fingerprint()
 
             first_chunks, first_cached, first_projections = await rag._chunk_document(
                 document,
@@ -254,12 +256,12 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
                 embed_func=AsyncMock(return_value=[1.0, 0.0]),
                 config=_config(),
             )
-            fingerprint = rag._make_build_fingerprint([document])
+            fingerprint = rag._make_chunking_fingerprint()
             await rag._chunk_document(document, fingerprint)
 
             cache_path = Path(rag._chunk_cache_path(
                 fingerprint,
-                document.document_id,
+                document,
             ))
             payload = json.loads(cache_path.read_text(encoding="utf-8"))
             payload["document"]["spans"][0]["text"] = "corrupted"
@@ -517,7 +519,15 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
                 embed_func=AsyncMock(return_value=[1.0, 1.0]),
                 config=_config(),
             )
-            original_fingerprint = rag._make_build_fingerprint(_documents())
+            original_build_fingerprint = rag._make_build_fingerprint(
+                _documents()
+            )
+            original_chunking_fingerprint = (
+                rag._make_chunking_fingerprint()
+            )
+            original_extraction_fingerprint = (
+                rag._make_extraction_fingerprint()
+            )
             changed_prompt = (
                 PROMPTS["entity_extraction_user_prompt"]
                 + "\nAdditional extraction instruction."
@@ -527,9 +537,216 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
                 PROMPTS,
                 {"entity_extraction_user_prompt": changed_prompt},
             ):
-                changed_fingerprint = rag._make_build_fingerprint(_documents())
+                changed_build_fingerprint = rag._make_build_fingerprint(
+                    _documents()
+                )
+                changed_chunking_fingerprint = (
+                    rag._make_chunking_fingerprint()
+                )
+                changed_extraction_fingerprint = (
+                    rag._make_extraction_fingerprint()
+                )
 
-            self.assertNotEqual(original_fingerprint, changed_fingerprint)
+            self.assertNotEqual(
+                original_build_fingerprint,
+                changed_build_fingerprint,
+            )
+            self.assertEqual(
+                original_chunking_fingerprint,
+                changed_chunking_fingerprint,
+            )
+            self.assertNotEqual(
+                original_extraction_fingerprint,
+                changed_extraction_fingerprint,
+            )
+
+    def test_stage_fingerprints_include_only_stage_dependencies(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base_config = _config()
+            changed_llm_config = replace(
+                base_config,
+                llm_model="different-llm",
+            )
+            fixed_rag = LightRAG(
+                working_dir=Path(directory, "fixed-a"),
+                llm_func=AsyncMock(),
+                con_num=1,
+                embed_func=AsyncMock(),
+                config=base_config,
+            )
+            changed_fixed_rag = LightRAG(
+                working_dir=Path(directory, "fixed-b"),
+                llm_func=AsyncMock(),
+                con_num=1,
+                embed_func=AsyncMock(),
+                config=changed_llm_config,
+            )
+
+            self.assertEqual(
+                fixed_rag._make_chunking_fingerprint(),
+                changed_fixed_rag._make_chunking_fingerprint(),
+            )
+            self.assertNotEqual(
+                fixed_rag._make_extraction_fingerprint(),
+                changed_fixed_rag._make_extraction_fingerprint(),
+            )
+
+            agentic_config = replace(
+                base_config,
+                chunk_config=replace(
+                    base_config.chunk_config,
+                    strategy="agentic_ibm",
+                ),
+            )
+            changed_agentic_config = replace(
+                agentic_config,
+                llm_model="different-llm",
+            )
+            agentic_rag = LightRAG(
+                working_dir=Path(directory, "agentic-a"),
+                llm_func=AsyncMock(),
+                con_num=1,
+                embed_func=AsyncMock(),
+                config=agentic_config,
+            )
+            changed_agentic_rag = LightRAG(
+                working_dir=Path(directory, "agentic-b"),
+                llm_func=AsyncMock(),
+                con_num=1,
+                embed_func=AsyncMock(),
+                config=changed_agentic_config,
+            )
+
+            self.assertNotEqual(
+                agentic_rag._make_chunking_fingerprint(),
+                changed_agentic_rag._make_chunking_fingerprint(),
+            )
+
+            semantic_config = replace(
+                base_config,
+                chunk_config=replace(
+                    base_config.chunk_config,
+                    strategy="semantic",
+                ),
+            )
+            changed_semantic_config = replace(
+                semantic_config,
+                embedding_model="different-embedding",
+            )
+            semantic_rag = LightRAG(
+                working_dir=Path(directory, "semantic-a"),
+                llm_func=AsyncMock(),
+                con_num=1,
+                embed_func=AsyncMock(),
+                config=semantic_config,
+            )
+            changed_semantic_rag = LightRAG(
+                working_dir=Path(directory, "semantic-b"),
+                llm_func=AsyncMock(),
+                con_num=1,
+                embed_func=AsyncMock(),
+                config=changed_semantic_config,
+            )
+
+            self.assertNotEqual(
+                semantic_rag._make_chunking_fingerprint(),
+                changed_semantic_rag._make_chunking_fingerprint(),
+            )
+            self.assertEqual(
+                semantic_rag._make_extraction_fingerprint(),
+                changed_semantic_rag._make_extraction_fingerprint(),
+            )
+
+    async def test_extraction_change_reuses_shared_chunking_cache_only(self):
+        config = replace(
+            _config(),
+            chunk_config=ChunkConfig(
+                strategy="agentic_ibm",
+                agentic_batch_max_sentences=10,
+                agentic_batch_max_chars=1000,
+                agentic_min_sentences=1,
+                agentic_max_sentences=5,
+                agentic_concurrency=1,
+                agentic_retries=0,
+            ),
+        )
+
+        with tempfile.TemporaryDirectory() as directory:
+            cache_directory = Path(directory, "shared-cache")
+            first_agentic_calls = 0
+            first_extraction_calls = 0
+
+            async def first_llm(*, system: str, prompt: str) -> str:
+                nonlocal first_agentic_calls, first_extraction_calls
+                if system == AGENTIC_CHUNKING_SYSTEM_PROMPT:
+                    first_agentic_calls += 1
+                    return '{"chunks": [{"start": 1, "end": 1}]}'
+                first_extraction_calls += 1
+                return _empty_extraction_response()
+
+            first_rag = LightRAG(
+                working_dir=Path(directory, "build-a"),
+                cache_directory=cache_directory,
+                llm_func=first_llm,
+                con_num=1,
+                embed_func=AsyncMock(return_value=[1.0, 0.0]),
+                config=config,
+            )
+            first_result = await first_rag.construct(_documents())
+
+            second_agentic_calls = 0
+            second_extraction_calls = 0
+
+            async def second_llm(*, system: str, prompt: str) -> str:
+                nonlocal second_agentic_calls, second_extraction_calls
+                if system == AGENTIC_CHUNKING_SYSTEM_PROMPT:
+                    second_agentic_calls += 1
+                    return '{"chunks": [{"start": 1, "end": 1}]}'
+                second_extraction_calls += 1
+                return _empty_extraction_response()
+
+            changed_prompt = (
+                PROMPTS["entity_extraction_user_prompt"]
+                + "\nAdditional extraction instruction."
+            )
+            with patch.dict(
+                PROMPTS,
+                {"entity_extraction_user_prompt": changed_prompt},
+            ):
+                second_rag = LightRAG(
+                    working_dir=Path(directory, "build-b"),
+                    cache_directory=cache_directory,
+                    llm_func=second_llm,
+                    con_num=1,
+                    embed_func=AsyncMock(return_value=[1.0, 0.0]),
+                    config=config,
+                )
+                second_result = await second_rag.construct(_documents())
+
+            self.assertEqual(first_agentic_calls, 2)
+            self.assertEqual(first_extraction_calls, 2)
+            self.assertEqual(second_agentic_calls, 0)
+            self.assertEqual(second_extraction_calls, 2)
+            self.assertEqual(
+                first_result.chunking_fingerprint,
+                second_result.chunking_fingerprint,
+            )
+            self.assertNotEqual(
+                first_result.extraction_fingerprint,
+                second_result.extraction_fingerprint,
+            )
+            self.assertNotEqual(
+                first_result.build_fingerprint,
+                second_result.build_fingerprint,
+            )
+            self.assertEqual(
+                len(list(Path(cache_directory, "chunking").iterdir())),
+                1,
+            )
+            self.assertEqual(
+                len(list(Path(cache_directory, "extraction").iterdir())),
+                2,
+            )
 
     async def test_incomplete_cached_manifest_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -588,7 +805,9 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             self.assertFalse(Path(directory, "build_manifest.json").exists())
             self.assertFalse(Path(directory, "chunks.json").exists())
             self.assertEqual(first_rag.chunk_vidx._ids, [])
-            self.assertTrue(Path(directory, "extraction_cache").is_dir())
+            self.assertTrue(
+                Path(directory, "pipeline_cache", "extraction").is_dir()
+            )
 
             second_prompts: list[str] = []
 

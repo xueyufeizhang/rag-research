@@ -18,6 +18,9 @@ dataset_directory = Path(
 working_directory = Path(
     os.getenv("WORKING_DIR", PROJECT_ROOT / "artifacts/stores/multihop_rag_fixed")
 )
+cache_directory = Path(
+    os.getenv("CACHE_DIR", PROJECT_ROOT / "artifacts/cache/multihop_rag")
+)
 
 async def main() -> None:
     started_at = time.perf_counter()
@@ -30,6 +33,7 @@ async def main() -> None:
         embed_func=embed_func,
         embed_many_func=embed_many_func,
         reranker=None,
+        cache_directory=cache_directory,
     )
     result = await rag.construct(dataset.documents)
 
@@ -45,6 +49,7 @@ async def main() -> None:
         "chunk_config": asdict(rag.config.chunk_config),
         "embedding_batch_size": rag.config.embedding_batch_size,
         "embedding_concurrency": rag.config.embedding_concurrency,
+        "cache_directory": str(cache_directory),
         "elapsed_seconds": time.perf_counter() - started_at,
     }
 

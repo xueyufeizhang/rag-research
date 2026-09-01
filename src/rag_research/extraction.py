@@ -18,7 +18,7 @@ from rag_research.prompts import PROMPTS
 
 
 EXTRACTION_PIPELINE_VERSION = 3
-EXTRACTION_CACHE_SCHEMA_VERSION = 1
+EXTRACTION_CACHE_SCHEMA_VERSION = 2
 MAX_ENTITY_RECORDS = 20
 MAX_TOTAL_RECORDS = 50
 
@@ -158,22 +158,30 @@ class ExtractionCache:
     def __init__(
         self,
         cache_directory: str | Path,
-        build_fingerprint: str,
+        extraction_fingerprint: str,
+        cache_scope: str,
     ) -> None:
-        if not isinstance(build_fingerprint, str) or not build_fingerprint.strip():
-            raise ValueError("build fingerprint must be a non-empty string")
+        if (
+            not isinstance(extraction_fingerprint, str)
+            or not extraction_fingerprint.strip()
+        ):
+            raise ValueError("extraction fingerprint must be a non-empty string")
+        if not isinstance(cache_scope, str) or not cache_scope.strip():
+            raise ValueError("extraction cache scope must be a non-empty string")
 
-        self.build_fingerprint = build_fingerprint
-        self.directory = Path(cache_directory) / build_fingerprint
+        self.extraction_fingerprint = extraction_fingerprint
+        self.cache_scope = cache_scope
+        self.directory = Path(cache_directory) / extraction_fingerprint
         self.records_directory = self.directory / "records"
-        self.state_path = self.directory / "state.json"
+        self.state_path = self.directory / "states" / f"{cache_scope}.json"
 
-    def _record_path(self, chunk_id: str) -> Path:
-        digest = hashlib.sha256(chunk_id.encode("utf-8")).hexdigest()
+    def _record_path(self, chunk: ChunkRecord) -> Path:
+        identity = f"{chunk.chunk_id}\0{_model_text_sha256(chunk)}"
+        digest = hashlib.sha256(identity.encode("utf-8")).hexdigest()
         return self.records_directory / f"{digest}.json"
 
     def load(self, chunk: ChunkRecord) -> ChunkExtractionResult | None:
-        path = self._record_path(chunk.chunk_id)
+        path = self._record_path(chunk)
         if not path.exists():
             return None
 
@@ -187,7 +195,10 @@ class ExtractionCache:
             raise ValueError(f"invalid extraction cache record: {path}")
         if payload.get("schema_version") != EXTRACTION_CACHE_SCHEMA_VERSION:
             raise ValueError(f"unsupported extraction cache schema: {path}")
-        if payload.get("build_fingerprint") != self.build_fingerprint:
+        if (
+            payload.get("extraction_fingerprint")
+            != self.extraction_fingerprint
+        ):
             raise ValueError(f"extraction cache fingerprint mismatch: {path}")
         if payload.get("chunk_id") != chunk.chunk_id:
             raise ValueError(f"extraction cache chunk ID mismatch: {path}")
@@ -239,10 +250,10 @@ class ExtractionCache:
         )
 
         _atomic_write_json(
-            self._record_path(chunk.chunk_id),
+            self._record_path(chunk),
             {
                 "schema_version": EXTRACTION_CACHE_SCHEMA_VERSION,
-                "build_fingerprint": self.build_fingerprint,
+                "extraction_fingerprint": self.extraction_fingerprint,
                 "chunk_id": chunk.chunk_id,
                 "model_text_sha256": _model_text_sha256(chunk),
                 "entities": [asdict(entity) for entity in result.entities],
@@ -261,7 +272,8 @@ class ExtractionCache:
             self.state_path,
             {
                 "schema_version": EXTRACTION_CACHE_SCHEMA_VERSION,
-                "build_fingerprint": self.build_fingerprint,
+                "extraction_fingerprint": self.extraction_fingerprint,
+                "cache_scope": self.cache_scope,
                 "status": "incomplete" if failed_chunk_ids else "complete",
                 "chunk_count": chunk_count,
                 "completed_chunk_count": completed_chunk_count,
@@ -493,7 +505,8 @@ async def extract(
     con_num: int,
     *,
     cache_directory: str | Path | None = None,
-    build_fingerprint: str | None = None,
+    extraction_fingerprint: str | None = None,
+    cache_scope: str | None = None,
 ) -> ExtractionResult:
     if con_num <= 0:
         raise ValueError("extraction concurrency must be positive")
@@ -505,9 +518,18 @@ async def extract(
     chunk_ids = [chunk.chunk_id for chunk in chunks]
     if len(chunk_ids) != len(set(chunk_ids)):
         raise ValueError("chunk IDs must be unique")
-    if (cache_directory is None) != (build_fingerprint is None):
+    cache_arguments = (
+        cache_directory,
+        extraction_fingerprint,
+        cache_scope,
+    )
+    if any(value is None for value in cache_arguments) and not all(
+        value is None
+        for value in cache_arguments
+    ):
         raise ValueError(
-            "cache_directory and build_fingerprint must be provided together"
+            "cache_directory, extraction_fingerprint, and cache_scope "
+            "must be provided together"
         )
     if not callable(llm_func):
         raise TypeError("llm_func must be callable")
@@ -517,8 +539,14 @@ async def extract(
     done_count = 0
     start = time.time()
     cache = (
-        ExtractionCache(cache_directory, build_fingerprint)
-        if cache_directory is not None and build_fingerprint is not None
+        ExtractionCache(
+            cache_directory,
+            extraction_fingerprint,
+            cache_scope,
+        )
+        if cache_directory is not None
+        and extraction_fingerprint is not None
+        and cache_scope is not None
         else None
     )
 

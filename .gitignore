@@ -53,10 +53,12 @@ cover/
 
 # Generated experiment outputs
 artifacts/evaluations/
+artifacts/cache/
 scratch/
 artifacts/visualizations/
 artifacts/stores/**/chunking_cache/
 artifacts/stores/**/extraction_cache/
+artifacts/stores/dickens_*/
 artifacts/stores/multihop_*/
 data/raw/MultiHopRAG/
 models/

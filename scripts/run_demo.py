@@ -17,6 +17,10 @@ reranker = create_reranker()
 async def main():
     lightrag = LightRAG(
         working_dir=os.getenv("WORKING_DIR", "./artifacts/stores/dickens_fixed"),
+        cache_directory=os.getenv(
+            "CACHE_DIR",
+            "./artifacts/cache/rag_research",
+        ),
         llm_func=llm_func,
         con_num=CON_NUM,
         embed_func=embed_func,
