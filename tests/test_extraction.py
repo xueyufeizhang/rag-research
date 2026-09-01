@@ -409,19 +409,25 @@ class ExtractTests(unittest.IsolatedAsyncioTestCase):
                     first_llm,
                     con_num=2,
                     cache_directory=directory,
-                    build_fingerprint="fingerprint-a",
+                    extraction_fingerprint="extraction-a",
+                    cache_scope="build-a",
                 )
 
             self.assertEqual(
                 first_result.failed_chunk_ids,
                 ["doc-1:chunk:1"],
             )
-            state_path = Path(directory, "fingerprint-a", "state.json")
+            state_path = Path(
+                directory,
+                "extraction-a",
+                "states",
+                "build-a.json",
+            )
             first_state = json.loads(state_path.read_text(encoding="utf-8"))
             self.assertEqual(first_state["status"], "incomplete")
             self.assertEqual(first_state["completed_chunk_count"], 1)
             self.assertEqual(
-                len(list(Path(directory, "fingerprint-a", "records").glob("*.json"))),
+                len(list(Path(directory, "extraction-a", "records").glob("*.json"))),
                 1,
             )
 
@@ -436,7 +442,8 @@ class ExtractTests(unittest.IsolatedAsyncioTestCase):
                 second_llm,
                 con_num=2,
                 cache_directory=directory,
-                build_fingerprint="fingerprint-a",
+                extraction_fingerprint="extraction-a",
+                cache_scope="build-a",
             )
 
             self.assertEqual(len(second_prompts), 1)
@@ -451,7 +458,7 @@ class ExtractTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(second_state["status"], "complete")
             self.assertEqual(second_state["completed_chunk_count"], 2)
 
-    async def test_cache_is_isolated_by_build_fingerprint(self):
+    async def test_cache_is_isolated_by_extraction_fingerprint(self):
         chunk = _chunk("doc-1:chunk:0")
 
         with tempfile.TemporaryDirectory() as directory:
@@ -461,7 +468,8 @@ class ExtractTests(unittest.IsolatedAsyncioTestCase):
                 first_llm,
                 con_num=1,
                 cache_directory=directory,
-                build_fingerprint="fingerprint-a",
+                extraction_fingerprint="extraction-a",
+                cache_scope="build-a",
             )
 
             second_llm = AsyncMock(return_value=_response())
@@ -470,13 +478,56 @@ class ExtractTests(unittest.IsolatedAsyncioTestCase):
                 second_llm,
                 con_num=1,
                 cache_directory=directory,
-                build_fingerprint="fingerprint-b",
+                extraction_fingerprint="extraction-b",
+                cache_scope="build-b",
             )
 
             first_llm.assert_awaited_once()
             second_llm.assert_awaited_once()
-            self.assertTrue(Path(directory, "fingerprint-a").is_dir())
-            self.assertTrue(Path(directory, "fingerprint-b").is_dir())
+            self.assertTrue(Path(directory, "extraction-a").is_dir())
+            self.assertTrue(Path(directory, "extraction-b").is_dir())
+
+    async def test_cache_identity_includes_model_input(self):
+        first_chunk = _chunk("stable-chunk-id", "FIRST MODEL INPUT")
+        second_chunk = _chunk("stable-chunk-id", "SECOND MODEL INPUT")
+
+        with tempfile.TemporaryDirectory() as directory:
+            first_llm = AsyncMock(
+                return_value=_response(entities=[{"name": "First"}])
+            )
+            await extract(
+                [first_chunk],
+                first_llm,
+                con_num=1,
+                cache_directory=directory,
+                extraction_fingerprint="extraction-a",
+                cache_scope="build-a",
+            )
+
+            second_llm = AsyncMock(
+                return_value=_response(entities=[{"name": "Second"}])
+            )
+            second_result = await extract(
+                [second_chunk],
+                second_llm,
+                con_num=1,
+                cache_directory=directory,
+                extraction_fingerprint="extraction-a",
+                cache_scope="build-b",
+            )
+
+            first_llm.assert_awaited_once()
+            second_llm.assert_awaited_once()
+            self.assertEqual(
+                [entity.name for entity in second_result.entities],
+                ["Second"],
+            )
+            self.assertEqual(
+                len(list(
+                    Path(directory, "extraction-a", "records").glob("*.json")
+                )),
+                2,
+            )
 
     async def test_corrupted_cache_record_is_rejected(self):
         chunk = _chunk("doc-1:chunk:0")
@@ -487,10 +538,11 @@ class ExtractTests(unittest.IsolatedAsyncioTestCase):
                 AsyncMock(return_value=_response()),
                 con_num=1,
                 cache_directory=directory,
-                build_fingerprint="fingerprint-a",
+                extraction_fingerprint="extraction-a",
+                cache_scope="build-a",
             )
             record_path = next(
-                Path(directory, "fingerprint-a", "records").glob("*.json")
+                Path(directory, "extraction-a", "records").glob("*.json")
             )
             record_path.write_text("{}", encoding="utf-8")
             llm_func = AsyncMock(return_value=_response())
@@ -501,7 +553,8 @@ class ExtractTests(unittest.IsolatedAsyncioTestCase):
                     llm_func,
                     con_num=1,
                     cache_directory=directory,
-                    build_fingerprint="fingerprint-a",
+                    extraction_fingerprint="extraction-a",
+                    cache_scope="build-a",
                 )
 
             llm_func.assert_not_awaited()
@@ -522,10 +575,11 @@ class ExtractTests(unittest.IsolatedAsyncioTestCase):
                 AsyncMock(return_value=response),
                 con_num=1,
                 cache_directory=directory,
-                build_fingerprint="fingerprint-a",
+                extraction_fingerprint="extraction-a",
+                cache_scope="build-a",
             )
             record_path = next(
-                Path(directory, "fingerprint-a", "records").glob("*.json")
+                Path(directory, "extraction-a", "records").glob("*.json")
             )
             payload = json.loads(record_path.read_text(encoding="utf-8"))
             payload["relations"][0]["target"] = "Missing"
@@ -538,7 +592,8 @@ class ExtractTests(unittest.IsolatedAsyncioTestCase):
                     llm_func,
                     con_num=1,
                     cache_directory=directory,
-                    build_fingerprint="fingerprint-a",
+                    extraction_fingerprint="extraction-a",
+                    cache_scope="build-a",
                 )
 
             llm_func.assert_not_awaited()
@@ -547,7 +602,12 @@ class ExtractTests(unittest.IsolatedAsyncioTestCase):
         llm_func = AsyncMock(return_value=_response())
         cases = [
             {"cache_directory": "cache"},
-            {"build_fingerprint": "fingerprint"},
+            {"extraction_fingerprint": "extraction"},
+            {"cache_scope": "build"},
+            {
+                "cache_directory": "cache",
+                "extraction_fingerprint": "extraction",
+            },
         ]
 
         for arguments in cases:

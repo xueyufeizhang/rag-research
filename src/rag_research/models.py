@@ -29,6 +29,8 @@ class BuildResult:
     relation_count: int
     failed_chunk_ids: list[str]
     build_fingerprint: str
+    chunking_fingerprint: str
+    extraction_fingerprint: str
     build_provenance: dict[str, Any] = field(default_factory=dict)
     chunking_projection_count: int = 0
 

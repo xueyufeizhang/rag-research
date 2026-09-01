@@ -168,6 +168,10 @@ async def eval_retrieval() -> tuple[list[dict], list[dict]]:
     working_dir = os.getenv("WORKING_DIR", "./artifacts/stores/dickens_fixed")
     lightrag = LightRAG(
         working_dir=working_dir,
+        cache_directory=os.getenv(
+            "CACHE_DIR",
+            "./artifacts/cache/rag_research",
+        ),
         llm_func=llm_func,
         con_num=CON_NUM,
         embed_func=embed_func,

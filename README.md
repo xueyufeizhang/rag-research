@@ -26,8 +26,10 @@ Research code and experiment artifacts for a thesis project on retrieval-augment
 3. **Index Construction** ([core.py](src/rag_research/core.py))
    Merges duplicate entities and relations, stores chunks/entities/relations, embeds each retrieval unit, and builds a graph representation.
    Successful per-document chunking results and per-chunk extraction results are
-   checkpointed under the selected working directory. Re-running an interrupted
-   build reuses checkpoints only when the complete build fingerprint matches.
+   checkpointed under `CACHE_DIR` using independent stage fingerprints. A change
+   limited to extraction invalidates extraction records while retaining compatible
+   chunking records. The final persisted index remains protected by the complete
+   build fingerprint.
 
 4. **Storage** ([storage.py](src/rag_research/storage.py))
    Persists the experiment state to disk:
@@ -116,6 +118,13 @@ Use a separate `WORKING_DIR` for each strategy. A completed store is reused only
 when its build fingerprint matches the corpus and complete pipeline provenance;
 a conflicting store is rejected instead of being silently overwritten. Every
 strategy is evaluated against the same canonical evidence file.
+
+Use the same `CACHE_DIR` across related `WORKING_DIR` outputs when stage-level
+reuse is desired. The chunking fingerprint covers the active chunking strategy,
+its configuration, pipeline version, and any model that affects boundaries. The
+extraction fingerprint separately covers the extraction backend, model, prompt,
+and pipeline version. Cache record identities also include their exact document
+or model input, so changed inputs coexist rather than being mistaken for hits.
 
 Example fixed-size run:
 
