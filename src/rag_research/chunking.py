@@ -10,7 +10,7 @@ from rag_research.embedding import (
 from rag_research.text_spans import sentence_context, split_sentences
 
 
-CHUNKING_PIPELINE_VERSION = 4
+CHUNKING_PIPELINE_VERSION = 5
 
 
 async def chunk_async(
@@ -110,7 +110,10 @@ async def semantic_chunk(
     sentences = split_sentences(text)
     if not sentences:
         return []
-    if len(sentences) <= max_sentences:
+    sentence_count = len(sentences)
+    fits_one_chunk = sentence_count <= max_sentences
+    can_form_two_minimum_chunks = sentence_count >= 2 * min_sentences
+    if fits_one_chunk and not can_form_two_minimum_chunks:
         return [_span_from_sentences(text, sentences, 0, len(sentences) - 1)]
 
     embedding_inputs = [

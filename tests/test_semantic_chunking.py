@@ -76,7 +76,7 @@ class SemanticChunkingTests(unittest.IsolatedAsyncioTestCase):
         chunks = await semantic_chunk(
             text=text,
             breakpoint_percentile=90,
-            min_sentences=1,
+            min_sentences=2,
             max_sentences=4,
             buffer_size=1,
             embedding_concurrency=1,
@@ -85,6 +85,48 @@ class SemanticChunkingTests(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(chunks, [ChunkSpan(text, 0, len(text))])
         self.assertEqual(calls, 0)
+
+    async def test_document_below_max_still_uses_a_feasible_semantic_boundary(self):
+        sentences = [
+            "Alpha topic one.",
+            "Bravo topic one.",
+            "Charlie topic one.",
+            "Delta topic one.",
+            "Echo topic two.",
+            "Foxtrot topic two.",
+            "Golf topic two.",
+            "Hotel topic two.",
+        ]
+        text = " ".join(sentences)
+        first_topic = set(sentences[:4])
+        calls = 0
+
+        async def embed_func(value: str) -> list[float]:
+            nonlocal calls
+            calls += 1
+            if value.strip() in first_topic:
+                return [1.0, 0.0]
+            return [0.0, 1.0]
+
+        chunks = await semantic_chunk(
+            text=text,
+            breakpoint_percentile=85,
+            min_sentences=4,
+            max_sentences=20,
+            buffer_size=0,
+            embedding_concurrency=1,
+            embed_func=embed_func,
+        )
+
+        self.assertEqual(calls, 8)
+        self.assertEqual(
+            chunks,
+            [
+                source_span(text, " ".join(sentences[:4]) + " "),
+                source_span(text, " ".join(sentences[4:])),
+            ],
+        )
+        self.assertEqual("".join(chunk.text for chunk in chunks), text)
 
     async def test_semantic_boundary_returns_source_aligned_chunks(self):
         async def embed_func(value: str) -> list[float]:
@@ -113,7 +155,11 @@ class SemanticChunkingTests(unittest.IsolatedAsyncioTestCase):
         self.assert_source_aligned(SOURCE, chunks)
 
     async def test_chunk_async_dispatches_semantic_strategy(self):
+        calls = 0
+
         async def embed_func(value: str) -> list[float]:
+            nonlocal calls
+            calls += 1
             return [1.0, float(len(value))]
 
         config = ChunkConfig(
@@ -130,7 +176,9 @@ class SemanticChunkingTests(unittest.IsolatedAsyncioTestCase):
             embed_func=embed_func,
         )
 
-        self.assertEqual(chunks, [ChunkSpan(SOURCE, 0, len(SOURCE))])
+        self.assertEqual(calls, len(SENTENCES))
+        self.assertEqual("".join(chunk.text for chunk in chunks), SOURCE)
+        self.assert_source_aligned(SOURCE, chunks)
 
     async def test_chunk_async_uses_batch_embeddings_for_semantic_strategy(self):
         calls: list[list[str]] = []
