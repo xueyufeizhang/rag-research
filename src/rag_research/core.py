@@ -1,10 +1,10 @@
 from rag_research.chunking import (
-    AGENTIC_CHUNKING_SYSTEM_PROMPT,
+    AGENTIC_METADATA_SYSTEM_PROMPT,
+    AGENTIC_PROPOSITION_SYSTEM_PROMPT,
+    AGENTIC_STATE_SYSTEM_PROMPT,
     CHUNKING_PIPELINE_VERSION,
     ChunkConfig,
     ChunkSpan,
-    _strict_partition_is_feasible,
-    _validate_agentic_boundaries,
     chunk_async,
 )
 from rag_research.embedding import BatchEmbeddingFunction, embed_texts
@@ -16,7 +16,7 @@ from rag_research.extraction import (
     extract,
 )
 from rag_research.models import InputDocument, ChunkRecord, BuildResult
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field, asdict, fields
 from dotenv import load_dotenv
 from rag_research.storage import KVStore, GraphStore, VectorIndex
 from typing import Any
@@ -332,7 +332,14 @@ class LightRAG:
             raise RuntimeError("invalid build manifest: build must be an object")
 
         try:
-            cached_build = BuildResult(**cached_data)
+            known_fields = {item.name for item in fields(BuildResult)}
+            cached_build = BuildResult(
+                **{
+                    key: value
+                    for key, value in cached_data.items()
+                    if key in known_fields
+                }
+            )
         except TypeError as error:
             raise RuntimeError("invalid build manifest fields") from error
 
@@ -679,13 +686,25 @@ class LightRAG:
                 "embedding_backend": self.config.embedding_backend,
                 "embedding_model": self.config.embedding_model,
             })
-        elif chunking_strategy == "agentic_ibm":
+        elif chunking_strategy == "agentic":
+            stateful_prompts = {
+                "proposition": AGENTIC_PROPOSITION_SYSTEM_PROMPT,
+                "state": AGENTIC_STATE_SYSTEM_PROMPT,
+                "metadata": AGENTIC_METADATA_SYSTEM_PROMPT,
+            }
+            prompt_json = json.dumps(
+                stateful_prompts,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            )
             chunking_provenance.update({
                 "llm_backend": self.config.llm_backend,
                 "llm_model": self.config.llm_model,
                 "prompt_sha256": hashlib.sha256(
-                    AGENTIC_CHUNKING_SYSTEM_PROMPT.encode("utf-8")
+                    prompt_json.encode("utf-8")
                 ).hexdigest(),
+                "state_model": "sequential-open-chunk-v1",
             })
 
         extraction_prompt = {
@@ -886,6 +905,8 @@ class LightRAG:
             span_text = raw_span.get("text")
             char_start = raw_span.get("char_start")
             char_end = raw_span.get("char_end")
+            title = raw_span.get("title")
+            summary = raw_span.get("summary")
             if not isinstance(span_text, str):
                 raise ValueError(
                     f"invalid chunking cache text at span {index}: {cache_path}"
@@ -914,8 +935,42 @@ class LightRAG:
                 raise ValueError(
                     f"chunking cache text mismatch at span {index}: {cache_path}"
                 )
+            if title is not None and (
+                not isinstance(title, str) or not title.strip()
+            ):
+                raise ValueError(
+                    f"invalid chunking cache title at span {index}: {cache_path}"
+                )
+            if summary is not None and (
+                not isinstance(summary, str) or not summary.strip()
+            ):
+                raise ValueError(
+                    f"invalid chunking cache summary at span {index}: {cache_path}"
+                )
+            if (title is None) != (summary is None):
+                raise ValueError(
+                    f"incomplete chunking metadata at span {index}: {cache_path}"
+                )
+            is_stateful_agentic = (
+                self.config.chunk_config.strategy.lower() == "agentic"
+            )
+            if is_stateful_agentic and title is None:
+                raise ValueError(
+                    f"stateful agentic span lacks metadata at {index}: {cache_path}"
+                )
+            if not is_stateful_agentic and title is not None:
+                raise ValueError(
+                    f"non-stateful span contains agentic metadata at {index}: "
+                    f"{cache_path}"
+                )
 
-            spans.append(ChunkSpan(span_text, char_start, char_end))
+            spans.append(ChunkSpan(
+                span_text,
+                char_start,
+                char_end,
+                title=title.strip() if isinstance(title, str) else None,
+                summary=summary.strip() if isinstance(summary, str) else None,
+            ))
             previous_start = char_start
             covered_end = max(covered_end, char_end)
 
@@ -930,7 +985,7 @@ class LightRAG:
         self,
         document: InputDocument,
         chunking_fingerprint: str,
-    ) -> tuple[list[ChunkSpan], list[dict[str, object]]] | None:
+    ) -> list[ChunkSpan] | None:
         cache_path = self._chunk_cache_path(
             chunking_fingerprint,
             document,
@@ -962,144 +1017,25 @@ class LightRAG:
             payload.get("spans"),
             cache_path=cache_path,
         )
-        projection_events = self._validate_chunking_projection_events(
-            payload.get("boundary_projection_events", []),
-            cache_path=cache_path,
-        )
+        state_events = payload.get("agentic_state_events", [])
+        if not isinstance(state_events, list) or any(
+            not isinstance(event, dict)
+            for event in state_events
+        ):
+            raise ValueError(f"invalid agentic state events: {cache_path}")
         if (
-            self.config.chunk_config.strategy.lower() != "agentic_ibm"
-            and projection_events
+            self.config.chunk_config.strategy.lower() != "agentic"
+            and state_events
         ):
             raise ValueError(
-                f"non-agentic chunking cache contains projections: {cache_path}"
+                f"non-stateful chunking cache contains state events: {cache_path}"
             )
-        return spans, projection_events
-
-
-    def _validate_chunking_projection_events(
-        self,
-        raw_events: object,
-        *,
-        cache_path: str,
-    ) -> list[dict[str, object]]:
-        if not isinstance(raw_events, list):
-            raise ValueError(
-                f"invalid chunking projection events: {cache_path}"
-            )
-
-        events: list[dict[str, object]] = []
-        seen_event_keys: set[tuple[str, int]] = set()
-        for event_index, raw_event in enumerate(raw_events):
-            if not isinstance(raw_event, dict):
-                raise ValueError(
-                    f"invalid chunking projection event {event_index}: {cache_path}"
-                )
-            scope = raw_event.get("scope")
-            batch_index = raw_event.get("batch_index")
-            sentence_count = raw_event.get("sentence_count")
-            if scope not in {"batch", "document"}:
-                raise ValueError(
-                    f"invalid projection scope: {cache_path}"
-                )
-            if type(batch_index) is not int or (
-                scope == "batch" and batch_index <= 0
-            ) or (
-                scope == "document" and batch_index != 0
-            ):
-                raise ValueError(
-                    f"invalid projected batch index: {cache_path}"
-                )
-            event_key = (scope, batch_index)
-            if event_key in seen_event_keys:
-                raise ValueError(
-                    f"duplicate projection event: {cache_path}"
-                )
-            if type(sentence_count) is not int or sentence_count <= 0:
-                raise ValueError(
-                    f"invalid projected sentence count: {cache_path}"
-                )
-
-            normalized_event: dict[str, object] = {
-                "scope": scope,
-                "batch_index": batch_index,
-                "sentence_count": sentence_count,
-            }
-            for field_name in (
-                "original_boundaries",
-                "projected_boundaries",
-            ):
-                raw_boundaries = raw_event.get(field_name)
-                if not isinstance(raw_boundaries, list) or not raw_boundaries:
-                    raise ValueError(
-                        f"invalid {field_name}: {cache_path}"
-                    )
-                boundaries: list[list[int]] = []
-                expected_start = 1
-                for raw_boundary in raw_boundaries:
-                    if (
-                        not isinstance(raw_boundary, list)
-                        or len(raw_boundary) != 2
-                        or any(type(value) is not int for value in raw_boundary)
-                    ):
-                        raise ValueError(
-                            f"invalid {field_name}: {cache_path}"
-                        )
-                    start, end = raw_boundary
-                    if start != expected_start or end < start or end > sentence_count:
-                        raise ValueError(
-                            f"invalid {field_name}: {cache_path}"
-                        )
-                    boundaries.append([start, end])
-                    expected_start = end + 1
-                if boundaries[-1][1] != sentence_count:
-                    raise ValueError(
-                        f"incomplete {field_name}: {cache_path}"
-                    )
-                normalized_event[field_name] = boundaries
-
-            if (
-                normalized_event["original_boundaries"]
-                == normalized_event["projected_boundaries"]
-            ):
-                raise ValueError(
-                    f"chunking projection event contains no adjustment: {cache_path}"
-                )
-
-            projected_boundaries = [
-                (start, end)
-                for start, end in normalized_event["projected_boundaries"]
-            ]
-            try:
-                _validate_agentic_boundaries(
-                    projected_boundaries,
-                    sentence_count=sentence_count,
-                    min_sentences=self.config.chunk_config.agentic_min_sentences,
-                    max_sentences=self.config.chunk_config.agentic_max_sentences,
-                    allow_short_final=(
-                        scope == "batch"
-                        or not _strict_partition_is_feasible(
-                            sentence_count,
-                            min_sentences=(
-                                self.config.chunk_config.agentic_min_sentences
-                            ),
-                            max_sentences=(
-                                self.config.chunk_config.agentic_max_sentences
-                            ),
-                        )
-                    ),
-                )
-            except ValueError as exc:
-                raise ValueError(
-                    f"invalid projected boundaries: {cache_path}"
-                ) from exc
-            events.append(normalized_event)
-            seen_event_keys.add(event_key)
-
-        events.sort(key=lambda event: (
-            event["scope"] == "document",
-            int(event["batch_index"]),
-        ))
-        return events
+        if (
+            self.config.chunk_config.strategy.lower() == "agentic"
+            and not state_events
+        ):
+            raise ValueError(f"stateful chunking cache has no trace: {cache_path}")
+        return spans
 
 
     def _save_chunk_spans(
@@ -1107,7 +1043,7 @@ class LightRAG:
         document: InputDocument,
         chunking_fingerprint: str,
         spans: list[ChunkSpan],
-        projection_events: list[dict[str, object]],
+        state_events: list[dict[str, object]] | None = None,
     ) -> None:
         cache_path = self._chunk_cache_path(
             chunking_fingerprint,
@@ -1118,17 +1054,31 @@ class LightRAG:
             [asdict(span) for span in spans],
             cache_path=cache_path,
         )
-        validated_projection_events = self._validate_chunking_projection_events(
-            projection_events,
-            cache_path=cache_path,
-        )
+        validated_state_events = state_events or []
+        if any(
+            not isinstance(event, dict)
+            for event in validated_state_events
+        ):
+            raise ValueError("agentic state events must be objects")
         if (
-            self.config.chunk_config.strategy.lower() != "agentic_ibm"
-            and validated_projection_events
+            self.config.chunk_config.strategy.lower() != "agentic"
+            and validated_state_events
         ):
             raise ValueError(
-                "non-agentic chunking cannot record boundary projections"
+                "only stateful agentic chunking can record state events"
             )
+        if (
+            self.config.chunk_config.strategy.lower() == "agentic"
+            and not validated_state_events
+        ):
+            raise ValueError("stateful agentic chunking requires a state trace")
+        try:
+            validated_state_events = json.loads(json.dumps(
+                validated_state_events,
+                ensure_ascii=False,
+            ))
+        except (TypeError, ValueError) as exc:
+            raise ValueError("agentic state events must be JSON serializable") from exc
         cache_store = KVStore(cache_path)
         cache_store.set(
             "document",
@@ -1141,7 +1091,7 @@ class LightRAG:
                 ).hexdigest(),
                 "strategy": self.config.chunk_config.strategy.lower(),
                 "spans": [asdict(span) for span in validated_spans],
-                "boundary_projection_events": validated_projection_events,
+                "agentic_state_events": validated_state_events,
             },
         )
         cache_store.save()
@@ -1151,34 +1101,38 @@ class LightRAG:
         self,
         document: InputDocument,
         chunking_fingerprint: str,
-    ) -> tuple[list[ChunkRecord], bool, list[dict[str, object]]]:
+    ) -> tuple[list[ChunkRecord], bool]:
         cached_result = self._load_cached_chunk_spans(
             document,
             chunking_fingerprint,
         )
         loaded_from_cache = cached_result is not None
         if cached_result is None:
-            projection_events: list[dict[str, object]] = []
+            state_events: list[dict[str, object]] = []
             spans = await chunk_async(
                 document.text,
                 self.config.chunk_config,
                 embed_func=self.embed_func,
                 embed_many_func=self.embed_many_func,
                 llm_func=self.llm_func,
-                agentic_projection_events=projection_events,
+                agentic_state_events=state_events,
             )
             self._save_chunk_spans(
                 document,
                 chunking_fingerprint,
                 spans,
-                projection_events,
+                state_events,
             )
         else:
-            spans, projection_events = cached_result
+            spans = cached_result
 
         chunks: list[ChunkRecord] = []
         for idx, span in enumerate(spans):
             chunk_id = self._make_chunk_id(document.document_id, idx, span)
+            chunk_metadata = dict(document.metadata)
+            if span.title is not None:
+                chunk_metadata["chunk_title"] = span.title
+                chunk_metadata["chunk_summary"] = span.summary
             chunks.append(ChunkRecord(
                 chunk_id=chunk_id,
                 document_id=document.document_id,
@@ -1187,9 +1141,9 @@ class LightRAG:
                 chunk_index=idx,
                 char_start=span.char_start,
                 char_end=span.char_end,
-                metadata=dict(document.metadata)
+                metadata=chunk_metadata,
             ))
-        return chunks, loaded_from_cache, projection_events
+        return chunks, loaded_from_cache
 
 
     def _make_chunk_id(self, document_id: str, chunk_index: int, span: ChunkSpan) -> str:
@@ -1200,6 +1154,8 @@ class LightRAG:
             f"{span.char_end}\0"
             f"{span.text}"
         )
+        if span.title is not None:
+            payload += f"\0{span.title}\0{span.summary}"
         digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
         return f"chunk-{digest[:24]}"
 
@@ -1224,6 +1180,20 @@ class LightRAG:
             return span.text
 
         return f"Header:\n{header}\n\nContent:\n{span.text}"
+
+
+    @staticmethod
+    def _make_chunk_embedding_text(chunk: ChunkRecord) -> str:
+        title = chunk.metadata.get("chunk_title")
+        summary = chunk.metadata.get("chunk_summary")
+        if not title or not summary:
+            return chunk.model_text
+        return (
+            "Semantic chunk state:\n"
+            f"Title: {title}\n"
+            f"Summary: {summary}\n\n"
+            f"{chunk.model_text}"
+        )
 
 
     async def construct(self, documents: Sequence[InputDocument]) -> BuildResult:
@@ -1278,35 +1248,22 @@ class LightRAG:
 
         chunks: list[ChunkRecord] = []
         cached_document_count = 0
-        chunking_projection_count = 0
-        chunking_rebalance_count = 0
         document_count = len(documents)
         for index, document in enumerate(documents, start=1):
             (
                 document_chunks,
                 loaded_from_cache,
-                projection_events,
             ) = await self._chunk_document(
                 document,
                 chunking_fingerprint,
             )
             chunks.extend(document_chunks)
             cached_document_count += int(loaded_from_cache)
-            chunking_projection_count += sum(
-                event.get("scope") == "batch"
-                for event in projection_events
-            )
-            chunking_rebalance_count += sum(
-                event.get("scope") == "document"
-                for event in projection_events
-            )
             if index % 10 == 0 or index == document_count:
                 print(
                     f"[chunk] {index}/{document_count} documents, "
                     f"{len(chunks)} chunks, "
-                    f"{cached_document_count} document cache hits, "
-                    f"{chunking_projection_count} projected batches, "
-                    f"{chunking_rebalance_count} rebalanced documents",
+                    f"{cached_document_count} document cache hits",
                     flush=True,
                 )
 
@@ -1350,7 +1307,7 @@ class LightRAG:
             for relation_key, relation in clean_relations.items()
         ]
         chunk_embedding_records = [
-            (chunk.chunk_id, chunk.model_text)
+            (chunk.chunk_id, self._make_chunk_embedding_text(chunk))
             for chunk in chunks
         ]
 
@@ -1391,8 +1348,6 @@ class LightRAG:
             chunking_fingerprint=chunking_fingerprint,
             extraction_fingerprint=extraction_fingerprint,
             build_provenance=build_provenance,
-            chunking_projection_count=chunking_projection_count,
-            chunking_rebalance_count=chunking_rebalance_count,
         )
 
         self._save_all()

@@ -15,7 +15,7 @@ Research code and experiment artifacts for a thesis project on retrieval-augment
    Splits documents with one of three strategies:
    - `fixed`: character-based sliding windows.
    - `semantic`: sentence-level semantic boundary detection using embeddings.
-   - `agentic_ibm`: constrained LLM topic-boundary selection over numbered sentences.
+   - `agentic`: proposition-aware, stateful semantic chunk management.
 
 2. **Extraction** ([extraction.py](src/rag_research/extraction.py))
    Runs concurrent LLM extraction over chunks, parses and validates JSON entities
@@ -112,7 +112,7 @@ Set `CHUNKING_STRATEGY` to one of:
 
 - `fixed`
 - `semantic`
-- `agentic_ibm`
+- `agentic`
 
 Use a separate `WORKING_DIR` for each strategy. A completed store is reused only
 when its build fingerprint matches the corpus and complete pipeline provenance;
@@ -147,30 +147,35 @@ SEMANTIC_EMBEDDING_CONCURRENCY=4
 WORKING_DIR=./artifacts/stores/dickens_semantic
 ```
 
-Example IBM-style agentic run:
+Example final stateful agentic run:
 
 ```env
-CHUNKING_STRATEGY=agentic_ibm
+CHUNKING_STRATEGY=agentic
 AGENTIC_BATCH_MAX_SENTENCES=60
 AGENTIC_BATCH_MAX_CHARS=12000
 AGENTIC_MIN_SENTENCES=4
 AGENTIC_MAX_SENTENCES=20
 AGENTIC_CONCURRENCY=4
 AGENTIC_RETRIES=2
-WORKING_DIR=./artifacts/stores/dickens_agentic_ibm
+WORKING_DIR=./artifacts/stores/dickens_agentic
 ```
 
-The LLM chooses contiguous topic boundaries within size-bounded macro-batches. It
-returns sentence indexes rather than rewritten text, and the implementation
-reconstructs chunks from the source sentences so canonical evidence offsets
-remain valid. Structurally invalid or incomplete responses are retried. A
-structurally valid response that violates the configured chunk sizes is
-deterministically projected onto the constraints while minimizing total boundary
-movement. Projection events are counted in the build result and stored with the
-per-document chunking checkpoint for auditability. If structural validation
-still fails after all attempts, construction stops instead of silently mixing
-fallback chunks into an agentic experiment. Completed documents remain in the
-chunking checkpoint and are reused when the same build is resumed.
+The final `agentic` strategy first extracts atomic propositions as source
+sentence ranges. It then processes them sequentially through a state manager.
+For each proposition, the manager reads the accumulated chunk catalog and the
+open chunk's recent propositions, chooses `append` or `new_chunk`, and updates
+the target chunk's title and summary. Hard size constraints restrict the actions
+available to the model. Proposition text is never rewritten: final chunks remain
+contiguous, lossless slices of the source, so canonical evidence offsets remain
+valid. Titles and summaries are stored in chunk metadata and included in the
+chunk embedding input, while graph extraction remains grounded only in source
+text and document metadata. The per-document checkpoint also stores the
+transition trace for audit and exact reuse.
+
+`AGENTIC_CONCURRENCY` parallelizes proposition-extraction batches and any final
+metadata refreshes. State transitions themselves remain sequential by design,
+so this strategy makes substantially more LLM calls than non-agentic boundary-based
+strategies.
 
 ### Optional reranking
 

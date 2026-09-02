@@ -5,7 +5,12 @@ from dataclasses import replace
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
-from rag_research.chunking import AGENTIC_CHUNKING_SYSTEM_PROMPT, ChunkConfig
+from rag_research.chunking import (
+    AGENTIC_METADATA_SYSTEM_PROMPT,
+    AGENTIC_PROPOSITION_SYSTEM_PROMPT,
+    AGENTIC_STATE_SYSTEM_PROMPT,
+    ChunkConfig,
+)
 from rag_research.core import (
     ENTITY_DESCRIPTION_MAX_CHARS,
     ENTITY_DESCRIPTION_MAX_VARIANTS,
@@ -56,13 +61,121 @@ def _empty_extraction_response() -> str:
 
 
 class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
+    async def test_stateful_agentic_metadata_and_trace_are_persisted(self):
+        text = "One is here. Two is here. Three is here. Four is here."
+        document = InputDocument(document_id="stateful-doc", text=text)
+        config = replace(
+            _config(),
+            chunk_config=ChunkConfig(
+                strategy="agentic",
+                agentic_batch_max_sentences=10,
+                agentic_batch_max_chars=1000,
+                agentic_min_sentences=1,
+                agentic_max_sentences=4,
+                agentic_concurrency=1,
+                agentic_retries=0,
+            ),
+        )
+
+        with tempfile.TemporaryDirectory() as directory:
+            state_call = 0
+
+            async def llm(*, system: str, prompt: str) -> str:
+                nonlocal state_call
+                if system == AGENTIC_PROPOSITION_SYSTEM_PROMPT:
+                    return (
+                        '{"propositions": ['
+                        '{"start": 1, "end": 1}, '
+                        '{"start": 2, "end": 2}, '
+                        '{"start": 3, "end": 3}, '
+                        '{"start": 4, "end": 4}'
+                        ']}'
+                    )
+                if system == AGENTIC_STATE_SYSTEM_PROMPT:
+                    decisions = [
+                        ("new_chunk", "First", "First topic starts."),
+                        ("append", "First", "First topic continues."),
+                        ("new_chunk", "Second", "Second topic starts."),
+                        ("append", "Second", "Second topic continues."),
+                    ]
+                    action, title, summary = decisions[state_call]
+                    state_call += 1
+                    return json.dumps({
+                        "action": action,
+                        "title": title,
+                        "summary": summary,
+                    })
+                return _empty_extraction_response()
+
+            embed_func = AsyncMock(return_value=[1.0, 0.0])
+            rag = LightRAG(
+                working_dir=directory,
+                llm_func=llm,
+                con_num=1,
+                embed_func=embed_func,
+                config=config,
+            )
+
+            result = await rag.construct((document,))
+
+            self.assertEqual(result.chunk_count, 2)
+            stored_chunks = list(rag.chunk_kv.all().values())
+            self.assertEqual(
+                [chunk["metadata"]["chunk_title"] for chunk in stored_chunks],
+                ["First", "Second"],
+            )
+            self.assertTrue(all(
+                "Semantic chunk state:" not in chunk["model_text"]
+                for chunk in stored_chunks
+            ))
+            embedded_texts = [
+                call.args[0]
+                for call in embed_func.await_args_list
+            ]
+            self.assertTrue(any(
+                "Semantic chunk state:" in embedded_text
+                for embedded_text in embedded_texts
+            ))
+
+            cache_path = Path(rag._chunk_cache_path(
+                rag._make_chunking_fingerprint(),
+                document,
+            ))
+            payload = json.loads(cache_path.read_text(encoding="utf-8"))["document"]
+            self.assertEqual(len(payload["agentic_state_events"]), 4)
+            self.assertEqual(
+                [span["title"] for span in payload["spans"]],
+                ["First", "Second"],
+            )
+
+            async def fail_if_called(*, system: str, prompt: str) -> str:
+                raise AssertionError("completed agentic cache should be reused")
+
+            resumed_rag = LightRAG(
+                working_dir=str(Path(directory, "resumed")),
+                cache_directory=rag.cache_directory,
+                llm_func=fail_if_called,
+                con_num=1,
+                embed_func=AsyncMock(return_value=[1.0, 0.0]),
+                config=config,
+            )
+            resumed_chunks, loaded = await resumed_rag._chunk_document(
+                document,
+                resumed_rag._make_chunking_fingerprint(),
+            )
+            self.assertTrue(loaded)
+            self.assertEqual(
+                [chunk.metadata["chunk_title"] for chunk in resumed_chunks],
+                ["First", "Second"],
+            )
+
     async def test_construct_audits_agentic_boundary_projection(self):
         text = " ".join(f"Sentence {index}." for index in range(1, 28))
         document = InputDocument(document_id="projected-doc", text=text)
         config = replace(
             _config(),
             chunk_config=ChunkConfig(
-                strategy="agentic_ibm",
+                strategy="agentic",
                 agentic_batch_max_sentences=60,
                 agentic_batch_max_chars=12000,
                 agentic_min_sentences=10,
@@ -73,18 +186,21 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
         )
 
         with tempfile.TemporaryDirectory() as directory:
-            agentic_calls = 0
+            proposition_calls = 0
+            state_calls = 0
 
             async def llm(*, system: str, prompt: str) -> str:
-                nonlocal agentic_calls
-                if system == AGENTIC_CHUNKING_SYSTEM_PROMPT:
-                    agentic_calls += 1
-                    return (
-                        '{"chunks": ['
-                        '{"start": 1, "end": 7}, '
-                        '{"start": 8, "end": 27}'
-                        ']}'
-                    )
+                nonlocal proposition_calls, state_calls
+                if system == AGENTIC_PROPOSITION_SYSTEM_PROMPT:
+                    proposition_calls += 1
+                    return '{"propositions": [{"start": 1, "end": 27}]}'
+                if system == AGENTIC_STATE_SYSTEM_PROMPT:
+                    state_calls += 1
+                    return json.dumps({
+                        "action": "new_chunk",
+                        "title": f"Projected {state_calls}",
+                        "summary": "A size-constrained proposition group.",
+                    })
                 return _empty_extraction_response()
 
             rag = LightRAG(
@@ -97,36 +213,29 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
 
             result = await rag.construct((document,))
 
-            self.assertEqual(agentic_calls, 1)
+            self.assertEqual(proposition_calls, 1)
+            self.assertEqual(state_calls, 2)
             self.assertEqual(result.chunk_count, 2)
-            self.assertEqual(result.chunking_projection_count, 1)
-            self.assertEqual(result.chunking_rebalance_count, 0)
 
             fingerprint = rag._make_chunking_fingerprint()
             cache_path = Path(rag._chunk_cache_path(
                 fingerprint,
                 document,
             ))
-            cache_payload = json.loads(cache_path.read_text(encoding="utf-8"))
-            self.assertEqual(
-                cache_payload["document"]["boundary_projection_events"],
-                [
-                    {
-                        "scope": "batch",
-                        "batch_index": 1,
-                        "sentence_count": 27,
-                        "original_boundaries": [[1, 7], [8, 27]],
-                        "projected_boundaries": [[1, 10], [11, 27]],
-                    }
-                ],
-            )
+            cache_payload = json.loads(cache_path.read_text(encoding="utf-8"))[
+                "document"
+            ]
+            projection = cache_payload["agentic_state_events"][0]
+            self.assertEqual(projection["event"], "proposition_projection")
+            self.assertEqual(projection["original_boundaries"], [[1, 27]])
+            self.assertEqual(projection["final_boundaries"][-1][-1], 27)
 
             manifest = json.loads(
                 Path(directory, "build_manifest.json").read_text(encoding="utf-8")
             )
             self.assertEqual(
-                manifest["build"]["chunking_projection_count"],
-                1,
+                manifest["build"]["build_provenance"]["chunking"]["strategy"],
+                "agentic",
             )
 
     async def test_construct_audits_document_tail_rebalancing(self):
@@ -138,7 +247,7 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
         config = replace(
             _config(),
             chunk_config=ChunkConfig(
-                strategy="agentic_ibm",
+                strategy="agentic",
                 agentic_batch_max_sentences=15,
                 agentic_batch_max_chars=12000,
                 agentic_min_sentences=10,
@@ -149,14 +258,31 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
         )
 
         with tempfile.TemporaryDirectory() as directory:
+            state_call = 0
+
             async def llm(*, system: str, prompt: str) -> str:
-                if system == AGENTIC_CHUNKING_SYSTEM_PROMPT:
+                nonlocal state_call
+                if system == AGENTIC_PROPOSITION_SYSTEM_PROMPT:
                     return (
-                        '{"chunks": ['
+                        '{"propositions": ['
                         '{"start": 1, "end": 10}, '
                         '{"start": 11, "end": 15}'
                         ']}'
                     )
+                if system == AGENTIC_STATE_SYSTEM_PROMPT:
+                    actions = ["new_chunk", "new_chunk", "append", "new_chunk"]
+                    action = actions[state_call]
+                    state_call += 1
+                    return json.dumps({
+                        "action": action,
+                        "title": f"State {state_call}",
+                        "summary": "A managed document segment.",
+                    })
+                if system == AGENTIC_METADATA_SYSTEM_PROMPT:
+                    return json.dumps({
+                        "title": "Rebalanced state",
+                        "summary": "A finalized rebalanced document segment.",
+                    })
                 return _empty_extraction_response()
 
             rag = LightRAG(
@@ -169,27 +295,25 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             result = await rag.construct((document,))
 
             self.assertEqual(result.chunk_count, 2)
-            self.assertEqual(result.chunking_projection_count, 0)
-            self.assertEqual(result.chunking_rebalance_count, 1)
             cache_path = Path(rag._chunk_cache_path(
                 rag._make_chunking_fingerprint(),
                 document,
             ))
             events = json.loads(
                 cache_path.read_text(encoding="utf-8")
-            )["document"]["boundary_projection_events"]
-            self.assertEqual(len(events), 1)
-            self.assertEqual(events[0]["scope"], "document")
+            )["document"]["agentic_state_events"]
+            rebalance = events[-1]
+            self.assertEqual(rebalance["event"], "document_rebalance")
             self.assertEqual(
-                events[0]["projected_boundaries"],
-                [[1, 15], [16, 30]],
+                rebalance["final_boundaries"],
+                [[1, 10], [11, 30]],
             )
 
     async def test_agentic_chunking_resumes_from_completed_document_cache(self):
         config = replace(
             _config(),
             chunk_config=ChunkConfig(
-                strategy="agentic_ibm",
+                strategy="agentic",
                 agentic_batch_max_sentences=10,
                 agentic_batch_max_chars=1000,
                 agentic_min_sentences=1,
@@ -200,14 +324,22 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
         )
 
         with tempfile.TemporaryDirectory() as directory:
-            first_agentic_prompts: list[str] = []
+            first_proposition_prompts: list[str] = []
+            first_state_prompts: list[str] = []
 
             async def first_llm(*, system: str, prompt: str) -> str:
-                if system == AGENTIC_CHUNKING_SYSTEM_PROMPT:
-                    first_agentic_prompts.append(prompt)
+                if system == AGENTIC_PROPOSITION_SYSTEM_PROMPT:
+                    first_proposition_prompts.append(prompt)
                     if "Alpha document." in prompt:
-                        return '{"chunks": [{"start": 1, "end": 1}]}'
+                        return '{"propositions": [{"start": 1, "end": 1}]}'
                     raise OSError("temporary chunking failure")
+                if system == AGENTIC_STATE_SYSTEM_PROMPT:
+                    first_state_prompts.append(prompt)
+                    return json.dumps({
+                        "action": "new_chunk",
+                        "title": "Document",
+                        "summary": "A short source document.",
+                    })
                 return _empty_extraction_response()
 
             first_rag = LightRAG(
@@ -220,23 +352,32 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
 
             with self.assertRaisesRegex(
                 RuntimeError,
-                "agentic chunking batch 1 failed",
+                "agentic proposition batch 1 failed",
             ):
                 await first_rag.construct(_documents())
 
-            self.assertEqual(len(first_agentic_prompts), 2)
+            self.assertEqual(len(first_proposition_prompts), 2)
+            self.assertEqual(len(first_state_prompts), 1)
             cached_documents = list(
                 Path(directory, "pipeline_cache", "chunking").rglob("*.json")
             )
             self.assertEqual(len(cached_documents), 1)
             self.assertFalse(Path(directory, "build_manifest.json").exists())
 
-            second_agentic_prompts: list[str] = []
+            second_proposition_prompts: list[str] = []
+            second_state_prompts: list[str] = []
 
             async def second_llm(*, system: str, prompt: str) -> str:
-                if system == AGENTIC_CHUNKING_SYSTEM_PROMPT:
-                    second_agentic_prompts.append(prompt)
-                    return '{"chunks": [{"start": 1, "end": 1}]}'
+                if system == AGENTIC_PROPOSITION_SYSTEM_PROMPT:
+                    second_proposition_prompts.append(prompt)
+                    return '{"propositions": [{"start": 1, "end": 1}]}'
+                if system == AGENTIC_STATE_SYSTEM_PROMPT:
+                    second_state_prompts.append(prompt)
+                    return json.dumps({
+                        "action": "new_chunk",
+                        "title": "Document",
+                        "summary": "A short source document.",
+                    })
                 return _empty_extraction_response()
 
             second_rag = LightRAG(
@@ -249,9 +390,10 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             result = await second_rag.construct(_documents())
 
             self.assertEqual(result.failed_chunk_ids, [])
-            self.assertEqual(len(second_agentic_prompts), 1)
-            self.assertIn("Beta document.", second_agentic_prompts[0])
-            self.assertNotIn("Alpha document.", second_agentic_prompts[0])
+            self.assertEqual(len(second_proposition_prompts), 1)
+            self.assertEqual(len(second_state_prompts), 1)
+            self.assertIn("Beta document.", second_proposition_prompts[0])
+            self.assertNotIn("Alpha document.", second_proposition_prompts[0])
             self.assertEqual(
                 len(list(
                     Path(directory, "pipeline_cache", "chunking").rglob("*.json")
@@ -294,12 +436,12 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             )
             fingerprint = rag._make_chunking_fingerprint()
 
-            first_chunks, first_cached, first_projections = await rag._chunk_document(
+            first_chunks, first_cached = await rag._chunk_document(
                 document,
                 fingerprint,
             )
             first_call_count = embedding_calls
-            second_chunks, second_cached, second_projections = await rag._chunk_document(
+            second_chunks, second_cached = await rag._chunk_document(
                 document,
                 fingerprint,
             )
@@ -309,8 +451,6 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             self.assertGreater(first_call_count, 0)
             self.assertEqual(embedding_calls, first_call_count)
             self.assertEqual(second_chunks, first_chunks)
-            self.assertEqual(first_projections, [])
-            self.assertEqual(second_projections, [])
 
     async def test_corrupted_chunking_cache_is_rejected(self):
         document = _documents()[0]
@@ -735,7 +875,7 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
                 base_config,
                 chunk_config=replace(
                     base_config.chunk_config,
-                    strategy="agentic_ibm",
+                    strategy="agentic",
                 ),
             )
             changed_agentic_config = replace(
@@ -801,7 +941,7 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
         config = replace(
             _config(),
             chunk_config=ChunkConfig(
-                strategy="agentic_ibm",
+                strategy="agentic",
                 agentic_batch_max_sentences=10,
                 agentic_batch_max_chars=1000,
                 agentic_min_sentences=1,
@@ -818,9 +958,16 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
 
             async def first_llm(*, system: str, prompt: str) -> str:
                 nonlocal first_agentic_calls, first_extraction_calls
-                if system == AGENTIC_CHUNKING_SYSTEM_PROMPT:
+                if system == AGENTIC_PROPOSITION_SYSTEM_PROMPT:
                     first_agentic_calls += 1
-                    return '{"chunks": [{"start": 1, "end": 1}]}'
+                    return '{"propositions": [{"start": 1, "end": 1}]}'
+                if system == AGENTIC_STATE_SYSTEM_PROMPT:
+                    first_agentic_calls += 1
+                    return json.dumps({
+                        "action": "new_chunk",
+                        "title": "Document",
+                        "summary": "A short source document.",
+                    })
                 first_extraction_calls += 1
                 return _empty_extraction_response()
 
@@ -839,9 +986,16 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
 
             async def second_llm(*, system: str, prompt: str) -> str:
                 nonlocal second_agentic_calls, second_extraction_calls
-                if system == AGENTIC_CHUNKING_SYSTEM_PROMPT:
+                if system == AGENTIC_PROPOSITION_SYSTEM_PROMPT:
                     second_agentic_calls += 1
-                    return '{"chunks": [{"start": 1, "end": 1}]}'
+                    return '{"propositions": [{"start": 1, "end": 1}]}'
+                if system == AGENTIC_STATE_SYSTEM_PROMPT:
+                    second_agentic_calls += 1
+                    return json.dumps({
+                        "action": "new_chunk",
+                        "title": "Document",
+                        "summary": "A short source document.",
+                    })
                 second_extraction_calls += 1
                 return _empty_extraction_response()
 
@@ -863,7 +1017,7 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
                 )
                 second_result = await second_rag.construct(_documents())
 
-            self.assertEqual(first_agentic_calls, 2)
+            self.assertEqual(first_agentic_calls, 4)
             self.assertEqual(first_extraction_calls, 2)
             self.assertEqual(second_agentic_calls, 0)
             self.assertEqual(second_extraction_calls, 2)

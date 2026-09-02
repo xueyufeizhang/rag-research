@@ -32,8 +32,6 @@ class BuildResult:
     chunking_fingerprint: str
     extraction_fingerprint: str
     build_provenance: dict[str, Any] = field(default_factory=dict)
-    chunking_projection_count: int = 0
-    chunking_rebalance_count: int = 0
 
 @dataclass(frozen=True)
 class EvidenceOccurrence:
