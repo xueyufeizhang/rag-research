@@ -6,7 +6,15 @@ from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
 from rag_research.chunking import AGENTIC_CHUNKING_SYSTEM_PROMPT, ChunkConfig
-from rag_research.core import LightRAG, LightRAGConfig
+from rag_research.core import (
+    ENTITY_DESCRIPTION_MAX_CHARS,
+    ENTITY_DESCRIPTION_MAX_VARIANTS,
+    LightRAG,
+    LightRAGConfig,
+    _aggregate_descriptions,
+    _merge_extraction_records,
+)
+from rag_research.extraction import Entity, Relation
 from rag_research.models import InputDocument
 from rag_research.prompts import PROMPTS
 from rag_research.storage import KVStore
@@ -92,6 +100,7 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(agentic_calls, 1)
             self.assertEqual(result.chunk_count, 2)
             self.assertEqual(result.chunking_projection_count, 1)
+            self.assertEqual(result.chunking_rebalance_count, 0)
 
             fingerprint = rag._make_chunking_fingerprint()
             cache_path = Path(rag._chunk_cache_path(
@@ -103,6 +112,7 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
                 cache_payload["document"]["boundary_projection_events"],
                 [
                     {
+                        "scope": "batch",
                         "batch_index": 1,
                         "sentence_count": 27,
                         "original_boundaries": [[1, 7], [8, 27]],
@@ -117,6 +127,62 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(
                 manifest["build"]["chunking_projection_count"],
                 1,
+            )
+
+    async def test_construct_audits_document_tail_rebalancing(self):
+        text = " ".join(
+            f"Sentence {index}."
+            for index in range(1, 31)
+        )
+        document = InputDocument(document_id="rebalanced-doc", text=text)
+        config = replace(
+            _config(),
+            chunk_config=ChunkConfig(
+                strategy="agentic_ibm",
+                agentic_batch_max_sentences=15,
+                agentic_batch_max_chars=12000,
+                agentic_min_sentences=10,
+                agentic_max_sentences=24,
+                agentic_concurrency=2,
+                agentic_retries=0,
+            ),
+        )
+
+        with tempfile.TemporaryDirectory() as directory:
+            async def llm(*, system: str, prompt: str) -> str:
+                if system == AGENTIC_CHUNKING_SYSTEM_PROMPT:
+                    return (
+                        '{"chunks": ['
+                        '{"start": 1, "end": 10}, '
+                        '{"start": 11, "end": 15}'
+                        ']}'
+                    )
+                return _empty_extraction_response()
+
+            rag = LightRAG(
+                working_dir=directory,
+                llm_func=llm,
+                con_num=1,
+                embed_func=AsyncMock(return_value=[1.0, 0.0]),
+                config=config,
+            )
+            result = await rag.construct((document,))
+
+            self.assertEqual(result.chunk_count, 2)
+            self.assertEqual(result.chunking_projection_count, 0)
+            self.assertEqual(result.chunking_rebalance_count, 1)
+            cache_path = Path(rag._chunk_cache_path(
+                rag._make_chunking_fingerprint(),
+                document,
+            ))
+            events = json.loads(
+                cache_path.read_text(encoding="utf-8")
+            )["document"]["boundary_projection_events"]
+            self.assertEqual(len(events), 1)
+            self.assertEqual(events[0]["scope"], "document")
+            self.assertEqual(
+                events[0]["projected_boundaries"],
+                [[1, 15], [16, 30]],
             )
 
     async def test_agentic_chunking_resumes_from_completed_document_cache(self):
@@ -451,13 +517,13 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(
                 batches[0],
                 [
-                    "Alpha Alpha description | Alpha description",
-                    "Beta Beta description | Beta description",
+                    "Alpha Alpha description",
+                    "Beta Beta description",
                 ],
             )
             self.assertEqual(
                 batches[1],
-                ["linked Relation description | Relation description"],
+                ["linked Relation description"],
             )
             self.assertEqual(len(batches[2]), 2)
             self.assertTrue(all("Content:" in text for text in batches[2]))
@@ -465,6 +531,80 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(len(rag.entity_vidx._ids), 2)
             self.assertEqual(len(rag.relation_vidx._ids), 1)
             self.assertEqual(len(rag.chunk_vidx._ids), 2)
+
+    def test_global_merge_normalizes_names_and_bounds_descriptions(self):
+        descriptions = [
+            f"Description {index} " + ("x" * 500)
+            for index in range(30)
+        ]
+        entities = [
+            Entity(
+                "TalkSport" if index % 2 == 0 else "talkSPORT",
+                "Organization",
+                description,
+                [f"chunk-{index}"],
+            )
+            for index, description in enumerate(descriptions)
+        ] + [
+            Entity(
+                "Club",
+                "Organization",
+                "Club description",
+                ["chunk-club"],
+            )
+        ]
+        relations = [
+            Relation(
+                "TalkSport",
+                "Club",
+                ["Coverage"],
+                "TalkSport covers the club.",
+                ["chunk-0"],
+            ),
+            Relation(
+                "talkSPORT",
+                "Club",
+                ["coverage", "Reporting"],
+                "talkSPORT reports on the club.",
+                ["chunk-1"],
+            ),
+        ]
+
+        clean_entities, clean_relations = _merge_extraction_records(
+            entities,
+            relations,
+        )
+
+        self.assertEqual(set(clean_entities), {"TalkSport", "Club"})
+        merged_entity = clean_entities["TalkSport"]
+        self.assertEqual(len(merged_entity.source_id), 30)
+        self.assertLessEqual(
+            len(merged_entity.description),
+            ENTITY_DESCRIPTION_MAX_CHARS,
+        )
+        self.assertLessEqual(
+            len(merged_entity.description.split(" | ")),
+            ENTITY_DESCRIPTION_MAX_VARIANTS,
+        )
+        self.assertEqual(set(clean_relations), {"Club||TalkSport"})
+        merged_relation = clean_relations["Club||TalkSport"]
+        self.assertEqual(merged_relation.source, "Club")
+        self.assertEqual(merged_relation.target, "TalkSport")
+        self.assertEqual(merged_relation.keywords, ["Coverage", "Reporting"])
+        self.assertEqual(
+            merged_relation.source_id,
+            ["chunk-0", "chunk-1"],
+        )
+
+    def test_description_aggregation_deduplicates_case_insensitively(self):
+        self.assertEqual(
+            _aggregate_descriptions(
+                ["Alpha description", " alpha DESCRIPTION ", "Beta"],
+                max_variants=12,
+                max_chars=4000,
+            ),
+            "Alpha description | Beta",
+        )
 
     async def test_embedding_model_change_invalidates_cached_build(self):
         with tempfile.TemporaryDirectory() as directory:

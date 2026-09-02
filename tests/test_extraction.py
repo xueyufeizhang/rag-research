@@ -22,12 +22,26 @@ def _chunk(chunk_id: str, model_text: str = "model input") -> ChunkRecord:
 
 
 def _response(
-        entities: list[dict] | None = None,
-        relationships: list[dict] | None = None,
+    entities: list[dict] | None = None,
+    relationships: list[dict] | None = None,
 ) -> str:
+    normalized_entities = []
+    for entity in entities or []:
+        normalized_entities.append({
+            "type": "Other",
+            "description": f"{entity.get('name', 'Entity')} description",
+            **entity,
+        })
+    normalized_relationships = []
+    for relationship in relationships or []:
+        normalized_relationships.append({
+            "keywords": ["related"],
+            "description": "The entities are directly related.",
+            **relationship,
+        })
     return json.dumps({
-        "entities": entities if entities is not None else [],
-        "relationships": relationships if relationships is not None else [],
+        "entities": normalized_entities,
+        "relationships": normalized_relationships,
     })
 
 
@@ -40,18 +54,19 @@ class ParseResponseTests(unittest.TestCase):
                     "type": "  Person ",
                     "description": "  Researcher  ",
                 },
-                {"name": " Bob ", "type": " Person "},
-                {"name": 123, "type": "invalid"},
-                "invalid",
+                {
+                    "name": " Bob ",
+                    "type": " person ",
+                    "description": " Engineer ",
+                },
             ],
             relationships=[
                 {
                     "source": " Alice ",
                     "target": " Bob ",
-                    "keywords": [" works with ", 123, ""],
+                    "keywords": [" works with ", ""],
                     "description": " colleague ",
                 },
-                {"source": 1, "target": "Bob"},
             ],
         )
 
@@ -65,7 +80,7 @@ class ParseResponseTests(unittest.TestCase):
             entities,
             [
                 Entity("Alice", "Person", "Researcher", ["doc-1:chunk:0"]),
-                Entity("Bob", "Person", "", ["doc-1:chunk:0"]),
+                Entity("Bob", "Person", "Engineer", ["doc-1:chunk:0"]),
             ],
         )
         self.assertEqual(
@@ -86,6 +101,70 @@ class ParseResponseTests(unittest.TestCase):
             _parse_response(_response(), "doc-1:chunk:0", "model input"),
             ([], []),
         )
+
+    def test_rejects_missing_or_unknown_entity_fields(self):
+        invalid_entities = (
+            {"name": "Alpha", "type": "Person"},
+            {"name": "Alpha", "description": "A person."},
+            {"name": "Alpha", "type": "Service", "description": "A service."},
+            {"name": "Alpha", "type": "Person", "description": ""},
+        )
+        for entity in invalid_entities:
+            with self.subTest(entity=entity):
+                response = json.dumps({
+                    "entities": [entity],
+                    "relationships": [],
+                })
+                with self.assertRaises(ValueError):
+                    _parse_response(
+                        response,
+                        "doc-1:chunk:0",
+                        "Alpha is present.",
+                    )
+
+    def test_rejects_incomplete_and_self_relationships(self):
+        entities = [
+            {
+                "name": "Alpha",
+                "type": "Concept",
+                "description": "Alpha is a concept.",
+            },
+            {
+                "name": "Beta",
+                "type": "Concept",
+                "description": "Beta is a concept.",
+            },
+        ]
+        invalid_relationships = (
+            {
+                "source": "Alpha",
+                "target": "Beta",
+                "description": "Alpha relates to Beta.",
+            },
+            {
+                "source": "Alpha",
+                "target": "Beta",
+                "keywords": ["related"],
+            },
+            {
+                "source": "Alpha",
+                "target": "alpha",
+                "keywords": ["identity"],
+                "description": "Invalid self relationship.",
+            },
+        )
+        for relationship in invalid_relationships:
+            with self.subTest(relationship=relationship):
+                response = json.dumps({
+                    "entities": entities,
+                    "relationships": [relationship],
+                })
+                with self.assertRaises(ValueError):
+                    _parse_response(
+                        response,
+                        "doc-1:chunk:0",
+                        "Alpha relates to Beta.",
+                    )
 
     def test_rejects_empty_or_missing_json(self):
         for response in ("", "   ", "no JSON here"):
@@ -149,13 +228,21 @@ class ParseResponseTests(unittest.TestCase):
     def test_deduplicates_entities_and_undirected_relationships(self):
         response = _response(
             entities=[
-                {"name": "Alpha", "description": "First description"},
+                {
+                    "name": "Alpha",
+                    "type": "Organization",
+                    "description": "First description",
+                },
                 {
                     "name": " alpha ",
                     "type": "Organization",
                     "description": "Second description",
                 },
-                {"name": "Beta", "type": "Person"},
+                {
+                    "name": "Beta",
+                    "type": "Person",
+                    "description": "Beta description",
+                },
             ],
             relationships=[
                 {
@@ -188,7 +275,12 @@ class ParseResponseTests(unittest.TestCase):
                     "First description | Second description",
                     ["doc-1:chunk:0"],
                 ),
-                Entity("Beta", "Person", "", ["doc-1:chunk:0"]),
+                Entity(
+                    "Beta",
+                    "Person",
+                    "Beta description",
+                    ["doc-1:chunk:0"],
+                ),
             ],
         )
         self.assertEqual(
@@ -229,12 +321,55 @@ class ParseResponseTests(unittest.TestCase):
 
         self.assertEqual(
             entities,
-            [Entity("Dr. Elena Vasquez", "Person", "", ["doc-1:chunk:0"])],
+            [
+                Entity(
+                    "Dr. Elena Vasquez",
+                    "Person",
+                    "Dr. Elena Vasquez description",
+                    ["doc-1:chunk:0"],
+                )
+            ],
         )
         self.assertEqual(relations, [])
 
 
 class ExtractTests(unittest.IsolatedAsyncioTestCase):
+    async def test_validation_retry_includes_contract_feedback(self):
+        prompts: list[str] = []
+
+        async def llm_func(*, system: str, prompt: str) -> str:
+            prompts.append(prompt)
+            if len(prompts) == 1:
+                return json.dumps({
+                    "entities": [{
+                        "name": "Alpha",
+                        "type": "Service",
+                        "description": "Alpha is a service.",
+                    }],
+                    "relationships": [],
+                })
+            return _response(entities=[{
+                "name": "Alpha",
+                "type": "Other",
+                "description": "Alpha is an entity.",
+            }])
+
+        with patch(
+            "rag_research.extraction.asyncio.sleep",
+            new=AsyncMock(),
+        ):
+            result = await extract(
+                [_chunk("doc-1:chunk:0", "Alpha is present.")],
+                llm_func,
+                con_num=1,
+            )
+
+        self.assertEqual(len(prompts), 2)
+        self.assertIn("Correction Required", prompts[1])
+        self.assertIn("unknown entity type", prompts[1])
+        self.assertEqual(result.entities[0].type, "Other")
+        self.assertEqual(result.failed_chunk_ids, [])
+
     async def test_uses_model_text_and_preserves_chunk_id(self):
         prompts: list[str] = []
 

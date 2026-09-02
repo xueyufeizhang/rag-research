@@ -17,10 +17,28 @@ from rag_research.models import ChunkRecord
 from rag_research.prompts import PROMPTS
 
 
-EXTRACTION_PIPELINE_VERSION = 3
-EXTRACTION_CACHE_SCHEMA_VERSION = 2
+EXTRACTION_PIPELINE_VERSION = 4
+EXTRACTION_CACHE_SCHEMA_VERSION = 3
 MAX_ENTITY_RECORDS = 20
 MAX_TOTAL_RECORDS = 50
+ALLOWED_ENTITY_TYPES = (
+    "Person",
+    "Creature",
+    "Organization",
+    "Location",
+    "Event",
+    "Concept",
+    "Method",
+    "Content",
+    "Data",
+    "Artifact",
+    "NaturalObject",
+    "Other",
+)
+_ENTITY_TYPES_BY_CASEFOLD = {
+    entity_type.casefold(): entity_type
+    for entity_type in ALLOWED_ENTITY_TYPES
+}
 
 
 def _collect_example_entity_names() -> dict[str, str]:
@@ -107,9 +125,9 @@ def _validate_cached_entity(raw: object, chunk_id: str) -> Entity:
     source_id = raw.get("source_id")
     if not isinstance(name, str) or not name.strip():
         raise ValueError(f"cached entity for {chunk_id} has an invalid name")
-    if not isinstance(entity_type, str):
+    if entity_type not in ALLOWED_ENTITY_TYPES:
         raise ValueError(f"cached entity for {chunk_id} has an invalid type")
-    if not isinstance(description, str):
+    if not isinstance(description, str) or not description.strip():
         raise ValueError(f"cached entity for {chunk_id} has an invalid description")
     if source_id != [chunk_id]:
         raise ValueError(f"cached entity for {chunk_id} has invalid source IDs")
@@ -135,12 +153,12 @@ def _validate_cached_relation(raw: object, chunk_id: str) -> Relation:
         raise ValueError(f"cached relation for {chunk_id} has an invalid source")
     if not isinstance(target, str) or not target.strip():
         raise ValueError(f"cached relation for {chunk_id} has an invalid target")
-    if not isinstance(keywords, list) or any(
-        not isinstance(keyword, str)
+    if not isinstance(keywords, list) or not keywords or any(
+        not isinstance(keyword, str) or not keyword.strip()
         for keyword in keywords
     ):
         raise ValueError(f"cached relation for {chunk_id} has invalid keywords")
-    if not isinstance(description, str):
+    if not isinstance(description, str) or not description.strip():
         raise ValueError(f"cached relation for {chunk_id} has an invalid description")
     if source_id != [chunk_id]:
         raise ValueError(f"cached relation for {chunk_id} has invalid source IDs")
@@ -283,8 +301,55 @@ class ExtractionCache:
         )
 
 
-def _optional_text(value: object) -> str:
-    return value.strip() if isinstance(value, str) else ""
+def _required_text(
+    value: object,
+    *,
+    field_name: str,
+    source_id: str,
+) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(
+            f"chunk {source_id}: {field_name} must be a non-empty string"
+        )
+    return value.strip()
+
+
+def _normalize_entity_type(value: object, source_id: str) -> str:
+    raw_type = _required_text(
+        value,
+        field_name="entity type",
+        source_id=source_id,
+    )
+    entity_type = _ENTITY_TYPES_BY_CASEFOLD.get(raw_type.casefold())
+    if entity_type is None:
+        raise ValueError(
+            f"chunk {source_id}: unknown entity type {raw_type!r}; "
+            f"expected one of {ALLOWED_ENTITY_TYPES}"
+        )
+    return entity_type
+
+
+def _normalize_keywords(value: object, source_id: str) -> list[str]:
+    if isinstance(value, list):
+        if any(not isinstance(keyword, str) for keyword in value):
+            raise ValueError(
+                f"chunk {source_id}: relationship keywords must contain strings"
+            )
+        keywords = [keyword.strip() for keyword in value if keyword.strip()]
+    elif isinstance(value, str):
+        keywords = [keyword.strip() for keyword in value.split(",") if keyword.strip()]
+    else:
+        raise ValueError(
+            f"chunk {source_id}: relationship keywords must be a string or list"
+        )
+
+    deduplicated: list[str] = []
+    _merge_keywords(deduplicated, keywords)
+    if not deduplicated:
+        raise ValueError(
+            f"chunk {source_id}: relationship keywords must not be empty"
+        )
+    return deduplicated
 
 
 def _merge_text(existing: str, new: str) -> str:
@@ -331,6 +396,20 @@ def _validate_extraction_contract(
 
     entity_names: dict[str, str] = {}
     for entity in entities:
+        if not entity.name.strip():
+            raise ValueError(f"chunk {source_id}: entity name must not be empty")
+        if entity.type not in ALLOWED_ENTITY_TYPES:
+            raise ValueError(
+                f"chunk {source_id}: unknown entity type {entity.type!r}"
+            )
+        if not entity.description.strip():
+            raise ValueError(
+                f"chunk {source_id}: entity description must not be empty"
+            )
+        if entity.source_id != [source_id]:
+            raise ValueError(
+                f"chunk {source_id}: entity has invalid source IDs"
+            )
         key = entity.name.casefold()
         if key in entity_names:
             raise ValueError(
@@ -350,8 +429,32 @@ def _validate_extraction_contract(
 
     relation_pairs: set[tuple[str, str]] = set()
     for relation in relations:
+        if not relation.source.strip() or not relation.target.strip():
+            raise ValueError(
+                f"chunk {source_id}: relationship endpoints must not be empty"
+            )
+        if not relation.keywords or any(
+            not keyword.strip()
+            for keyword in relation.keywords
+        ):
+            raise ValueError(
+                f"chunk {source_id}: relationship keywords must not be empty"
+            )
+        if not relation.description.strip():
+            raise ValueError(
+                f"chunk {source_id}: relationship description must not be empty"
+            )
+        if relation.source_id != [source_id]:
+            raise ValueError(
+                f"chunk {source_id}: relationship has invalid source IDs"
+            )
         source_key = relation.source.casefold()
         target_key = relation.target.casefold()
+        if source_key == target_key:
+            raise ValueError(
+                f"chunk {source_id}: self-relationships are not allowed: "
+                f"{relation.source!r}"
+            )
         if source_key not in entity_names or target_key not in entity_names:
             raise ValueError(
                 f"chunk {source_id}: relationship endpoints must appear in "
@@ -407,22 +510,32 @@ def _parse_response(
 
     entities_by_name: dict[str, Entity] = {}
 
-    for e in raw_entities:
+    for entity_index, e in enumerate(raw_entities):
         if not isinstance(e, dict):
-            continue
+            raise ValueError(
+                f"chunk {source_id}: entity[{entity_index}] must be an object"
+            )
 
-        name = e.get("name")
-        if not isinstance(name, str) or not name.strip():
-            continue
-
-        clean_name = name.strip()
+        clean_name = _required_text(
+            e.get("name"),
+            field_name=f"entity[{entity_index}].name",
+            source_id=source_id,
+        )
         key = clean_name.casefold()
-        entity_type = _optional_text(e.get("type"))
-        description = _optional_text(e.get("description"))
+        entity_type = _normalize_entity_type(e.get("type"), source_id)
+        description = _required_text(
+            e.get("description"),
+            field_name=f"entity[{entity_index}].description",
+            source_id=source_id,
+        )
         existing = entities_by_name.get(key)
         if existing is not None:
-            if not existing.type and entity_type:
-                existing.type = entity_type
+            if existing.type != entity_type:
+                raise ValueError(
+                    f"chunk {source_id}: duplicate entity {clean_name!r} "
+                    f"has conflicting types {existing.type!r} and "
+                    f"{entity_type!r}"
+                )
             existing.description = _merge_text(
                 existing.description,
                 description,
@@ -437,20 +550,29 @@ def _parse_response(
         )
 
     relations_by_pair: dict[tuple[str, str], Relation] = {}
-    for r in raw_relations:
+    for relation_index, r in enumerate(raw_relations):
         if not isinstance(r, dict):
-            continue
+            raise ValueError(
+                f"chunk {source_id}: relationship[{relation_index}] must be an object"
+            )
 
-        src, tgt = r.get("source"), r.get("target")
-        if not isinstance(src, str) or not src.strip():
-            continue
-        if not isinstance(tgt, str) or not tgt.strip():
-            continue
-
-        clean_source = src.strip()
-        clean_target = tgt.strip()
+        clean_source = _required_text(
+            r.get("source"),
+            field_name=f"relationship[{relation_index}].source",
+            source_id=source_id,
+        )
+        clean_target = _required_text(
+            r.get("target"),
+            field_name=f"relationship[{relation_index}].target",
+            source_id=source_id,
+        )
         source_key = clean_source.casefold()
         target_key = clean_target.casefold()
+        if source_key == target_key:
+            raise ValueError(
+                f"chunk {source_id}: self-relationships are not allowed: "
+                f"{clean_source!r}"
+            )
         source_entity = entities_by_name.get(source_key)
         target_entity = entities_by_name.get(target_key)
         if source_entity is None or target_entity is None:
@@ -460,15 +582,15 @@ def _parse_response(
                 f"{clean_target!r}"
             )
 
-        kw = r.get("keywords")
-        if isinstance(kw, list):
-            keywords = [k.strip() for k in kw if isinstance(k, str) and k.strip()]
-        elif isinstance(kw, str):
-            keywords = [k.strip() for k in kw.split(",") if k.strip()]
-        else:
-            keywords = []
-        deduplicated_keywords: list[str] = []
-        _merge_keywords(deduplicated_keywords, keywords)
+        deduplicated_keywords = _normalize_keywords(
+            r.get("keywords"),
+            source_id,
+        )
+        description = _required_text(
+            r.get("description"),
+            field_name=f"relationship[{relation_index}].description",
+            source_id=source_id,
+        )
 
         pair = tuple(sorted((source_key, target_key)))
         existing = relations_by_pair.get(pair)
@@ -476,7 +598,7 @@ def _parse_response(
             _merge_keywords(existing.keywords, deduplicated_keywords)
             existing.description = _merge_text(
                 existing.description,
-                _optional_text(r.get("description")),
+                description,
             )
             continue
 
@@ -484,7 +606,7 @@ def _parse_response(
             source=source_entity.name,
             target=target_entity.name,
             keywords=deduplicated_keywords,
-            description=_optional_text(r.get("description")),
+            description=description,
             source_id=[source_id],
         )
 
@@ -574,6 +696,13 @@ async def extract(
     ) -> ChunkExtractionResult:
         nonlocal done_count
         last_err: Exception | None = None
+        base_prompt = PROMPTS["entity_extraction_user_prompt"].format(
+            entity_types_guidance=PROMPTS["default_entity_types_guidance"],
+            input_text=chunk.model_text,
+            max_total_records=MAX_TOTAL_RECORDS,
+            max_entity_records=MAX_ENTITY_RECORDS,
+        )
+        retry_prompt = base_prompt
         for attempt in range(5):
             t0 = time.time()
             try:
@@ -587,12 +716,7 @@ async def extract(
                             max_total_records=MAX_TOTAL_RECORDS,
                             max_entity_records=MAX_ENTITY_RECORDS,
                         ),
-                        prompt=PROMPTS["entity_extraction_user_prompt"].format(
-                            entity_types_guidance=PROMPTS["default_entity_types_guidance"],
-                            input_text=chunk.model_text,
-                            max_total_records=MAX_TOTAL_RECORDS,
-                            max_entity_records=MAX_ENTITY_RECORDS,
-                        )
+                        prompt=retry_prompt,
                     )
             except Exception as e:
                 last_err = e
@@ -605,6 +729,13 @@ async def extract(
                     )
                 except ValueError as e:
                     last_err = e
+                    retry_prompt = (
+                        base_prompt
+                        + "\n\n---Correction Required---\n"
+                        + "Your previous response violated the output contract: "
+                        + str(e)
+                        + ". Return a corrected JSON object only."
+                    )
                 else:
                     result = ChunkExtractionResult(
                         chunk_id=chunk.chunk_id,

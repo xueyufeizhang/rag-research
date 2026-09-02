@@ -3,13 +3,16 @@ from rag_research.chunking import (
     CHUNKING_PIPELINE_VERSION,
     ChunkConfig,
     ChunkSpan,
+    _strict_partition_is_feasible,
     _validate_agentic_boundaries,
     chunk_async,
 )
 from rag_research.embedding import BatchEmbeddingFunction, embed_texts
 from rag_research.extraction import (
     EXTRACTION_PIPELINE_VERSION,
+    Entity,
     ExtractionResult,
+    Relation,
     extract,
 )
 from rag_research.models import InputDocument, ChunkRecord, BuildResult
@@ -22,10 +25,186 @@ import json
 from rag_research.prompts import PROMPTS
 import os
 import hashlib
+import re
+import unicodedata
 
 load_dotenv()
 
-CHUNKING_CACHE_SCHEMA_VERSION = 3
+CHUNKING_CACHE_SCHEMA_VERSION = 4
+BUILD_PIPELINE_VERSION = 4
+ENTITY_DESCRIPTION_MAX_VARIANTS = 12
+ENTITY_DESCRIPTION_MAX_CHARS = 4000
+RELATION_DESCRIPTION_MAX_VARIANTS = 12
+RELATION_DESCRIPTION_MAX_CHARS = 4000
+
+
+def _normalize_entity_name_key(name: str) -> str:
+    normalized = unicodedata.normalize("NFKC", name)
+    return re.sub(r"\s+", " ", normalized).strip().casefold()
+
+
+def _select_canonical_entity_name(entities: list[Entity]) -> str:
+    counts: dict[str, int] = {}
+    first_positions: dict[str, int] = {}
+    for index, entity in enumerate(entities):
+        counts[entity.name] = counts.get(entity.name, 0) + 1
+        first_positions.setdefault(entity.name, index)
+    return max(
+        counts,
+        key=lambda name: (counts[name], -first_positions[name]),
+    )
+
+
+def _select_canonical_entity_type(entities: list[Entity]) -> str:
+    counts: dict[str, int] = {}
+    first_positions: dict[str, int] = {}
+    for index, entity in enumerate(entities):
+        counts[entity.type] = counts.get(entity.type, 0) + 1
+        first_positions.setdefault(entity.type, index)
+    return max(
+        counts,
+        key=lambda entity_type: (
+            counts[entity_type],
+            entity_type != "Other",
+            -first_positions[entity_type],
+        ),
+    )
+
+
+def _unique_strings(values: Sequence[str]) -> list[str]:
+    unique: list[str] = []
+    seen: set[str] = set()
+    for value in values:
+        clean_value = value.strip()
+        key = clean_value.casefold()
+        if clean_value and key not in seen:
+            unique.append(clean_value)
+            seen.add(key)
+    return unique
+
+
+def _evenly_spaced(values: list[str], limit: int) -> list[str]:
+    if len(values) <= limit:
+        return values
+    if limit == 1:
+        return [values[0]]
+    indexes = [
+        round(index * (len(values) - 1) / (limit - 1))
+        for index in range(limit)
+    ]
+    return [values[index] for index in indexes]
+
+
+def _aggregate_descriptions(
+    descriptions: Sequence[str],
+    *,
+    max_variants: int,
+    max_chars: int,
+) -> str:
+    if max_variants <= 0 or max_chars <= 0:
+        raise ValueError("description aggregation limits must be positive")
+
+    candidates = _evenly_spaced(
+        _unique_strings(descriptions),
+        max_variants,
+    )
+    selected: list[str] = []
+    current_length = 0
+    separator_length = len(" | ")
+    for description in candidates:
+        extra_length = len(description) + (
+            separator_length if selected else 0
+        )
+        if current_length + extra_length <= max_chars:
+            selected.append(description)
+            current_length += extra_length
+            continue
+        if not selected:
+            selected.append(
+                description[:max_chars]
+                if len(description) <= max_chars
+                else description[:max_chars - 1].rstrip() + "…"
+            )
+        break
+    return " | ".join(selected)
+
+
+def _merge_extraction_records(
+    entities: Sequence[Entity],
+    relations: Sequence[Relation],
+) -> tuple[dict[str, Entity], dict[str, Relation]]:
+    entity_groups: dict[str, list[Entity]] = {}
+    for entity in entities:
+        key = _normalize_entity_name_key(entity.name)
+        entity_groups.setdefault(key, []).append(entity)
+
+    clean_entities: dict[str, Entity] = {}
+    canonical_names: dict[str, str] = {}
+    for normalized_name, group in entity_groups.items():
+        canonical_name = _select_canonical_entity_name(group)
+        canonical_names[normalized_name] = canonical_name
+        clean_entities[canonical_name] = Entity(
+            name=canonical_name,
+            type=_select_canonical_entity_type(group),
+            description=_aggregate_descriptions(
+                [entity.description for entity in group],
+                max_variants=ENTITY_DESCRIPTION_MAX_VARIANTS,
+                max_chars=ENTITY_DESCRIPTION_MAX_CHARS,
+            ),
+            source_id=_unique_strings([
+                source_id
+                for entity in group
+                for source_id in entity.source_id
+            ]),
+        )
+
+    relation_groups: dict[str, list[Relation]] = {}
+    relation_endpoints: dict[str, tuple[str, str]] = {}
+    for relation in relations:
+        source_key = _normalize_entity_name_key(relation.source)
+        target_key = _normalize_entity_name_key(relation.target)
+        source = canonical_names.get(source_key)
+        target = canonical_names.get(target_key)
+        if source is None or target is None:
+            raise RuntimeError(
+                "relation endpoint is absent after global entity resolution: "
+                f"{relation.source!r} -- {relation.target!r}"
+            )
+        if source_key == target_key:
+            raise RuntimeError(
+                "self-relation survived extraction validation: "
+                f"{relation.source!r} -- {relation.target!r}"
+            )
+
+        left, right = sorted((source, target))
+        relation_key = f"{left}||{right}"
+        relation_groups.setdefault(relation_key, []).append(relation)
+        relation_endpoints[relation_key] = (left, right)
+
+    clean_relations: dict[str, Relation] = {}
+    for relation_key, group in relation_groups.items():
+        source, target = relation_endpoints[relation_key]
+        clean_relations[relation_key] = Relation(
+            source=source,
+            target=target,
+            keywords=_unique_strings([
+                keyword
+                for relation in group
+                for keyword in relation.keywords
+            ]),
+            description=_aggregate_descriptions(
+                [relation.description for relation in group],
+                max_variants=RELATION_DESCRIPTION_MAX_VARIANTS,
+                max_chars=RELATION_DESCRIPTION_MAX_CHARS,
+            ),
+            source_id=_unique_strings([
+                source_id
+                for relation in group
+                for source_id in relation.source_id
+            ]),
+        )
+
+    return clean_entities, clean_relations
 
 @dataclass
 class LightRAGConfig:
@@ -539,6 +718,22 @@ class LightRAG:
                 "backend": self.config.embedding_backend,
                 "model": self.config.embedding_model,
             },
+            "assembly": {
+                "pipeline_version": BUILD_PIPELINE_VERSION,
+                "entity_name_normalization": "nfkc-whitespace-casefold",
+                "entity_description_max_variants": (
+                    ENTITY_DESCRIPTION_MAX_VARIANTS
+                ),
+                "entity_description_max_chars": (
+                    ENTITY_DESCRIPTION_MAX_CHARS
+                ),
+                "relation_description_max_variants": (
+                    RELATION_DESCRIPTION_MAX_VARIANTS
+                ),
+                "relation_description_max_chars": (
+                    RELATION_DESCRIPTION_MAX_CHARS
+                ),
+            },
         }
 
 
@@ -596,7 +791,7 @@ class LightRAG:
         )
 
         payload = {
-            "schema_version": 3,
+            "schema_version": 4,
             "documents": document_records,
             "chunk_config": asdict(
                 self.config.chunk_config
@@ -793,21 +988,31 @@ class LightRAG:
             )
 
         events: list[dict[str, object]] = []
-        seen_batch_indices: set[int] = set()
+        seen_event_keys: set[tuple[str, int]] = set()
         for event_index, raw_event in enumerate(raw_events):
             if not isinstance(raw_event, dict):
                 raise ValueError(
                     f"invalid chunking projection event {event_index}: {cache_path}"
                 )
+            scope = raw_event.get("scope")
             batch_index = raw_event.get("batch_index")
             sentence_count = raw_event.get("sentence_count")
-            if type(batch_index) is not int or batch_index <= 0:
+            if scope not in {"batch", "document"}:
+                raise ValueError(
+                    f"invalid projection scope: {cache_path}"
+                )
+            if type(batch_index) is not int or (
+                scope == "batch" and batch_index <= 0
+            ) or (
+                scope == "document" and batch_index != 0
+            ):
                 raise ValueError(
                     f"invalid projected batch index: {cache_path}"
                 )
-            if batch_index in seen_batch_indices:
+            event_key = (scope, batch_index)
+            if event_key in seen_event_keys:
                 raise ValueError(
-                    f"duplicate projected batch index: {cache_path}"
+                    f"duplicate projection event: {cache_path}"
                 )
             if type(sentence_count) is not int or sentence_count <= 0:
                 raise ValueError(
@@ -815,6 +1020,7 @@ class LightRAG:
                 )
 
             normalized_event: dict[str, object] = {
+                "scope": scope,
                 "batch_index": batch_index,
                 "sentence_count": sentence_count,
             }
@@ -869,15 +1075,30 @@ class LightRAG:
                     sentence_count=sentence_count,
                     min_sentences=self.config.chunk_config.agentic_min_sentences,
                     max_sentences=self.config.chunk_config.agentic_max_sentences,
+                    allow_short_final=(
+                        scope == "batch"
+                        or not _strict_partition_is_feasible(
+                            sentence_count,
+                            min_sentences=(
+                                self.config.chunk_config.agentic_min_sentences
+                            ),
+                            max_sentences=(
+                                self.config.chunk_config.agentic_max_sentences
+                            ),
+                        )
+                    ),
                 )
             except ValueError as exc:
                 raise ValueError(
                     f"invalid projected boundaries: {cache_path}"
                 ) from exc
             events.append(normalized_event)
-            seen_batch_indices.add(batch_index)
+            seen_event_keys.add(event_key)
 
-        events.sort(key=lambda event: int(event["batch_index"]))
+        events.sort(key=lambda event: (
+            event["scope"] == "document",
+            int(event["batch_index"]),
+        ))
         return events
 
 
@@ -1058,6 +1279,7 @@ class LightRAG:
         chunks: list[ChunkRecord] = []
         cached_document_count = 0
         chunking_projection_count = 0
+        chunking_rebalance_count = 0
         document_count = len(documents)
         for index, document in enumerate(documents, start=1):
             (
@@ -1070,13 +1292,21 @@ class LightRAG:
             )
             chunks.extend(document_chunks)
             cached_document_count += int(loaded_from_cache)
-            chunking_projection_count += len(projection_events)
+            chunking_projection_count += sum(
+                event.get("scope") == "batch"
+                for event in projection_events
+            )
+            chunking_rebalance_count += sum(
+                event.get("scope") == "document"
+                for event in projection_events
+            )
             if index % 10 == 0 or index == document_count:
                 print(
                     f"[chunk] {index}/{document_count} documents, "
                     f"{len(chunks)} chunks, "
                     f"{cached_document_count} document cache hits, "
-                    f"{chunking_projection_count} projected batches",
+                    f"{chunking_projection_count} projected batches, "
+                    f"{chunking_rebalance_count} rebalanced documents",
                     flush=True,
                 )
 
@@ -1098,35 +1328,10 @@ class LightRAG:
                 f"{len(extraction_results.failed_chunk_ids)} chunks"
             )
 
-        clean_entities = {}
-        clean_relations = {}
-
-        for entity in extraction_results.entities:
-            exist_name = clean_entities.get(entity.name, None)
-            if exist_name:
-                if entity.description:
-                    exist_name.description += (" | " if exist_name.description else "") + entity.description
-                exist_name.source_id.extend(entity.source_id)
-            else:
-                clean_entities[entity.name] = entity
-          
-        for relation in extraction_results.relations:
-            relation_pair = "||".join(sorted([relation.source, relation.target]))
-            exist_pair = clean_relations.get(relation_pair, None)
-            if exist_pair:
-                exist_pair.keywords.extend(relation.keywords)
-                if relation.description:
-                    exist_pair.description += (" | " if exist_pair.description else "") + relation.description
-                exist_pair.source_id.extend(relation.source_id)
-            else:
-                clean_relations[relation_pair] = relation
-
-        for ev in clean_entities.values():
-            ev.source_id = list(dict.fromkeys(ev.source_id))
-
-        for rv in clean_relations.values():
-            rv.source_id = list(dict.fromkeys(rv.source_id))
-            rv.keywords = list(dict.fromkeys(rv.keywords))
+        clean_entities, clean_relations = _merge_extraction_records(
+            extraction_results.entities,
+            extraction_results.relations,
+        )
         
         entity_embedding_records = [
             (entity_key, f"{entity_key} {entity.description}".strip())
@@ -1187,6 +1392,7 @@ class LightRAG:
             extraction_fingerprint=extraction_fingerprint,
             build_provenance=build_provenance,
             chunking_projection_count=chunking_projection_count,
+            chunking_rebalance_count=chunking_rebalance_count,
         )
 
         self._save_all()

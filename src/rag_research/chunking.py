@@ -16,7 +16,7 @@ from rag_research.embedding import (
 )
 
 
-CHUNKING_PIPELINE_VERSION = 3
+CHUNKING_PIPELINE_VERSION = 4
 
 AGENTIC_CHUNKING_SYSTEM_PROMPT = """
 You are a document segmentation assistant. Your only task is to identify
@@ -369,6 +369,7 @@ async def agentic_ibm_chunk(
                     )
                     if boundaries != proposed_boundaries:
                         event = {
+                            "scope": "batch",
                             "batch_index": batch_index,
                             "sentence_count": len(batch),
                             "original_boundaries": [
@@ -405,11 +406,60 @@ async def agentic_ibm_chunk(
         process_batch(text, index, batch)
         for index, batch in enumerate(batches, start=1)
     ))
-    return [
+    batch_chunks = [
         chunk
         for batch in batch_results
         for chunk in batch
     ]
+
+    document_boundaries = _chunk_spans_to_boundaries(
+        sentences,
+        batch_chunks,
+    )
+    allow_short_document_final = not _strict_partition_is_feasible(
+        len(sentences),
+        min_sentences=min_sentences,
+        max_sentences=max_sentences,
+    )
+    rebalanced_boundaries = _rebalance_agentic_document_boundaries(
+        document_boundaries,
+        sentence_count=len(sentences),
+        min_sentences=min_sentences,
+        max_sentences=max_sentences,
+    )
+    _validate_agentic_boundaries(
+        rebalanced_boundaries,
+        sentence_count=len(sentences),
+        min_sentences=min_sentences,
+        max_sentences=max_sentences,
+        allow_short_final=allow_short_document_final,
+    )
+    if rebalanced_boundaries != document_boundaries:
+        if projection_events is not None:
+            projection_events.append({
+                "scope": "document",
+                "batch_index": 0,
+                "sentence_count": len(sentences),
+                "original_boundaries": [
+                    [start, end]
+                    for start, end in document_boundaries
+                ],
+                "projected_boundaries": [
+                    [start, end]
+                    for start, end in rebalanced_boundaries
+                ],
+            })
+        print(
+            "[agentic chunking] document: rebalanced short "
+            "macro-batch tails onto document-level sentence limits",
+            flush=True,
+        )
+
+    return _reconstruct_chunks(
+        text,
+        sentences,
+        rebalanced_boundaries,
+    )
 
 
 def _make_sentence_batches(
@@ -514,6 +564,7 @@ def _validate_agentic_boundaries(
     sentence_count: int,
     min_sentences: int,
     max_sentences: int,
+    allow_short_final: bool = True,
 ) -> None:
     if min_sentences <= 0:
         raise ValueError("agentic min sentences must be positive")
@@ -528,9 +579,11 @@ def _validate_agentic_boundaries(
         is_final = index == len(boundaries) - 1
         if size > max_sentences:
             raise ValueError(f"chunk size {size} exceeds maximum {max_sentences}")
-        if not is_final and size < min_sentences:
+        if size < min_sentences and (
+            not is_final or not allow_short_final
+        ):
             raise ValueError(
-                f"non-final chunk size {size} is below minimum {min_sentences}"
+                f"chunk size {size} is below minimum {min_sentences}"
             )
 
 
@@ -565,6 +618,7 @@ def _project_agentic_boundaries(
     sentence_count: int,
     min_sentences: int,
     max_sentences: int,
+    allow_short_final: bool = True,
 ) -> list[tuple[int, int]]:
     """Project structurally valid model boundaries onto hard size limits.
 
@@ -586,6 +640,7 @@ def _project_agentic_boundaries(
         (end - start + 1) <= max_sentences
         and (
             index == len(boundaries) - 1
+            and allow_short_final
             or (end - start + 1) >= min_sentences
         )
         for index, (start, end) in enumerate(boundaries)
@@ -597,7 +652,11 @@ def _project_agentic_boundaries(
         chunk_count
         for chunk_count in range(1, sentence_count + 1)
         if (
-            ((chunk_count - 1) * min_sentences + 1) <= sentence_count
+            (
+                (chunk_count - 1) * min_sentences + 1
+                if allow_short_final
+                else chunk_count * min_sentences
+            ) <= sentence_count
             and sentence_count <= chunk_count * max_sentences
         )
     ]
@@ -636,7 +695,8 @@ def _project_agentic_boundaries(
         remaining_chunks = projected_chunk_count - chunk_index
         if remaining_chunks == 1:
             final_size = sentence_count - previous_end
-            if 1 <= final_size <= max_sentences:
+            minimum_final_size = 1 if allow_short_final else min_sentences
+            if minimum_final_size <= final_size <= max_sentences:
                 return Fraction(0), (sentence_count,)
             return None
 
@@ -648,6 +708,8 @@ def _project_agentic_boundaries(
             remaining_sentences = sentence_count - current_end
             minimum_remaining = (
                 (chunks_after_current - 1) * min_sentences + 1
+                if allow_short_final
+                else chunks_after_current * min_sentences
             )
             maximum_remaining = chunks_after_current * max_sentences
             if not minimum_remaining <= remaining_sentences <= maximum_remaining:
@@ -679,6 +741,168 @@ def _project_agentic_boundaries(
         projected.append((previous_end + 1, current_end))
         previous_end = current_end
     return projected
+
+
+def _strict_partition_is_feasible(
+    sentence_count: int,
+    *,
+    min_sentences: int,
+    max_sentences: int,
+) -> bool:
+    if sentence_count <= 0:
+        return False
+    return any(
+        chunk_count * min_sentences <= sentence_count
+        <= chunk_count * max_sentences
+        for chunk_count in range(1, sentence_count + 1)
+    )
+
+
+def _rebalance_agentic_document_boundaries(
+    boundaries: list[tuple[int, int]],
+    *,
+    sentence_count: int,
+    min_sentences: int,
+    max_sentences: int,
+) -> list[tuple[int, int]]:
+    """Remove artificial short tails while preserving semantic boundaries.
+
+    Short chunks are first merged with the smallest adjacent chunk whenever
+    the merged chunk remains within the maximum. If merging is impossible,
+    the minimum number of sentences is borrowed from adjacent chunks. A full
+    constrained projection is only used as a last resort.
+    """
+    _validate_agentic_boundary_structure(boundaries, sentence_count)
+    if any(
+        end - start + 1 > max_sentences
+        for start, end in boundaries
+    ):
+        raise ValueError(
+            "document-level rebalancing received an oversized chunk"
+        )
+    if not _strict_partition_is_feasible(
+        sentence_count,
+        min_sentences=min_sentences,
+        max_sentences=max_sentences,
+    ):
+        return _project_agentic_boundaries(
+            boundaries,
+            sentence_count=sentence_count,
+            min_sentences=min_sentences,
+            max_sentences=max_sentences,
+            allow_short_final=True,
+        )
+
+    endpoints = [end for _, end in boundaries]
+    while True:
+        previous_end = 0
+        sizes: list[int] = []
+        for endpoint in endpoints:
+            sizes.append(endpoint - previous_end)
+            previous_end = endpoint
+
+        short_index = next(
+            (
+                index
+                for index, size in enumerate(sizes)
+                if size < min_sentences
+            ),
+            None,
+        )
+        if short_index is None:
+            break
+
+        merge_candidates: list[tuple[int, int, str]] = []
+        if short_index > 0:
+            merged_size = sizes[short_index - 1] + sizes[short_index]
+            if merged_size <= max_sentences:
+                merge_candidates.append((merged_size, 0, "left"))
+        if short_index + 1 < len(sizes):
+            merged_size = sizes[short_index] + sizes[short_index + 1]
+            if merged_size <= max_sentences:
+                merge_candidates.append((merged_size, 1, "right"))
+
+        if merge_candidates:
+            _, _, merge_side = min(merge_candidates)
+            boundary_to_remove = (
+                short_index - 1
+                if merge_side == "left"
+                else short_index
+            )
+            del endpoints[boundary_to_remove]
+            continue
+
+        needed = min_sentences - sizes[short_index]
+        left_available = (
+            sizes[short_index - 1] - min_sentences
+            if short_index > 0
+            else 0
+        )
+        right_available = (
+            sizes[short_index + 1] - min_sentences
+            if short_index + 1 < len(sizes)
+            else 0
+        )
+        if left_available + right_available < needed:
+            return _project_agentic_boundaries(
+                boundaries,
+                sentence_count=sentence_count,
+                min_sentences=min_sentences,
+                max_sentences=max_sentences,
+                allow_short_final=False,
+            )
+
+        take_from_left = min(left_available, needed)
+        take_from_right = needed - take_from_left
+        if take_from_left:
+            endpoints[short_index - 1] -= take_from_left
+        if take_from_right:
+            endpoints[short_index] += take_from_right
+
+    rebalanced: list[tuple[int, int]] = []
+    previous_end = 0
+    for endpoint in endpoints:
+        rebalanced.append((previous_end + 1, endpoint))
+        previous_end = endpoint
+
+    _validate_agentic_boundaries(
+        rebalanced,
+        sentence_count=sentence_count,
+        min_sentences=min_sentences,
+        max_sentences=max_sentences,
+        allow_short_final=False,
+    )
+    return rebalanced
+
+
+def _chunk_spans_to_boundaries(
+    sentences: list[SentenceSpan],
+    chunks: list[ChunkSpan],
+) -> list[tuple[int, int]]:
+    if not sentences or not chunks:
+        raise ValueError("sentences and chunks must not be empty")
+
+    sentence_start_indexes = {
+        sentence.char_start: index
+        for index, sentence in enumerate(sentences, start=1)
+    }
+    sentence_end_indexes = {
+        sentence.char_end: index
+        for index, sentence in enumerate(sentences, start=1)
+    }
+    boundaries: list[tuple[int, int]] = []
+    for chunk in chunks:
+        start = sentence_start_indexes.get(chunk.char_start)
+        end = sentence_end_indexes.get(chunk.char_end)
+        if start is None or end is None:
+            raise ValueError("agentic chunk is not aligned to sentence boundaries")
+        boundaries.append((start, end))
+
+    _validate_agentic_boundary_structure(
+        boundaries,
+        sentence_count=len(sentences),
+    )
+    return boundaries
 
 
 def _reconstruct_chunks(

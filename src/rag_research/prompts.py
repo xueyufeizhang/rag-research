@@ -27,8 +27,8 @@ You are a Knowledge Graph Specialist responsible for extracting entities and rel
   - **Identification:** Identify clearly defined and meaningful entities in the `---Input Text---` session of user prompt.
   - **Entity Details:** For each identified entity, extract the following information:
     - `name`: The name of the entity. If the entity name is case-insensitive, capitalize the first letter of each significant word (title case). Ensure **consistent naming** across the entire extraction process.
-    - `type`: Categorize the entity using the type guidance provided in the `---Entity Types---` section below. If none of the provided entity types apply, classify it as `Other`.
-    - `description`: Provide a concise yet comprehensive description of the entity's attributes and activities, based *solely* on the information present in the input text.
+    - `type`: Categorize the entity using exactly one type label from the `---Entity Types---` section below. If none of the provided entity types apply, classify it as `Other`; never invent a new type label.
+    - `description`: Provide a non-empty, concise yet comprehensive description of the entity's attributes and activities, based *solely* on the information present in the input text.
 
 2. **Relationship Extraction:**
   - **Identification:** Identify direct, clearly stated, and meaningful relationships between previously extracted entities.
@@ -37,12 +37,13 @@ You are a Knowledge Graph Specialist responsible for extracting entities and rel
   - **Relationship Details:** For each binary relationship, extract the following fields:
     - `source`: The name of the source entity. Ensure **consistent naming** with entity extraction. Capitalize the first letter of each significant word (title case) if the name is case-insensitive.
     - `target`: The name of the target entity. Ensure **consistent naming** with entity extraction. Capitalize the first letter of each significant word (title case) if the name is case-insensitive.
-    - `keywords`: One or more high-level keywords summarizing the overarching nature, concepts, or themes of the relationship, separated by commas.
-    - `description`: A concise explanation of the nature of the relationship between the source and target entities, providing a clear rationale for their connection.
+    - `keywords`: One or more non-empty high-level keywords summarizing the overarching nature, concepts, or themes of the relationship, separated by commas.
+    - `description`: A non-empty, concise explanation of the nature of the relationship between the source and target entities, providing a clear rationale for their connection.
 
 3. **Relationship Direction & Duplication:**
   - Treat all relationships as **undirected** unless explicitly stated otherwise. Swapping the source and target entities for an undirected relationship does not constitute a new relationship.
   - Avoid outputting duplicate relationships.
+  - Never create a relationship whose `source` and `target` refer to the same entity. Represent unary facts in the entity description instead.
 
 4. **Output Limits & Prioritization:**
   - Output at most {max_total_records} total records across `entities` and `relationships` in this response.
@@ -79,8 +80,9 @@ Extract entities and relationships from the `---Input Text---` session below.
 ---Instructions---
 1. **Strict Adherence to JSON Format:** Your output MUST be a valid JSON object with `entities` and `relationships` arrays. Do not include any introductory or concluding remarks, explanations, markdown code fences, or any other text before or after the JSON.
 2. **Quantity Limits:** In this response, output at most {max_total_records} total records and at most {max_entity_records} entity objects. Output fewer records if fewer high-value items are present. Only output relationship objects whose `source` and `target` are both included in this response.
-3. **Input Grounding:** Use only the current `---Input Text---`. The examples in the system prompt are format demonstrations, not extraction candidates; do not copy their entities, relationships, or facts unless they are explicitly present below.
-4. **Output Language:** Ensure the output language is English. Proper nouns (e.g., personal names, place names, organization names) must be kept in their original language and not translated.
+3. **Required Fields:** Every entity must have a non-empty `name`, one exact type label from `---Entity Types---`, and a non-empty `description`. Every relationship must have two different endpoints plus non-empty `keywords` and `description`.
+4. **Input Grounding:** Use only the current `---Input Text---`. The examples in the system prompt are format demonstrations, not extraction candidates; do not copy their entities, relationships, or facts unless they are explicitly present below.
+5. **Output Language:** Ensure the output language is English. Proper nouns (e.g., personal names, place names, organization names) must be kept in their original language and not translated.
 
 ---Entity Types---
 {entity_types_guidance}

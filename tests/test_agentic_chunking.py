@@ -6,6 +6,7 @@ from rag_research.chunking import (
     SentenceSpan,
     _make_sentence_batches,
     _project_agentic_boundaries,
+    _rebalance_agentic_document_boundaries,
     _split_sentences,
     _validate_agentic_boundaries,
     agentic_ibm_chunk,
@@ -278,6 +279,16 @@ class AgenticIBMChunkingTests(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(projected, [(1, 20), (21, 40), (41, 60)])
 
+    def test_document_rebalancing_borrows_only_when_merge_is_impossible(self):
+        rebalanced = _rebalance_agentic_document_boundaries(
+            [(1, 24), (25, 29)],
+            sentence_count=29,
+            min_sentences=10,
+            max_sentences=24,
+        )
+
+        self.assertEqual(rebalanced, [(1, 19), (20, 29)])
+
     def test_projection_produces_legal_boundaries_for_every_batch_size(self):
         for sentence_count in range(1, 61):
             proposals = [
@@ -341,12 +352,58 @@ class AgenticIBMChunkingTests(unittest.IsolatedAsyncioTestCase):
             projection_events,
             [
                 {
+                    "scope": "batch",
                     "batch_index": 1,
                     "sentence_count": 27,
                     "original_boundaries": [[1, 7], [8, 27]],
                     "projected_boundaries": [[1, 10], [11, 27]],
                 }
             ],
+        )
+        self.assertEqual("".join(chunk.text for chunk in chunks), text)
+        assert_source_aligned(self, text, chunks)
+
+    async def test_document_projection_rebalances_short_macro_batch_tails(self):
+        text = " ".join(
+            f"Sentence {index}."
+            for index in range(1, 31)
+        )
+        projection_events: list[dict[str, object]] = []
+
+        async def fake_llm(system: str, prompt: str) -> str:
+            return (
+                '{"chunks": ['
+                '{"start": 1, "end": 10}, '
+                '{"start": 11, "end": 15}'
+                ']}'
+            )
+
+        chunks = await agentic_ibm_chunk(
+            text=text,
+            batch_max_sentences=15,
+            batch_max_chars=12000,
+            min_sentences=10,
+            max_sentences=24,
+            concurrency=2,
+            retries=0,
+            llm_func=fake_llm,
+            projection_events=projection_events,
+        )
+
+        self.assertEqual(
+            [len(_split_sentences(chunk.text)) for chunk in chunks],
+            [15, 15],
+        )
+        self.assertEqual(len(projection_events), 1)
+        self.assertEqual(projection_events[0]["scope"], "document")
+        self.assertEqual(projection_events[0]["batch_index"], 0)
+        self.assertEqual(
+            projection_events[0]["original_boundaries"],
+            [[1, 10], [11, 15], [16, 25], [26, 30]],
+        )
+        self.assertEqual(
+            projection_events[0]["projected_boundaries"],
+            [[1, 15], [16, 30]],
         )
         self.assertEqual("".join(chunk.text for chunk in chunks), text)
         assert_source_aligned(self, text, chunks)
