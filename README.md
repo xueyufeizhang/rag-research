@@ -5,9 +5,9 @@ Research code and experiment artifacts for a thesis project on retrieval-augment
 ## Current Focus
 
 - Build a lightweight RAG pipeline with KV storage, vector indexes, and a knowledge graph.
-- Compare fixed-size, sentence-window, and embedding-based semantic chunking.
-- Evaluate retrieval quality across naive, local, global, and hybrid retrieval modes.
-- Keep reusable experiment outputs for the *A Christmas Carol* corpus while the thesis method evolves.
+- Compare fixed-size, embedding-based semantic, and stateful agentic chunking.
+- Evaluate single- and multi-document retrieval across naive, local, global, and hybrid modes.
+- Use MultiHopRAG for cross-document evidence and joint multi-hop retrieval evaluation.
 
 ## Pipeline
 
@@ -44,8 +44,10 @@ Research code and experiment artifacts for a thesis project on retrieval-augment
    - `global`: relation-vector retrieval plus endpoint entity lookup.
    - `hybrid`: deduplicated merge of local and global retrieval traces.
 
-6. **Evaluation** ([evaluate_retrieval.py](scripts/evaluate_retrieval.py))
-   Runs retrieval modes against chunk-independent canonical evidence and writes detailed results plus summary metrics under `artifacts/evaluations/`.
+6. **Evaluation** ([evaluate_retrieval.py](scripts/evaluate_retrieval.py), [evaluate_multihop_retrieval.py](scripts/evaluate_multihop_retrieval.py))
+   Runs retrieval modes against chunk-independent canonical evidence. The
+   MultiHopRAG evaluator isolates document-relative offsets, reports K curves
+   and joint evidence/document success, and checkpoints every question/mode.
 
 7. **Visualization** ([visualize_graph.py](scripts/visualize_graph.py))
    Renders the selected experiment graph under `artifacts/visualizations/` with `pyvis`.
@@ -55,15 +57,21 @@ Research code and experiment artifacts for a thesis project on retrieval-augment
 ```text
 src/rag_research/                  reusable RAG implementation
 ├── backends.py                    LLM and embedding backend adapters
-├── chunking.py                    fixed-size, sentence-window, and semantic chunkers
+├── chunking.py                    public fixed/semantic/agentic dispatcher
+├── chunking_models.py             shared chunk configuration and span models
+├── text_spans.py                  lossless sentence segmentation helpers
+├── agentic_chunking.py            stateful Agentic Chunking workflow
+├── agentic_llm.py                 Agentic LLM calls, validation, and recovery
+├── agentic_boundaries.py          boundary projection and rebalancing rules
 ├── core.py                        LightRAG construction and retrieval pipeline
 ├── extraction.py                  concurrent entity/relation extraction
-├── prompts.py                     extraction and retrieval prompt templates
+├── prompts.py                     chunking, extraction, and retrieval prompts
 └── storage.py                     JSON/npy-backed KV, vector, and graph stores
 
 scripts/                           runnable project entry points
 ├── run_demo.py                    build/query demo
 ├── evaluate_retrieval.py          retrieval evaluation
+├── evaluate_multihop_retrieval.py MultiHopRAG retrieval evaluation
 └── visualize_graph.py             graph visualization
 
 data/
@@ -234,6 +242,48 @@ The script evaluates `naive`, `local`, `global`, and `hybrid` modes with the que
 
 For example: `retrieval_eval_semantic_rerank_results.json` and
 `retrieval_eval_fixed_dense_only_summaries.json`.
+
+### MultiHopRAG retrieval evaluation
+
+Point `WORKING_DIR` at a completed MultiHopRAG index and run:
+
+```bash
+uv run python scripts/evaluate_multihop_retrieval.py
+```
+
+The evaluator verifies that the dataset and build fingerprint match the loaded
+index, then produces two deliberately separate evaluation sections from the
+same retrieval ranking:
+
+- `thesis_extended` is the system-oriented evaluator. It reports Evidence
+  Recall@K, Joint Evidence Success@K, Document Recall@K, Joint Document
+  Success@K, Chunk Precision@K, MAP@K, MRR, nDCG@K, evidence density,
+  retrieved tokens, and cross-document counts. `null_query` rows are kept
+  separate and report context statistics only.
+- `official` reproduces the [MultiHop-RAG official retrieval evaluator](https://github.com/yixuantt/MultiHop-RAG/blob/main/retrieval_evaluate.py):
+  literal spaces and newlines are removed, a retrieved text is relevant when it
+  contains a gold fact, and the aggregate contains exactly `Hits@4`, `Hits@10`,
+  `MAP@10`, and `MRR@10`. It always scores top 10 and excludes `null_query`
+  rows, matching the official baseline protocol.
+
+Retrieval runs once at `max(max(EVAL_K_VALUES), 10)`. The extended evaluator
+uses the configured K prefixes; the official evaluator uses the top-10 prefix.
+
+Each run is stored under a configuration fingerprint in
+`artifacts/evaluations/multihop_rag/`. Per-question/mode atomic checkpoints make
+the 2,556-question run resumable. Final `results.json`, `summaries.json`, and
+`run_manifest.json` preserve the dataset hashes, build fingerprint, retrieval
+configuration, model names, and tokenizer. The `official/<mode>.json` files use
+the upstream `query`/`retrieval_list`/`gold_list` JSON shape, so the official
+script can independently rescore them. Useful controls are:
+
+```env
+EVAL_MODES=naive,local,global,hybrid
+EVAL_K_VALUES=1,3,5,10,20
+EVAL_CONCURRENCY=4
+EVAL_INCLUDE_NULL=true
+EVAL_MAX_QUESTIONS=0
+```
 
 Render the graph for the configured `WORKING_DIR`:
 

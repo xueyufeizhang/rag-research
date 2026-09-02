@@ -1,7 +1,4 @@
 from rag_research.chunking import (
-    AGENTIC_METADATA_SYSTEM_PROMPT,
-    AGENTIC_PROPOSITION_SYSTEM_PROMPT,
-    AGENTIC_STATE_SYSTEM_PROMPT,
     CHUNKING_PIPELINE_VERSION,
     ChunkConfig,
     ChunkSpan,
@@ -22,7 +19,12 @@ from rag_research.storage import KVStore, GraphStore, VectorIndex
 from typing import Any
 from collections.abc import Sequence
 import json
-from rag_research.prompts import PROMPTS
+from rag_research.prompts import (
+    AGENTIC_METADATA_SYSTEM_PROMPT,
+    AGENTIC_PROPOSITION_SYSTEM_PROMPT,
+    AGENTIC_STATE_SYSTEM_PROMPT,
+    PROMPTS,
+)
 import os
 import hashlib
 import re
@@ -212,8 +214,6 @@ class LightRAGConfig:
         strategy=os.getenv("CHUNKING_STRATEGY", "fixed"),
         fixed_size=int(os.getenv("FIXED_WINDOW_SIZE", 2400)),
         fixed_overlap=int(os.getenv("FIXED_WINDOW_OVERLAP", 200)),
-        sentence_window_size=int(os.getenv("SENTENCE_WINDOW_SIZE", 8)),
-        sentence_window_overlap=int(os.getenv("SENTENCE_WINDOW_OVERLAP", 2)),
         semantic_breakpoint_percentile=float(os.getenv("SEMANTIC_BREAKPOINT_PERCENTILE", 90)),
         semantic_min_sentences=int(os.getenv("SEMANTIC_MIN_SENTENCES", 8)),
         semantic_max_sentences=int(os.getenv("SEMANTIC_MAX_SENTENCES", 24)),
@@ -459,8 +459,11 @@ class LightRAG:
         )
 
         return [
-            relation
-            for relation, _ in ranked_relations[:self.config.relation_top_k]
+            {
+                **relation,
+                "rerank_score": float(score),
+            }
+            for relation, score in ranked_relations[:self.config.relation_top_k]
         ]
 
 
@@ -493,10 +496,49 @@ class LightRAG:
                 seen.add(sid)
         return chunks
 
+    def _get_graph_candidate_chunks(
+        self,
+        entities: list[dict],
+        relations: list[dict],
+        *,
+        retrieval_source: str,
+    ) -> list[dict]:
+        """Collect graph-introduced chunks with auditable candidate provenance."""
+        introductions: dict[str, list[dict[str, str]]] = {}
+        for entity in entities:
+            entity_name = entity.get("name")
+            if not entity_name:
+                continue
+            for chunk_id in entity.get("source_id", []):
+                introductions.setdefault(chunk_id, []).append({
+                    "kind": "entity",
+                    "id": entity_name,
+                })
+        for relation in relations:
+            relation_id = self._relation_key(relation)
+            if not relation_id:
+                continue
+            for chunk_id in relation.get("source_id", []):
+                introductions.setdefault(chunk_id, []).append({
+                    "kind": "relation",
+                    "id": relation_id,
+                })
+
+        chunks = self._get_chunks_by_source_ids(list(introductions))
+        return [
+            {
+                **chunk,
+                "retrieval_sources": [retrieval_source],
+                "introduced_by": introductions.get(chunk["chunk_id"], []),
+            }
+            for chunk in chunks
+        ]
+
     def _dense_filter_chunks(
             self,
             emb: list[float],
             candidate_chunks: list[dict],
+            candidate_top_k: int | None = None,
     ) -> list[dict]:
         candidate_chunks_by_id = {
             chunk["chunk_id"]: chunk
@@ -513,18 +555,36 @@ class LightRAG:
                 continue
             candidate_vidx.add(chunk_id, vector)
 
-        dense_hits = candidate_vidx.query(emb, self.config.chunk_candidate_top_k)
+        requested_candidates = (
+            self.config.chunk_candidate_top_k
+            if candidate_top_k is None
+            else candidate_top_k
+        )
+        if requested_candidates <= 0:
+            raise ValueError("chunk candidate top_k must be positive")
+        dense_hits = candidate_vidx.query(emb, requested_candidates)
         return [
-            candidate_chunks_by_id[chunk_id]
-            for chunk_id, _ in dense_hits
+            {
+                **candidate_chunks_by_id[chunk_id],
+                "dense_score": float(dense_score),
+            }
+            for chunk_id, dense_score in dense_hits
             if chunk_id in candidate_chunks_by_id
         ]
 
-    def _rerank_chunks(self, query: str, shortlist: list[dict]) -> list[dict]:
+    def _rerank_chunks(
+        self,
+        query: str,
+        shortlist: list[dict],
+        top_k: int | None = None,
+    ) -> list[dict]:
         if not shortlist:
             return []
+        requested_top_k = self.config.chunk_top_k if top_k is None else top_k
+        if requested_top_k <= 0:
+            raise ValueError("chunk top_k must be positive")
         if self.reranker is None:
-            return shortlist[:self.config.chunk_top_k]
+            return shortlist[:requested_top_k]
 
         pairs = [(query, chunk["text"]) for chunk in shortlist]
         rerank_scores = self.reranker.predict(pairs)
@@ -534,15 +594,25 @@ class LightRAG:
             reverse=True,
         )
         return [
-            chunk
-            for chunk, _ in ranked_chunks[:self.config.chunk_top_k]
+            {
+                **chunk,
+                "rerank_score": float(score),
+            }
+            for chunk, score in ranked_chunks[:requested_top_k]
         ]
     
-    async def _naive_retrieve(self, query: str) -> list[dict]:
+    async def _naive_retrieve(
+        self,
+        query: str,
+        top_k: int | None = None,
+    ) -> list[dict]:
         emb = await self.embed_func(query)
+        requested_top_k = self.config.chunk_top_k if top_k is None else top_k
+        if requested_top_k <= 0:
+            raise ValueError("chunk top_k must be positive")
         dense_hits = self.chunk_vidx.query(
             emb,
-            self.config.chunk_candidate_top_k,
+            max(self.config.chunk_candidate_top_k, requested_top_k),
         )
         shortlist = []
         for chunk_id, dense_score in dense_hits:
@@ -552,8 +622,10 @@ class LightRAG:
                     **chunk,
                     "chunk_id": chunk_id,
                     "dense_score": dense_score,
+                    "retrieval_sources": ["naive"],
+                    "introduced_by": [{"kind": "dense", "id": chunk_id}],
                 })
-        return self._rerank_chunks(query, shortlist)
+        return self._rerank_chunks(query, shortlist, requested_top_k)
 
 
     def _dense_filter_local_relations(
@@ -570,8 +642,11 @@ class LightRAG:
 
         dense_hits = candidate_vidx.query(emb, self.config.relation_candidate_top_k)
         shortlist = [
-            candidate_relations[relation_key]
-            for relation_key, _ in dense_hits
+            {
+                **candidate_relations[relation_key],
+                "dense_score": float(dense_score),
+            }
+            for relation_key, dense_score in dense_hits
             if relation_key in candidate_relations
         ]
         return shortlist
@@ -581,25 +656,37 @@ class LightRAG:
             query: str,
             init_emb: list[float] | None = None,
             retrieve_chunks: bool = True,
+            top_k: int | None = None,
     ) -> tuple[list[dict], list[dict], list[dict]]:
         emb = init_emb if init_emb is not None else await self.embed_func(query)
 
         dense_hits = self.entity_vidx.query(emb, self.config.entity_top_k)
-        entities = [self.entity_kv.get(k) for k, _ in dense_hits if self.entity_kv.get(k)]
+        entities = [
+            {
+                **entity,
+                "dense_score": float(dense_score),
+            }
+            for key, dense_score in dense_hits
+            if (entity := self.entity_kv.get(key))
+        ]
         candidate_relations = self._get_relation_candidates_from_entities(entities)
         relation_shortlist = self._dense_filter_local_relations(emb, candidate_relations)
         relations = self._rerank_relations(query, relation_shortlist)
         if not retrieve_chunks:
             return entities, relations, []
 
-        source_ids = []
-        for e in entities:
-            source_ids.extend(e.get("source_id", []))
-        for r in relations:
-            source_ids.extend(r.get("source_id", []))
-        candidate_chunks = self._get_chunks_by_source_ids(source_ids)
-        chunk_shortlist = self._dense_filter_chunks(emb, candidate_chunks)
-        chunks = self._rerank_chunks(query, chunk_shortlist)
+        requested_top_k = self.config.chunk_top_k if top_k is None else top_k
+        candidate_chunks = self._get_graph_candidate_chunks(
+            entities,
+            relations,
+            retrieval_source="local",
+        )
+        chunk_shortlist = self._dense_filter_chunks(
+            emb,
+            candidate_chunks,
+            max(self.config.chunk_candidate_top_k, requested_top_k),
+        )
+        chunks = self._rerank_chunks(query, chunk_shortlist, requested_top_k)
         return entities, relations, chunks
 
     async def _global_retrieve(
@@ -607,24 +694,36 @@ class LightRAG:
             query: str,
             init_emb: list[float] | None = None,
             retrieve_chunks: bool = True,
+            top_k: int | None = None,
     ) -> tuple[list[dict], list[dict], list[dict]]:
         emb = init_emb if init_emb is not None else await self.embed_func(query)
 
         dense_hits = self.relation_vidx.query(emb, self.config.relation_candidate_top_k)
-        relation_shortlist = [self.relation_kv.get(k) for k, _ in dense_hits if self.relation_kv.get(k)]
+        relation_shortlist = [
+            {
+                **relation,
+                "dense_score": float(dense_score),
+            }
+            for key, dense_score in dense_hits
+            if (relation := self.relation_kv.get(key))
+        ]
         relations = self._rerank_relations(query, relation_shortlist)
         entities = self._get_entities_from_relations(relations)
         if not retrieve_chunks:
             return entities, relations, []
 
-        source_ids = []
-        for r in relations:
-            source_ids.extend(r.get("source_id", []))
-        for e in entities:
-            source_ids.extend(e.get("source_id", []))
-        candidate_chunks = self._get_chunks_by_source_ids(source_ids)
-        chunk_shortlist = self._dense_filter_chunks(emb, candidate_chunks)
-        chunks = self._rerank_chunks(query, chunk_shortlist)
+        requested_top_k = self.config.chunk_top_k if top_k is None else top_k
+        candidate_chunks = self._get_graph_candidate_chunks(
+            entities,
+            relations,
+            retrieval_source="global",
+        )
+        chunk_shortlist = self._dense_filter_chunks(
+            emb,
+            candidate_chunks,
+            max(self.config.chunk_candidate_top_k, requested_top_k),
+        )
+        chunks = self._rerank_chunks(query, chunk_shortlist, requested_top_k)
         return entities, relations, chunks
 
     def _dedupe_entities(self, entities: list[dict]) -> list[dict]:
@@ -656,7 +755,11 @@ class LightRAG:
         return output_relations
 
 
-    async def _hybrid_retrieve(self, query: str) -> tuple[list[dict], list[dict], list[dict]]:
+    async def _hybrid_retrieve(
+        self,
+        query: str,
+        top_k: int | None = None,
+    ) -> tuple[list[dict], list[dict], list[dict]]:
         emb = await self.embed_func(query)
 
         local_entities, local_relations, _ = await self._local_retrieve(query, emb, retrieve_chunks=False)
@@ -664,14 +767,39 @@ class LightRAG:
         entities = self._dedupe_entities(local_entities + global_entities)
         relations = self._dedupe_relations(local_relations + global_relations)
 
-        source_ids = []
-        for e in entities:
-            source_ids.extend(e.get("source_id", []))
-        for r in relations:
-            source_ids.extend(r.get("source_id", []))
-        candidate_chunks = self._get_chunks_by_source_ids(source_ids)
-        shortlist = self._dense_filter_chunks(emb, candidate_chunks)
-        chunks = self._rerank_chunks(query, shortlist)
+        requested_top_k = self.config.chunk_top_k if top_k is None else top_k
+        local_candidates = self._get_graph_candidate_chunks(
+            local_entities,
+            local_relations,
+            retrieval_source="local",
+        )
+        global_candidates = self._get_graph_candidate_chunks(
+            global_entities,
+            global_relations,
+            retrieval_source="global",
+        )
+        candidates_by_id: dict[str, dict] = {}
+        for candidate in local_candidates + global_candidates:
+            chunk_id = candidate["chunk_id"]
+            existing = candidates_by_id.get(chunk_id)
+            if existing is None:
+                candidates_by_id[chunk_id] = candidate
+                continue
+            existing["retrieval_sources"] = list(dict.fromkeys(
+                existing.get("retrieval_sources", [])
+                + candidate.get("retrieval_sources", [])
+            ))
+            introductions = existing.get("introduced_by", []) + candidate.get("introduced_by", [])
+            existing["introduced_by"] = list({
+                (item["kind"], item["id"]): item
+                for item in introductions
+            }.values())
+        shortlist = self._dense_filter_chunks(
+            emb,
+            list(candidates_by_id.values()),
+            max(self.config.chunk_candidate_top_k, requested_top_k),
+        )
+        chunks = self._rerank_chunks(query, shortlist, requested_top_k)
         return entities, relations, chunks
 
 
@@ -704,7 +832,7 @@ class LightRAG:
                 "prompt_sha256": hashlib.sha256(
                     prompt_json.encode("utf-8")
                 ).hexdigest(),
-                "state_model": "sequential-open-chunk-v1",
+                "state_model": "sequential-open-chunk-v2",
             })
 
         extraction_prompt = {
@@ -1395,16 +1523,33 @@ class LightRAG:
             return ""
         return "||".join(sorted([source, target]))
 
-    async def retrieve_trace(self, query: str, mode: str = "hybrid") -> dict:
+    async def retrieve_trace(
+        self,
+        query: str,
+        mode: str = "hybrid",
+        top_k: int | None = None,
+    ) -> dict:
+        requested_top_k = self.config.chunk_top_k if top_k is None else top_k
+        if requested_top_k <= 0:
+            raise ValueError("top_k must be positive")
         if mode == "naive":
-            chunks = await self._naive_retrieve(query)
+            chunks = await self._naive_retrieve(query, requested_top_k)
             entities, relations = [], []
         elif mode == "local":
-            entities, relations, chunks = await self._local_retrieve(query)
+            entities, relations, chunks = await self._local_retrieve(
+                query,
+                top_k=requested_top_k,
+            )
         elif mode == "global":
-            entities, relations, chunks = await self._global_retrieve(query)
+            entities, relations, chunks = await self._global_retrieve(
+                query,
+                top_k=requested_top_k,
+            )
         elif mode == "hybrid":
-            entities, relations, chunks = await self._hybrid_retrieve(query)
+            entities, relations, chunks = await self._hybrid_retrieve(
+                query,
+                top_k=requested_top_k,
+            )
         else:
             raise ValueError(f"unknown retrieval mode: {mode}")
 
@@ -1420,6 +1565,7 @@ class LightRAG:
         return {
             "query": query,
             "mode": mode,
+            "requested_top_k": requested_top_k,
             "entity_ids": entity_ids,
             "relation_ids": relation_ids,
             "chunk_ids": chunk_ids,

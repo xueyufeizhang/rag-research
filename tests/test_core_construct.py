@@ -5,11 +5,11 @@ from dataclasses import replace
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
-from rag_research.chunking import (
+from rag_research.chunking import ChunkConfig
+from rag_research.prompts import (
     AGENTIC_METADATA_SYSTEM_PROMPT,
     AGENTIC_PROPOSITION_SYSTEM_PROMPT,
     AGENTIC_STATE_SYSTEM_PROMPT,
-    ChunkConfig,
 )
 from rag_research.core import (
     ENTITY_DESCRIPTION_MAX_CHARS,

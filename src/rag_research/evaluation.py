@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import re
 import math
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping, Sequence
+
+from rag_research.models import InputDocument, QuestionRecord
 
 
 def dedupe_preserving_order(values: Iterable[str]) -> list[str]:
@@ -328,3 +330,306 @@ def map_question_evidence_to_chunks(
             chunk_to_evidence[chunk_id] = matched
 
     return chunk_to_evidence
+
+
+def build_multidocument_chunk_index(
+    documents: Sequence[InputDocument],
+    chunks: Mapping[str, dict],
+) -> dict[str, tuple[str, int, int]]:
+    """Validate source-aligned chunks and index their document-relative spans.
+
+    Multi-document offsets are meaningful only together with ``document_id``.
+    This validation deliberately requires exact source slices so an evaluator
+    cannot silently score a chunk store built from different document text.
+    """
+    documents_by_id = {document.document_id: document for document in documents}
+    if len(documents_by_id) != len(documents):
+        raise ValueError("evaluation documents contain duplicate document_id values")
+
+    indexed: dict[str, tuple[str, int, int]] = {}
+    for fallback_id, chunk in chunks.items():
+        if not isinstance(chunk, dict):
+            raise ValueError(f"invalid chunk record for {fallback_id}: expected an object")
+
+        chunk_id = chunk.get("chunk_id") or fallback_id
+        if not isinstance(chunk_id, str) or not chunk_id.strip():
+            raise ValueError(f"invalid chunk ID for stored key {fallback_id!r}")
+        if chunk_id != fallback_id:
+            raise ValueError(
+                f"chunk ID does not match its store key: {chunk_id!r} != {fallback_id!r}"
+            )
+
+        document_id = chunk.get("document_id")
+        if not isinstance(document_id, str) or document_id not in documents_by_id:
+            raise ValueError(f"chunk {chunk_id} references unknown document: {document_id!r}")
+
+        char_start = chunk.get("char_start")
+        char_end = chunk.get("char_end")
+        if (
+            not isinstance(char_start, int)
+            or isinstance(char_start, bool)
+            or not isinstance(char_end, int)
+            or isinstance(char_end, bool)
+        ):
+            raise ValueError(f"chunk {chunk_id} requires integer source offsets")
+
+        source = documents_by_id[document_id].text
+        if char_start < 0 or char_start >= char_end or char_end > len(source):
+            raise ValueError(
+                f"chunk {chunk_id} has invalid source interval: "
+                f"({char_start}, {char_end})"
+            )
+        chunk_text = chunk.get("text")
+        if chunk_text != source[char_start:char_end]:
+            raise ValueError(f"chunk {chunk_id} text does not match its document source slice")
+
+        indexed[chunk_id] = (document_id, char_start, char_end)
+
+    return indexed
+
+
+def map_multihop_evidence_to_chunks(
+    question: QuestionRecord,
+    chunk_index: Mapping[str, tuple[str, int, int]],
+) -> dict[str, list[str]]:
+    """Map canonical evidence to chunks without crossing document boundaries.
+
+    A chunk is relevant only when it fully contains at least one occurrence of
+    the evidence fact. Partial overlap is insufficient for multi-hop evidence
+    retrieval because it may omit the part needed for reasoning.
+    """
+    chunk_to_evidence: dict[str, list[str]] = {}
+    for chunk_id, (document_id, chunk_start, chunk_end) in chunk_index.items():
+        matched = []
+        for evidence in question.evidence:
+            if evidence.document_id != document_id:
+                continue
+            if any(
+                chunk_start <= occurrence.char_start
+                and occurrence.char_end <= chunk_end
+                for occurrence in evidence.occurrences
+            ):
+                matched.append(evidence.evidence_id)
+        if matched:
+            chunk_to_evidence[chunk_id] = matched
+    return chunk_to_evidence
+
+
+def normalize_multihop_official_text(value: str) -> str:
+    """Apply the exact normalization used by MultiHop-RAG's evaluator."""
+    return value.replace(" ", "").replace("\n", "")
+
+
+def calc_multihop_official_metrics(
+    *,
+    retrieved_texts: Sequence[str],
+    gold_facts: Sequence[str],
+) -> dict:
+    """Reproduce the official MultiHop-RAG top-10 scoring semantics.
+
+    The official baseline retrieves ten chunks, considers a chunk relevant when
+    any normalized gold fact is a substring of its normalized text, and credits
+    each gold fact only at the first retrieved chunk that contains it. Its
+    ``MAP@10`` formula is intentionally reproduced rather than replaced with a
+    conventional average-precision implementation.
+    """
+    if not gold_facts:
+        raise ValueError("official MultiHop-RAG metrics require gold facts")
+    if any(not isinstance(text, str) for text in retrieved_texts):
+        raise ValueError("official MultiHop-RAG retrieved texts must be strings")
+    if any(not isinstance(fact, str) for fact in gold_facts):
+        raise ValueError("official MultiHop-RAG gold facts must be strings")
+
+    normalized_gold = [
+        normalize_multihop_official_text(fact)
+        for fact in gold_facts
+    ]
+    normalized_retrieved = [
+        normalize_multihop_official_text(text)
+        for text in retrieved_texts[:10]
+    ]
+
+    hits_at_4 = False
+    hits_at_10 = False
+    average_precision_sum = 0.0
+    first_relevant_rank: int | None = None
+    found_gold: list[str] = []
+
+    for rank, retrieved_item in enumerate(normalized_retrieved, start=1):
+        if not any(gold_item in retrieved_item for gold_item in normalized_gold):
+            continue
+
+        hits_at_10 = True
+        if rank <= 4:
+            hits_at_4 = True
+        if first_relevant_rank is None:
+            first_relevant_rank = rank
+
+        newly_found_count = 0
+        for gold_item in normalized_gold:
+            if gold_item in retrieved_item and gold_item not in found_gold:
+                newly_found_count += 1
+                found_gold.append(gold_item)
+        average_precision_sum += newly_found_count / rank
+
+    return {
+        "Hits@10": int(hits_at_10),
+        "Hits@4": int(hits_at_4),
+        "MAP@10": average_precision_sum / min(len(normalized_gold), 10),
+        "MRR@10": 1.0 / first_relevant_rank if first_relevant_rank else 0.0,
+        "first_relevant_rank": first_relevant_rank,
+        "matched_gold_count": len(found_gold),
+        "gold_count": len(normalized_gold),
+        "retrieved_count": len(normalized_retrieved),
+    }
+
+
+def calc_multihop_retrieval_metrics(
+    *,
+    retrieved_chunk_ids: Sequence[str],
+    requested_k: int | None = None,
+    chunks: Mapping[str, dict],
+    chunk_to_evidence: Mapping[str, Sequence[str]],
+    evidence_to_document: Mapping[str, str],
+    evidence_lengths: Mapping[str, int],
+    token_counter: Callable[[str], int],
+) -> dict:
+    """Score one ranked chunk prefix for an answerable multi-hop question."""
+    retrieved = dedupe_preserving_order(retrieved_chunk_ids)
+    evaluation_k = len(retrieved) if requested_k is None else requested_k
+    if evaluation_k <= 0:
+        raise ValueError("requested_k must be positive")
+    if len(retrieved) > evaluation_k:
+        raise ValueError("retrieved chunks exceed requested_k")
+    gold_evidence = set(evidence_to_document)
+    if not gold_evidence:
+        raise ValueError("multi-hop retrieval metrics require gold evidence")
+
+    gold_documents = set(evidence_to_document.values())
+    covered_evidence: set[str] = set()
+    relevant_chunk_ids: list[str] = []
+    retrieved_document_ids: list[str] = []
+    first_relevant_rank: int | None = None
+    precision_sum = 0.0
+
+    retrieved_texts: list[str] = []
+    retrieved_chars = 0
+    for rank, chunk_id in enumerate(retrieved, start=1):
+        chunk = chunks.get(chunk_id)
+        if chunk is None:
+            raise ValueError(f"retrieved chunk is missing from the store: {chunk_id}")
+        document_id = chunk.get("document_id")
+        text = chunk.get("text")
+        if not isinstance(document_id, str) or not isinstance(text, str):
+            raise ValueError(f"retrieved chunk has invalid provenance: {chunk_id}")
+
+        retrieved_document_ids.append(document_id)
+        retrieved_texts.append(text)
+        retrieved_chars += len(text)
+
+        matched = set(chunk_to_evidence.get(chunk_id, ())) & gold_evidence
+        if not matched:
+            continue
+        relevant_chunk_ids.append(chunk_id)
+        if first_relevant_rank is None:
+            first_relevant_rank = rank
+        precision_sum += len(relevant_chunk_ids) / rank
+        covered_evidence.update(matched)
+
+    retrieved_document_set = set(retrieved_document_ids)
+    matched_documents = retrieved_document_set & gold_documents
+    relevant_count = len(relevant_chunk_ids)
+    retrieved_count = len(retrieved)
+    total_relevant_chunks = len(chunk_to_evidence)
+    ideal_relevant_count = min(evaluation_k, total_relevant_chunks)
+    discounted_gain = sum(
+        1.0 / math.log2(rank + 1)
+        for rank, chunk_id in enumerate(retrieved, start=1)
+        if chunk_id in chunk_to_evidence
+    )
+    ideal_discounted_gain = sum(
+        1.0 / math.log2(rank + 1)
+        for rank in range(1, ideal_relevant_count + 1)
+    )
+    evidence_recall = len(covered_evidence) / len(gold_evidence)
+    chunk_precision = relevant_count / evaluation_k
+    retrieved_tokens = token_counter("\n\n".join(retrieved_texts)) if retrieved_texts else 0
+    covered_evidence_chars = sum(
+        evidence_lengths[evidence_id]
+        for evidence_id in covered_evidence
+    )
+
+    return {
+        "requested_k": evaluation_k,
+        "retrieved_count": retrieved_count,
+        "relevant_retrieved_count": relevant_count,
+        "gold_relevant_chunk_count": total_relevant_chunks,
+        "chunk_precision": chunk_precision,
+        "evidence_recall": evidence_recall,
+        "coverage_f1": harmonic_mean(chunk_precision, evidence_recall),
+        "joint_evidence_success": covered_evidence == gold_evidence,
+        "document_recall": len(matched_documents) / len(gold_documents),
+        "joint_document_success": matched_documents == gold_documents,
+        "reciprocal_rank": 1.0 / first_relevant_rank if first_relevant_rank else 0.0,
+        "average_precision_at_k": (
+            precision_sum / min(total_relevant_chunks, evaluation_k)
+            if total_relevant_chunks
+            else 0.0
+        ),
+        "ndcg_at_k": (
+            discounted_gain / ideal_discounted_gain
+            if ideal_discounted_gain
+            else 0.0
+        ),
+        "first_relevant_rank": first_relevant_rank,
+        "gold_evidence_count": len(gold_evidence),
+        "matched_evidence_count": len(covered_evidence),
+        "matched_evidence_ids": sorted(covered_evidence),
+        "gold_document_count": len(gold_documents),
+        "matched_document_count": len(matched_documents),
+        "matched_document_ids": sorted(matched_documents),
+        "retrieved_document_count": len(retrieved_document_set),
+        "retrieved_document_ids": dedupe_preserving_order(retrieved_document_ids),
+        "cross_document_retrieval": len(retrieved_document_set) > 1,
+        "relevant_chunk_ids": relevant_chunk_ids,
+        "retrieved_chars": retrieved_chars,
+        "retrieved_tokens": retrieved_tokens,
+        "covered_evidence_chars": covered_evidence_chars,
+        "evidence_density": (
+            covered_evidence_chars / retrieved_chars if retrieved_chars else 0.0
+        ),
+    }
+
+
+def calc_null_retrieval_context_metrics(
+    *,
+    retrieved_chunk_ids: Sequence[str],
+    chunks: Mapping[str, dict],
+    token_counter: Callable[[str], int],
+) -> dict:
+    """Describe retrieval for a null query without inventing relevance labels."""
+    retrieved = dedupe_preserving_order(retrieved_chunk_ids)
+    texts: list[str] = []
+    document_ids: list[str] = []
+    for chunk_id in retrieved:
+        chunk = chunks.get(chunk_id)
+        if chunk is None:
+            raise ValueError(f"retrieved chunk is missing from the store: {chunk_id}")
+        text = chunk.get("text")
+        document_id = chunk.get("document_id")
+        if not isinstance(text, str) or not isinstance(document_id, str):
+            raise ValueError(f"retrieved chunk has invalid provenance: {chunk_id}")
+        texts.append(text)
+        document_ids.append(document_id)
+
+    unique_documents = dedupe_preserving_order(document_ids)
+    return {
+        "k": len(retrieved),
+        "retrieved_count": len(retrieved),
+        "retrieved_chars": sum(len(text) for text in texts),
+        "retrieved_tokens": token_counter("\n\n".join(texts)) if texts else 0,
+        "retrieved_document_count": len(unique_documents),
+        "retrieved_document_ids": unique_documents,
+        "cross_document_retrieval": len(unique_documents) > 1,
+        "relevance_metrics_applicable": False,
+    }

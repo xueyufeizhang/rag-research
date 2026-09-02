@@ -156,6 +156,32 @@ class RerankingTests(unittest.TestCase):
 
         self.assertEqual([chunk["chunk_id"] for chunk in ranked], ["c1", "c2"])
 
+    def test_trace_top_k_expands_candidate_pool_and_preserves_scores(self):
+        async def embed_func(_: str) -> list[float]:
+            return [1.0, 0.0]
+
+        self.rag.embed_func = embed_func
+        self.rag.chunk_kv.set("c1", {"text": "dense first"})
+        self.rag.chunk_kv.set("c2", {"text": "cross encoder first"})
+        self.rag.chunk_kv.set("c3", {"text": "outside dense shortlist"})
+
+        trace = asyncio.run(
+            self.rag.retrieve_trace("query", mode="naive", top_k=3)
+        )
+
+        self.assertEqual(trace["requested_top_k"], 3)
+        self.assertEqual(trace["chunk_ids"], ["c3", "c2", "c1"])
+        self.assertTrue(all("dense_score" in chunk for chunk in trace["chunks"]))
+        self.assertTrue(all("rerank_score" in chunk for chunk in trace["chunks"]))
+        self.assertTrue(all(
+            chunk["retrieval_sources"] == ["naive"]
+            for chunk in trace["chunks"]
+        ))
+
+    def test_trace_rejects_non_positive_top_k(self):
+        with self.assertRaisesRegex(ValueError, "top_k must be positive"):
+            asyncio.run(self.rag.retrieve_trace("query", mode="naive", top_k=0))
+
 
 if __name__ == "__main__":
     unittest.main()

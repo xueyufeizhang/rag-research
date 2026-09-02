@@ -1,21 +1,25 @@
 import json
 import unittest
 
+from rag_research.agentic_boundaries import (
+    project_boundaries,
+    rebalance_document_boundaries,
+    validate_boundaries,
+)
+from rag_research.agentic_chunking import agentic_chunk
+from rag_research.agentic_llm import make_sentence_batches
 from rag_research.chunking import (
-    AGENTIC_METADATA_SYSTEM_PROMPT,
-    AGENTIC_PROPOSITION_SYSTEM_PROMPT,
-    AGENTIC_STATE_SYSTEM_PROMPT,
     ChunkConfig,
     ChunkSpan,
     SentenceSpan,
-    _make_sentence_batches,
-    _project_agentic_boundaries,
-    _rebalance_agentic_document_boundaries,
-    _split_sentences,
-    _validate_agentic_boundaries,
-    agentic_chunk,
     chunk_async,
 )
+from rag_research.prompts import (
+    AGENTIC_METADATA_SYSTEM_PROMPT,
+    AGENTIC_PROPOSITION_SYSTEM_PROMPT,
+    AGENTIC_STATE_SYSTEM_PROMPT,
+)
+from rag_research.text_spans import split_sentences
 
 
 FOUR_SENTENCES = "One is here. Two is here. Three is here. Four is here."
@@ -40,7 +44,7 @@ class AgenticBoundaryConstraintTests(unittest.TestCase):
     def test_sentence_spans_are_a_lossless_partition(self):
         text = "  Alpha is here.\n\nBravo is here.  "
 
-        sentences = _split_sentences(text)
+        sentences = split_sentences(text)
 
         self.assertEqual("".join(sentence.text for sentence in sentences), text)
         self.assertEqual(sentences[0].char_start, 0)
@@ -51,7 +55,7 @@ class AgenticBoundaryConstraintTests(unittest.TestCase):
     def test_overlapping_ellipsis_spans_are_merged_without_text_loss(self):
         text = "Loading . . .\n\nStudents are here."
 
-        sentences = _split_sentences(text)
+        sentences = split_sentences(text)
 
         self.assertEqual(
             sentences,
@@ -70,7 +74,7 @@ class AgenticBoundaryConstraintTests(unittest.TestCase):
             SentenceSpan("dddd", 15, 19),
         ]
 
-        batches = _make_sentence_batches(
+        batches = make_sentence_batches(
             sentences,
             max_sentences=3,
             max_chars=9,
@@ -80,7 +84,7 @@ class AgenticBoundaryConstraintTests(unittest.TestCase):
 
     def test_validator_rejects_gaps(self):
         with self.assertRaisesRegex(ValueError, "expected chunk to start at 3"):
-            _validate_agentic_boundaries(
+            validate_boundaries(
                 [(1, 2), (4, 4)],
                 sentence_count=4,
                 min_sentences=1,
@@ -90,7 +94,7 @@ class AgenticBoundaryConstraintTests(unittest.TestCase):
     def test_projection_keeps_valid_boundaries(self):
         boundaries = [(1, 10), (11, 24), (25, 29)]
 
-        projected = _project_agentic_boundaries(
+        projected = project_boundaries(
             boundaries,
             sentence_count=29,
             min_sentences=10,
@@ -100,7 +104,7 @@ class AgenticBoundaryConstraintTests(unittest.TestCase):
         self.assertEqual(projected, boundaries)
 
     def test_projection_splits_an_oversized_unit(self):
-        projected = _project_agentic_boundaries(
+        projected = project_boundaries(
             [(1, 26)],
             sentence_count=26,
             min_sentences=10,
@@ -110,7 +114,7 @@ class AgenticBoundaryConstraintTests(unittest.TestCase):
         self.assertEqual(projected, [(1, 13), (14, 26)])
 
     def test_projection_moves_an_undersized_boundary(self):
-        projected = _project_agentic_boundaries(
+        projected = project_boundaries(
             [(1, 7), (8, 27)],
             sentence_count=27,
             min_sentences=10,
@@ -120,7 +124,7 @@ class AgenticBoundaryConstraintTests(unittest.TestCase):
         self.assertEqual(projected, [(1, 10), (11, 27)])
 
     def test_document_rebalancing_borrows_when_merge_is_impossible(self):
-        rebalanced = _rebalance_agentic_document_boundaries(
+        rebalanced = rebalance_document_boundaries(
             [(1, 24), (25, 29)],
             sentence_count=29,
             min_sentences=10,
@@ -143,13 +147,13 @@ class AgenticBoundaryConstraintTests(unittest.TestCase):
                     sentence_count=sentence_count,
                     proposed_chunk_count=len(proposed),
                 ):
-                    projected = _project_agentic_boundaries(
+                    projected = project_boundaries(
                         proposed,
                         sentence_count=sentence_count,
                         min_sentences=10,
                         max_sentences=24,
                     )
-                    _validate_agentic_boundaries(
+                    validate_boundaries(
                         projected,
                         sentence_count=sentence_count,
                         min_sentences=10,
@@ -226,7 +230,7 @@ class StatefulAgenticChunkingTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual("".join(chunk.text for chunk in chunks), FOUR_SENTENCES)
         assert_source_aligned(self, FOUR_SENTENCES, chunks)
 
-    async def test_retries_an_invalid_state_transition(self):
+    async def test_forces_single_allowed_action_without_retry(self):
         state_calls = 0
 
         async def fake_llm(system: str, prompt: str) -> str:
@@ -235,17 +239,10 @@ class StatefulAgenticChunkingTests(unittest.IsolatedAsyncioTestCase):
                 return '{"propositions": [{"start": 1, "end": 4}]}'
             if system == AGENTIC_STATE_SYSTEM_PROMPT:
                 state_calls += 1
-                if state_calls == 1:
-                    return json.dumps({
-                        "action": "append",
-                        "title": "Invalid",
-                        "summary": "There is no open chunk.",
-                    })
-                self.assertIn("previous response was invalid", prompt)
                 return json.dumps({
-                    "action": "new_chunk",
-                    "title": "Valid",
-                    "summary": "A valid initial chunk.",
+                    "action": "append",
+                    "title": "Forced initial chunk",
+                    "summary": "The program forces the only legal action.",
                 })
             self.fail(f"unexpected system prompt: {system}")
 
@@ -256,12 +253,216 @@ class StatefulAgenticChunkingTests(unittest.IsolatedAsyncioTestCase):
             min_sentences=1,
             max_sentences=4,
             concurrency=1,
+            retries=0,
+            llm_func=fake_llm,
+        )
+
+        self.assertEqual(state_calls, 1)
+        self.assertEqual(chunks[0].title, "Forced initial chunk")
+
+    async def test_retries_an_invalid_choice_when_two_actions_are_allowed(self):
+        text = "One. Two."
+        state_calls = 0
+
+        async def fake_llm(system: str, prompt: str) -> str:
+            nonlocal state_calls
+            if system == AGENTIC_PROPOSITION_SYSTEM_PROMPT:
+                return (
+                    '{"propositions": ['
+                    '{"start": 1, "end": 1}, '
+                    '{"start": 2, "end": 2}'
+                    ']}'
+                )
+            if system == AGENTIC_STATE_SYSTEM_PROMPT:
+                state_calls += 1
+                if state_calls == 1:
+                    return json.dumps({
+                        "action": "append",
+                        "title": "First",
+                        "summary": "The forced initial state.",
+                    })
+                if state_calls == 2:
+                    return json.dumps({
+                        "action": "merge",
+                        "title": "Invalid",
+                        "summary": "An unsupported routing action.",
+                    })
+                self.assertIn("previous response was invalid", prompt)
+                return json.dumps({
+                    "action": "append",
+                    "title": "Combined",
+                    "summary": "Both statements remain together.",
+                })
+            self.fail(f"unexpected system prompt: {system}")
+
+        chunks = await agentic_chunk(
+            text=text,
+            batch_max_sentences=10,
+            batch_max_chars=1000,
+            min_sentences=1,
+            max_sentences=4,
+            concurrency=1,
             retries=1,
             llm_func=fake_llm,
         )
 
-        self.assertEqual(state_calls, 2)
-        self.assertEqual(chunks[0].title, "Valid")
+        self.assertEqual(state_calls, 3)
+        self.assertEqual(len(chunks), 1)
+        self.assertEqual(chunks[0].title, "Combined")
+
+    async def test_invalid_routing_action_never_uses_metadata_fallback(self):
+        text = "One. Two."
+        state_calls = 0
+
+        async def fake_llm(system: str, prompt: str) -> str:
+            nonlocal state_calls
+            if system == AGENTIC_PROPOSITION_SYSTEM_PROMPT:
+                return (
+                    '{"propositions": ['
+                    '{"start": 1, "end": 1}, '
+                    '{"start": 2, "end": 2}'
+                    ']}'
+                )
+            if system == AGENTIC_STATE_SYSTEM_PROMPT:
+                state_calls += 1
+                if state_calls == 1:
+                    return json.dumps({
+                        "title": "First",
+                        "summary": "The initial forced state.",
+                    })
+                return json.dumps({
+                    "action": "merge",
+                    "title": "Invalid routing",
+                    "summary": "The action is outside the protocol.",
+                })
+            if system == AGENTIC_METADATA_SYSTEM_PROMPT:
+                self.fail("metadata repair must not invent a routing action")
+            self.fail(f"unexpected system prompt: {system}")
+
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "state transition 2 failed after 2 attempts",
+        ):
+            await agentic_chunk(
+                text=text,
+                batch_max_sentences=10,
+                batch_max_chars=1000,
+                min_sentences=1,
+                max_sentences=4,
+                concurrency=1,
+                retries=1,
+                llm_func=fake_llm,
+            )
+
+    async def test_invalid_state_metadata_uses_dedicated_metadata_repair(self):
+        text = "First topic sentence. Second supporting sentence."
+        state_calls = 0
+        metadata_calls = 0
+
+        async def fake_llm(system: str, prompt: str) -> str:
+            nonlocal state_calls, metadata_calls
+            if system == AGENTIC_PROPOSITION_SYSTEM_PROMPT:
+                return (
+                    '{"propositions": ['
+                    '{"start": 1, "end": 1}, '
+                    '{"start": 2, "end": 2}'
+                    ']}'
+                )
+            if system == AGENTIC_STATE_SYSTEM_PROMPT:
+                state_calls += 1
+                if state_calls == 1:
+                    return json.dumps({
+                        "title": "First topic",
+                        "summary": "The initial state.",
+                    })
+                return json.dumps({
+                    "action": "new_chunk",
+                    "title": "",
+                    "summary": "Missing title on every attempt.",
+                })
+            if system == AGENTIC_METADATA_SYSTEM_PROMPT:
+                metadata_calls += 1
+                return json.dumps({
+                    "title": "Repaired topic",
+                    "summary": "Metadata regenerated from the resulting chunk.",
+                })
+            self.fail(f"unexpected system prompt: {system}")
+
+        events: list[dict[str, object]] = []
+        chunks = await agentic_chunk(
+            text=text,
+            batch_max_sentences=10,
+            batch_max_chars=1000,
+            min_sentences=2,
+            max_sentences=4,
+            concurrency=1,
+            retries=2,
+            llm_func=fake_llm,
+            state_events=events,
+        )
+
+        transitions = [
+            event for event in events if event["event"] == "transition"
+        ]
+        self.assertEqual(state_calls, 4)
+        self.assertEqual(metadata_calls, 1)
+        self.assertEqual(len(chunks), 1)
+        self.assertEqual(transitions[-1]["action"], "append")
+        self.assertEqual(
+            transitions[-1]["decision_source"],
+            "metadata_repair",
+        )
+        self.assertIn("non-empty title", transitions[-1]["recovery_error"])
+        self.assertNotIn("fallback_error", transitions[-1])
+        self.assertEqual(chunks[0].title, "Repaired topic")
+
+    async def test_metadata_repair_failure_uses_audited_source_fallback(self):
+        text = "First topic sentence. Second supporting sentence."
+
+        async def fake_llm(system: str, prompt: str) -> str:
+            if system == AGENTIC_PROPOSITION_SYSTEM_PROMPT:
+                return (
+                    '{"propositions": ['
+                    '{"start": 1, "end": 1}, '
+                    '{"start": 2, "end": 2}'
+                    ']}'
+                )
+            if system == AGENTIC_STATE_SYSTEM_PROMPT:
+                if '"index": 1' in prompt:
+                    return json.dumps({
+                        "title": "First topic",
+                        "summary": "The initial state.",
+                    })
+                return json.dumps({
+                    "title": "",
+                    "summary": "Missing title.",
+                })
+            if system == AGENTIC_METADATA_SYSTEM_PROMPT:
+                return json.dumps({"title": "", "summary": "Still invalid."})
+            self.fail(f"unexpected system prompt: {system}")
+
+        events: list[dict[str, object]] = []
+        chunks = await agentic_chunk(
+            text=text,
+            batch_max_sentences=10,
+            batch_max_chars=1000,
+            min_sentences=2,
+            max_sentences=4,
+            concurrency=1,
+            retries=1,
+            llm_func=fake_llm,
+            state_events=events,
+        )
+
+        transitions = [
+            event for event in events if event["event"] == "transition"
+        ]
+        self.assertEqual(len(chunks), 1)
+        self.assertEqual(transitions[-1]["action"], "append")
+        self.assertEqual(transitions[-1]["decision_source"], "fallback")
+        self.assertIn("non-empty title", transitions[-1]["fallback_error"])
+        self.assertEqual(chunks[0].title, "First topic")
+        self.assertIn("Second supporting sentence", chunks[0].summary)
 
     async def test_hard_size_constraints_limit_allowed_actions(self):
         text = "One. Two. Three. Four."
@@ -281,7 +482,7 @@ class StatefulAgenticChunkingTests(unittest.IsolatedAsyncioTestCase):
                 )
             if system == AGENTIC_STATE_SYSTEM_PROMPT:
                 observed_prompts.append(prompt)
-                actions = ["new_chunk", "append", "new_chunk", "append"]
+                actions = ["append", "new_chunk", "append", "new_chunk"]
                 action = actions[state_call]
                 state_call += 1
                 return json.dumps({
@@ -308,7 +509,7 @@ class StatefulAgenticChunkingTests(unittest.IsolatedAsyncioTestCase):
         )
 
         self.assertEqual(
-            [len(_split_sentences(chunk.text)) for chunk in chunks],
+            [len(split_sentences(chunk.text)) for chunk in chunks],
             [2, 2],
         )
         self.assertIn('"allowed_actions": [\n      "append"', observed_prompts[1])
