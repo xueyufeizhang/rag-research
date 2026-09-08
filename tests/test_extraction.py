@@ -50,8 +50,22 @@ def _response(
 
 
 class ParseResponseTests(unittest.TestCase):
+    def test_production_extraction_prompt_has_no_semantic_few_shots(self):
+        prompt = PROMPTS["entity_extraction_system_prompt"]
+        for leaked_name in (
+            "Dr. Elena Vasquez",
+            "Global Wildlife Conservation Institute",
+            "NASBench-360",
+            "Alex",
+            "Taylor",
+            "Project X",
+        ):
+            with self.subTest(leaked_name=leaked_name):
+                self.assertNotIn(leaked_name, prompt)
+        self.assertIn("exactly two top-level keys", prompt)
+
     def test_every_few_shot_output_passes_the_real_parser_on_its_input(self):
-        for index, example in enumerate(PROMPTS["entity_extraction_examples"]):
+        for index, example in enumerate(PROMPTS["entity_extraction_test_examples"]):
             with self.subTest(example=index):
                 input_text = re.search(r"---Input Text---\s*```\s*(.*?)\s*```", example, re.DOTALL).group(1)
                 output = example.split("---Output---", 1)[1]
@@ -577,8 +591,10 @@ class ExtractTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_validation_retry_includes_contract_feedback(self):
         prompts: list[str] = []
+        systems: list[str] = []
 
         async def llm_func(*, system: str, prompt: str) -> str:
+            systems.append(system)
             prompts.append(prompt)
             if len(prompts) == 1:
                 return json.dumps({
@@ -606,9 +622,38 @@ class ExtractTests(unittest.IsolatedAsyncioTestCase):
             )
 
         self.assertEqual(len(prompts), 2)
+        self.assertNotIn("Dr. Elena Vasquez", systems[0])
+        self.assertNotIn("Dr. Elena Vasquez", systems[1])
+        self.assertIn("Retry Safety", systems[1])
         self.assertIn("Correction Required", prompts[1])
         self.assertIn("unknown entity type", prompts[1])
         self.assertEqual(result.entities[0].type, "Other")
+        self.assertEqual(result.failed_chunk_ids, [])
+
+    async def test_retry_feedback_does_not_echo_a_leaked_fixture_name(self):
+        prompts: list[str] = []
+
+        async def llm_func(*, system: str, prompt: str) -> str:
+            prompts.append(prompt)
+            if len(prompts) == 1:
+                return _response(
+                    entities=[{"name": "Dr. Elena Vasquez", "type": "Person"}],
+                )
+            return _response()
+
+        with patch(
+            "rag_research.extraction.asyncio.sleep",
+            new=AsyncMock(),
+        ):
+            result = await extract(
+                [_chunk("doc-1:chunk:0", "This chunk contains no such person.")],
+                llm_func,
+                con_num=1,
+            )
+
+        self.assertEqual(len(prompts), 2)
+        self.assertNotIn("Dr. Elena Vasquez", prompts[1])
+        self.assertIn("possible prompt example leakage", prompts[1])
         self.assertEqual(result.failed_chunk_ids, [])
 
     async def test_uses_model_text_and_preserves_chunk_id(self):

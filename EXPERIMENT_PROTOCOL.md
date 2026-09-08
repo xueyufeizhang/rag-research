@@ -138,6 +138,15 @@ literal-text official protocol can disagree; retain both definitions.
 
 ## Extraction observability
 
+Production entity and relation extraction uses a schema-only prompt. Realistic
+few-shot demonstrations are retained solely as offline parser fixtures and are
+never sent to the model. Retry calls use an example-free correction contract as
+well. The parser keeps a defensive guard for names from the offline fixtures:
+if one appears in a response without an orthographic match in the current
+chunk, the attempt is rejected as possible prompt leakage. The extraction
+pipeline version and fingerprint record this policy so results generated under
+the former prompt cannot be mixed with the baseline.
+
 The per-response contract is 20 entities and 50 total records, checked before
 duplicate merging. These are limits, not extraction targets. Reaching a limit
 does not prove that additional facts were omitted.

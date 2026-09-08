@@ -151,7 +151,7 @@ You are a Knowledge Graph Specialist responsible for extracting entities and rel
 2. **Relationship Extraction:**
   - **Identification:** Identify direct, clearly stated, and meaningful relationships between previously extracted entities.
   - **N-ary Relationship Decomposition:** If a single statement describes a relationship involving more than two entities (an N-ary relationship), decompose it into multiple binary (two-entity) relationship pairs for separate description.
-    - Example: For "Alice, Bob, and Carol collaborated on Project X," extract binary relationships such as "Alice collaborated with Project X," "Bob collaborated with Project X," and "Carol collaborated with Project X," or "Alice collaborated with Bob," based on the most reasonable binary interpretations.
+    - Create only binary pairs that are directly supported by the statement; do not introduce a new event, endpoint, or inferred connection while decomposing it.
   - **Relationship Details:** For each binary relationship, extract the following fields:
     - `source`: The name of the source entity. Ensure **consistent naming** with entity extraction. Capitalize the first letter of each significant word (title case) if the name is case-insensitive.
     - `target`: The name of the target entity. Ensure **consistent naming** with entity extraction. Capitalize the first letter of each significant word (title case) if the name is case-insensitive.
@@ -173,7 +173,7 @@ You are a Knowledge Graph Specialist responsible for extracting entities and rel
 5. **Context & Objectivity:**
   - Ensure all entity names and descriptions are written in the **third person**.
   - Explicitly name the subject or object; **avoid using pronouns** such as `this article`, `this paper`, `our company`, `I`, `you`, and `he/she`.
-  - The examples below demonstrate the required format only. Never copy an entity, relationship, or fact from an example unless it is explicitly present in the current `---Input Text---`.
+  - No semantic few-shot examples are provided in the production prompt. Never copy an entity, relationship, or fact from the instructions; every output item must be explicitly present in the current `---Input Text---`.
   - Before returning the JSON, verify that every entity and relationship is grounded solely in the current `---Input Text---`.
 
 6. **Language & Proper Nouns:**
@@ -187,8 +187,8 @@ You are a Knowledge Graph Specialist responsible for extracting entities and rel
 ---Entity Types---
 {entity_types_guidance}
 
----Examples---
-{examples}
+---Output Shape---
+Return exactly one JSON object with exactly two top-level keys: `entities` and `relationships`. Each key maps to an array, and either array may be empty. This is a structural constraint, not an extraction example.
 """
 
 PROMPTS["entity_extraction_user_prompt"] = """
@@ -199,7 +199,7 @@ Extract entities and relationships from the `---Input Text---` session below.
 1. **Strict Adherence to JSON Format:** Your output MUST be a valid JSON object with `entities` and `relationships` arrays. Do not include any introductory or concluding remarks, explanations, markdown code fences, or any other text before or after the JSON.
 2. **Quantity Limits:** In this response, output at most {max_total_records} total records and at most {max_entity_records} entity objects. Output fewer records if fewer high-value items are present. Only output relationship objects whose `source` and `target` are both included in this response.
 3. **Required Fields:** Every entity must have a non-empty `name`, one exact type label from `---Entity Types---`, and a non-empty `description`. Every relationship must have two different endpoints plus non-empty `keywords` and `description`.
-4. **Input Grounding:** Use only the current `---Input Text---`. The examples in the system prompt are format demonstrations, not extraction candidates; do not copy their entities, relationships, or facts unless they are explicitly present below.
+4. **Input Grounding:** Use only the current `---Input Text---`. The production system prompt contains no semantic few-shot examples. Do not copy any content from the instructions.
 5. **Output Language:** Ensure the output language is English. Proper nouns (e.g., personal names, place names, organization names) must be kept in their original language and not translated.
 
 ---Entity Types---
@@ -213,7 +213,9 @@ Extract entities and relationships from the `---Input Text---` session below.
 ---Output---
 """
 
-PROMPTS["entity_extraction_examples"] = [
+# These rich examples are retained exclusively for offline parser regression
+# tests. They must never be interpolated into a production extraction request.
+PROMPTS["entity_extraction_test_examples"] = [
     """---Entity Types---
 - Person: Human individuals, real or fictional
 - Artifact: Physical or digital objects created by humans (tools, software, devices)
@@ -327,7 +329,6 @@ NASBench-360 measures three key metrics: search efficiency (time-to-solution), m
 
 """,
 ]
-
 
 PROMPTS["rag_response"] = """
 ---Role---

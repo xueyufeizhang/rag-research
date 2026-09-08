@@ -18,6 +18,7 @@ from rag_research.embedding import (
     format_embedding_input,
 )
 from rag_research.extraction import (
+    EXTRACTION_FEW_SHOT_POLICY,
     EXTRACTION_PIPELINE_VERSION,
     Entity,
     ExtractionResult,
@@ -1067,7 +1068,6 @@ class LightRAG:
                 "default_entity_types_guidance",
                 "entity_extraction_system_prompt",
                 "entity_extraction_user_prompt",
-                "entity_extraction_examples",
             )
         }
         prompt_json = json.dumps(
@@ -1084,6 +1084,7 @@ class LightRAG:
                 "model": self.config.llm_model,
                 "pipeline_version": EXTRACTION_PIPELINE_VERSION,
                 "model_input_policy": CHUNK_MODEL_INPUT_POLICY,
+                "few_shot_policy": EXTRACTION_FEW_SHOT_POLICY,
                 "prompt_sha256": hashlib.sha256(
                     prompt_json.encode("utf-8")
                 ).hexdigest(),

@@ -146,9 +146,16 @@ successful JSON, even if JSON repair could parse them.
 ## Extraction and diagnostics
 
 Responses may contain at most 20 entities and at most 50 total records
-(entities plus relationships). Few-shot examples are checked against the actual
-parser. Limited Unicode/whitespace/dash normalization supports surface variants
-without replacing validation with semantic similarity.
+(entities plus relationships). Offline regression examples are checked against
+the actual parser. The production extraction request is schema-only: it contains the
+contract and an output shape, never realistic few-shot entities,
+relationships, or facts. Rich examples remain in a test-only fixture and are
+parsed offline as a regression check. Every retry uses the same example-free
+contract with an additional correction reminder, so failed attempts cannot
+reinforce example copying. Limited Unicode/whitespace/dash normalization
+supports surface variants without replacing validation with semantic similarity.
+The extraction pipeline version and fingerprint include this policy; existing
+extraction caches are therefore not reused silently after the change.
 
 Attempts retain raw counts, errors, completion reasons, known/unknown truncation
 status, reported token usage, and retry identities. Current, historical and

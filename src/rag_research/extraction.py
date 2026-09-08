@@ -21,7 +21,8 @@ from rag_research.llm import LLMResponse, normalize_llm_response
 from rag_research.prompts import PROMPTS
 
 
-EXTRACTION_PIPELINE_VERSION = 5
+EXTRACTION_PIPELINE_VERSION = 6
+EXTRACTION_FEW_SHOT_POLICY = "production-schema-only-test-fixtures-offline-v1"
 EXTRACTION_CACHE_SCHEMA_VERSION = 4
 EXTRACTION_STATISTICS_SCHEMA_VERSION = 1
 MAX_EXTRACTION_ATTEMPTS = 5
@@ -60,7 +61,13 @@ def _normalize_grounding_text(value: str) -> str:
 
 
 def _collect_example_entity_names() -> dict[str, str]:
-    examples = PROMPTS.get("entity_extraction_examples")
+    """Collect offline-fixture names for the defensive leakage guard.
+
+    The fixtures are never sent to the model. Keeping their names here lets
+    the parser reject a known fixture entity if a provider or prompt assembly
+    regression causes it to appear without grounding in the current chunk.
+    """
+    examples = PROMPTS.get("entity_extraction_test_examples")
     if not isinstance(examples, list) or any(
         not isinstance(example, str)
         for example in examples
@@ -114,6 +121,49 @@ class ChunkExtractionResult:
 
 class ExtractionLimitError(ValueError):
     """An observable model output exceeds the per-response record limits."""
+
+
+def _safe_retry_feedback(error: Exception) -> str:
+    """Return a category-level correction hint without echoing model text.
+
+    Validation errors can contain model-generated names, descriptions, or
+    provider details. Echoing those values into the next prompt would create a
+    second leakage channel, especially after a known few-shot entity is
+    rejected. Retry feedback therefore contains only stable contract
+    categories; it never includes ``str(error)``.
+    """
+    message = str(error).casefold()
+    if isinstance(error, ExtractionLimitError):
+        return (
+            "The previous response exceeded the configured record limit. "
+            "Select fewer records and return a complete JSON object."
+        )
+    if "prompt example leakage" in message:
+        return (
+            "The previous response contained an ungrounded entity. "
+            "possible prompt example leakage was detected; use only names "
+            "explicitly present in the current input text."
+        )
+    if "unknown entity type" in message:
+        return (
+            "The previous response used an unknown entity type. Use exactly "
+            "one of the allowed entity type labels."
+        )
+    if "json" in message or "object" in message or "array" in message:
+        return (
+            "The previous response violated the JSON shape contract. Return "
+            "one object with `entities` and `relationships` arrays only."
+        )
+    if "relationship" in message:
+        return (
+            "The previous response violated the relationship contract. Check "
+            "required fields, distinct endpoints, and response-local entities."
+        )
+    return (
+        "The previous response violated the extraction contract. Check all "
+        "required fields, grounding, and output limits, then return corrected "
+        "JSON only."
+    )
 
 
 def _ratio(numerator: int, denominator: int) -> float | None:
@@ -1085,9 +1135,17 @@ async def extract(
     persist_report("running")
     system_prompt = PROMPTS["entity_extraction_system_prompt"].format(
         entity_types_guidance=PROMPTS["default_entity_types_guidance"],
-        examples="\n\n".join(PROMPTS["entity_extraction_examples"]),
         max_total_records=MAX_TOTAL_RECORDS,
         max_entity_records=MAX_ENTITY_RECORDS,
+    )
+    # Retries receive a separate contract reminder but still no semantic
+    # examples. This prevents a failed response from being repeatedly exposed
+    # to realistic names and facts that can be copied into the next attempt.
+    retry_system_prompt = (
+        system_prompt
+        + "\n---Retry Safety---\n"
+        + "This is a correction attempt. Re-read only the current input text; "
+        + "do not reproduce any content from the instructions."
     )
 
     async def process_one(idx: int, chunk: ChunkRecord) -> ChunkExtractionResult:
@@ -1144,7 +1202,10 @@ async def extract(
                             history.pop()
                             attempt = None
                             raise
-                    raw_response = await llm_func(system=system_prompt, prompt=retry_prompt)
+                    raw_response = await llm_func(
+                        system=system_prompt if attempt_number == 1 else retry_system_prompt,
+                        prompt=retry_prompt,
+                    )
                     attempt["response_received"] = True
                 stage = "normalize"
                 response = normalize_llm_response(raw_response)
@@ -1192,8 +1253,8 @@ async def extract(
                         attempt["outcome"] = "validation_error"
                     retry_prompt = (
                         base_prompt + "\n\n---Correction Required---\n"
-                        + "Your previous response violated the output contract: "
-                        + str(error) + ". Return a corrected JSON object only."
+                        + _safe_retry_feedback(error)
+                        + " Return a corrected JSON object only."
                     )
                 else:
                     attempt["outcome"] = "internal_error"
@@ -1202,7 +1263,7 @@ async def extract(
                 if isinstance(error, ExtractionLimitError):
                     retry_prompt = (
                         base_prompt + "\n\n---Correction Required---\n"
-                        + str(error) + ". Select fewer records and return a complete JSON object."
+                        + _safe_retry_feedback(error)
                     )
             finally:
                 if attempt is not None:
