@@ -1,13 +1,13 @@
 import json
 import unittest
 
-from rag_research.agentic_boundaries import (
+from rag_research.chunking.agentic_boundaries import (
     project_boundaries,
     rebalance_document_boundaries,
     validate_boundaries,
 )
-from rag_research.agentic_chunking import agentic_chunk
-from rag_research.agentic_llm import make_sentence_batches
+from rag_research.chunking.agentic_chunking import agentic_chunk
+from rag_research.chunking.agentic_llm import make_sentence_batches
 from rag_research.chunking import (
     ChunkConfig,
     ChunkSpan,
@@ -19,7 +19,7 @@ from rag_research.prompts import (
     AGENTIC_PROPOSITION_SYSTEM_PROMPT,
     AGENTIC_STATE_SYSTEM_PROMPT,
 )
-from rag_research.text_spans import split_sentences
+from rag_research.chunking.text_spans import split_sentences
 
 
 FOUR_SENTENCES = "One is here. Two is here. Three is here. Four is here."
@@ -572,11 +572,19 @@ class StatefulAgenticChunkingTests(unittest.IsolatedAsyncioTestCase):
             agentic_retries=0,
         )
 
-        chunks = await chunk_async(FOUR_SENTENCES, config, llm_func=fake_llm)
+        progress: list[tuple[str, int, int, int]] = []
+        chunks = await chunk_async(
+            FOUR_SENTENCES,
+            config,
+            llm_func=fake_llm,
+            agentic_progress_callback=lambda *event: progress.append(event),
+        )
 
         self.assertEqual(len(chunks), 1)
         self.assertEqual(chunks[0].text, FOUR_SENTENCES)
         self.assertEqual(chunks[0].title, "All")
+        self.assertEqual(progress[0], ("propositions", 0, 1, 0))
+        self.assertEqual(progress[-1], ("state", 1, 1, 1))
 
     async def test_chunk_async_requires_llm(self):
         with self.assertRaisesRegex(ValueError, "requires an llm_func"):

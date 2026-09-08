@@ -107,6 +107,43 @@ class GraphStore:
     def get_neighbors(self, name: str):
         return list(self._graph.neighbors(name))
 
+    def validate_contents(
+        self,
+        entities: dict[str, dict],
+        relations: dict[str, dict],
+    ) -> None:
+        """Require the graph to mirror the canonical entity/relation stores."""
+        if self._graph.is_directed() or self._graph.is_multigraph():
+            raise RuntimeError("stored graph must be a simple undirected graph")
+        if set(self._graph.nodes) != set(entities):
+            raise RuntimeError("graph node IDs do not match the entity store")
+
+        expected_edges = {
+            frozenset((relation["source"], relation["target"]))
+            for relation in relations.values()
+        }
+        actual_edges = {frozenset(pair) for pair in self._graph.edges}
+        if actual_edges != expected_edges:
+            raise RuntimeError("graph edges do not match the relation store")
+
+        for name, entity in entities.items():
+            if self._graph.nodes[name] != entity:
+                raise RuntimeError(f"graph node data does not match entity {name!r}")
+        for key, relation in relations.items():
+            # node_link_graph consumes source/target as structural endpoints.
+            # They were checked above; compare only the remaining edge data.
+            edge_data = self.get_edge(relation["source"], relation["target"])
+            expected_data = {
+                name: value for name, value in relation.items()
+                if name not in ("source", "target")
+            }
+            actual_data = {
+                name: value for name, value in edge_data.items()
+                if name not in ("source", "target")
+            }
+            if actual_data != expected_data:
+                raise RuntimeError(f"graph edge data does not match relation {key!r}")
+
     def save(self):
         data = nx.node_link_data(self._graph)
         _atomic_write_json(self.file_path, data)
@@ -129,6 +166,10 @@ class VectorIndex:
         self._pending: list[np.ndarray] = []
         self.vector_path = file_path + ".npy"
         self.id_path = file_path + ".json"
+
+    def ids(self) -> tuple[str, ...]:
+        """Expose indexed identities without allowing callers to mutate them."""
+        return tuple(self._ids)
 
     def add(self, key: str, vector: list[float]):
         if not isinstance(key, str) or not key.strip():

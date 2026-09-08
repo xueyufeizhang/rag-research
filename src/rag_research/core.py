@@ -1,10 +1,22 @@
 from rag_research.chunking import (
-    CHUNKING_PIPELINE_VERSION,
+    CHUNKING_STRATEGY_VERSIONS,
+    AGENTIC_STATE_MODEL,
+    SEMANTIC_BOUNDARY_POLICY,
     ChunkConfig,
     ChunkSpan,
     chunk_async,
+    UNIFORM_OVERLAP_POLICY,
 )
-from rag_research.embedding import BatchEmbeddingFunction, embed_texts
+from rag_research.embedding import (
+    EMBEDDING_PREFIX_POLICY,
+    EMBEDDING_PREFIXES,
+    EMBEDDING_TRUNCATION_POLICY,
+    BatchEmbeddingFunction,
+    EmbeddingInputTooLongError,
+    EmbeddingPurpose,
+    embed_texts,
+    format_embedding_input,
+)
 from rag_research.extraction import (
     EXTRACTION_PIPELINE_VERSION,
     Entity,
@@ -13,11 +25,12 @@ from rag_research.extraction import (
     extract,
 )
 from rag_research.models import InputDocument, ChunkRecord, BuildResult
+from rag_research.llm import normalize_llm_response
 from dataclasses import dataclass, field, asdict, fields
 from dotenv import load_dotenv
 from rag_research.storage import KVStore, GraphStore, VectorIndex
 from typing import Any
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 import json
 from rag_research.prompts import (
     AGENTIC_METADATA_SYSTEM_PROMPT,
@@ -29,19 +42,130 @@ import os
 import hashlib
 import re
 import unicodedata
+import time
 
 load_dotenv()
 
 CHUNKING_CACHE_SCHEMA_VERSION = 4
-BUILD_PIPELINE_VERSION = 4
+BUILD_PIPELINE_VERSION = 9
+CHUNK_MODEL_INPUT_POLICY = "source-plus-dataset-metadata-no-generated-state-v1"
+CHUNK_ID_POLICY = "document-index-source-span-no-generated-state-v1"
+ENTITY_EMBEDDING_INPUT_POLICY = "entity-name-type-description-v1"
+RELATION_EMBEDDING_INPUT_POLICY = "relation-endpoints-keywords-description-v1"
 ENTITY_DESCRIPTION_MAX_VARIANTS = 12
 ENTITY_DESCRIPTION_MAX_CHARS = 4000
 RELATION_DESCRIPTION_MAX_VARIANTS = 12
 RELATION_DESCRIPTION_MAX_CHARS = 4000
 
 
+def _format_elapsed(seconds: float) -> str:
+    total_seconds = max(0, int(seconds))
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    if hours:
+        return f"{hours}h{minutes:02d}m"
+    if minutes:
+        return f"{minutes}m{seconds:02d}s"
+    return f"{seconds}s"
+
+
+@dataclass
+class _AgenticProgressReporter:
+    """Render stable document and state progress for an agentic build."""
+
+    total_documents: int
+    started_at: float = field(default_factory=time.monotonic)
+    completed_documents: int = 0
+    current_document_index: int = 0
+    current_state: int = 0
+    current_state_total: int = 0
+    current_chunks: int = 0
+
+    def begin_document(self, document_index: int, _document_id: str) -> None:
+        self.current_document_index = document_index
+        self.current_state = 0
+        self.current_state_total = 0
+        self.current_chunks = 0
+        print(
+            f"[agentic] {document_index}/{self.total_documents} | start",
+            flush=True,
+        )
+
+    def callback(self, phase: str, current: int, total: int, chunks: int) -> None:
+        self.current_state = current
+        self.current_state_total = total
+        self.current_chunks = chunks
+        if phase == "propositions":
+            self._print(
+                f"propositions {total} | state 0/{total} | chunks 0"
+            )
+        elif phase == "state" and (
+            current % 10 == 0 or current == total
+        ):
+            self._print(
+                f"state {current}/{total} | chunks {chunks}"
+            )
+
+    def finish_document(self, *, chunk_count: int, cached: bool) -> None:
+        self.current_state = self.current_state_total
+        self.current_chunks = chunk_count
+        self.completed_documents += 1
+        status = "cache" if cached else "done"
+        self._print(
+            f"{status} | chunks {chunk_count}",
+            force=True,
+        )
+
+    def _progress_units(self) -> float:
+        if self.current_state_total > 0:
+            fraction = self.current_state / self.current_state_total
+        else:
+            fraction = 0.0
+        return min(
+            float(self.total_documents),
+            self.completed_documents + fraction,
+        )
+
+    def _eta(self) -> str:
+        completed_units = self._progress_units()
+        if completed_units <= 0:
+            return "--"
+        elapsed = time.monotonic() - self.started_at
+        remaining = max(0.0, self.total_documents - completed_units)
+        return _format_elapsed(elapsed * remaining / completed_units)
+
+    def _print(self, detail: str, *, force: bool = False) -> None:
+        if not force and not detail:
+            return
+        elapsed = _format_elapsed(time.monotonic() - self.started_at)
+        completed_units = self._progress_units()
+        print(
+            f"[agentic] {self.current_document_index}/{self.total_documents} | "
+            f"{detail} | elapsed {elapsed} | eta {self._eta()}",
+            flush=True,
+        )
+
+_ENTITY_NAME_TYPOGRAPHIC_TRANSLATION = str.maketrans({
+    "\u2018": "'",
+    "\u2019": "'",
+    "\u201b": "'",
+    "\u02bc": "'",
+    "\u201c": '"',
+    "\u201d": '"',
+    "\u201f": '"',
+    "\u2010": "-",
+    "\u2011": "-",
+    "\u2012": "-",
+    "\u2013": "-",
+    "\u2014": "-",
+    "\u2212": "-",
+})
+
+
 def _normalize_entity_name_key(name: str) -> str:
-    normalized = unicodedata.normalize("NFKC", name)
+    normalized = unicodedata.normalize("NFKC", name).translate(
+        _ENTITY_NAME_TYPOGRAPHIC_TRANSLATION
+    )
     return re.sub(r"\s+", " ", normalized).strip().casefold()
 
 
@@ -213,7 +337,7 @@ class LightRAGConfig:
     chunk_config: ChunkConfig = field(default_factory=lambda: ChunkConfig(
         strategy=os.getenv("CHUNKING_STRATEGY", "fixed"),
         fixed_size=int(os.getenv("FIXED_WINDOW_SIZE", 2400)),
-        fixed_overlap=int(os.getenv("FIXED_WINDOW_OVERLAP", 200)),
+        overlap_size=int(os.getenv("CHUNK_OVERLAP", 200)),
         semantic_breakpoint_percentile=float(os.getenv("SEMANTIC_BREAKPOINT_PERCENTILE", 90)),
         semantic_min_sentences=int(os.getenv("SEMANTIC_MIN_SENTENCES", 8)),
         semantic_max_sentences=int(os.getenv("SEMANTIC_MAX_SENTENCES", 24)),
@@ -276,6 +400,8 @@ class LightRAG:
         os.makedirs(self.cache_directory, exist_ok=True)
 
         self.reranker = reranker
+        self.last_extraction_statistics: dict[str, Any] | None = None
+        self.last_build_reused = False
 
         self.entity_kv = KVStore(os.path.join(working_dir, "entities.json"))
         self.relation_kv = KVStore(os.path.join(working_dir, "relations.json"))
@@ -294,6 +420,8 @@ class LightRAG:
                       self.entity_vidx, self.relation_vidx, self.chunk_vidx, self.graph,
                       self.build_manifest_kv):
             store.load()
+        if self.build_manifest_kv.get("build") is not None:
+            self._validate_index_integrity()
 
     def _save_all(self):
         for store in (self.entity_kv, self.relation_kv, self.chunk_kv,
@@ -314,6 +442,78 @@ class LightRAG:
             self.chunk_vidx.vector_path,
         )
         return any(os.path.exists(path) for path in paths)
+
+    def _validate_index_integrity(self) -> None:
+        """Reject incomplete or inconsistent stores without repairing them."""
+        stores = (
+            ("entity", self.entity_kv, self.entity_vidx),
+            ("relation", self.relation_kv, self.relation_vidx),
+            ("chunk", self.chunk_kv, self.chunk_vidx),
+        )
+        required_paths = [self.graph.file_path]
+        for _, store, vector_index in stores:
+            required_paths.extend((store.file_path, vector_index.id_path))
+            # Empty vector indexes intentionally persist [] without an NPY file.
+            if store.all():
+                required_paths.append(vector_index.vector_path)
+        for path in required_paths:
+            if not os.path.isfile(path):
+                raise RuntimeError(f"stored index is incomplete: missing file {path}")
+
+        for label, store, vector_index in stores:
+            records = store.all()
+            expected_ids = set(records)
+            actual_ids = set(vector_index.ids())
+            if actual_ids != expected_ids:
+                raise RuntimeError(
+                    f"{label} vector IDs do not match the {label} store: "
+                    f"{len(expected_ids - actual_ids)} missing, "
+                    f"{len(actual_ids - expected_ids)} unexpected"
+                )
+            for key, record in records.items():
+                if (
+                    not isinstance(key, str)
+                    or not key.strip()
+                    or not isinstance(record, dict)
+                ):
+                    raise RuntimeError(f"invalid {label} store record: {key!r}")
+
+        chunks = self.chunk_kv.all()
+        entities = self.entity_kv.all()
+        relations = self.relation_kv.all()
+        for chunk_id, chunk in chunks.items():
+            if chunk.get("chunk_id") != chunk_id:
+                raise RuntimeError(f"chunk record ID does not match store key {chunk_id!r}")
+        for name, entity in entities.items():
+            if entity.get("name") != name:
+                raise RuntimeError(f"entity name does not match store key {name!r}")
+        for key, relation in relations.items():
+            source, target = relation.get("source"), relation.get("target")
+            if (
+                not isinstance(source, str)
+                or not isinstance(target, str)
+                or source not in entities
+                or target not in entities
+                or source == target
+            ):
+                raise RuntimeError(f"relation {key!r} has invalid or missing endpoints")
+            if key != self._relation_key(relation):
+                raise RuntimeError(f"relation endpoints do not match store key {key!r}")
+
+        for label, records in (("entity", entities), ("relation", relations)):
+            for key, record in records.items():
+                source_ids = record.get("source_id")
+                if (
+                    not isinstance(source_ids, list)
+                    or not source_ids
+                    or any(
+                        not isinstance(item, str) or item not in chunks
+                        for item in source_ids
+                    )
+                ):
+                    raise RuntimeError(f"{label} {key!r} has invalid chunk source IDs")
+
+        self.graph.validate_contents(entities, relations)
 
     def _load_cached_build(
             self,
@@ -373,6 +573,7 @@ class LightRAG:
                 f"expected {expected_counts}, found {stored_counts}"
             )
 
+        self._validate_index_integrity()
         return cached_build
 
     def _save_build_manifest(self, build_result: BuildResult) -> None:
@@ -381,7 +582,8 @@ class LightRAG:
         manifest.save()
         self.build_manifest_kv = manifest
 
-    def _build_context(self, entities: list[dict], relations: list[dict], chunks: list[dict]) -> str:
+    def build_context(self, entities: list[dict], relations: list[dict], chunks: list[dict]) -> str:
+        """Serialize the same retrieved context for generation and measurement."""
         parts = []
         if entities:
             entity_lines = "\n".join(json.dumps(
@@ -411,6 +613,9 @@ class LightRAG:
             ) for c in chunks if c)
             parts.append("-----Chunks-----\n" + chunk_lines)
         return "\n\n".join(parts)
+
+    def _build_context(self, entities: list[dict], relations: list[dict], chunks: list[dict]) -> str:
+        return self.build_context(entities, relations, chunks)
 
     def _get_relation_candidates_from_entities(self, entities: list[dict]) -> dict[str, dict]:
         candidate_relations = {}
@@ -600,13 +805,29 @@ class LightRAG:
             }
             for chunk, score in ranked_chunks[:requested_top_k]
         ]
+
+    async def _embed_query(self, query: str) -> list[float]:
+        """Embed a user query with the query-side task prefix exactly once."""
+        if not isinstance(query, str):
+            raise TypeError("query must be a string")
+        if not callable(self.embed_func):
+            raise TypeError("retrieval requires a callable embed_func")
+        try:
+            return await self.embed_func(format_embedding_input(query, "query"))
+        except EmbeddingInputTooLongError as error:
+            raise EmbeddingInputTooLongError(
+                "query embedding input exceeds the model context; "
+                "truncation is disabled",
+                purpose="query",
+                input_indices=error.input_indices or (0,),
+            ) from error
     
     async def _naive_retrieve(
         self,
         query: str,
         top_k: int | None = None,
     ) -> list[dict]:
-        emb = await self.embed_func(query)
+        emb = await self._embed_query(query)
         requested_top_k = self.config.chunk_top_k if top_k is None else top_k
         if requested_top_k <= 0:
             raise ValueError("chunk top_k must be positive")
@@ -658,7 +879,7 @@ class LightRAG:
             retrieve_chunks: bool = True,
             top_k: int | None = None,
     ) -> tuple[list[dict], list[dict], list[dict]]:
-        emb = init_emb if init_emb is not None else await self.embed_func(query)
+        emb = init_emb if init_emb is not None else await self._embed_query(query)
 
         dense_hits = self.entity_vidx.query(emb, self.config.entity_top_k)
         entities = [
@@ -696,7 +917,7 @@ class LightRAG:
             retrieve_chunks: bool = True,
             top_k: int | None = None,
     ) -> tuple[list[dict], list[dict], list[dict]]:
-        emb = init_emb if init_emb is not None else await self.embed_func(query)
+        emb = init_emb if init_emb is not None else await self._embed_query(query)
 
         dense_hits = self.relation_vidx.query(emb, self.config.relation_candidate_top_k)
         relation_shortlist = [
@@ -760,7 +981,7 @@ class LightRAG:
         query: str,
         top_k: int | None = None,
     ) -> tuple[list[dict], list[dict], list[dict]]:
-        emb = await self.embed_func(query)
+        emb = await self._embed_query(query)
 
         local_entities, local_relations, _ = await self._local_retrieve(query, emb, retrieve_chunks=False)
         global_entities, global_relations, _ = await self._global_retrieve(query, emb, retrieve_chunks=False)
@@ -807,12 +1028,17 @@ class LightRAG:
         chunking_strategy = self.config.chunk_config.strategy.lower()
         chunking_provenance: dict[str, Any] = {
             "strategy": chunking_strategy,
-            "pipeline_version": CHUNKING_PIPELINE_VERSION,
+            "pipeline_version": CHUNKING_STRATEGY_VERSIONS[chunking_strategy],
+            "overlap_size": self.config.chunk_config.overlap_size,
+            "overlap_policy": UNIFORM_OVERLAP_POLICY,
         }
         if chunking_strategy == "semantic":
             chunking_provenance.update({
                 "embedding_backend": self.config.embedding_backend,
                 "embedding_model": self.config.embedding_model,
+                "embedding_purpose": "semantic",
+                "embedding_prefix_policy": EMBEDDING_PREFIX_POLICY,
+                "boundary_policy": SEMANTIC_BOUNDARY_POLICY,
             })
         elif chunking_strategy == "agentic":
             stateful_prompts = {
@@ -832,7 +1058,7 @@ class LightRAG:
                 "prompt_sha256": hashlib.sha256(
                     prompt_json.encode("utf-8")
                 ).hexdigest(),
-                "state_model": "sequential-open-chunk-v2",
+                "state_model": AGENTIC_STATE_MODEL,
             })
 
         extraction_prompt = {
@@ -857,6 +1083,7 @@ class LightRAG:
                 "backend": self.config.llm_backend,
                 "model": self.config.llm_model,
                 "pipeline_version": EXTRACTION_PIPELINE_VERSION,
+                "model_input_policy": CHUNK_MODEL_INPUT_POLICY,
                 "prompt_sha256": hashlib.sha256(
                     prompt_json.encode("utf-8")
                 ).hexdigest(),
@@ -864,10 +1091,20 @@ class LightRAG:
             "embedding": {
                 "backend": self.config.embedding_backend,
                 "model": self.config.embedding_model,
+                "prefix_policy": EMBEDDING_PREFIX_POLICY,
+                "prefixes": dict(EMBEDDING_PREFIXES),
+                "truncation_policy": EMBEDDING_TRUNCATION_POLICY,
+                "truncate": False,
+                "chunk_input_policy": CHUNK_MODEL_INPUT_POLICY,
+                "entity_input_policy": ENTITY_EMBEDDING_INPUT_POLICY,
+                "relation_input_policy": RELATION_EMBEDDING_INPUT_POLICY,
             },
             "assembly": {
                 "pipeline_version": BUILD_PIPELINE_VERSION,
-                "entity_name_normalization": "nfkc-whitespace-casefold",
+                "chunk_id_policy": CHUNK_ID_POLICY,
+                "entity_name_normalization": (
+                    "nfkc-typographic-punctuation-whitespace-casefold"
+                ),
                 "entity_description_max_variants": (
                     ENTITY_DESCRIPTION_MAX_VARIANTS
                 ),
@@ -902,7 +1139,7 @@ class LightRAG:
         provenance = build_provenance or self._make_build_provenance()
         return self._fingerprint_payload({
             "schema_version": 1,
-            "chunk_config": asdict(self.config.chunk_config),
+            "chunk_config": self.config.chunk_config.fingerprint_dict(),
             "chunking_provenance": provenance["chunking"],
         })
 
@@ -940,9 +1177,7 @@ class LightRAG:
         payload = {
             "schema_version": 4,
             "documents": document_records,
-            "chunk_config": asdict(
-                self.config.chunk_config
-            ),
+            "chunk_config": self.config.chunk_config.fingerprint_dict(),
             "build_provenance": build_provenance or self._make_build_provenance(),
         }
 
@@ -954,6 +1189,8 @@ class LightRAG:
         records: Sequence[tuple[str, str]],
         vector_index: VectorIndex,
         label: str,
+        *,
+        purpose: EmbeddingPurpose = "document",
     ) -> None:
         if not records:
             return
@@ -975,13 +1212,31 @@ class LightRAG:
 
         for start in range(0, total, window_size):
             window = records[start:start + window_size]
-            vectors = await embed_texts(
-                [text for _, text in window],
-                embed_func=self.embed_func,
-                embed_many_func=self.embed_many_func,
-                batch_size=self.config.embedding_batch_size,
-                concurrency=self.config.embedding_concurrency,
-            )
+            try:
+                vectors = await embed_texts(
+                    [text for _, text in window],
+                    embed_func=self.embed_func,
+                    embed_many_func=self.embed_many_func,
+                    batch_size=self.config.embedding_batch_size,
+                    concurrency=self.config.embedding_concurrency,
+                    purpose=purpose,
+                )
+            except EmbeddingInputTooLongError as error:
+                indices = error.input_indices or tuple(range(len(window)))
+                affected_ids = [
+                    window[index][0]
+                    for index in indices
+                    if 0 <= index < len(window)
+                ]
+                preview = ", ".join(affected_ids[:8])
+                if len(affected_ids) > 8:
+                    preview += f", ... ({len(affected_ids)} records total)"
+                raise EmbeddingInputTooLongError(
+                    f"{label} embedding input exceeds the model context; "
+                    f"affected record IDs: {preview or 'unknown'}",
+                    purpose=purpose,
+                    input_indices=indices,
+                ) from error
             for (record_id, _), vector in zip(window, vectors, strict=True):
                 vector_index.add(record_id, vector)
 
@@ -1151,12 +1406,11 @@ class LightRAG:
             for event in state_events
         ):
             raise ValueError(f"invalid agentic state events: {cache_path}")
-        if (
-            self.config.chunk_config.strategy.lower() != "agentic"
-            and state_events
+        if self.config.chunk_config.strategy.lower() != "agentic" and any(
+            event.get("event") != "uniform_overlap" for event in state_events
         ):
             raise ValueError(
-                f"non-stateful chunking cache contains state events: {cache_path}"
+                f"non-stateful chunking cache contains non-overlap events: {cache_path}"
             )
         if (
             self.config.chunk_config.strategy.lower() == "agentic"
@@ -1188,12 +1442,12 @@ class LightRAG:
             for event in validated_state_events
         ):
             raise ValueError("agentic state events must be objects")
-        if (
-            self.config.chunk_config.strategy.lower() != "agentic"
-            and validated_state_events
+        if self.config.chunk_config.strategy.lower() != "agentic" and any(
+            event.get("event") != "uniform_overlap"
+            for event in validated_state_events
         ):
             raise ValueError(
-                "only stateful agentic chunking can record state events"
+                "non-stateful chunking can only record uniform overlap events"
             )
         if (
             self.config.chunk_config.strategy.lower() == "agentic"
@@ -1229,6 +1483,7 @@ class LightRAG:
         self,
         document: InputDocument,
         chunking_fingerprint: str,
+        progress_callback: Callable[[str, int, int, int], None] | None = None,
     ) -> tuple[list[ChunkRecord], bool]:
         cached_result = self._load_cached_chunk_spans(
             document,
@@ -1244,6 +1499,7 @@ class LightRAG:
                 embed_many_func=self.embed_many_func,
                 llm_func=self.llm_func,
                 agentic_state_events=state_events,
+                agentic_progress_callback=progress_callback,
             )
             self._save_chunk_spans(
                 document,
@@ -1275,6 +1531,13 @@ class LightRAG:
 
 
     def _make_chunk_id(self, document_id: str, chunk_index: int, span: ChunkSpan) -> str:
+        """Derive stable chunk identity only from source provenance.
+
+        Agentic titles and summaries are persisted as metadata, but they are
+        generated state rather than source identity. Keeping them out of the
+        ID prevents metadata changes from changing graph source references or
+        invalidating otherwise identical extraction and embedding inputs.
+        """
         payload = (
             f"{document_id}\0"
             f"{chunk_index}\0"
@@ -1282,21 +1545,20 @@ class LightRAG:
             f"{span.char_end}\0"
             f"{span.text}"
         )
-        if span.title is not None:
-            payload += f"\0{span.title}\0{span.summary}"
         digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
         return f"chunk-{digest[:24]}"
 
 
     def _make_model_text(self, document: InputDocument, span: ChunkSpan) -> str:
         metadata = document.metadata
+        date_value = metadata.get("date")
+        if date_value is None:
+            date_value = metadata.get("published_at")
         header_fields = [
             ("Title", metadata.get("title")),
             ("Source", metadata.get("source")),
             ("Author", metadata.get("author")),
-            ("Published at", metadata.get("published_at")),
-            ("Category", metadata.get("category")),
-            ("URL", metadata.get("url")),
+            ("Date", date_value),
         ]
 
         header = "\n".join(
@@ -1312,16 +1574,8 @@ class LightRAG:
 
     @staticmethod
     def _make_chunk_embedding_text(chunk: ChunkRecord) -> str:
-        title = chunk.metadata.get("chunk_title")
-        summary = chunk.metadata.get("chunk_summary")
-        if not title or not summary:
-            return chunk.model_text
-        return (
-            "Semantic chunk state:\n"
-            f"Title: {title}\n"
-            f"Summary: {summary}\n\n"
-            f"{chunk.model_text}"
-        )
+        """Use source plus dataset metadata; generated chunk state is excluded."""
+        return chunk.model_text
 
 
     async def construct(self, documents: Sequence[InputDocument]) -> BuildResult:
@@ -1331,6 +1585,8 @@ class LightRAG:
         3. D(·)：remove duplications and merge 👌
         4. storage（KV store + vector index + graph）👌
         """
+        self.last_extraction_statistics = None
+        self.last_build_reused = False
         if isinstance(documents, (str, bytes)) or not isinstance(documents, Sequence):
             raise TypeError("documents must be a sequence of InputDocument")
         if not documents:
@@ -1371,23 +1627,43 @@ class LightRAG:
         )
         cached_build = self._load_cached_build(build_fingerprint)
         if cached_build is not None:
+            self.last_build_reused = True
             print("[construct] matching index already built, reuse")
             return cached_build
 
         chunks: list[ChunkRecord] = []
         cached_document_count = 0
         document_count = len(documents)
+        agentic_progress = (
+            _AgenticProgressReporter(document_count)
+            if self.config.chunk_config.strategy.lower() == "agentic"
+            else None
+        )
         for index, document in enumerate(documents, start=1):
+            if agentic_progress is not None:
+                agentic_progress.begin_document(index, document.document_id)
             (
                 document_chunks,
                 loaded_from_cache,
             ) = await self._chunk_document(
                 document,
                 chunking_fingerprint,
+                progress_callback=(
+                    agentic_progress.callback
+                    if agentic_progress is not None
+                    else None
+                ),
             )
             chunks.extend(document_chunks)
             cached_document_count += int(loaded_from_cache)
-            if index % 10 == 0 or index == document_count:
+            if agentic_progress is not None:
+                agentic_progress.finish_document(
+                    chunk_count=len(document_chunks),
+                    cached=loaded_from_cache,
+                )
+            if agentic_progress is None and (
+                index % 10 == 0 or index == document_count
+            ):
                 print(
                     f"[chunk] {index}/{document_count} documents, "
                     f"{len(chunks)} chunks, "
@@ -1407,6 +1683,13 @@ class LightRAG:
             cache_scope=build_fingerprint,
         )
 
+        self.last_extraction_statistics = extraction_results.statistics
+        extraction_report = KVStore(os.path.join(self.working_dir, "extraction_report.json"))
+        extraction_report.set("build_fingerprint", build_fingerprint)
+        extraction_report.set("extraction_fingerprint", extraction_fingerprint)
+        extraction_report.set("statistics", extraction_results.statistics)
+        extraction_report.save()
+
         if extraction_results.failed_chunk_ids:
             raise RuntimeError(
                 "construction aborted because extraction failed for "
@@ -1419,18 +1702,25 @@ class LightRAG:
         )
         
         entity_embedding_records = [
-            (entity_key, f"{entity_key} {entity.description}".strip())
+            (
+                entity_key,
+                (
+                    f"Name: {entity.name}\n"
+                    f"Type: {entity.type}\n"
+                    f"Description: {entity.description}"
+                ),
+            )
             for entity_key, entity in clean_entities.items()
         ]
         relation_embedding_records = [
             (
                 relation_key,
                 (
-                    " ".join(relation.keywords)
-                    + " "
-                    + relation.description
-                ).strip()
-                or f"{relation.source} {relation.target}",
+                    f"Source: {relation.source}\n"
+                    f"Target: {relation.target}\n"
+                    f"Keywords: {', '.join(relation.keywords)}\n"
+                    f"Description: {relation.description}"
+                ),
             )
             for relation_key, relation in clean_relations.items()
         ]
@@ -1443,16 +1733,19 @@ class LightRAG:
             entity_embedding_records,
             self.entity_vidx,
             "entities",
+            purpose="document",
         )
         await self._embed_into_index(
             relation_embedding_records,
             self.relation_vidx,
             "relations",
+            purpose="document",
         )
         await self._embed_into_index(
             chunk_embedding_records,
             self.chunk_vidx,
             "chunks",
+            purpose="document",
         )
 
         for entity_key, entity in clean_entities.items():
@@ -1476,9 +1769,14 @@ class LightRAG:
             chunking_fingerprint=chunking_fingerprint,
             extraction_fingerprint=extraction_fingerprint,
             build_provenance=build_provenance,
+            extraction_statistics={
+                key: value for key, value in extraction_results.statistics.items()
+                if key != "chunks"
+            },
         )
 
         self._save_all()
+        self._validate_index_integrity()
         self._save_build_manifest(build_result)
 
         return build_result
@@ -1493,27 +1791,32 @@ class LightRAG:
         """
         if mode == "naive":
             chunks = await self._naive_retrieve(query)
-            context = self._build_context([], [], chunks)
+            context = self.build_context([], [], chunks)
             print(f"\n[retrieved {len(chunks)} chunks]\n{context[:500]}\n---\n")
             system_prompt = PROMPTS["naive_rag_response"].format(response_type="Multiple Paragraphs", context_data=context)
         elif mode == "local":
             entities, relations, chunks = await self._local_retrieve(query)
-            context = self._build_context(entities, relations, chunks)
+            context = self.build_context(entities, relations, chunks)
             system_prompt = PROMPTS["rag_response"].format(response_type="Multiple Paragraphs", context_data=context)
         elif mode == "global":
             entities, relations, chunks = await self._global_retrieve(query)
-            context = self._build_context(entities, relations, chunks)
+            context = self.build_context(entities, relations, chunks)
             system_prompt = PROMPTS["rag_response"].format(response_type="Multiple Paragraphs", context_data=context)
         elif mode == "hybrid":
             entities, relations, chunks = await self._hybrid_retrieve(query)
-            context = self._build_context(entities, relations, chunks)
+            context = self.build_context(entities, relations, chunks)
             system_prompt = PROMPTS["rag_response"].format(response_type="Multiple Paragraphs", context_data=context)
         else:
             raise ValueError(f"unknown retrieval mode: {mode}")
 
         if mode in ["local", "global", "hybrid"]:
             print(f"\n[retrieved {len(entities)} entities, {len(relations)} relations, and {len(chunks)} chunks]\n{context[:500]}\n-----\n")
-        return await self.llm_func(system=system_prompt, prompt=query)
+        response = normalize_llm_response(
+            await self.llm_func(system=system_prompt, prompt=query)
+        )
+        if response.truncated is True:
+            raise RuntimeError("answer generation was truncated by the model output limit")
+        return response.text
 
 
     def _relation_key(self, relation: dict) -> str:

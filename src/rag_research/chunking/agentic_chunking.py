@@ -1,17 +1,21 @@
 from dataclasses import dataclass, field
 from typing import Awaitable, Callable
 
-from rag_research.agentic_boundaries import (
+from rag_research.llm import LLMResponse
+
+from .agentic_boundaries import (
     rebalance_document_boundaries,
     validate_boundary_structure,
 )
-from rag_research.agentic_llm import AgenticLlmGateway
-from rag_research.chunking_models import ChunkSpan, SentenceSpan
-from rag_research.text_spans import split_sentences
+from .agentic_llm import AgenticLlmGateway
+from .chunking_models import ChunkSpan, SentenceSpan
+from .text_spans import split_sentences
 
 
 AGENTIC_RECENT_PROPOSITIONS = 3
 AGENTIC_CATALOG_MAX_CHUNKS = 20
+AGENTIC_STATE_MODEL = "sequential-open-chunk-v3"
+AgenticProgressCallback = Callable[[str, int, int, int], None]
 
 
 @dataclass
@@ -39,8 +43,9 @@ async def agentic_chunk(
     max_sentences: int,
     concurrency: int,
     retries: int,
-    llm_func: Callable[..., Awaitable[str]],
+    llm_func: Callable[..., Awaitable[str | LLMResponse]],
     state_events: list[dict[str, object]] | None = None,
+    progress_callback: AgenticProgressCallback | None = None,
 ) -> list[ChunkSpan]:
     """Build source-aligned chunks with a proposition-aware stateful agent."""
     _validate_runtime_config(
@@ -69,11 +74,14 @@ async def agentic_chunk(
         state_events=state_events,
     )
     proposition_count = len(proposition_boundaries)
-    print(
-        f"[agentic] extracted {proposition_count} propositions from "
-        f"{len(sentences)} sentences",
-        flush=True,
-    )
+    if progress_callback is None:
+        print(
+            f"[agentic] extracted {proposition_count} propositions from "
+            f"{len(sentences)} sentences",
+            flush=True,
+        )
+    else:
+        progress_callback("propositions", 0, proposition_count, 0)
 
     managed_chunks = await _route_propositions(
         text=text,
@@ -83,6 +91,7 @@ async def agentic_chunk(
         max_sentences=max_sentences,
         llm_gateway=llm_gateway,
         state_events=state_events,
+        progress_callback=progress_callback,
     )
     return await _finalize_chunks(
         text=text,
@@ -104,6 +113,7 @@ async def _route_propositions(
     max_sentences: int,
     llm_gateway: AgenticLlmGateway,
     state_events: list[dict[str, object]] | None,
+    progress_callback: AgenticProgressCallback | None,
 ) -> list[AgenticManagedChunk]:
     managed_chunks: list[AgenticManagedChunk] = []
     proposition_count = len(proposition_boundaries)
@@ -159,7 +169,14 @@ async def _route_propositions(
             target=target,
         )
 
-        if proposition_index % 10 == 0 or proposition_index == proposition_count:
+        if progress_callback is not None:
+            progress_callback(
+                "state",
+                proposition_index,
+                proposition_count,
+                len(managed_chunks),
+            )
+        elif proposition_index % 10 == 0 or proposition_index == proposition_count:
             print(
                 f"[agentic] state {proposition_index}/{proposition_count}, "
                 f"{len(managed_chunks)} chunks",
@@ -301,6 +318,7 @@ async def _finalize_chunks(
             text=text,
             sentences=sentences,
             boundaries=missing_boundaries,
+            state_events=state_events,
         )
         metadata_by_boundary.update(refreshed)
 

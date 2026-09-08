@@ -5,7 +5,7 @@ from dataclasses import replace
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
-from rag_research.chunking import ChunkConfig
+from rag_research.chunking import ChunkConfig, ChunkSpan
 from rag_research.prompts import (
     AGENTIC_METADATA_SYSTEM_PROMPT,
     AGENTIC_PROPOSITION_SYSTEM_PROMPT,
@@ -18,9 +18,10 @@ from rag_research.core import (
     LightRAGConfig,
     _aggregate_descriptions,
     _merge_extraction_records,
+    _normalize_entity_name_key,
 )
 from rag_research.extraction import Entity, Relation
-from rag_research.models import InputDocument
+from rag_research.models import ChunkRecord, InputDocument
 from rag_research.prompts import PROMPTS
 from rag_research.storage import KVStore
 
@@ -30,7 +31,7 @@ def _config() -> LightRAGConfig:
         chunk_config=ChunkConfig(
             strategy="fixed",
             fixed_size=100,
-            fixed_overlap=0,
+            overlap_size=0,
         ),
         embedding_batch_size=2,
         embedding_concurrency=2,
@@ -132,8 +133,11 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
                 call.args[0]
                 for call in embed_func.await_args_list
             ]
-            self.assertTrue(any(
-                "Semantic chunk state:" in embedded_text
+            self.assertTrue(embedded_texts)
+            self.assertTrue(all(
+                "Semantic chunk state:" not in embedded_text
+                and "First topic starts." not in embedded_text
+                and "Second topic starts." not in embedded_text
                 for embedded_text in embedded_texts
             ))
 
@@ -142,7 +146,11 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
                 document,
             ))
             payload = json.loads(cache_path.read_text(encoding="utf-8"))["document"]
-            self.assertEqual(len(payload["agentic_state_events"]), 4)
+            self.assertEqual(len(payload["agentic_state_events"]), 5)
+            self.assertEqual(
+                payload["agentic_state_events"][-1]["event"],
+                "uniform_overlap",
+            )
             self.assertEqual(
                 [span["title"] for span in payload["spans"]],
                 ["First", "Second"],
@@ -302,11 +310,18 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             events = json.loads(
                 cache_path.read_text(encoding="utf-8")
             )["document"]["agentic_state_events"]
-            rebalance = events[-1]
-            self.assertEqual(rebalance["event"], "document_rebalance")
+            rebalances = [event for event in events if event["event"] == "document_rebalance"]
+            self.assertEqual(len(rebalances), 1)
+            rebalance = rebalances[0]
             self.assertEqual(
                 rebalance["final_boundaries"],
                 [[1, 10], [11, 30]],
+            )
+            refreshes = [event for event in events if event["event"] == "metadata_refresh"]
+            self.assertEqual(
+                [event["final_boundary"] for event in refreshes],
+                [boundary for boundary in rebalance["final_boundaries"]
+                 if boundary not in rebalance["original_boundaries"]],
             )
 
     async def test_agentic_chunking_resumes_from_completed_document_cache(self):
@@ -498,6 +513,15 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
                 first_result.build_provenance["embedding"]["model"],
                 "test-embedding",
             )
+            self.assertEqual(
+                first_result.build_provenance["embedding"]["prefixes"],
+                {
+                    "query": "search_query: ",
+                    "document": "search_document: ",
+                    "semantic": "clustering: ",
+                },
+            )
+            self.assertFalse(first_result.build_provenance["embedding"]["truncate"])
 
             stored_chunks = list(first_rag.chunk_kv.all().values())
             self.assertEqual(
@@ -657,13 +681,18 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(
                 batches[0],
                 [
-                    "Alpha Alpha description",
-                    "Beta Beta description",
+                    "search_document: Name: Alpha\nType: Concept\nDescription: Alpha description",
+                    "search_document: Name: Beta\nType: Concept\nDescription: Beta description",
                 ],
             )
             self.assertEqual(
                 batches[1],
-                ["linked Relation description"],
+                [
+                    "search_document: Source: Alpha\n"
+                    "Target: Beta\n"
+                    "Keywords: linked\n"
+                    "Description: Relation description",
+                ],
             )
             self.assertEqual(len(batches[2]), 2)
             self.assertTrue(all("Content:" in text for text in batches[2]))
@@ -736,6 +765,153 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
             ["chunk-0", "chunk-1"],
         )
 
+    def test_global_merge_collapses_typographic_entity_variants(self):
+        entities = [
+            Entity(
+                "Baldur\u2019s Gate 3",
+                "Artifact",
+                "A role-playing game.",
+                ["chunk-1"],
+            ),
+            Entity(
+                "Baldur's Gate 3",
+                "Artifact",
+                "A game developed by Larian Studios.",
+                ["chunk-2"],
+            ),
+            Entity(
+                "Larian Studios",
+                "Organization",
+                "A game developer.",
+                ["chunk-1", "chunk-2"],
+            ),
+        ]
+        relations = [
+            Relation(
+                "Baldur\u2019s Gate 3",
+                "Larian Studios",
+                ["developer"],
+                "Larian Studios developed the game.",
+                ["chunk-1"],
+            ),
+            Relation(
+                "Baldur's Gate 3",
+                "Larian Studios",
+                ["studio"],
+                "The game was made by Larian Studios.",
+                ["chunk-2"],
+            ),
+        ]
+
+        clean_entities, clean_relations = _merge_extraction_records(
+            entities,
+            relations,
+        )
+
+        self.assertEqual(
+            set(clean_entities),
+            {"Baldur\u2019s Gate 3", "Larian Studios"},
+        )
+        self.assertEqual(
+            clean_entities["Baldur\u2019s Gate 3"].source_id,
+            ["chunk-1", "chunk-2"],
+        )
+        self.assertEqual(
+            set(clean_relations),
+            {"Baldur\u2019s Gate 3||Larian Studios"},
+        )
+        merged_relation = clean_relations[
+            "Baldur\u2019s Gate 3||Larian Studios"
+        ]
+        self.assertEqual(merged_relation.keywords, ["developer", "studio"])
+        self.assertEqual(merged_relation.source_id, ["chunk-1", "chunk-2"])
+
+    def test_chunk_model_and_embedding_inputs_use_only_confirmed_metadata(self):
+        document = InputDocument(
+            document_id="doc-1",
+            text="Original chunk text.",
+            metadata={
+                "title": "Dataset title",
+                "author": "Dataset author",
+                "published_at": "2024-01-02",
+                "source": "Dataset source",
+                "category": "Should remain metadata only",
+                "url": "https://example.test/doc-1",
+            },
+        )
+        span = ChunkSpan(
+            "Original chunk text.",
+            0,
+            len(document.text),
+            title="Generated title",
+            summary="Generated summary",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            rag = LightRAG(
+                working_dir=directory,
+                llm_func=AsyncMock(),
+                con_num=1,
+                embed_func=AsyncMock(),
+                config=_config(),
+            )
+            chunk = ChunkRecord(
+                chunk_id="chunk-1",
+                document_id=document.document_id,
+                text=span.text,
+                model_text=rag._make_model_text(document, span),
+                chunk_index=0,
+                char_start=span.char_start,
+                char_end=span.char_end,
+                metadata={**document.metadata, "chunk_title": span.title, "chunk_summary": span.summary},
+            )
+            model_text = chunk.model_text
+            embedding_text = rag._make_chunk_embedding_text(chunk)
+            self.assertEqual(chunk.document_id, "doc-1")
+            self.assertEqual(chunk.metadata["url"], "https://example.test/doc-1")
+            self.assertEqual(
+                (chunk.char_start, chunk.char_end),
+                (0, len(document.text)),
+            )
+            for expected in (
+                "Original chunk text.",
+                "Title: Dataset title",
+                "Source: Dataset source",
+                "Author: Dataset author",
+                "Date: 2024-01-02",
+            ):
+                with self.subTest(expected=expected):
+                    self.assertIn(expected, model_text)
+                    self.assertIn(expected, embedding_text)
+            for excluded in (
+                "Generated title",
+                "Generated summary",
+                "Should remain metadata only",
+                "https://example.test/doc-1",
+            ):
+                with self.subTest(excluded=excluded):
+                    self.assertNotIn(excluded, model_text)
+                    self.assertNotIn(excluded, embedding_text)
+            self.assertEqual(model_text, embedding_text)
+
+            source_span = ChunkSpan(
+                "Original chunk text.",
+                0,
+                len(document.text),
+                title="Generated title A",
+                summary="Generated summary A",
+            )
+            changed_metadata_span = ChunkSpan(
+                "Original chunk text.",
+                0,
+                len(document.text),
+                title="Generated title B",
+                summary="Generated summary B",
+            )
+            self.assertEqual(
+                rag._make_chunk_id(document.document_id, 0, source_span),
+                rag._make_chunk_id(document.document_id, 0, changed_metadata_span),
+            )
+
     def test_description_aggregation_deduplicates_case_insensitively(self):
         self.assertEqual(
             _aggregate_descriptions(
@@ -744,6 +920,25 @@ class ConstructManifestTests(unittest.IsolatedAsyncioTestCase):
                 max_chars=4000,
             ),
             "Alpha description | Beta",
+        )
+
+    def test_entity_name_normalization_folds_typographic_punctuation(self):
+        equivalent_names = (
+            ("Baldur's Gate 3", "Baldur\u2019s Gate 3"),
+            ('The "Example"', "The \u201cExample\u201d"),
+            ("Alpha-Beta", "Alpha\u2014Beta"),
+        )
+
+        for plain, typographic in equivalent_names:
+            with self.subTest(plain=plain, typographic=typographic):
+                self.assertEqual(
+                    _normalize_entity_name_key(plain),
+                    _normalize_entity_name_key(typographic),
+                )
+
+        self.assertNotEqual(
+            _normalize_entity_name_key("U.S."),
+            _normalize_entity_name_key("US"),
         )
 
     async def test_embedding_model_change_invalidates_cached_build(self):

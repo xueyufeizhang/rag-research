@@ -32,6 +32,8 @@ class BuildResult:
     chunking_fingerprint: str
     extraction_fingerprint: str
     build_provenance: dict[str, Any] = field(default_factory=dict)
+    # Absent on legacy builds: lack of observations must not become zero rates.
+    extraction_statistics: dict[str, Any] | None = None
 
 @dataclass(frozen=True)
 class EvidenceOccurrence:

@@ -1,6 +1,6 @@
 import pysbd
 
-from rag_research.chunking_models import SentenceSpan
+from .chunking_models import SentenceSpan
 
 
 _SENTENCE_SEGMENTER = pysbd.Segmenter(

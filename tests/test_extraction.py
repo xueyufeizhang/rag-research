@@ -1,12 +1,16 @@
 import asyncio
 import json
+import itertools
+import re
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
 from rag_research.extraction import Entity, Relation, _parse_response, extract
+from rag_research.llm import LLMResponse
 from rag_research.models import ChunkRecord
+from rag_research.prompts import PROMPTS
 
 
 def _chunk(chunk_id: str, model_text: str = "model input") -> ChunkRecord:
@@ -46,6 +50,28 @@ def _response(
 
 
 class ParseResponseTests(unittest.TestCase):
+    def test_every_few_shot_output_passes_the_real_parser_on_its_input(self):
+        for index, example in enumerate(PROMPTS["entity_extraction_examples"]):
+            with self.subTest(example=index):
+                input_text = re.search(r"---Input Text---\s*```\s*(.*?)\s*```", example, re.DOTALL).group(1)
+                output = example.split("---Output---", 1)[1]
+                entities, relations = _parse_response(output, f"example-{index}", input_text)
+                self.assertTrue(entities)
+                self.assertTrue(relations)
+
+    def test_grounding_accepts_only_orthographic_name_variations(self):
+        for spelling in ("peat-soil", "peat\u2011soil", "Ｐｅａｔ　Ｓｏｉｌ", "peat\n  soil"):
+            with self.subTest(spelling=spelling):
+                entities, _ = _parse_response(
+                    _response(entities=[{"name": "Peat Soil"}]),
+                    "grounding", f"The {spelling} was damaged.",
+                )
+                self.assertEqual(entities[0].name, "Peat Soil")
+        for text in ("Mineral soil was damaged.", "Peat soils were damaged.", "Soil containing peat was damaged."):
+            with self.subTest(text=text):
+                with self.assertRaisesRegex(ValueError, "example leakage"):
+                    _parse_response(_response(entities=[{"name": "Peat-Soil"}]), "grounding", text)
+
     def test_parses_and_cleans_valid_records(self):
         response = _response(
             entities=[
@@ -334,6 +360,221 @@ class ParseResponseTests(unittest.TestCase):
 
 
 class ExtractTests(unittest.IsolatedAsyncioTestCase):
+    async def test_cap_statistics_use_raw_counts_and_explicit_chunk_denominators(self):
+        names = [f"Worker {index}" for index in range(20)]
+        pairs = list(itertools.combinations(names, 2))[:30]
+        capped = _response(
+            entities=[{"name": name} for name in names],
+            relationships=[{"source": source, "target": target} for source, target in pairs],
+        )
+        result = await extract(
+            [_chunk("capped"), _chunk("small")],
+            AsyncMock(side_effect=[LLMResponse(capped, "stop", truncated=False), _response()]),
+            con_num=1,
+        )
+        summary = result.statistics["run_summary"]
+        self.assertEqual(summary["attempt_count"], 2)
+        for limit_name in ("entity_limit", "total_limit"):
+            metric = summary[limit_name]
+            self.assertEqual(metric["known_count_chunk_count"], 2)
+            self.assertEqual(metric["exactly_at_limit_attempt_count"], 1)
+            self.assertEqual(metric["at_or_above_limit_rate_per_known_chunk"], 0.5)
+        self.assertEqual(summary["truncation_known_response_attempt_count"], 1)
+        self.assertEqual(summary["truncation_unknown_response_attempt_count"], 1)
+        self.assertEqual(summary["output_truncation_rate_per_known_response"], 0.0)
+
+        duplicates = _response(entities=[{"name": "Repeated"} for _ in range(20)])
+        duplicate_result = await extract([_chunk("duplicates")], AsyncMock(return_value=duplicates), con_num=1)
+        self.assertEqual(len(duplicate_result.entities), 1)
+        self.assertEqual(duplicate_result.statistics["chunks"][0]["attempts"][0]["raw_entity_count"], 20)
+        self.assertEqual(duplicate_result.statistics["run_summary"]["entity_limit"]["exactly_at_limit_attempt_count"], 1)
+        self.assertEqual(duplicate_result.statistics["run_summary"]["accepted_entity_limit"]["exactly_at_limit_attempt_count"], 0)
+        self.assertEqual(duplicate_result.statistics["chunks"][0]["attempts"][0]["accepted_entity_count"], 1)
+
+    async def test_repaired_json_has_unknown_raw_counts_but_observable_accepted_counts(self):
+        malformed = "{'entities': [{'name': 'Alpha', 'type': 'Person', 'description': 'A person.'}], 'relationships': []}"
+        result = await extract([_chunk("repaired")], AsyncMock(return_value=malformed), 1)
+        self.assertEqual(result.failed_chunk_ids, [])
+        attempt = result.statistics["chunks"][0]["attempts"][0]
+        self.assertEqual(attempt["raw_count_source"], "unavailable")
+        self.assertIsNone(attempt["raw_entity_count"])
+        self.assertEqual(attempt["accepted_entity_count"], 1)
+        summary = result.statistics["run_summary"]
+        self.assertEqual(summary["entity_limit"]["known_count_attempt_count"], 0)
+        self.assertEqual(summary["accepted_entity_limit"]["known_count_attempt_count"], 1)
+
+    async def test_attempt_start_is_durable_before_the_backend_is_called(self):
+        with tempfile.TemporaryDirectory() as directory:
+            async def llm(*, system: str, prompt: str) -> str:
+                payload = json.loads(next(Path(directory, "f", "attempts").glob("*.json")).read_text())
+                attempt = payload["attempts"][0]
+                self.assertEqual(attempt["outcome"], "pending")
+                self.assertIsNone(attempt["duration_seconds"])
+                self.assertFalse(attempt["response_received"])
+                self.assertIsNone(attempt["raw_entity_count"])
+                return _response()
+
+            await extract(
+                [_chunk("durable")], llm, 1,
+                cache_directory=directory, extraction_fingerprint="f", cache_scope="scope",
+            )
+            payload = json.loads(next(Path(directory, "f", "attempts").glob("*.json")).read_text())
+            self.assertEqual(len(payload["attempts"]), 1)
+            self.assertEqual(payload["attempts"][0]["outcome"], "success")
+
+    async def test_resume_preserves_unresolved_historical_attempts_as_unknown(self):
+        with tempfile.TemporaryDirectory() as directory:
+            captured = {}
+
+            async def interrupted_llm(*, system: str, prompt: str) -> str:
+                path = next(Path(directory, "f", "attempts").glob("*.json"))
+                captured["path"] = path
+                captured["pending"] = path.read_text()
+                raise asyncio.CancelledError()
+
+            arguments = dict(cache_directory=directory, extraction_fingerprint="f", cache_scope="scope")
+            with self.assertRaises(asyncio.CancelledError):
+                await extract([_chunk("interrupted")], interrupted_llm, 1, **arguments)
+            # Reproduce the exact ledger state a hard kill leaves before the
+            # running call can report any outcome or completion metadata.
+            captured["path"].write_text(captured["pending"])
+            resumed = await extract([_chunk("interrupted")], AsyncMock(return_value=_response()), 1, **arguments)
+            history = resumed.statistics["historical_summary"]
+            self.assertEqual(history["attempt_count"], 1)
+            self.assertEqual(history["unresolved_attempt_count"], 1)
+            self.assertEqual(history["response_attempt_count"], 0)
+            self.assertIsNone(history["output_truncation_rate_per_known_response"])
+            self.assertEqual(resumed.statistics["run_summary"]["attempt_count"], 1)
+            attempts = resumed.statistics["chunks"][0]["attempts"]
+            self.assertEqual([attempt["outcome"] for attempt in attempts], ["pending", "success"])
+
+    async def test_five_limit_errors_only_create_four_actual_retries(self):
+        response = _response(entities=[{"name": f"Entity {index}"} for index in range(21)])
+        with patch("rag_research.extraction.asyncio.sleep", new=AsyncMock()):
+            result = await extract(
+                [_chunk("over-limit")],
+                AsyncMock(return_value=LLMResponse(response, "stop", truncated=False)),
+                con_num=1,
+            )
+        summary = result.statistics["run_summary"]
+        self.assertEqual(summary["attempt_count"], 5)
+        self.assertEqual(summary["over_limit_attempt_count"], 5)
+        self.assertEqual(summary["over_limit_error_attempt_count"], 5)
+        self.assertEqual(summary["over_limit_retry_count"], 4)
+        self.assertEqual(summary["over_limit_retry_rate_per_violation"], 0.8)
+        self.assertEqual(summary["retry_rate_per_attempted_chunk"], 1.0)
+        attempts = result.statistics["chunks"][0]["attempts"]
+        self.assertIsNone(attempts[0]["retry_of"])
+        self.assertEqual(attempts[-1]["retry_of"], attempts[-2]["attempt_id"])
+        self.assertTrue(all(attempt["raw_entity_count"] == 21 for attempt in attempts))
+
+    async def test_explicit_truncation_retries_even_when_json_is_valid(self):
+        llm = AsyncMock(side_effect=[
+            LLMResponse(_response(), "length", {"completion_tokens": 4096}, True),
+            LLMResponse(_response(), "stop", {"completion_tokens": 20}, False),
+        ])
+        with tempfile.TemporaryDirectory() as directory:
+            with patch("rag_research.extraction.asyncio.sleep", new=AsyncMock()):
+                result = await extract(
+                    [_chunk("truncated")], llm, 1,
+                    cache_directory=directory, extraction_fingerprint="f", cache_scope="scope",
+                )
+            summary = result.statistics["run_summary"]
+            self.assertEqual(summary["output_truncation_rate_per_known_response"], 0.5)
+            self.assertEqual(summary["retry_count"], 1)
+            record = json.loads(next(Path(directory, "f", "records").glob("*.json")).read_text())
+            self.assertEqual([attempt["outcome"] for attempt in record["attempts"]], ["truncated", "success"])
+            self.assertEqual(record["attempts"][0]["usage"]["completion_tokens"], 4096)
+
+    async def test_invalid_json_does_not_invent_a_truncation_signal(self):
+        with patch("rag_research.extraction.asyncio.sleep", new=AsyncMock()):
+            result = await extract([_chunk("unknown")], AsyncMock(return_value="broken JSON"), 1)
+        summary = result.statistics["run_summary"]
+        self.assertEqual(summary["truncation_unknown_response_attempt_count"], 5)
+        self.assertEqual(summary["truncated_response_attempt_count"], 0)
+        self.assertIsNone(summary["output_truncation_rate_per_known_response"])
+        self.assertIsNone(summary["entity_limit"]["at_or_above_limit_rate_per_known_attempt"])
+        self.assertTrue(all(attempt["raw_entity_count"] is None for attempt in result.statistics["chunks"][0]["attempts"]))
+
+    async def test_failed_attempt_history_survives_resume_and_cache_reuse(self):
+        with tempfile.TemporaryDirectory() as directory:
+            arguments = dict(cache_directory=directory, extraction_fingerprint="f", cache_scope="scope")
+            chunk = _chunk("resumed")
+            with patch("rag_research.extraction.asyncio.sleep", new=AsyncMock()):
+                failed = await extract([chunk], AsyncMock(side_effect=OSError("offline")), 1, **arguments)
+            failed_report = json.loads(Path(failed.statistics["report_path"]).read_text())
+            self.assertEqual(failed_report["status"], "incomplete")
+            self.assertEqual(failed_report["run_summary"]["backend_error_attempt_count"], 5)
+            self.assertEqual(failed_report["run_summary"]["response_attempt_count"], 0)
+            resumed = await extract([chunk], AsyncMock(return_value=_response()), 1, **arguments)
+            self.assertEqual(resumed.statistics["run_summary"]["attempt_count"], 1)
+            self.assertEqual(resumed.statistics["historical_summary"]["attempt_count"], 5)
+            self.assertEqual(resumed.statistics["cumulative_summary"]["attempt_count"], 6)
+            self.assertEqual(resumed.statistics["run_summary"]["retry_count"], 0)
+            final_llm = AsyncMock(side_effect=AssertionError("cache must be reused"))
+            cached = await extract([chunk], final_llm, 1, **arguments)
+            final_llm.assert_not_awaited()
+            self.assertEqual(cached.statistics["cached_chunk_count"], 1)
+            self.assertEqual(cached.statistics["run_summary"]["attempt_count"], 0)
+            self.assertIsNone(cached.statistics["run_summary"]["output_truncation_rate_per_known_response"])
+            self.assertEqual(cached.statistics["historical_summary"]["attempt_count"], 6)
+            self.assertEqual(len(list(Path(directory, "f", "runs", "scope").glob("*.json"))), 3)
+
+    async def test_cancellation_during_backoff_does_not_count_an_unmade_retry(self):
+        response = _response(entities=[{"name": f"Entity {index}"} for index in range(21)])
+        with tempfile.TemporaryDirectory() as directory:
+            with patch("rag_research.extraction.asyncio.sleep", new=AsyncMock(side_effect=asyncio.CancelledError)):
+                with self.assertRaises(asyncio.CancelledError):
+                    await extract(
+                        [_chunk("cancelled")], AsyncMock(return_value=response), 1,
+                        cache_directory=directory, extraction_fingerprint="f", cache_scope="scope",
+                    )
+            report = json.loads(next(Path(directory, "f", "runs", "scope").glob("*.json")).read_text())
+            self.assertEqual(report["status"], "interrupted")
+            self.assertEqual(report["run_summary"]["over_limit_attempt_count"], 1)
+            self.assertEqual(report["run_summary"]["over_limit_retry_count"], 0)
+
+    async def test_statistics_versions_and_missing_attempt_fields_are_rejected(self):
+        for corruption in ("record-version", "state-version", "ledger-version", "missing-count"):
+            with self.subTest(corruption=corruption), tempfile.TemporaryDirectory() as directory:
+                arguments = dict(cache_directory=directory, extraction_fingerprint="f", cache_scope="scope")
+                chunk = _chunk("corrupted")
+                await extract([chunk], AsyncMock(return_value=_response()), 1, **arguments)
+                if corruption == "state-version":
+                    path = Path(directory, "f", "states", "scope.json")
+                else:
+                    folder = "attempts" if corruption == "ledger-version" else "records"
+                    path = next(Path(directory, "f", folder).glob("*.json"))
+                payload = json.loads(path.read_text())
+                if corruption == "record-version":
+                    payload["statistics_schema_version"] = 999
+                elif corruption == "state-version":
+                    payload["statistics"]["schema_version"] = 999
+                elif corruption == "ledger-version":
+                    payload["schema_version"] = 999
+                else:
+                    del payload["attempts"][0]["raw_entity_count"]
+                path.write_text(json.dumps(payload))
+                llm = AsyncMock(side_effect=AssertionError("invalid statistics must not run models"))
+                with self.assertRaisesRegex(ValueError, "statistics"):
+                    await extract([chunk], llm, 1, **arguments)
+                llm.assert_not_awaited()
+
+    async def test_cache_rejects_accepted_statistics_that_disagree_with_records(self):
+        with tempfile.TemporaryDirectory() as directory:
+            arguments = dict(cache_directory=directory, extraction_fingerprint="f", cache_scope="scope")
+            chunk = _chunk("inconsistent-accepted-count")
+            await extract([chunk], AsyncMock(return_value=_response()), 1, **arguments)
+            path = next(Path(directory, "f", "records").glob("*.json"))
+            payload = json.loads(path.read_text())
+            payload["attempts"][-1]["accepted_entity_count"] = 1
+            payload["attempts"][-1]["accepted_total_count"] = 1
+            path.write_text(json.dumps(payload))
+            llm = AsyncMock(side_effect=AssertionError("corrupt cache must not invoke models"))
+            with self.assertRaisesRegex(ValueError, "statistics disagree with accepted records"):
+                await extract([chunk], llm, 1, **arguments)
+            llm.assert_not_awaited()
+
     async def test_validation_retry_includes_contract_feedback(self):
         prompts: list[str] = []
 

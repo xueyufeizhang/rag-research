@@ -4,12 +4,13 @@ import re
 from typing import Awaitable, Callable
 
 from json_repair import repair_json
+from rag_research.llm import LLMResponse, normalize_llm_response
 
-from rag_research.agentic_boundaries import (
+from .agentic_boundaries import (
     project_boundaries,
     validate_boundary_structure,
 )
-from rag_research.chunking_models import SentenceSpan
+from .chunking_models import SentenceSpan
 from rag_research.prompts import (
     AGENTIC_METADATA_SYSTEM_PROMPT,
     AGENTIC_PROPOSITION_SYSTEM_PROMPT,
@@ -30,7 +31,7 @@ class AgenticLlmGateway:
     def __init__(
         self,
         *,
-        llm_func: Callable[..., Awaitable[str]],
+        llm_func: Callable[..., Awaitable[str | LLMResponse]],
         retries: int,
         concurrency: int,
     ) -> None:
@@ -80,6 +81,7 @@ class AgenticLlmGateway:
                             system=AGENTIC_PROPOSITION_SYSTEM_PROMPT,
                             prompt=prompt,
                         )
+                        response = _complete_response_text(response)
                         proposed = _parse_named_boundaries(
                             response,
                             field_name="propositions",
@@ -165,6 +167,7 @@ class AgenticLlmGateway:
                     system=AGENTIC_STATE_SYSTEM_PROMPT,
                     prompt=prompt,
                 )
+                response = _complete_response_text(response)
             except Exception as exc:
                 last_error = exc
                 _log_retry(
@@ -256,6 +259,7 @@ class AgenticLlmGateway:
                     system=AGENTIC_METADATA_SYSTEM_PROMPT,
                     prompt=prompt,
                 )
+                response = _complete_response_text(response)
                 title, summary = _validate_metadata(
                     _parse_json_object(response)
                 )
@@ -303,6 +307,7 @@ class AgenticLlmGateway:
         text: str,
         sentences: list[SentenceSpan],
         boundaries: list[tuple[int, int]],
+        state_events: list[dict[str, object]] | None = None,
     ) -> dict[tuple[int, int], tuple[str, str]]:
         print(
             f"[agentic] refreshing metadata for {len(boundaries)} "
@@ -313,18 +318,30 @@ class AgenticLlmGateway:
 
         async def describe(
             boundary: tuple[int, int],
-        ) -> tuple[tuple[int, int], tuple[str, str]]:
+        ) -> tuple[tuple[int, int], dict[str, str]]:
             async with semaphore:
                 metadata = await self.describe_chunk(
                     text=text,
                     sentences=sentences,
                     boundary=boundary,
                 )
-            return boundary, (metadata["title"], metadata["summary"])
+            return boundary, metadata
 
-        return dict(await asyncio.gather(*(
+        results = await asyncio.gather(*(
             describe(boundary) for boundary in boundaries
-        )))
+        ))
+        if state_events is not None:
+            # Gather preserves boundary order even when requests finish out of
+            # order, making the persisted refresh trace deterministic.
+            state_events.extend({
+                "event": "metadata_refresh",
+                "final_boundary": list(boundary),
+                **metadata,
+            } for boundary, metadata in results)
+        return {
+            boundary: (metadata["title"], metadata["summary"])
+            for boundary, metadata in results
+        }
 
     async def _repair_transition_metadata(
         self,
@@ -381,12 +398,28 @@ class AgenticLlmGateway:
         return recovered
 
 
+def _complete_response_text(response: str | LLMResponse) -> str:
+    normalized = normalize_llm_response(response)
+    if normalized.truncated is True:
+        raise ValueError(
+            "LLM response was truncated "
+            f"(finish_reason={normalized.finish_reason!r}); "
+            "incomplete JSON must not be repaired into a successful response"
+        )
+    return normalized.text
+
+
 def make_sentence_batches(
     sentences: list[SentenceSpan],
     max_sentences: int,
     max_chars: int,
 ) -> list[list[SentenceSpan]]:
-    """Group source sentences for bounded proposition-extraction calls."""
+    """Pre-screen batches by stripped source characters without losing text.
+
+    This budget excludes sentence labels and prompts and is not a tokenizer or
+    a complete model-context limit. A sentence that alone exceeds it is rejected
+    with its original source span instead of being truncated or split silently.
+    """
     if max_sentences <= 0:
         raise ValueError("max sentences must be positive")
     if max_chars <= 0:
@@ -397,6 +430,13 @@ def make_sentence_batches(
     current_chars = 0
     for sentence_span in sentences:
         sentence_chars = len(sentence_span.text.strip())
+        if sentence_chars > max_chars:
+            raise ValueError(
+                "source sentence exceeds proposition batch character budget: "
+                f"span=[{sentence_span.char_start}, {sentence_span.char_end}), "
+                f"stripped_source_chars={sentence_chars}, budget={max_chars}; "
+                "source text was not truncated"
+            )
         exceeds_sentence_limit = len(current) >= max_sentences
         exceeds_char_limit = (
             bool(current) and current_chars + sentence_chars > max_chars
@@ -539,14 +579,13 @@ def _parse_named_boundaries(
     for item in raw_boundaries:
         if not isinstance(item, dict):
             raise ValueError(f"each {field_name} boundary must be an object")
-        try:
-            start = int(item["start"])
-            end = int(item["end"])
-        except (KeyError, TypeError, ValueError) as exc:
+        start = item.get("start")
+        end = item.get("end")
+        if type(start) is not int or type(end) is not int:
             raise ValueError(
                 f"each {field_name} boundary requires integer start and end "
                 "indexes"
-            ) from exc
+            )
         boundaries.append((start, end))
     return boundaries
 

@@ -1,16 +1,24 @@
+"""Public dispatcher for the supported document chunking strategies."""
+
 from typing import Awaitable, Callable
 
-from rag_research.agentic_chunking import agentic_chunk
-from rag_research.chunking_models import ChunkConfig, ChunkSpan, SentenceSpan
+from .agentic_chunking import AgenticProgressCallback, agentic_chunk
+from .agentic_boundaries import rebalance_document_boundaries
+from .chunking_models import ChunkConfig, ChunkSpan, SentenceSpan
 from rag_research.embedding import (
     BatchEmbeddingFunction,
     EmbeddingFunction,
     embed_texts,
 )
-from rag_research.text_spans import sentence_context, split_sentences
+from rag_research.llm import LLMResponse
+from .text_spans import sentence_context, split_sentences
 
 
-CHUNKING_PIPELINE_VERSION = 5
+CHUNKING_PIPELINE_VERSION = 6
+CHUNKING_STRATEGY_VERSIONS = {"fixed": 6, "semantic": 7, "agentic": 7}
+SEMANTIC_BOUNDARY_POLICY = "strict-percentile-rebalance-v2"
+SEMANTIC_DISTANCE_ABS_TOLERANCE = 1e-12
+UNIFORM_OVERLAP_POLICY = "source-prefix-after-boundaries-v1"
 
 
 async def chunk_async(
@@ -18,17 +26,20 @@ async def chunk_async(
     config: ChunkConfig,
     embed_func: EmbeddingFunction | None = None,
     embed_many_func: BatchEmbeddingFunction | None = None,
-    llm_func: Callable[..., Awaitable[str]] | None = None,
+    llm_func: Callable[..., Awaitable[str | LLMResponse]] | None = None,
     agentic_state_events: list[dict[str, object]] | None = None,
+    agentic_progress_callback: AgenticProgressCallback | None = None,
 ) -> list[ChunkSpan]:
-    """Dispatch a document to the configured chunking strategy."""
+    """Dispatch a strategy, then apply the one shared overlap postprocess."""
     strategy = config.strategy.lower()
+    overlap = config.overlap_size
     if strategy == "fixed":
-        return fixed_size_chunk(text, config.fixed_size, config.fixed_overlap)
+        spans = fixed_size_chunk(text, config.fixed_size, 0)
+        return apply_uniform_overlap(text, spans, overlap, audit=agentic_state_events)
     if strategy == "semantic":
         if embed_func is None:
             raise ValueError("semantic chunking requires an embed_func")
-        return await semantic_chunk(
+        spans = await semantic_chunk(
             text,
             breakpoint_percentile=config.semantic_breakpoint_percentile,
             min_sentences=config.semantic_min_sentences,
@@ -39,10 +50,11 @@ async def chunk_async(
             embed_func=embed_func,
             embed_many_func=embed_many_func,
         )
+        return apply_uniform_overlap(text, spans, overlap, audit=agentic_state_events)
     if strategy == "agentic":
         if llm_func is None:
             raise ValueError("agentic chunking requires an llm_func")
-        return await agentic_chunk(
+        spans = await agentic_chunk(
             text=text,
             batch_max_sentences=config.agentic_batch_max_sentences,
             batch_max_chars=config.agentic_batch_max_chars,
@@ -52,12 +64,14 @@ async def chunk_async(
             retries=config.agentic_retries,
             llm_func=llm_func,
             state_events=agentic_state_events,
+            progress_callback=agentic_progress_callback,
         )
+        return apply_uniform_overlap(text, spans, overlap, audit=agentic_state_events)
     raise ValueError(f"unknown chunking strategy: {config.strategy}")
 
 
 def fixed_size_chunk(text: str, size: int, overlap: int) -> list[ChunkSpan]:
-    """Split text into fixed character windows with optional overlap."""
+    """Split text into fixed windows and apply the common overlap postprocess."""
     if size <= 0:
         raise ValueError(f"chunk size must be positive, got {size}")
     if overlap < 0:
@@ -71,20 +85,88 @@ def fixed_size_chunk(text: str, size: int, overlap: int) -> list[ChunkSpan]:
     chunks: list[ChunkSpan] = []
     start = 0
     text_length = len(text)
-    step = size - overlap
+    # Build a non-overlapping core. Overlap is applied exactly once below.
+    step = size
     while start < text_length:
         end = min(start + size, text_length)
-        chunks.append(
-            ChunkSpan(
-                text=text[start:end],
-                char_start=start,
-                char_end=end,
-            )
-        )
+        chunks.append(ChunkSpan(text=text[start:end], char_start=start, char_end=end))
         if end == text_length:
             break
         start += step
-    return chunks
+    # Keep this standalone public helper backwards-compatible. The dispatcher
+    # calls it with zero overlap and applies the same postprocess to every
+    # strategy.
+    return apply_uniform_overlap(text, chunks, overlap)
+
+
+def apply_uniform_overlap(
+    text: str,
+    spans: list[ChunkSpan],
+    overlap: int,
+    *,
+    audit: list[dict[str, object]] | None = None,
+) -> list[ChunkSpan]:
+    """Expand every core span backwards by up to ``overlap`` source characters.
+
+    The operation is strategy-independent and preserves source text exactly.
+    At the beginning of a document, or when a requested overlap would make two
+    starts identical, the effective overlap is shortened to keep deterministic
+    strictly increasing chunk starts. The final chunk end is never changed.
+    """
+    if not isinstance(text, str):
+        raise TypeError("chunking text must be a string")
+    if type(overlap) is not int or overlap < 0:
+        raise ValueError("chunk overlap must be a non-negative integer")
+    if not isinstance(spans, list):
+        raise TypeError("chunk spans must be a list")
+    if not spans:
+        return []
+
+    previous_core_end = 0
+    previous_start = -1
+    expanded: list[ChunkSpan] = []
+    for index, span in enumerate(spans):
+        if not isinstance(span, ChunkSpan):
+            raise TypeError("chunk spans must contain ChunkSpan values")
+        if (
+            type(span.char_start) is not int
+            or type(span.char_end) is not int
+            or not 0 <= span.char_start < span.char_end <= len(text)
+            or span.text != text[span.char_start:span.char_end]
+        ):
+            raise ValueError(f"invalid source-aligned core span at index {index}")
+        if index == 0 and span.char_start != 0:
+            raise ValueError("core spans must start at the beginning of the source")
+        if span.char_start < previous_core_end:
+            raise ValueError("core spans must be non-overlapping and ordered")
+        start = span.char_start if index == 0 else max(0, span.char_start - overlap)
+        if start <= previous_start:
+            start = previous_start + 1
+        expanded.append(ChunkSpan(
+            text=text[start:span.char_end],
+            char_start=start,
+            char_end=span.char_end,
+            title=span.title,
+            summary=span.summary,
+        ))
+        previous_start = start
+        previous_core_end = span.char_end
+
+    if expanded[-1].char_end != len(text):
+        raise ValueError("core spans must cover the complete source")
+    if audit is not None and overlap:
+        audit.append({
+            "event": "uniform_overlap",
+            "policy": UNIFORM_OVERLAP_POLICY,
+            "requested_overlap": overlap,
+            "core_boundaries": [[span.char_start, span.char_end] for span in spans],
+            "expanded_boundaries": [[span.char_start, span.char_end] for span in expanded],
+            "effective_overlaps": [
+                core.char_start - actual.char_start
+                for core, actual in zip(spans, expanded, strict=True)
+            ],
+        })
+    return expanded
 
 
 async def semantic_chunk(
@@ -98,7 +180,12 @@ async def semantic_chunk(
     embedding_batch_size: int = 32,
     embed_many_func: BatchEmbeddingFunction | None = None,
 ) -> list[ChunkSpan]:
-    """Split text at unusually large adjacent-sentence embedding distances."""
+    """Split at distances strictly above the percentile, ignoring numeric ties.
+
+    A distance must exceed the threshold by more than the absolute tolerance.
+    Percentile 100 therefore disables semantic splits; maximum chunk size and
+    document-level rebalancing still apply.
+    """
     _validate_semantic_config(
         breakpoint_percentile=breakpoint_percentile,
         min_sentences=min_sentences,
@@ -126,6 +213,7 @@ async def semantic_chunk(
         embed_many_func=embed_many_func,
         batch_size=embedding_batch_size,
         concurrency=embedding_concurrency,
+        purpose="semantic",
     )
     distances = [
         1.0 - _cosine_similarity(embeddings[index], embeddings[index + 1])
@@ -133,36 +221,32 @@ async def semantic_chunk(
     ]
     threshold = _percentile(distances, breakpoint_percentile)
 
-    chunks: list[ChunkSpan] = []
+    boundaries: list[tuple[int, int]] = []
     start = 0
     for index, distance in enumerate(distances):
         sentence_count = index - start + 1
         should_split = (
-            sentence_count >= min_sentences and distance >= threshold
+            sentence_count >= min_sentences
+            and distance > threshold + SEMANTIC_DISTANCE_ABS_TOLERANCE
         )
         must_split = sentence_count >= max_sentences
         if should_split or must_split:
-            chunks.append(_span_from_sentences(text, sentences, start, index))
+            boundaries.append((start + 1, index + 1))
             start = index + 1
 
     if start < len(sentences):
-        tail_size = len(sentences) - start
-        if chunks and tail_size < min_sentences:
-            chunks[-1] = ChunkSpan(
-                text=text[chunks[-1].char_start:sentences[-1].char_end],
-                char_start=chunks[-1].char_start,
-                char_end=sentences[-1].char_end,
-            )
-        else:
-            chunks.append(
-                _span_from_sentences(
-                    text,
-                    sentences,
-                    start,
-                    len(sentences) - 1,
-                )
-            )
-    return chunks
+        boundaries.append((start + 1, len(sentences)))
+
+    boundaries = rebalance_document_boundaries(
+        boundaries,
+        sentence_count=len(sentences),
+        min_sentences=min_sentences,
+        max_sentences=max_sentences,
+    )
+    return [
+        _span_from_sentences(text, sentences, start - 1, end - 1)
+        for start, end in boundaries
+    ]
 
 
 def _validate_semantic_config(

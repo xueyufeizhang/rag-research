@@ -2,123 +2,47 @@ import unittest
 
 from rag_research.evaluation import (
     build_multidocument_chunk_index,
-    build_entity_normalizer,
-    calc_context_efficiency_metrics,
-    calc_evidence_metrics,
+    calc_evidence_reachability,
     calc_multihop_official_metrics,
     calc_multihop_retrieval_metrics,
     calc_null_retrieval_context_metrics,
-    calc_set_metrics,
     map_multihop_evidence_to_chunks,
-    normalize_relation_key,
 )
-from rag_research.models import (
-    EvidenceOccurrence,
-    EvidenceRecord,
-    InputDocument,
-    QuestionRecord,
-)
+from rag_research.models import EvidenceOccurrence, EvidenceRecord, InputDocument, QuestionRecord
 
 
-class EvidenceMetricsTests(unittest.TestCase):
-    def setUp(self):
-        self.chunk_to_evidence = {
-            "c1": ["e1"],
-            "c2": ["e1"],
-            "c3": ["e2"],
-            "c4": [],
-        }
-        self.evidence_to_answer_points = {"e1": [1], "e2": [2, 3]}
-
-    def test_recall_counts_evidence_not_overlapping_chunks(self):
-        metrics = calc_evidence_metrics(
-            ["c1", "c2"],
-            self.chunk_to_evidence,
-            self.evidence_to_answer_points,
-            answer_point_count=3,
-        )
-
-        self.assertEqual(metrics["chunk_precision"], 1.0)
-        self.assertEqual(metrics["evidence_recall"], 0.5)
-        self.assertEqual(metrics["answer_point_recall"], 1 / 3)
-        self.assertEqual(metrics["redundancy_rate"], 0.5)
-        self.assertEqual(metrics["ndcg_at_k"], 1.0)
-        self.assertNotIn("precision", metrics)
-        self.assertNotIn("recall", metrics)
-        self.assertNotIn("f1", metrics)
-
-    def test_rank_and_full_coverage(self):
-        metrics = calc_evidence_metrics(
-            ["c4", "c1", "c3"],
-            self.chunk_to_evidence,
-            self.evidence_to_answer_points,
-            answer_point_count=3,
-        )
-
-        self.assertEqual(metrics["chunk_precision"], 2 / 3)
-        self.assertEqual(metrics["evidence_recall"], 1.0)
-        self.assertEqual(metrics["answer_point_recall"], 1.0)
-        self.assertEqual(metrics["reciprocal_rank"], 0.5)
-        self.assertEqual(metrics["first_relevant_rank"], 2)
-        self.assertLess(metrics["ndcg_at_k"], 1.0)
-
-    def test_context_efficiency_counts_unique_evidence_against_full_context(self):
-        source = "alpha beta gamma delta epsilon"
-        chunks = {
-            "c1": {"text": "alpha beta gamma"},
-            "c2": {"text": "gamma delta epsilon"},
-        }
-        chunk_intervals = {
-            "c1": (0, len("alpha beta gamma")),
-            "c2": (source.index("gamma"), len(source)),
-        }
-        evidence_spans = [
-            {
-                "evidence_id": "e1",
-                "char_start": source.index("beta"),
-                "char_end": source.index("gamma") + len("gamma"),
-            },
-            {
-                "evidence_id": "e2",
-                "char_start": source.index("delta"),
-                "char_end": source.index("delta") + len("delta"),
-            },
-        ]
-
-        metrics = calc_context_efficiency_metrics(
-            source=source,
-            retrieved_chunk_ids=["c1", "c2"],
-            chunks=chunks,
-            chunk_intervals=chunk_intervals,
-            gold_evidence_spans=evidence_spans,
-            matched_answer_point_count=2,
-            token_counter=lambda text: len(text.split()),
-        )
-
-        self.assertEqual(metrics["retrieved_chars"], 35)
-        self.assertEqual(metrics["retrieved_tokens"], 6)
-        self.assertEqual(metrics["covered_evidence_chars"], 15)
-        self.assertAlmostEqual(metrics["evidence_density"], 15 / 35)
-        self.assertAlmostEqual(metrics["answer_points_per_1k_tokens"], 2000 / 6)
+def question_with(*evidence):
+    return QuestionRecord(
+        question_id="q1", dataset_index=0, query="Combine facts", answer="answer",
+        question_type="inference_query", evidence=tuple(evidence),
+    )
 
 
-class EntityAndRelationNormalizationTests(unittest.TestCase):
-    def test_aliases_are_applied_to_entities_and_relation_endpoints(self):
-        normalize_entity = build_entity_normalizer(
-            ["Jacob Marley", "Scrooge"],
-            {"Marley": "Jacob Marley", "Ebenezer Scrooge": "Scrooge"},
-        )
+def fact(evidence_id, document_id, text, *intervals):
+    return EvidenceRecord(
+        evidence_id=evidence_id, document_id=document_id, fact=text,
+        occurrences=tuple(EvidenceOccurrence(*interval) for interval in intervals),
+    )
 
-        metrics = calc_set_metrics(
-            ["Marley", "Ebenezer Scrooge"],
-            ["Jacob Marley", "Scrooge"],
-            normalize_entity,
-        )
-        self.assertEqual(metrics["f1"], 1.0)
-        self.assertEqual(
-            normalize_relation_key("Ebenezer Scrooge||Marley", normalize_entity),
-            "Jacob Marley||Scrooge",
-        )
+
+def chunk(chunk_id, document_id, source, start, end):
+    return {
+        "chunk_id": chunk_id, "document_id": document_id, "text": source[start:end],
+        "char_start": start, "char_end": end,
+    }
+
+
+def score(question, documents, chunks, retrieved_ids, requested_k=None):
+    index = build_multidocument_chunk_index(documents, chunks)
+    mapping = map_multihop_evidence_to_chunks(question, index)
+    return calc_multihop_retrieval_metrics(
+        question=question,
+        retrieved_chunk_ids=retrieved_ids,
+        requested_k=requested_k if requested_k is not None else max(len(retrieved_ids), 1),
+        chunks=chunks,
+        chunk_to_evidence=mapping,
+        token_counter=lambda text: len(text.split()),
+    )
 
 
 class MultiDocumentEvidenceMetricsTests(unittest.TestCase):
@@ -128,111 +52,44 @@ class MultiDocumentEvidenceMetricsTests(unittest.TestCase):
             InputDocument(document_id="doc-b", text="alpha evidence two omega"),
             InputDocument(document_id="doc-c", text="irrelevant context"),
         )
+        a, b, c = (document.text for document in self.documents)
         self.chunks = {
-            "a-full": {
-                "chunk_id": "a-full",
-                "document_id": "doc-a",
-                "text": "alpha evidence one omega",
-                "char_start": 0,
-                "char_end": len("alpha evidence one omega"),
-            },
-            "a-duplicate": {
-                "chunk_id": "a-duplicate",
-                "document_id": "doc-a",
-                "text": "evidence one",
-                "char_start": len("alpha "),
-                "char_end": len("alpha evidence one"),
-            },
-            "b-full": {
-                "chunk_id": "b-full",
-                "document_id": "doc-b",
-                "text": "alpha evidence two omega",
-                "char_start": 0,
-                "char_end": len("alpha evidence two omega"),
-            },
-            "c-irrelevant": {
-                "chunk_id": "c-irrelevant",
-                "document_id": "doc-c",
-                "text": "irrelevant context",
-                "char_start": 0,
-                "char_end": len("irrelevant context"),
-            },
+            "a-full": chunk("a-full", "doc-a", a, 0, len(a)),
+            "a-duplicate": chunk("a-duplicate", "doc-a", a, 6, 18),
+            "b-full": chunk("b-full", "doc-b", b, 0, len(b)),
+            "c-irrelevant": chunk("c-irrelevant", "doc-c", c, 0, len(c)),
         }
-        self.question = QuestionRecord(
-            question_id="q1",
-            dataset_index=0,
-            query="Combine both facts",
-            answer="answer",
-            question_type="inference_query",
-            evidence=(
-                EvidenceRecord(
-                    evidence_id="e1",
-                    document_id="doc-a",
-                    fact="evidence one",
-                    occurrences=(EvidenceOccurrence(6, 18),),
-                ),
-                EvidenceRecord(
-                    evidence_id="e2",
-                    document_id="doc-b",
-                    fact="evidence two",
-                    occurrences=(EvidenceOccurrence(6, 18),),
-                ),
-            ),
+        self.question = question_with(
+            fact("e1", "doc-a", "evidence one", (6, 18)),
+            fact("e2", "doc-b", "evidence two", (6, 18)),
         )
 
-    def test_evidence_mapping_is_document_scoped_and_requires_full_containment(self):
-        partial_chunks = {
-            **self.chunks,
-            "a-partial": {
-                "chunk_id": "a-partial",
-                "document_id": "doc-a",
-                "text": "evidence",
-                "char_start": 6,
-                "char_end": 14,
-            },
-        }
-        index = build_multidocument_chunk_index(self.documents, partial_chunks)
-
+    def test_mapping_requires_same_document_and_full_containment(self):
+        chunks = {**self.chunks, "a-partial": chunk(
+            "a-partial", "doc-a", self.documents[0].text, 6, 14,
+        )}
+        index = build_multidocument_chunk_index(self.documents, chunks)
         mapping = map_multihop_evidence_to_chunks(self.question, index)
-
         self.assertEqual(mapping["a-full"], ["e1"])
         self.assertEqual(mapping["a-duplicate"], ["e1"])
         self.assertEqual(mapping["b-full"], ["e2"])
         self.assertNotIn("a-partial", mapping)
         self.assertNotIn("c-irrelevant", mapping)
 
-    def test_chunk_index_rejects_source_mismatch(self):
-        invalid = {
-            "bad": {
-                "chunk_id": "bad",
-                "document_id": "doc-a",
-                "text": "different",
-                "char_start": 0,
-                "char_end": 5,
-            }
-        }
+    def test_corrupt_source_offsets_and_text_remain_errors(self):
+        for changes in (
+            {"text": "different"}, {"char_start": -1}, {"char_start": True},
+            {"char_end": 500}, {"document_id": "unknown"}, {"chunk_id": "other"},
+        ):
+            with self.subTest(changes=changes), self.assertRaises(ValueError):
+                build_multidocument_chunk_index(self.documents, {
+                    "a-full": {**self.chunks["a-full"], **changes},
+                })
 
-        with self.assertRaisesRegex(ValueError, "source slice"):
-            build_multidocument_chunk_index(self.documents, invalid)
-
-    def test_joint_evidence_and_document_metrics_use_the_ranked_prefix(self):
-        index = build_multidocument_chunk_index(self.documents, self.chunks)
-        mapping = map_multihop_evidence_to_chunks(self.question, index)
-
-        metrics = calc_multihop_retrieval_metrics(
-            retrieved_chunk_ids=[
-                "c-irrelevant",
-                "a-full",
-                "a-duplicate",
-                "b-full",
-            ],
-            chunks=self.chunks,
-            chunk_to_evidence=mapping,
-            evidence_to_document={"e1": "doc-a", "e2": "doc-b"},
-            evidence_lengths={"e1": 12, "e2": 12},
-            token_counter=lambda text: len(text.split()),
-        )
-
+    def test_ranking_document_recall_and_source_density(self):
+        metrics = score(self.question, self.documents, self.chunks, [
+            "c-irrelevant", "a-full", "a-duplicate", "b-full",
+        ])
         self.assertEqual(metrics["evidence_recall"], 1.0)
         self.assertTrue(metrics["joint_evidence_success"])
         self.assertEqual(metrics["document_recall"], 1.0)
@@ -240,38 +97,130 @@ class MultiDocumentEvidenceMetricsTests(unittest.TestCase):
         self.assertEqual(metrics["chunk_precision"], 3 / 4)
         self.assertEqual(metrics["reciprocal_rank"], 0.5)
         self.assertEqual(metrics["retrieved_document_count"], 3)
-        self.assertTrue(metrics["cross_document_retrieval"])
         self.assertEqual(metrics["covered_evidence_chars"], 24)
+        self.assertEqual(metrics["chunk_source_tokens"], 12)
+        self.assertNotIn("retrieved_tokens", metrics)
 
-    def test_null_query_reports_context_without_relevance_scores(self):
+    def test_document_hit_does_not_imply_evidence_hit(self):
+        chunks = {"a-prefix": chunk("a-prefix", "doc-a", self.documents[0].text, 0, 5)}
+        metrics = score(self.question, self.documents, chunks, ["a-prefix"])
+        self.assertEqual(metrics["document_recall"], 0.5)
+        self.assertEqual(metrics["evidence_recall"], 0.0)
+
+    def test_unreachable_facts_remain_in_denominators(self):
+        chunks = {"a-full": self.chunks["a-full"]}
+        index = build_multidocument_chunk_index(self.documents, chunks)
+        mapping = map_multihop_evidence_to_chunks(self.question, index)
+        coverage = calc_evidence_reachability(self.question, mapping)
+        metrics = score(self.question, self.documents, chunks, ["a-full"])
+        self.assertEqual(coverage["reachable_evidence_ids"], ["e1"])
+        self.assertEqual(coverage["unreachable_evidence_ids"], ["e2"])
+        self.assertEqual(coverage["evidence_recall_ceiling"], 0.5)
+        self.assertFalse(coverage["joint_evidence_success_ceiling"])
+        self.assertEqual(metrics["gold_evidence_count"], 2)
+        self.assertEqual(metrics["evidence_recall"], 0.5)
+        self.assertFalse(metrics["joint_evidence_success"])
+
+    def test_empty_ranking_and_no_reachable_gold_are_valid_misses(self):
+        metrics = score(self.question, self.documents, {}, [], requested_k=5)
+        self.assertEqual(metrics["gold_evidence_count"], 2)
+        self.assertEqual(metrics["evidence_recall"], 0.0)
+        self.assertEqual(metrics["ndcg_at_k"], 0.0)
+        self.assertEqual(metrics["average_precision_at_k"], 0.0)
+        self.assertEqual(metrics["evidence_density"], 0.0)
+        self.assertFalse(metrics["cross_chunk_union_joint_evidence_success"])
+
+    def test_precision_at_k_penalizes_short_result_list(self):
+        metrics = score(self.question, self.documents, self.chunks, ["a-full"], requested_k=5)
+        self.assertEqual(metrics["chunk_precision"], 0.2)
+        self.assertEqual(metrics["precision_among_returned"], 1.0)
+        self.assertEqual(metrics["requested_k"], 5)
+
+    def test_null_query_has_source_context_without_relevance_scores(self):
         metrics = calc_null_retrieval_context_metrics(
-            retrieved_chunk_ids=["a-full", "b-full"],
-            chunks=self.chunks,
+            retrieved_chunk_ids=["a-full", "b-full"], chunks=self.chunks,
             token_counter=lambda text: len(text.split()),
         )
-
         self.assertFalse(metrics["relevance_metrics_applicable"])
         self.assertEqual(metrics["retrieved_document_count"], 2)
-        self.assertTrue(metrics["cross_document_retrieval"])
+        self.assertEqual(metrics["chunk_source_tokens"], 8)
         self.assertNotIn("evidence_recall", metrics)
+        self.assertNotIn("retrieved_tokens", metrics)
 
-    def test_precision_at_k_penalizes_a_short_result_list(self):
-        index = build_multidocument_chunk_index(self.documents, self.chunks)
-        mapping = map_multihop_evidence_to_chunks(self.question, index)
 
-        metrics = calc_multihop_retrieval_metrics(
-            retrieved_chunk_ids=["a-full"],
-            requested_k=5,
-            chunks=self.chunks,
-            chunk_to_evidence=mapping,
-            evidence_to_document={"e1": "doc-a", "e2": "doc-b"},
-            evidence_lengths={"e1": 12, "e2": 12},
-            token_counter=lambda text: len(text.split()),
+class SourceIntervalCoverageTests(unittest.TestCase):
+    def test_adjacent_chunks_cover_one_occurrence_only_in_union_protocol(self):
+        source = "abcdefghij"
+        documents = [InputDocument(document_id="a", text=source)]
+        question = question_with(fact("e", "a", source, (0, 10)))
+        chunks = {
+            "left": chunk("left", "a", source, 0, 5),
+            "right": chunk("right", "a", source, 5, 10),
+        }
+        metrics = score(question, documents, chunks, ["left", "right"])
+        self.assertEqual(metrics["evidence_recall"], 0.0)
+        self.assertEqual(metrics["cross_chunk_union_evidence_recall"], 1.0)
+        self.assertTrue(metrics["cross_chunk_union_joint_evidence_success"])
+        self.assertEqual(metrics["covered_evidence_chars"], 10)
+        self.assertEqual(metrics["evidence_density"], 1.0)
+
+    def test_gap_or_cross_document_fragments_do_not_complete_a_fact(self):
+        source = "abcdefghij"
+        documents = [InputDocument(document_id=doc, text=source) for doc in ("a", "b")]
+        question = question_with(fact("e", "a", source, (0, 10)))
+        for left_document, right_start, expected_chars in (("a", 6, 9), ("b", 5, 5)):
+            chunks = {
+                "left": chunk("left", left_document, source, 0, 5),
+                "right": chunk("right", "a", source, right_start, 10),
+            }
+            with self.subTest(left_document=left_document, right_start=right_start):
+                metrics = score(question, documents, chunks, ["left", "right"])
+                self.assertEqual(metrics["cross_chunk_union_evidence_recall"], 0.0)
+                self.assertEqual(metrics["covered_evidence_chars"], expected_chars)
+
+    def test_fragments_from_different_occurrences_cannot_be_joined(self):
+        source = "abcdef--abcdef"
+        documents = [InputDocument(document_id="a", text=source)]
+        question = question_with(fact("e", "a", "abcdef", (0, 6), (8, 14)))
+        chunks = {
+            "first-half": chunk("first-half", "a", source, 0, 3),
+            "second-half": chunk("second-half", "a", source, 11, 14),
+        }
+        metrics = score(question, documents, chunks, list(chunks))
+        self.assertEqual(metrics["evidence_recall"], 0.0)
+        self.assertEqual(metrics["cross_chunk_union_evidence_recall"], 0.0)
+        self.assertEqual(metrics["covered_evidence_chars"], 6)
+        # High character density is not a claim of complete fact retrieval.
+        self.assertEqual(metrics["evidence_density"], 1.0)
+
+    def test_density_unions_nested_facts_and_duplicate_source_coverage(self):
+        source = "abcdefghij"
+        documents = [InputDocument(document_id="a", text=source)]
+        question = question_with(
+            fact("outer", "a", source, (0, 10)), fact("inner", "a", "bcdefgh", (1, 8)),
         )
+        chunks = {
+            "first": chunk("first", "a", source, 0, 10),
+            "duplicate": chunk("duplicate", "a", source, 0, 10),
+        }
+        metrics = score(question, documents, chunks, list(chunks))
+        self.assertEqual(metrics["covered_evidence_chars"], 10)
+        self.assertEqual(metrics["retrieved_chars"], 20)
+        self.assertEqual(metrics["evidence_density"], 0.5)
+        self.assertEqual(metrics["matched_evidence_count"], 2)
 
-        self.assertEqual(metrics["retrieved_count"], 1)
-        self.assertEqual(metrics["requested_k"], 5)
-        self.assertEqual(metrics["chunk_precision"], 0.2)
+    def test_density_counts_distinct_source_occurrences_but_fact_recall_once(self):
+        source = "abcdef--abcdef"
+        documents = [InputDocument(document_id="a", text=source)]
+        question = question_with(fact("e", "a", "abcdef", (0, 6), (8, 14)))
+        chunks = {
+            "first": chunk("first", "a", source, 0, 6),
+            "second": chunk("second", "a", source, 8, 14),
+        }
+        metrics = score(question, documents, chunks, list(chunks))
+        self.assertEqual(metrics["covered_evidence_chars"], 12)
+        self.assertEqual(metrics["evidence_density"], 1.0)
+        self.assertEqual(metrics["matched_evidence_count"], 1)
 
 
 class MultiHopOfficialMetricsTests(unittest.TestCase):

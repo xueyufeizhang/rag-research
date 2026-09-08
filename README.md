@@ -1,330 +1,227 @@
 # rag-research
 
-Research code and experiment artifacts for a thesis project on retrieval-augmented generation with graph-structured memory. The project started as a LightRAG replication, but it is now used as a broader experimental workspace for comparing chunking strategies, graph-based retrieval behavior, and evaluation traces.
+A LightRAG-inspired MultiHop-RAG baseline for a master's thesis on agentic
+search with persistent graph memory. The current system builds a document
+index offline; iterative retrieval and interaction-driven graph updates are
+subsequent stages of the thesis.
 
-## Current Focus
+MultiHop-RAG is the experimental dataset. A Christmas Carol remains a small
+build/query demonstration; its custom evaluation pipeline has been removed.
+See [EXPERIMENT_PROTOCOL.md](EXPERIMENT_PROTOCOL.md) for the measurement contract.
 
-- Build a lightweight RAG pipeline with KV storage, vector indexes, and a knowledge graph.
-- Compare fixed-size, embedding-based semantic, and stateful agentic chunking.
-- Evaluate single- and multi-document retrieval across naive, local, global, and hybrid modes.
-- Use MultiHopRAG for cross-document evidence and joint multi-hop retrieval evaluation.
+## Pipeline and layout
 
-## Pipeline
-
-1. **Chunking** ([chunking.py](src/rag_research/chunking.py))
-   Splits documents with one of three strategies:
-   - `fixed`: character-based sliding windows.
-   - `semantic`: sentence-level semantic boundary detection using embeddings.
-   - `agentic`: proposition-aware, stateful semantic chunk management.
-
-2. **Extraction** ([extraction.py](src/rag_research/extraction.py))
-   Runs concurrent LLM extraction over chunks, parses and validates JSON entities
-   and relationships, enforces response limits and same-response relationship
-   endpoints, merges duplicates, rejects prompt-example leakage, and retries
-   failed chunk calls.
-
-3. **Index Construction** ([core.py](src/rag_research/core.py))
-   Merges duplicate entities and relations, stores chunks/entities/relations, embeds each retrieval unit, and builds a graph representation.
-   Successful per-document chunking results and per-chunk extraction results are
-   checkpointed under `CACHE_DIR` using independent stage fingerprints. A change
-   limited to extraction invalidates extraction records while retaining compatible
-   chunking records. The final persisted index remains protected by the complete
-   build fingerprint.
-
-4. **Storage** ([storage.py](src/rag_research/storage.py))
-   Persists the experiment state to disk:
-   - `entities.json`, `relations.json`, `chunks.json`
-   - `entity_vectors.*`, `relation_vectors.*`, `chunk_vectors.*`
-   - `graph.json`
-
-5. **Retrieval** ([core.py](src/rag_research/core.py))
-   Supports four modes:
-   - `naive`: chunk-vector retrieval only.
-   - `local`: entity-vector retrieval plus one-hop graph expansion.
-   - `global`: relation-vector retrieval plus endpoint entity lookup.
-   - `hybrid`: deduplicated merge of local and global retrieval traces.
-
-6. **Evaluation** ([evaluate_retrieval.py](scripts/evaluate_retrieval.py), [evaluate_multihop_retrieval.py](scripts/evaluate_multihop_retrieval.py))
-   Runs retrieval modes against chunk-independent canonical evidence. The
-   MultiHopRAG evaluator isolates document-relative offsets, reports K curves
-   and joint evidence/document success, and checkpoints every question/mode.
-
-7. **Visualization** ([visualize_graph.py](scripts/visualize_graph.py))
-   Renders the selected experiment graph under `artifacts/visualizations/` with `pyvis`.
-
-## Project Layout
+Documents → fixed/semantic/agentic chunks → entity/relation extraction → record
+merging → KV/vector/graph indexes → retrieval → evaluation or answer generation.
 
 ```text
-src/rag_research/                  reusable RAG implementation
-├── backends.py                    LLM and embedding backend adapters
-├── chunking.py                    public fixed/semantic/agentic dispatcher
-├── chunking_models.py             shared chunk configuration and span models
-├── text_spans.py                  lossless sentence segmentation helpers
-├── agentic_chunking.py            stateful Agentic Chunking workflow
-├── agentic_llm.py                 Agentic LLM calls, validation, and recovery
-├── agentic_boundaries.py          boundary projection and rebalancing rules
-├── core.py                        LightRAG construction and retrieval pipeline
-├── extraction.py                  concurrent entity/relation extraction
-├── prompts.py                     chunking, extraction, and retrieval prompts
-└── storage.py                     JSON/npy-backed KV, vector, and graph stores
-
-scripts/                           runnable project entry points
-├── run_demo.py                    build/query demo
-├── evaluate_retrieval.py          retrieval evaluation
-├── evaluate_multihop_retrieval.py MultiHopRAG retrieval evaluation
-└── visualize_graph.py             graph visualization
-
-data/
-├── raw/                           source corpora
-└── evaluation/                    canonical evidence annotations
-
-artifacts/
-├── stores/                        persisted stores for each chunking strategy
-└── evaluations/                   generated evaluation results
+src/rag_research/
+├── backends.py             model service adapters
+├── llm.py                  explicit completion text, status, and usage
+├── chunking/               strategies, source spans, boundary constraints
+├── core.py                 construction, retrieval, context serialization
+├── extraction.py           extraction validation, retries, and diagnostics
+├── evaluation.py           MultiHop-RAG evidence and ranking metrics
+├── datasets/               validated dataset loading
+├── embedding.py            bounded batching and vector validation
+├── models.py               document, evidence, chunk, and build records
+├── prompts.py              chunking, extraction, and answer prompts
+└── storage.py              atomic JSON/NumPy persistence and graph storage
+scripts/
+├── build_multihop_index.py
+├── evaluate_multihop_retrieval.py
+├── run_carol_demo.py
+└── visualize_graph.py
+tests/                     offline unit and integration checks
+data/raw/                  input corpora
+artifacts/stores/           version-specific completed indexes
+artifacts/cache/            stage caches and extraction attempt history
+artifacts/evaluations/      fingerprinted evaluation runs
 ```
 
-## Setup
+Chunks retain exact source text and document-relative offsets. Chunking and
+extraction have separate stage caches. Completed indexes are reused only when
+fingerprints match and KV, vector, graph, and source references agree.
+
+## Setup and execution
+
+Requires Python 3.12+ and uv.
 
 ```bash
-git clone https://github.com/xueyufeizhang/rag-research.git
-cd rag-research
 uv sync
 cp .env.example .env
 ```
 
-Requires Python 3.12+ and [uv](https://docs.astral.sh/uv/).
+Place `corpus.json` and `MultiHopRAG.json` from the
+[authors' repository](https://github.com/yixuantt/MultiHop-RAG) in
+`data/raw/MultiHopRAG/`, or configure `MULTIHOP_DATASET_DIR`.
 
-## Configuration
-
-The project is configured through `.env`.
-
-### LLM Backend
-
-Set `LLM_BACKEND` to:
-
-- `ollama`: local Ollama generation and embedding.
-- `api`: any OpenAI-compatible chat completion endpoint for generation.
-
-Embeddings currently use the Ollama `/api/embed` endpoint through `EMBED_MODEL`.
-
-Index construction sends embeddings in bounded batches. `EMBEDDING_BATCH_SIZE`
-controls the number of texts in each Ollama request and
-`EMBEDDING_CONCURRENCY` limits simultaneous batch requests. The default values
-are 32 and 2. Reduce the batch size first if the embedding model exceeds the
-available memory. Semantic chunking uses the same batch backend and has its own
-`SEMANTIC_EMBEDDING_BATCH_SIZE` setting.
-
-### Chunking
-
-Set `CHUNKING_STRATEGY` to one of:
-
-- `fixed`
-- `semantic`
-- `agentic`
-
-Use a separate `WORKING_DIR` for each strategy. A completed store is reused only
-when its build fingerprint matches the corpus and complete pipeline provenance;
-a conflicting store is rejected instead of being silently overwritten. Every
-strategy is evaluated against the same canonical evidence file.
-
-Use the same `CACHE_DIR` across related `WORKING_DIR` outputs when stage-level
-reuse is desired. The chunking fingerprint covers the active chunking strategy,
-its configuration, pipeline version, and any model that affects boundaries. The
-extraction fingerprint separately covers the extraction backend, model, prompt,
-and pipeline version. Cache record identities also include their exact document
-or model input, so changed inputs coexist rather than being mistaken for hits.
-
-Example fixed-size run:
+Select `LLM_BACKEND=ollama` or `LLM_BACKEND=api` and configure the corresponding
+model/connection values in `.env`. Embeddings currently use Ollama through
+`EMBED_MODEL`. Chunk embedding input follows the indexing information policy
+described below; `EMBEDDING_BATCH_SIZE` and `EMBEDDING_CONCURRENCY` bound
+embedding work.
 
 ```env
-CHUNKING_STRATEGY=fixed
-FIXED_WINDOW_SIZE=2400
-FIXED_WINDOW_OVERLAP=200
-WORKING_DIR=./artifacts/stores/dickens_fixed
-```
-
-Example semantic run:
-
-```env
-CHUNKING_STRATEGY=semantic
-SEMANTIC_BREAKPOINT_PERCENTILE=92
-SEMANTIC_MIN_SENTENCES=10
-SEMANTIC_MAX_SENTENCES=32
-SEMANTIC_BUFFER_SIZE=1
-SEMANTIC_EMBEDDING_CONCURRENCY=4
-WORKING_DIR=./artifacts/stores/dickens_semantic
-```
-
-Example final stateful agentic run:
-
-```env
-CHUNKING_STRATEGY=agentic
-AGENTIC_BATCH_MAX_SENTENCES=60
-AGENTIC_BATCH_MAX_CHARS=12000
-AGENTIC_MIN_SENTENCES=4
-AGENTIC_MAX_SENTENCES=20
-AGENTIC_CONCURRENCY=4
-AGENTIC_RETRIES=2
-WORKING_DIR=./artifacts/stores/dickens_agentic
-```
-
-The final `agentic` strategy first extracts atomic propositions as source
-sentence ranges. It then processes them sequentially through a state manager.
-For each proposition, the manager reads the accumulated chunk catalog and the
-open chunk's recent propositions, chooses `append` or `new_chunk`, and updates
-the target chunk's title and summary. Hard size constraints restrict the actions
-available to the model. Proposition text is never rewritten: final chunks remain
-contiguous, lossless slices of the source, so canonical evidence offsets remain
-valid. Titles and summaries are stored in chunk metadata and included in the
-chunk embedding input, while graph extraction remains grounded only in source
-text and document metadata. The per-document checkpoint also stores the
-transition trace for audit and exact reuse.
-
-`AGENTIC_CONCURRENCY` parallelizes proposition-extraction batches and any final
-metadata refreshes. State transitions themselves remain sequential by design,
-so this strategy makes substantially more LLM calls than non-agentic boundary-based
-strategies.
-
-### Optional reranking
-
-Set `ENABLE_RERANKER=true` to apply CrossEncoder reranking after dense candidate
-retrieval in naive, local, global, and hybrid modes. Set it to `false` for the dense-only
-baseline. Both paths use the same candidate pools and final top-k limits so the
-effect of CrossEncoder reranking can be compared directly.
-
-```env
-ENABLE_RERANKER=true
-RERANK_MODEL=mixedbread-ai/mxbai-rerank-base-v1
-```
-
-## Usage
-
-Run the demo query:
-
-```bash
-uv run python scripts/run_demo.py
-```
-
-This loads or builds the store configured by `WORKING_DIR`, then asks a sample hybrid retrieval question.
-
-Run retrieval evaluation:
-
-```bash
-uv run python scripts/evaluate_retrieval.py
-```
-
-The default evaluation set is `data/evaluation/carol_canonical.json`. To run
-only the naive retrieval mode while developing chunk reranking:
-
-```bash
-EVAL_MODES=naive uv run python scripts/evaluate_retrieval.py
-```
-
-With canonical evidence, the main retrieval metrics are:
-
-- **Chunk Precision@K:** fraction of returned chunks that overlap gold evidence.
-- **Evidence Recall@K:** fraction of canonical evidence spans covered by at least one returned chunk.
-- **Answer-point Recall@K:** fraction of answer points supported by covered evidence.
-- **MRR and nDCG@K:** rank-sensitive retrieval quality.
-- **Chunk redundancy rate:** fraction of relevant returned chunks that add no new evidence coverage.
-- **Average retrieved characters/tokens:** mean source-aligned context budget returned per question. Token counts use the fixed `EVAL_TOKENIZER_MODEL` with no special tokens.
-- **Evidence density:** unique covered gold-evidence characters divided by all retrieved source characters; overlapping retrieved context is counted repeatedly only in the denominator.
-- **Answer points per 1K tokens:** matched answer points per 1,000 retrieved tokens.
-
-The evaluator writes both macro averages across questions and micro totals. It
-rejects evaluation files that do not contain chunk-independent canonical
-evidence.
-
-The script evaluates `naive`, `local`, `global`, and `hybrid` modes with the question file configured by `EVAL_SET`, then writes:
-
-- `artifacts/evaluations/retrieval_eval_<chunking>_<rerank-state>_results.json`
-- `artifacts/evaluations/retrieval_eval_<chunking>_<rerank-state>_summaries.json`
-
-For example: `retrieval_eval_semantic_rerank_results.json` and
-`retrieval_eval_fixed_dense_only_summaries.json`.
-
-### MultiHopRAG retrieval evaluation
-
-Point `WORKING_DIR` at a completed MultiHopRAG index and run:
-
-```bash
-uv run python scripts/evaluate_multihop_retrieval.py
-```
-
-The evaluator verifies that the dataset and build fingerprint match the loaded
-index, then produces two deliberately separate evaluation sections from the
-same retrieval ranking:
-
-- `thesis_extended` is the system-oriented evaluator. It reports Evidence
-  Recall@K, Joint Evidence Success@K, Document Recall@K, Joint Document
-  Success@K, Chunk Precision@K, MAP@K, MRR, nDCG@K, evidence density,
-  retrieved tokens, and cross-document counts. `null_query` rows are kept
-  separate and report context statistics only.
-- `official` reproduces the [MultiHop-RAG official retrieval evaluator](https://github.com/yixuantt/MultiHop-RAG/blob/main/retrieval_evaluate.py):
-  literal spaces and newlines are removed, a retrieved text is relevant when it
-  contains a gold fact, and the aggregate contains exactly `Hits@4`, `Hits@10`,
-  `MAP@10`, and `MRR@10`. It always scores top 10 and excludes `null_query`
-  rows, matching the official baseline protocol.
-
-Retrieval runs once at `max(max(EVAL_K_VALUES), 10)`. The extended evaluator
-uses the configured K prefixes; the official evaluator uses the top-10 prefix.
-
-Each run is stored under a configuration fingerprint in
-`artifacts/evaluations/multihop_rag/`. Per-question/mode atomic checkpoints make
-the 2,556-question run resumable. Final `results.json`, `summaries.json`, and
-`run_manifest.json` preserve the dataset hashes, build fingerprint, retrieval
-configuration, model names, and tokenizer. The `official/<mode>.json` files use
-the upstream `query`/`retrieval_list`/`gold_list` JSON shape, so the official
-script can independently rescore them. Useful controls are:
-
-```env
+MULTIHOP_DATASET_DIR=./data/raw/MultiHopRAG
+WORKING_DIR=./artifacts/stores/multihop_fixed_v2
+CACHE_DIR=./artifacts/cache/rag_research
+EVAL_OUTPUT_DIR=./artifacts/evaluations/multihop_rag
 EVAL_MODES=naive,local,global,hybrid
 EVAL_K_VALUES=1,3,5,10,20
 EVAL_CONCURRENCY=4
 EVAL_INCLUDE_NULL=true
 EVAL_MAX_QUESTIONS=0
+EVAL_TOKENIZER_MODEL=mixedbread-ai/mxbai-rerank-base-v1
 ```
 
-Render the graph for the configured `WORKING_DIR`:
+```bash
+uv run python scripts/build_multihop_index.py
+uv run python scripts/evaluate_multihop_retrieval.py
+```
+
+Use a new `WORKING_DIR` after a build-protocol change. Compatible stage results
+can be reused through the shared `CACHE_DIR`. Conflicting existing indexes are
+rejected without being overwritten. The evaluator requires a completed index
+whose build fingerprint matches the active configuration; build it first.
+
+`EVAL_MAX_QUESTIONS=0` selects all eligible questions; a positive value selects a
+source-order prefix for smoke testing, not a random evaluation split.
+
+For a 20-document construction smoke test, use the saved random sample:
 
 ```bash
+CHUNKING_STRATEGY=agentic uv run python scripts/build_multihop_index.py \
+  --corpus data/samples/multihop_20_seed42/corpus.json \
+  --working-dir artifacts/stores/multihop_agentic_20_seed42
+```
+
+The sample uses seed 42, sampling without replacement and preserving source
+order and complete records. Its adjacent `manifest.json` records source/sample
+hashes, source indexes, and document URLs. `--corpus` loads only documents and
+requires an explicit output directory; the shared `CACHE_DIR` still applies.
+The build report marks question metadata as unavailable (`null`). This sample
+is for construction, chunk inspection, and runtime checks. For a retrieval
+smoke test, sample questions and include all their evidence documents plus
+distractors; a smaller retrieval corpus is not comparable to the full benchmark.
+The existing evaluator expects a matching full dataset and index.
+
+## Chunking
+
+- All strategies first produce non-overlapping core spans. A shared
+  `CHUNK_OVERLAP` postprocess then adds up to that many source characters to the
+  beginning of every chunk after the first. The effective overlap can be shorter
+  at the document start or for very short core spans; source boundaries remain
+  ordered and lossless.
+- `fixed`: character core windows controlled by `FIXED_WINDOW_SIZE` (default
+  2400), followed by the shared overlap postprocess. Final chunks can therefore
+  be longer than the core window by the overlap amount.
+- `semantic`: adjacent sentence-context distances must strictly exceed the
+  configured percentile plus `1e-12`. Minimum/maximum sentence counts and final
+  rebalancing remain enforced. Percentile 100 disables semantic soft cuts.
+- `agentic`: sequential source sentence groups are appended to the open chunk
+  or begin a new chunk, updating its title and summary. Proposition extraction
+  and final metadata refresh can run concurrently; transitions are sequential.
+
+Agentic build logs use the compact form `[agentic] i/N | state j/M | chunks K |
+elapsed T | eta E`. `i/N` is corpus progress; `j/M` is transition progress
+inside the current document, where `M` is that document's proposition count and
+may differ between documents. Document start and completion lines use the same
+format, with `start`, `done`, or `cache` in place of the state detail.
+
+Semantic and agentic retain their non-overlapping core spans for boundary
+decisions; the shared source-overlap postprocess is applied afterward. The final
+stage-specific information policy remains an explicit design decision.
+
+Agentic JSON boundaries require integers, rejecting floats, booleans and
+numeric strings. A sentence whose stripped source text exceeds the character
+batch limit fails
+before the proposition call with its source range; text is never silently
+shortened. This precheck excludes prompt overhead and is not a model token-limit
+guarantee. Iterative boundary projection preserves the exact objective and tie
+rules. Final metadata refresh records final bounds, content, decision source,
+and fallback errors. Explicitly truncated completions cannot be accepted as
+successful JSON, even if JSON repair could parse them.
+
+## Extraction and diagnostics
+
+Responses may contain at most 20 entities and at most 50 total records
+(entities plus relationships). Few-shot examples are checked against the actual
+parser. Limited Unicode/whitespace/dash normalization supports surface variants
+without replacing validation with semantic similarity.
+
+Attempts retain raw counts, errors, completion reasons, known/unknown truncation
+status, reported token usage, and retry identities. Current, historical and
+cumulative summaries distinguish fresh calls from cached work. An exhausted
+final attempt is not counted as a retry that never occurred. Missing completion
+metadata is unknown, not zero truncation.
+
+Complete diagnostics are saved to `WORKING_DIR/extraction_report.json`, even
+when extraction returns failed chunks. The manifest holds compact summaries;
+cache ledgers and per-run reports preserve earlier attempts across resumption.
+Fully reusing an index makes no new extraction calls and retains its original
+build statistics. See [rate definitions](EXPERIMENT_PROTOCOL.md#extraction-observability).
+
+## Retrieval and evaluation
+
+- `naive`: dense chunk retrieval.
+- `local`: dense entity retrieval, adjacent relations, and source chunks.
+- `global`: dense relation retrieval, endpoint entities, and source chunks.
+- `hybrid`: deduplicated local/global candidates followed by chunk ranking.
+
+`ENABLE_RERANKER=true` enables CrossEncoder reranking for relation and chunk
+shortlists. In graph modes, relation reranking can also change the downstream
+chunk candidate set; this is a system comparison, not a chunk-only ablation.
+
+Each question/mode retrieves once at `max(max(EVAL_K_VALUES), 10)`. Requested
+prefixes are scored using strict evidence containment and an additional,
+separately named cross-chunk union diagnostic. Unreachable facts remain in the
+recall denominator; source/hash/offset corruption still raises an error.
+Official Hits/MAP/MRR keep the authors' text-matching rules and top-10 protocol.
+Null queries have context statistics only and are excluded from relevance means.
+
+Runs contain `run_manifest.json`, per-question checkpoints, `results.json`,
+`summaries.json`, and upstream-format `official/<mode>.json`. Fingerprints include
+schema, code hashes, selected questions, index, and retrieval configuration.
+Schema-2 checkpoints are incompatible with the revised schema-3 metrics.
+
+Chunk embedding and graph extraction both receive the source chunk and the
+dataset-provided title, author, date, and source. Agentic-generated title and
+summary remain persisted chunk metadata for later use, but are excluded from
+both inputs. Other dataset metadata, such as category, remains on the record
+without being sent to either model. Document ID, URL, and source offsets remain
+on the chunk record for identity, provenance, and citation. Chunk IDs are derived
+from document identity, chunk position, source offsets, and source text only.
+The embedding adapter adds `search_document: ` to indexed documents and
+`search_query: ` to retrieval queries. Semantic boundary embeddings use
+`clustering: `. These prefixes are added only at the embedding request boundary
+and are not written into `model_text` or the answer context.
+Entity vectors use name, type, and description. Relation vectors always use
+both endpoint names, keywords, and description, including when the description
+or keyword list is empty.
+Ollama embedding requests set `truncate=false`; an input that exceeds the
+backend context is rejected and reported with its purpose and record IDs rather
+than silently losing source text.
+Answer context is unchanged:
+it contains the original chunk text and retrieved entity/relation descriptions,
+without directly serializing chunk title/summary. The public `build_context`
+serializer is shared by generation and evaluation token measurement. Explicitly
+truncated answers raise an error.
+
+## Development demo and checks
+
+Use a separate store for the retained Carol demo:
+
+```bash
+WORKING_DIR=./artifacts/stores/carol_demo_v2 uv run python scripts/run_carol_demo.py
 uv run python scripts/visualize_graph.py
+PYTHONDONTWRITEBYTECODE=1 uv run python -B -m unittest discover -s tests -v
 ```
 
-## Experiment Artifacts
-
-The checked-in Dickens stores are snapshots for comparing chunking behavior:
-
-- `artifacts/stores/dickens_fixed`: fixed character windows.
-- `artifacts/stores/dickens_semantic`: embedding-based semantic boundaries.
-
-Each store has the same file schema, so retrieval and visualization can be pointed at any of them by changing `WORKING_DIR`. The evaluator maps the single canonical gold set to the selected store automatically.
-
-## Chunk-independent gold evidence
-
-`data/evaluation/carol_canonical.json` is the authoritative retrieval gold set for
-*A Christmas Carol*. It identifies evidence with source sentence ranges and
-zero-based character offsets, rather than with IDs from a particular chunking
-run. Each evidence span also records which answer points it supports.
-
-Rebuild the canonical file after changing its reviewed sentence ranges:
-
-```bash
-python scripts/build_canonical_gold.py
-```
-
-Map the same evidence spans to any persisted chunk store:
-
-```bash
-python scripts/map_canonical_gold_to_chunks.py \
-  --chunks artifacts/stores/dickens_fixed/chunks.json \
-  --output artifacts/evaluations/carol_fixed_from_canonical.json
-```
-
-The derived file contains the evidence spans covered by each chunk. The main
-evaluator performs this mapping in memory, so a derived file is needed only for
-inspection or annotation review.
+Tests use temporary stores and fake model responses to verify parser contracts,
+boundaries, failure recovery, cache history, metrics, and checkpoint/export
+behavior without making model requests.
 
 ## License
 
-MIT - see [LICENSE](LICENSE).
+MIT; see [LICENSE](LICENSE).

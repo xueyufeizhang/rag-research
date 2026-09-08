@@ -1,10 +1,104 @@
 import asyncio
 import unittest
 
-from rag_research.embedding import embed_texts
+from rag_research.embedding import (
+    EmbeddingInputTooLongError,
+    embed_texts,
+    format_embedding_input,
+)
 
 
 class BatchEmbeddingTests(unittest.IsolatedAsyncioTestCase):
+    async def test_purpose_prefix_is_applied_before_backend(self):
+        calls: list[list[str]] = []
+
+        async def embed_one(_: str) -> list[float]:
+            raise AssertionError("single embedding fallback must not be used")
+
+        async def embed_many(texts) -> list[list[float]]:
+            calls.append(list(texts))
+            return [[1.0, 1.0] for _ in texts]
+
+        await embed_texts(
+            ["What happened?", "A source passage."],
+            embed_func=embed_one,
+            embed_many_func=embed_many,
+            batch_size=2,
+            concurrency=1,
+            purpose="query",
+        )
+
+        self.assertEqual(
+            calls,
+            [["search_query: What happened?", "search_query: A source passage."]],
+        )
+        self.assertEqual(
+            format_embedding_input("A source passage.", "document"),
+            "search_document: A source passage.",
+        )
+        self.assertEqual(
+            format_embedding_input("A source passage.", "semantic"),
+            "clustering: A source passage.",
+        )
+
+    async def test_invalid_purpose_is_rejected_before_backend(self):
+        async def embed_one(_: str) -> list[float]:
+            return [1.0, 1.0]
+
+        with self.assertRaisesRegex(ValueError, "unknown embedding purpose"):
+            await embed_texts(
+                ["text"],
+                embed_func=embed_one,
+                embed_many_func=None,
+                batch_size=1,
+                concurrency=1,
+                purpose="invalid",  # type: ignore[arg-type]
+            )
+
+    async def test_overflow_error_keeps_purpose_and_input_indices(self):
+        async def embed_one(_: str) -> list[float]:
+            raise EmbeddingInputTooLongError(
+                "input exceeds context",
+                input_indices=(0,),
+            )
+
+        with self.assertRaises(EmbeddingInputTooLongError) as raised:
+            await embed_texts(
+                ["first", "second"],
+                embed_func=embed_one,
+                embed_many_func=None,
+                batch_size=1,
+                concurrency=1,
+                purpose="document",
+            )
+
+        self.assertEqual(raised.exception.purpose, "document")
+        self.assertEqual(raised.exception.input_indices, (0,))
+
+    async def test_batch_overflow_indices_are_global(self):
+        async def embed_one(_: str) -> list[float]:
+            raise AssertionError("single embedding fallback must not be used")
+
+        async def embed_many(texts) -> list[list[float]]:
+            if texts[0].endswith("third"):
+                raise EmbeddingInputTooLongError(
+                    "input exceeds context",
+                    input_indices=(1,),
+                )
+            return [[1.0, 1.0] for _ in texts]
+
+        with self.assertRaises(EmbeddingInputTooLongError) as raised:
+            await embed_texts(
+                ["first", "second", "third", "fourth"],
+                embed_func=embed_one,
+                embed_many_func=embed_many,
+                batch_size=2,
+                concurrency=1,
+                purpose="document",
+            )
+
+        self.assertEqual(raised.exception.input_indices, (3,))
+
     async def test_batches_preserve_input_order(self):
         calls: list[list[str]] = []
 

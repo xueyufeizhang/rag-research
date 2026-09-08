@@ -11,6 +11,7 @@ import json
 import os
 import tempfile
 import time
+from collections.abc import Callable
 from dataclasses import asdict
 from datetime import datetime, timezone
 from typing import Any
@@ -31,6 +32,7 @@ from rag_research.core import LightRAG
 from rag_research.datasets.multihop_rag import load_multihop_rag
 from rag_research.evaluation import (
     build_multidocument_chunk_index,
+    calc_evidence_reachability,
     calc_multihop_official_metrics,
     calc_multihop_retrieval_metrics,
     calc_null_retrieval_context_metrics,
@@ -42,13 +44,54 @@ from rag_research.models import QuestionRecord
 
 load_dotenv()
 
-EVALUATION_SCHEMA_VERSION = 2
+EVALUATION_SCHEMA_VERSION = 3
 DEFAULT_MODES = ("naive", "local", "global", "hybrid")
 DEFAULT_K_VALUES = (1, 3, 5, 10, 20)
 OFFICIAL_TOP_K = 10
 OFFICIAL_EVALUATOR_URL = (
     "https://github.com/yixuantt/MultiHop-RAG/blob/main/retrieval_evaluate.py"
 )
+
+EVALUATION_PROTOCOLS = {
+    "thesis_extended": {
+        "evidence_unit": "canonical MultiHopRAG evidence fact",
+        "evidence_match": "one chunk fully contains one occurrence in the gold document",
+        "unreachable_evidence": "retained in every recall denominator and counted as misses",
+        "index_coverage": "single-chunk reachability before ranking; ceiling ignores finite K",
+        "joint_evidence_success": "all gold evidence facts retrieved under single-chunk matching",
+        "cross_chunk_union": (
+            "additional metric: adjacent or overlapping retrieved intervals in the same "
+            "document completely cover one occurrence; fragments of different occurrences "
+            "cannot be joined; does not change primary or official evidence matching"
+        ),
+        "chunk_precision": "relevant chunks / requested K, for both macro and micro P@K",
+        "precision_among_returned": "relevant chunks / actual returned chunks",
+        "joint_document_success": "some chunk from each gold document, regardless of relevance",
+        "evidence_density": (
+            "per-document union of gold-occurrence characters intersecting retrieved source "
+            "intervals / sum of retrieved chunk source lengths; partial overlap contributes; "
+            "nested facts and repeated coverage of the same source position count once; "
+            "distinct occurrences at different source positions are distinct characters"
+        ),
+        "chunk_source_tokens": "fixed tokenizer over chunk source texts joined by two newlines",
+        "generation_context_tokens": (
+            "diagnostic: fixed tokenizer over the shared generation context builder with "
+            "the ranked chunk prefix and the trace's full entity/relation context; includes "
+            "serialization, excludes instructions, query, chat framing and special tokens; "
+            "not billed tokens, generation quality, or measured model cost"
+        ),
+        "evidence_count": "number of gold facts, not graph path length",
+        "null_queries": "context statistics only; no relevance or refusal score is invented",
+    },
+    "official": {
+        "source": OFFICIAL_EVALUATOR_URL,
+        "retrieved_k": OFFICIAL_TOP_K,
+        "text_normalization": "remove literal spaces and newline characters exactly as official code",
+        "relevance": "normalized gold fact is a substring of retrieved text",
+        "metrics": ["Hits@10", "Hits@4", "MAP@10", "MRR@10"],
+        "null_queries": "excluded from official aggregation",
+    },
+}
 
 
 def utc_now() -> str:
@@ -234,6 +277,111 @@ def mean(rows: list[dict], key: str) -> float:
     return sum(float(row.get(key, 0.0)) for row in rows) / len(rows) if rows else 0.0
 
 
+def summarize_index_coverage(coverages: list[dict]) -> dict:
+    if not coverages:
+        return {"applicable": False, "question_count": 0}
+    gold_total = sum(item["gold_evidence_count"] for item in coverages)
+    reachable_total = sum(item["reachable_evidence_count"] for item in coverages)
+    return {
+        "applicable": True,
+        "question_count": len(coverages),
+        "gold_evidence_count": gold_total,
+        "reachable_evidence_count": reachable_total,
+        "unreachable_evidence_count": gold_total - reachable_total,
+        "questions_with_unreachable_evidence": sum(
+            item["unreachable_evidence_count"] > 0 for item in coverages
+        ),
+        "macro_evidence_recall_ceiling": mean(coverages, "evidence_recall_ceiling"),
+        "micro_evidence_recall_ceiling": reachable_total / gold_total,
+        "joint_evidence_success_rate_ceiling": mean(
+            coverages, "joint_evidence_success_ceiling",
+        ),
+    }
+
+
+def score_question_trace(
+    question: QuestionRecord,
+    trace: dict,
+    *,
+    chunks: dict[str, dict],
+    chunk_to_evidence: dict[str, list[str]],
+    k_values: tuple[int, ...],
+    token_counter: Callable[[str], int],
+    build_context: Callable[[list[dict], list[dict], list[dict]], str],
+) -> dict:
+    """Score an existing ranking without performing retrieval or model calls."""
+    ranked_ids = trace.get("chunk_ids", [])
+    if ranked_ids != [chunk.get("chunk_id") for chunk in trace.get("chunks", [])]:
+        raise ValueError("trace chunk IDs disagree with the official export ranking")
+    if len(ranked_ids) != len(set(ranked_ids)):
+        raise ValueError("trace contains duplicate retrieved chunk IDs")
+    is_null = question.question_type == "null_query"
+    metrics_by_k = {}
+    for requested_k in k_values:
+        retrieved_ids = ranked_ids[:requested_k]
+        if is_null:
+            metrics = calc_null_retrieval_context_metrics(
+                retrieved_chunk_ids=retrieved_ids,
+                chunks=chunks,
+                token_counter=token_counter,
+            )
+        else:
+            metrics = calc_multihop_retrieval_metrics(
+                question=question,
+                retrieved_chunk_ids=retrieved_ids,
+                requested_k=requested_k,
+                chunks=chunks,
+                chunk_to_evidence=chunk_to_evidence,
+                token_counter=token_counter,
+            )
+        generation_context = build_context(
+            trace.get("entities", []),
+            trace.get("relations", []),
+            [chunks[chunk_id] for chunk_id in retrieved_ids],
+        )
+        metrics["generation_context_tokens"] = (
+            token_counter(generation_context) if generation_context else 0
+        )
+        metrics["requested_k"] = requested_k
+        metrics_by_k[str(requested_k)] = metrics
+
+    if is_null:
+        official = {
+            "applicable": False,
+            "reason": "official evaluator excludes null_query rows",
+        }
+    else:
+        official_retrieval = build_official_retrieval_list(trace, chunks)
+        official = {
+            "applicable": True,
+            "metrics": calc_multihop_official_metrics(
+                retrieved_texts=[item["text"] for item in official_retrieval],
+                gold_facts=[evidence.fact for evidence in question.evidence],
+            ),
+        }
+    return {"thesis_extended": {"metrics_by_k": metrics_by_k}, "official": official}
+
+
+def validate_checkpoint(
+    row: dict,
+    *,
+    evaluation_fingerprint: str,
+    question: QuestionRecord,
+    mode: str,
+) -> None:
+    if (
+        row.get("schema_version") != EVALUATION_SCHEMA_VERSION
+        or row.get("evaluation_fingerprint") != evaluation_fingerprint
+    ):
+        raise RuntimeError("incompatible evaluation checkpoint schema or fingerprint")
+    if (
+        row.get("question_id") != question.question_id
+        or row.get("dataset_index") != question.dataset_index
+        or row.get("mode") != mode
+    ):
+        raise RuntimeError("checkpoint identity mismatch")
+
+
 def summarize_answerable_group(
     *,
     mode: str,
@@ -256,7 +404,8 @@ def summarize_answerable_group(
         document_matched = sum(item["matched_document_count"] for item in metrics)
         retrieved_chars = sum(item["retrieved_chars"] for item in metrics)
         covered_chars = sum(item["covered_evidence_chars"] for item in metrics)
-        micro_precision = relevant_total / retrieved_total if retrieved_total else 0.0
+        requested_total = sum(item["requested_k"] for item in metrics)
+        micro_precision = relevant_total / requested_total if requested_total else 0.0
         micro_evidence_recall = evidence_matched / evidence_total if evidence_total else 0.0
 
         summaries.append({
@@ -267,27 +416,43 @@ def summarize_answerable_group(
             "requested_k": requested_k,
             "avg_returned_chunks": mean(metrics, "retrieved_count"),
             "macro_chunk_precision": mean(metrics, "chunk_precision"),
+            "macro_precision_among_returned": mean(metrics, "precision_among_returned"),
             "macro_evidence_recall": mean(metrics, "evidence_recall"),
             "macro_coverage_f1": mean(metrics, "coverage_f1"),
             "joint_evidence_success_rate": mean(metrics, "joint_evidence_success"),
+            "macro_cross_chunk_union_evidence_recall": mean(
+                metrics, "cross_chunk_union_evidence_recall",
+            ),
+            "cross_chunk_union_joint_evidence_success_rate": mean(
+                metrics, "cross_chunk_union_joint_evidence_success",
+            ),
             "macro_document_recall": mean(metrics, "document_recall"),
             "joint_document_success_rate": mean(metrics, "joint_document_success"),
             "mean_reciprocal_rank": mean(metrics, "reciprocal_rank"),
             "mean_average_precision_at_k": mean(metrics, "average_precision_at_k"),
             "mean_ndcg_at_k": mean(metrics, "ndcg_at_k"),
             "micro_chunk_precision": micro_precision,
+            "micro_precision_among_returned": (
+                relevant_total / retrieved_total if retrieved_total else 0.0
+            ),
             "micro_evidence_recall": micro_evidence_recall,
+            "micro_cross_chunk_union_evidence_recall": (
+                sum(item["cross_chunk_union_matched_evidence_count"] for item in metrics)
+                / evidence_total if evidence_total else 0.0
+            ),
             "micro_coverage_f1": harmonic_mean(micro_precision, micro_evidence_recall),
             "micro_document_recall": (
                 document_matched / document_total if document_total else 0.0
             ),
-            "avg_retrieved_tokens": mean(metrics, "retrieved_tokens"),
+            "avg_chunk_source_tokens": mean(metrics, "chunk_source_tokens"),
+            "avg_generation_context_tokens": mean(metrics, "generation_context_tokens"),
             "avg_retrieved_chars": mean(metrics, "retrieved_chars"),
             "avg_retrieved_document_count": mean(metrics, "retrieved_document_count"),
             "cross_document_retrieval_rate": mean(metrics, "cross_document_retrieval"),
             "evidence_density": (
                 covered_chars / retrieved_chars if retrieved_chars else 0.0
             ),
+            "index_coverage": summarize_index_coverage([row["index_coverage"] for row in rows]),
         })
     return summaries
 
@@ -332,15 +497,16 @@ def build_summaries(
                 k_values=k_values,
             ))
 
-        for hop_count in sorted({row["hop_count"] for row in answerable}):
-            grouped = [row for row in answerable if row["hop_count"] == hop_count]
-            answerable_summaries.extend(summarize_answerable_group(
-                mode=mode,
-                group_name="hop_count",
-                group_value=hop_count,
-                rows=grouped,
-                k_values=k_values,
-            ))
+        for count_field in ("evidence_count", "gold_document_count"):
+            for count in sorted({row[count_field] for row in answerable}):
+                grouped = [row for row in answerable if row[count_field] == count]
+                answerable_summaries.extend(summarize_answerable_group(
+                    mode=mode,
+                    group_name=count_field,
+                    group_value=count,
+                    rows=grouped,
+                    k_values=k_values,
+                ))
 
         null_rows = [row for row in mode_rows if row["question_type"] == "null_query"]
         if not null_rows:
@@ -355,35 +521,22 @@ def build_summaries(
                 "question_count": len(null_rows),
                 "requested_k": requested_k,
                 "avg_returned_chunks": mean(metrics, "retrieved_count"),
-                "avg_retrieved_tokens": mean(metrics, "retrieved_tokens"),
+                "avg_chunk_source_tokens": mean(metrics, "chunk_source_tokens"),
+                "avg_generation_context_tokens": mean(metrics, "generation_context_tokens"),
                 "avg_retrieved_chars": mean(metrics, "retrieved_chars"),
                 "avg_retrieved_document_count": mean(metrics, "retrieved_document_count"),
                 "cross_document_retrieval_rate": mean(metrics, "cross_document_retrieval"),
                 "relevance_metrics_applicable": False,
             })
 
+    unique_coverages = {
+        row["question_id"]: row["index_coverage"]
+        for row in results if row["question_type"] != "null_query"
+    }
     return {
-        "protocols": {
-            "thesis_extended": {
-                "evidence_unit": "canonical MultiHopRAG evidence fact",
-                "evidence_match": "same document and full occurrence containment",
-                "joint_evidence_success": "all gold evidence facts retrieved",
-                "joint_document_success": "all gold evidence documents retrieved",
-                "null_queries": (
-                    "context statistics only; refusal is evaluated during generation"
-                ),
-            },
-            "official": {
-                "source": OFFICIAL_EVALUATOR_URL,
-                "retrieved_k": OFFICIAL_TOP_K,
-                "text_normalization": (
-                    "remove literal spaces and newline characters exactly as official code"
-                ),
-                "relevance": "normalized gold fact is a substring of retrieved text",
-                "metrics": ["Hits@10", "Hits@4", "MAP@10", "MRR@10"],
-                "null_queries": "excluded from official aggregation",
-            },
-        },
+        "schema_version": EVALUATION_SCHEMA_VERSION,
+        "protocols": EVALUATION_PROTOCOLS,
+        "index_coverage": summarize_index_coverage(list(unique_coverages.values())),
         "thesis_extended": {
             "answerable": answerable_summaries,
             "null_queries": null_summaries,
@@ -506,22 +659,15 @@ async def main() -> tuple[Path, dict]:
     chunk_index = build_multidocument_chunk_index(dataset.documents, chunks)
 
     evidence_maps: dict[str, dict[str, list[str]]] = {}
+    index_coverages: dict[str, dict] = {}
     for question in questions:
         if question.question_type == "null_query":
             continue
         evidence_map = map_multihop_evidence_to_chunks(question, chunk_index)
-        mapped_evidence = {
-            evidence_id
-            for evidence_ids in evidence_map.values()
-            for evidence_id in evidence_ids
-        }
-        expected_evidence = {evidence.evidence_id for evidence in question.evidence}
-        if mapped_evidence != expected_evidence:
-            missing = sorted(expected_evidence - mapped_evidence)
-            raise RuntimeError(
-                f"question {question.question_id} has evidence absent from all chunks: {missing}"
-            )
         evidence_maps[question.question_id] = evidence_map
+        index_coverages[question.question_id] = calc_evidence_reachability(
+            question, evidence_map,
+        )
 
     retrieval_config = {
         "modes": modes,
@@ -549,13 +695,11 @@ async def main() -> tuple[Path, dict]:
         "retrieval_config": retrieval_config,
         "selected_question_ids": [question.question_id for question in questions],
         "code_sha256": {
-            "core": hashlib.sha256(
-                (PROJECT_ROOT / "src/rag_research/core.py").read_bytes()
-            ).hexdigest(),
-            "evaluation": hashlib.sha256(
-                (PROJECT_ROOT / "src/rag_research/evaluation.py").read_bytes()
-            ).hexdigest(),
-            "runner": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            str(path.relative_to(PROJECT_ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in [
+                Path(__file__).resolve(),
+                *sorted((PROJECT_ROOT / "src/rag_research").rglob("*.py")),
+            ]
         },
     }
     evaluation_fingerprint = stable_fingerprint(fingerprint_material)
@@ -593,6 +737,8 @@ async def main() -> tuple[Path, dict]:
             "chunk_count": build.chunk_count,
         },
         "retrieval_config": retrieval_config,
+        "protocols": EVALUATION_PROTOCOLS,
+        "index_coverage": summarize_index_coverage(list(index_coverages.values())),
         "execution": {
             "concurrency": concurrency,
             "cache_directory": str(cache_directory),
@@ -601,7 +747,10 @@ async def main() -> tuple[Path, dict]:
     }
     if manifest_path.exists():
         existing_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        if existing_manifest.get("evaluation_fingerprint") != evaluation_fingerprint:
+        if (
+            existing_manifest.get("schema_version") != EVALUATION_SCHEMA_VERSION
+            or existing_manifest.get("evaluation_fingerprint") != evaluation_fingerprint
+        ):
             raise RuntimeError(
                 f"evaluation output {run_directory} belongs to a different experiment"
             )
@@ -615,14 +764,12 @@ async def main() -> tuple[Path, dict]:
             checkpoint_path = checkpoint_directory / mode / f"{question.question_id}.json"
             if checkpoint_path.exists():
                 row = json.loads(checkpoint_path.read_text(encoding="utf-8"))
-                if row.get("evaluation_fingerprint") != evaluation_fingerprint:
-                    raise RuntimeError(f"incompatible checkpoint: {checkpoint_path}")
-                if (
-                    row.get("question_id") != question.question_id
-                    or row.get("dataset_index") != question.dataset_index
-                    or row.get("mode") != mode
-                ):
-                    raise RuntimeError(f"checkpoint identity mismatch: {checkpoint_path}")
+                validate_checkpoint(
+                    row,
+                    evaluation_fingerprint=evaluation_fingerprint,
+                    question=question,
+                    mode=mode,
+                )
                 completed_rows.append(row)
             else:
                 jobs.append((question, mode, checkpoint_path))
@@ -641,66 +788,35 @@ async def main() -> tuple[Path, dict]:
                 top_k=max(max(k_values), OFFICIAL_TOP_K),
             )
 
-        metrics_by_k: dict[str, dict] = {}
-        for requested_k in k_values:
-            retrieved_ids = trace.get("chunk_ids", [])[:requested_k]
-            if question.question_type == "null_query":
-                metrics = calc_null_retrieval_context_metrics(
-                    retrieved_chunk_ids=retrieved_ids,
-                    chunks=chunks,
-                    token_counter=token_counter,
-                )
-            else:
-                metrics = calc_multihop_retrieval_metrics(
-                    retrieved_chunk_ids=retrieved_ids,
-                    requested_k=requested_k,
-                    chunks=chunks,
-                    chunk_to_evidence=evidence_maps[question.question_id],
-                    evidence_to_document={
-                        evidence.evidence_id: evidence.document_id
-                        for evidence in question.evidence
-                    },
-                    evidence_lengths={
-                        evidence.evidence_id: len(evidence.fact)
-                        for evidence in question.evidence
-                    },
-                    token_counter=token_counter,
-                )
-            metrics["requested_k"] = requested_k
-            metrics_by_k[str(requested_k)] = metrics
-
-        if question.question_type == "null_query":
-            official = {
-                "applicable": False,
-                "reason": "official evaluator excludes null_query rows",
-            }
-        else:
-            official_retrieval = build_official_retrieval_list(trace, chunks)
-            official = {
-                "applicable": True,
-                "metrics": calc_multihop_official_metrics(
-                    retrieved_texts=[item["text"] for item in official_retrieval],
-                    gold_facts=[evidence.fact for evidence in question.evidence],
-                ),
-            }
+        scores = score_question_trace(
+            question,
+            trace,
+            chunks=chunks,
+            chunk_to_evidence=evidence_maps.get(question.question_id, {}),
+            k_values=k_values,
+            token_counter=token_counter,
+            build_context=rag.build_context,
+        )
 
         row = {
+            "schema_version": EVALUATION_SCHEMA_VERSION,
             "evaluation_fingerprint": evaluation_fingerprint,
             "question_id": question.question_id,
             "dataset_index": question.dataset_index,
             "question": question.query,
             "answer": question.answer,
             "question_type": question.question_type,
-            "hop_count": len(question.evidence),
+            "evidence_count": len(question.evidence),
+            "gold_document_count": len({evidence.document_id for evidence in question.evidence}),
+            "index_coverage": index_coverages.get(
+                question.question_id, {"applicable": False},
+            ),
             "mode": mode,
             "gold_evidence": [asdict(evidence) for evidence in question.evidence],
             "gold_document_ids": list(dict.fromkeys(
                 evidence.document_id for evidence in question.evidence
             )),
-            "thesis_extended": {
-                "metrics_by_k": metrics_by_k,
-            },
-            "official": official,
+            **scores,
             "trace": compact_trace(trace),
         }
         atomic_write_json(checkpoint_path, row)

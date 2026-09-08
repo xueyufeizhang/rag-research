@@ -144,7 +144,7 @@ You are a Knowledge Graph Specialist responsible for extracting entities and rel
 1. **Entity Extraction:**
   - **Identification:** Identify clearly defined and meaningful entities in the `---Input Text---` session of user prompt.
   - **Entity Details:** For each identified entity, extract the following information:
-    - `name`: The name of the entity. If the entity name is case-insensitive, capitalize the first letter of each significant word (title case). Ensure **consistent naming** across the entire extraction process.
+    - `name`: Use the entity's explicit wording in the input. Title case, Unicode typography, hyphen/space variation, and repeated whitespace may be normalized; do not replace source words with synonyms or infer a more specific name. Ensure **consistent naming** across the entire extraction process.
     - `type`: Categorize the entity using exactly one type label from the `---Entity Types---` section below. If none of the provided entity types apply, classify it as `Other`; never invent a new type label.
     - `description`: Provide a non-empty, concise yet comprehensive description of the entity's attributes and activities, based *solely* on the information present in the input text.
 
@@ -300,7 +300,7 @@ The expedition was funded by the Global Wildlife Conservation Institute and prod
 ```
 The 2023 edition of "Advances in Neural Architecture Search" synthesized findings from over 200 peer-reviewed papers and introduced a new benchmarking framework called NASBench-360, designed to evaluate search algorithms across diverse task domains. The publication was co-authored by Dr. Priya Nair and Dr. Luca Ferretti of the DeepSystems Research Lab.
 
-NASBench-360 measures three key metrics: search efficiency (time-to-solution), model accuracy on held-out test sets, and computational cost in GPU-hours. Early results showed that evolutionary search algorithms outperformed gradient-based methods by 12% on accuracy while consuming 30% fewer GPU-hours on vision tasks.
+NASBench-360 measures three key metrics: search efficiency (time-to-solution), model accuracy on held-out test sets, and computational cost in GPU-hours. Early results showed that evolutionary search algorithms outperformed gradient-based search methods by 12% on accuracy while consuming 30% fewer GPU-hours on vision tasks.
 ```
 
 ---Output---

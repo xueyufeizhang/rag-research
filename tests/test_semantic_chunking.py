@@ -104,6 +104,7 @@ class SemanticChunkingTests(unittest.IsolatedAsyncioTestCase):
         async def embed_func(value: str) -> list[float]:
             nonlocal calls
             calls += 1
+            value = value.removeprefix("clustering: ")
             if value.strip() in first_topic:
                 return [1.0, 0.0]
             return [0.0, 1.0]
@@ -130,6 +131,7 @@ class SemanticChunkingTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_semantic_boundary_returns_source_aligned_chunks(self):
         async def embed_func(value: str) -> list[float]:
+            value = value.removeprefix("clustering: ")
             if value.startswith(("Alpha", "Bravo")):
                 return [1.0, 0.0]
             return [0.0, 1.0]
@@ -153,6 +155,76 @@ class SemanticChunkingTests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertEqual("".join(chunk.text for chunk in chunks), SOURCE)
         self.assert_source_aligned(SOURCE, chunks)
+
+    async def test_short_tail_is_rebalanced_without_exceeding_maximum(self):
+        sentences = [
+            f"Sentence {index} is here."
+            for index in range(1, 24)
+        ]
+        text = " ".join(sentences)
+        call_count = 0
+
+        async def embed_func(_: str) -> list[float]:
+            nonlocal call_count
+            call_count += 1
+            if call_count == len(sentences):
+                return [0.0, 1.0]
+            return [1.0, 0.0]
+
+        chunks = await semantic_chunk(
+            text=text,
+            breakpoint_percentile=100,
+            min_sentences=4,
+            max_sentences=20,
+            buffer_size=0,
+            embedding_concurrency=1,
+            embed_func=embed_func,
+        )
+
+        self.assertEqual(
+            chunks,
+            [
+                source_span(text, " ".join(sentences[:19]) + " "),
+                source_span(text, " ".join(sentences[19:])),
+            ],
+        )
+        self.assertEqual("".join(chunk.text for chunk in chunks), text)
+        self.assert_source_aligned(text, chunks)
+
+    async def test_infeasible_partition_keeps_short_tail_but_honors_maximum(self):
+        sentences = [
+            f"Sentence {index} is here."
+            for index in range(1, 8)
+        ]
+        text = " ".join(sentences)
+        call_count = 0
+
+        async def embed_func(_: str) -> list[float]:
+            nonlocal call_count
+            call_count += 1
+            if call_count == len(sentences):
+                return [0.0, 1.0]
+            return [1.0, 0.0]
+
+        chunks = await semantic_chunk(
+            text=text,
+            breakpoint_percentile=100,
+            min_sentences=4,
+            max_sentences=4,
+            buffer_size=0,
+            embedding_concurrency=1,
+            embed_func=embed_func,
+        )
+
+        self.assertEqual(
+            chunks,
+            [
+                source_span(text, " ".join(sentences[:4]) + " "),
+                source_span(text, " ".join(sentences[4:])),
+            ],
+        )
+        self.assertEqual("".join(chunk.text for chunk in chunks), text)
+        self.assert_source_aligned(text, chunks)
 
     async def test_chunk_async_dispatches_semantic_strategy(self):
         calls = 0

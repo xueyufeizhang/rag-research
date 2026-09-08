@@ -129,7 +129,10 @@ class RerankingTests(unittest.TestCase):
         self.assertIsNone(rag.reranker)
 
     def test_naive_retrieval_uses_cross_encoder_after_dense_retrieval(self):
-        async def embed_func(_: str) -> list[float]:
+        calls = []
+
+        async def embed_func(value: str) -> list[float]:
+            calls.append(value)
             return [1.0, 0.0]
 
         self.rag.embed_func = embed_func
@@ -140,6 +143,7 @@ class RerankingTests(unittest.TestCase):
         ranked = asyncio.run(self.rag._naive_retrieve("query"))
 
         self.assertEqual([chunk["chunk_id"] for chunk in ranked], ["c2", "c1"])
+        self.assertEqual(calls, ["search_query: query"])
         self.assertIn("dense_score", ranked[0])
 
     def test_naive_retrieval_keeps_dense_order_without_reranker(self):

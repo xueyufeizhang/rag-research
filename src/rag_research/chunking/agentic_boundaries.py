@@ -1,5 +1,4 @@
 from fractions import Fraction
-from functools import lru_cache
 
 
 def validate_boundaries(
@@ -39,6 +38,8 @@ def validate_boundary_structure(
 
     expected_start = 1
     for start, end in boundaries:
+        if type(start) is not int or type(end) is not int:
+            raise ValueError("boundary start and end indexes must be integers")
         if start != expected_start:
             raise ValueError(
                 f"expected chunk to start at {expected_start}, got {start}"
@@ -123,57 +124,68 @@ def project_boundaries(
             + fraction * (right_endpoint - left_endpoint)
         )
 
-    @lru_cache(maxsize=None)
-    def solve(
-        chunk_index: int,
-        previous_end: int,
-    ) -> tuple[Fraction, tuple[int, ...]] | None:
+    minimum_final_size = 1 if allow_short_final else min_sentences
+
+    def feasible_previous_ends(chunk_index: int) -> range:
         remaining_chunks = projected_chunk_count - chunk_index
-        if remaining_chunks == 1:
-            final_size = sentence_count - previous_end
-            minimum_final_size = 1 if allow_short_final else min_sentences
-            if minimum_final_size <= final_size <= max_sentences:
-                return Fraction(0), (sentence_count,)
-            return None
+        minimum_remaining = (
+            (remaining_chunks - 1) * min_sentences + minimum_final_size
+        )
+        earliest = max(
+            chunk_index * min_sentences,
+            sentence_count - remaining_chunks * max_sentences,
+        )
+        latest = min(
+            chunk_index * max_sentences,
+            sentence_count - minimum_remaining,
+        )
+        return range(earliest, latest + 1)
 
-        best: tuple[Fraction, tuple[int, ...]] | None = None
-        earliest_end = previous_end + min_sentences
-        latest_end = min(previous_end + max_sentences, sentence_count - 1)
-        for current_end in range(earliest_end, latest_end + 1):
-            chunks_after_current = remaining_chunks - 1
-            remaining_sentences = sentence_count - current_end
-            minimum_remaining = (
-                (chunks_after_current - 1) * min_sentences + 1
-                if allow_short_final
-                else chunks_after_current * min_sentences
-            )
-            maximum_remaining = chunks_after_current * max_sentences
-            if not minimum_remaining <= remaining_sentences <= maximum_remaining:
-                continue
+    # Store only the next endpoint for each state. With equal total costs the
+    # smaller next endpoint gives the same lexicographically smallest path as
+    # comparing complete endpoint tuples in the recursive formulation.
+    choices: list[dict[int, int]] = [
+        {} for _ in range(projected_chunk_count)
+    ]
+    final_index = projected_chunk_count - 1
+    next_costs = {
+        previous_end: Fraction(0)
+        for previous_end in feasible_previous_ends(final_index)
+    }
+    choices[final_index] = {
+        previous_end: sentence_count for previous_end in next_costs
+    }
+    for chunk_index in range(final_index - 1, -1, -1):
+        costs: dict[int, Fraction] = {}
+        for previous_end in feasible_previous_ends(chunk_index):
+            best: tuple[Fraction, int] | None = None
+            for current_end in range(
+                previous_end + min_sentences,
+                min(previous_end + max_sentences, sentence_count - 1) + 1,
+            ):
+                tail_cost = next_costs.get(current_end)
+                if tail_cost is None:
+                    continue
+                boundary_cost = abs(
+                    Fraction(current_end) - target_endpoints[chunk_index]
+                )
+                candidate = (boundary_cost + tail_cost, current_end)
+                if best is None or candidate < best:
+                    best = candidate
+            if best is not None:
+                costs[previous_end] = best[0]
+                choices[chunk_index][previous_end] = best[1]
+        next_costs = costs
 
-            tail = solve(chunk_index + 1, current_end)
-            if tail is None:
-                continue
-            boundary_cost = abs(
-                Fraction(current_end) - target_endpoints[chunk_index]
-            )
-            candidate = (
-                boundary_cost + tail[0],
-                (current_end, *tail[1]),
-            )
-            if best is None or candidate < best:
-                best = candidate
-        return best
-
-    solution = solve(0, 0)
-    if solution is None:
+    if 0 not in next_costs:
         raise ValueError(
             "failed to project agentic boundaries onto configured limits"
         )
 
     projected: list[tuple[int, int]] = []
     previous_end = 0
-    for current_end in solution[1]:
+    for chunk_choices in choices:
+        current_end = chunk_choices[previous_end]
         projected.append((previous_end + 1, current_end))
         previous_end = current_end
     return projected

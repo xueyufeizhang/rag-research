@@ -54,8 +54,8 @@ class FixedSizeChunkTests(ChunkSpanAssertions, unittest.TestCase):
             chunks,
             [
                 ChunkSpan("abcd", 0, 4),
-                ChunkSpan("defg", 3, 7),
-                ChunkSpan("ghij", 6, 10),
+                ChunkSpan("defgh", 3, 8),
+                ChunkSpan("hij", 7, 10),
             ],
         )
         self.assert_source_aligned(text, chunks)

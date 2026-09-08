@@ -4,6 +4,8 @@ from collections.abc import Sequence
 import httpx
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
+from rag_research.embedding import EmbeddingInputTooLongError
+from rag_research.llm import LLMResponse, truncation_from_finish_reason
 
 load_dotenv()
 LLM_BACKEND = os.getenv("LLM_BACKEND", "ollama")    # "ollama" | "api"
@@ -34,7 +36,7 @@ def create_reranker():
     return CrossEncoder(RERANK_MODEL, cache_folder="./models")
 
 
-async def ollama_llm(system: str, prompt: str) -> str:
+async def ollama_llm(system: str, prompt: str) -> LLMResponse:
     async with httpx.AsyncClient() as client:
         response = await client.post(
             f"{OLLAMA_BASE_URL}/api/generate",
@@ -47,9 +49,28 @@ async def ollama_llm(system: str, prompt: str) -> str:
             timeout=EXTRACTION_TIMEOUT,
         )
         response.raise_for_status()
-        return response.json()["response"]
+        payload = response.json()
+        reason = payload.get("done_reason")
+        usage = {
+            key: payload[key]
+            for key in (
+                "prompt_eval_count", "eval_count", "total_duration",
+                "load_duration", "prompt_eval_duration", "eval_duration",
+            )
+            if key in payload
+        }
+        return LLMResponse(
+            text=payload["response"],
+            finish_reason=reason,
+            usage=usage or None,
+            truncated=truncation_from_finish_reason(reason),
+        )
      
-async def api_llm(system: str, prompt: str) -> str:
+async def api_llm(system: str, prompt: str) -> LLMResponse:
+    extra_body = {"thinking": {"type": "disabled"}}
+    if "openrouter.ai" in API_BASE_URL:
+        extra_body["reasoning"] = {"enabled": False}
+
     resp = await api_client.chat.completions.create(
         model=API_MODEL,
         messages=[
@@ -58,20 +79,18 @@ async def api_llm(system: str, prompt: str) -> str:
         ],
         max_tokens=4096,
         timeout=EXTRACTION_TIMEOUT,
-        # extra_body={"thinking": {"type": "disabled"}},
-        extra_body={"thinking": {"type": "disabled"}, "reasoning": {"enabled": False}},
+        extra_body=extra_body,
     )
 
     choice = resp.choices[0]
     content = choice.message.content
-
-    if not content:
-        print("[api_llm] empty content", flush=True)
-        print(f"[api_llm] finish_reason: {choice.finish_reason}", flush=True)
-        print(f"[api_llm] usage: {resp.usage}", flush=True)
-        print(f"[api_llm] message: {choice.message}", flush=True)
-
-    return content
+    usage = resp.usage.model_dump(mode="json") if resp.usage is not None else None
+    return LLMResponse(
+        text=content if content is not None else "",
+        finish_reason=choice.finish_reason,
+        usage=usage,
+        truncated=truncation_from_finish_reason(choice.finish_reason),
+    )
 
 llm_func = api_llm if LLM_BACKEND == "api" else ollama_llm
 
@@ -87,10 +106,34 @@ async def embed_many_func(texts: Sequence[str]) -> list[list[float]]:
     async with httpx.AsyncClient() as client:
         response = await client.post(
             f"{OLLAMA_BASE_URL}/api/embed",
-            json={"model": EMBED_MODEL, "input": list(texts)},
+            json={
+                "model": EMBED_MODEL,
+                "input": list(texts),
+                # Never allow the server's default silent truncation. The
+                # stored chunk, extraction input, and vector must represent
+                # exactly the same text.
+                "truncate": False,
+            },
             timeout=EXTRACTION_TIMEOUT
         )
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except httpx.HTTPStatusError as error:
+            detail = response.text.lower()
+            if response.status_code == 400 and any(
+                marker in detail
+                for marker in (
+                    "context length",
+                    "input length",
+                    "too long",
+                    "truncate",
+                )
+            ):
+                raise EmbeddingInputTooLongError(
+                    "Ollama rejected an embedding input; truncation is disabled "
+                    "and the input exceeds the model context or request limits"
+                ) from error
+            raise
         payload = response.json()
 
     embeddings = payload.get("embeddings")

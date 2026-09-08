@@ -5,7 +5,9 @@ from dataclasses import dataclass
 class ChunkConfig:
     strategy: str = "fixed"
     fixed_size: int = 2400
-    fixed_overlap: int = 200
+    # One source-character overlap is applied after every strategy has chosen
+    # its core boundaries.
+    overlap_size: int = 200
     semantic_breakpoint_percentile: float = 90.0
     semantic_min_sentences: int = 8
     semantic_max_sentences: int = 24
@@ -18,6 +20,14 @@ class ChunkConfig:
     agentic_max_sentences: int = 20
     agentic_concurrency: int = 4
     agentic_retries: int = 2
+
+    def __post_init__(self) -> None:
+        if type(self.overlap_size) is not int or self.overlap_size < 0:
+            raise ValueError("chunk overlap must be a non-negative integer")
+
+    def fingerprint_dict(self) -> dict:
+        """Return the canonical chunk configuration used in fingerprints."""
+        return dict(self.__dict__)
 
 
 @dataclass(frozen=True)
