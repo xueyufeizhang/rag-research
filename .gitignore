@@ -54,6 +54,7 @@ cover/
 # Generated experiment outputs
 artifacts/evaluations/
 artifacts/cache/
+artifacts/reports/
 scratch/
 artifacts/visualizations/
 artifacts/stores/**/chunking_cache/
