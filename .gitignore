@@ -55,6 +55,7 @@ cover/
 artifacts/evaluations/
 artifacts/cache/
 artifacts/reports/
+artifacts/baselines/
 scratch/
 artifacts/visualizations/
 artifacts/stores/**/chunking_cache/
