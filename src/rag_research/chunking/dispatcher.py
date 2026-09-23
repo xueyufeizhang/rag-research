@@ -15,7 +15,7 @@ from .text_spans import sentence_context, split_sentences
 
 
 CHUNKING_PIPELINE_VERSION = 6
-CHUNKING_STRATEGY_VERSIONS = {"fixed": 6, "semantic": 7, "agentic": 7}
+CHUNKING_STRATEGY_VERSIONS = {"fixed": 6, "semantic": 7, "agentic": 8}
 SEMANTIC_BOUNDARY_POLICY = "strict-percentile-rebalance-v2"
 SEMANTIC_DISTANCE_ABS_TOLERANCE = 1e-12
 UNIFORM_OVERLAP_POLICY = "source-prefix-after-boundaries-v1"

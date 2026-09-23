@@ -60,6 +60,7 @@ def build_agentic_state_prompt(
     *,
     allowed_actions: tuple[str, ...],
     title_max_chars: int,
+    summary_target_chars: int,
     summary_max_chars: int,
 ) -> str:
     if len(allowed_actions) == 1:
@@ -83,8 +84,9 @@ Decision criteria:
 {action_instruction}
 - The returned title and summary must describe the resulting target chunk after
   applying the action, not merely the incoming proposition.
-- Keep the title under {title_max_chars} characters and the summary
-  under {summary_max_chars} characters.
+- Keep the title under {title_max_chars} characters. Keep the summary concise,
+  ideally around {summary_target_chars} characters; it must not exceed
+  {summary_max_chars} characters.
 - Make metadata useful for future routing and retrieval; avoid vague phrases
   such as "this chunk" or "various information".
 
@@ -104,6 +106,7 @@ def build_agentic_metadata_prompt(
     chunk_text: str,
     *,
     title_max_chars: int,
+    summary_target_chars: int,
     summary_max_chars: int,
 ) -> str:
     return f"""
@@ -111,7 +114,8 @@ Create retrieval metadata for the following finalized source chunk.
 
 Rules:
 - Title: specific and under {title_max_chars} characters.
-- Summary: generalized, concise, and under {summary_max_chars} characters.
+- Summary: generalized and concise, ideally around {summary_target_chars}
+  characters; it must not exceed {summary_max_chars} characters.
 - Return JSON only: {{"title": "...", "summary": "..."}}
 
 Source chunk:

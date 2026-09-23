@@ -72,7 +72,7 @@ EVAL_K_VALUES=1,3,5,10,20
 EVAL_CONCURRENCY=4
 EVAL_INCLUDE_NULL=true
 EVAL_MAX_QUESTIONS=0
-EVAL_TOKENIZER_MODEL=mixedbread-ai/mxbai-rerank-base-v1
+EVAL_TOKENIZER_MODEL=mixedbread-ai/mxbai-rerank-base-v2
 ```
 
 ```bash

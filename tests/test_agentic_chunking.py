@@ -260,6 +260,54 @@ class StatefulAgenticChunkingTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(state_calls, 1)
         self.assertEqual(chunks[0].title, "Forced initial chunk")
 
+    async def test_overlong_summary_is_truncated_without_retry(self):
+        state_calls = 0
+        long_summary = f"{'A' * 450}. {'B' * 300}."
+
+        async def fake_llm(system: str, prompt: str) -> str:
+            nonlocal state_calls
+            if system == AGENTIC_PROPOSITION_SYSTEM_PROMPT:
+                return '{"propositions": [{"start": 1, "end": 4}]}'
+            if system == AGENTIC_STATE_SYSTEM_PROMPT:
+                state_calls += 1
+                self.assertIn("ideally around 400 characters", prompt)
+                self.assertIn("must not exceed\n  600 characters", prompt)
+                return json.dumps({
+                    "action": "new_chunk",
+                    "title": "A valid title",
+                    "summary": long_summary,
+                })
+            self.fail(f"unexpected system prompt: {system}")
+
+        events: list[dict[str, object]] = []
+        chunks = await agentic_chunk(
+            text=FOUR_SENTENCES,
+            batch_max_sentences=10,
+            batch_max_chars=1000,
+            min_sentences=1,
+            max_sentences=4,
+            concurrency=1,
+            retries=2,
+            llm_func=fake_llm,
+            state_events=events,
+        )
+
+        transition = next(
+            event for event in events if event["event"] == "transition"
+        )
+        self.assertEqual(state_calls, 1)
+        self.assertLessEqual(len(chunks[0].summary or ""), 600)
+        self.assertEqual(chunks[0].summary, f"{'A' * 450}.…")
+        self.assertTrue(transition["metadata_truncated"])
+        self.assertEqual(
+            transition["original_summary_chars"],
+            len(long_summary),
+        )
+        self.assertEqual(
+            transition["final_summary_chars"],
+            len(chunks[0].summary or ""),
+        )
+
     async def test_retries_an_invalid_choice_when_two_actions_are_allowed(self):
         text = "One. Two."
         state_calls = 0

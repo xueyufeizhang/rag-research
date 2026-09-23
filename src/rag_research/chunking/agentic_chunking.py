@@ -14,7 +14,7 @@ from .text_spans import split_sentences
 
 AGENTIC_RECENT_PROPOSITIONS = 3
 AGENTIC_CATALOG_MAX_CHUNKS = 20
-AGENTIC_STATE_MODEL = "sequential-open-chunk-v3"
+AGENTIC_STATE_MODEL = "sequential-open-chunk-v4"
 AgenticProgressCallback = Callable[[str, int, int, int], None]
 
 
@@ -263,8 +263,14 @@ def _record_transition(
         "reason": decision.get("reason", ""),
         "decision_source": decision.get("decision_source", "llm"),
     }
-    for field_name in ("fallback_error", "recovery_error"):
-        if decision.get(field_name):
+    for field_name in (
+        "fallback_error",
+        "recovery_error",
+        "metadata_truncated",
+        "original_summary_chars",
+        "final_summary_chars",
+    ):
+        if field_name in decision:
             event[field_name] = decision[field_name]
     state_events.append(event)
 

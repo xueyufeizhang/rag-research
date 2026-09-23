@@ -22,6 +22,7 @@ from rag_research.prompts import (
 
 
 AGENTIC_TITLE_MAX_CHARS = 120
+AGENTIC_SUMMARY_TARGET_CHARS = 400
 AGENTIC_SUMMARY_MAX_CHARS = 600
 
 
@@ -155,6 +156,7 @@ class AgenticLlmGateway:
             state_payload,
             allowed_actions=allowed_actions,
             title_max_chars=AGENTIC_TITLE_MAX_CHARS,
+            summary_target_chars=AGENTIC_SUMMARY_TARGET_CHARS,
             summary_max_chars=AGENTIC_SUMMARY_MAX_CHARS,
         )
         last_error: Exception | None = None
@@ -249,6 +251,7 @@ class AgenticLlmGateway:
         prompt = build_agentic_metadata_prompt(
             chunk_text,
             title_max_chars=AGENTIC_TITLE_MAX_CHARS,
+            summary_target_chars=AGENTIC_SUMMARY_TARGET_CHARS,
             summary_max_chars=AGENTIC_SUMMARY_MAX_CHARS,
         )
         last_error: Exception | None = None
@@ -260,13 +263,14 @@ class AgenticLlmGateway:
                     prompt=prompt,
                 )
                 response = _complete_response_text(response)
-                title, summary = _validate_metadata(
+                title, summary, normalization = _validate_metadata(
                     _parse_json_object(response)
                 )
                 return {
                     "title": title,
                     "summary": summary,
                     "decision_source": "llm",
+                    **normalization,
                 }
             except Exception as exc:
                 last_error = exc
@@ -395,6 +399,13 @@ class AgenticLlmGateway:
                 "fallback_error",
                 error_text,
             )
+        for field_name in (
+            "metadata_truncated",
+            "original_summary_chars",
+            "final_summary_chars",
+        ):
+            if field_name in metadata:
+                recovered[field_name] = metadata[field_name]
         return recovered
 
 
@@ -466,7 +477,7 @@ def _parse_state_decision(
         allowed_actions=allowed_actions,
         forced_action=forced_action,
     )
-    title, summary = _validate_metadata(payload)
+    title, summary, normalization = _validate_metadata(payload)
     reason = payload.get("reason", "")
     if not isinstance(reason, str):
         raise ValueError("agentic state reason must be a string")
@@ -475,6 +486,7 @@ def _parse_state_decision(
         "title": title,
         "summary": summary,
         "reason": forced_reason or reason.strip(),
+        **normalization,
     }
 
 
@@ -515,7 +527,9 @@ def _validate_state_action(
     return action
 
 
-def _validate_metadata(payload: dict[str, object]) -> tuple[str, str]:
+def _validate_metadata(
+    payload: dict[str, object],
+) -> tuple[str, str, dict[str, object]]:
     title = payload.get("title")
     summary = payload.get("summary")
     if not isinstance(title, str) or not title.strip():
@@ -528,11 +542,15 @@ def _validate_metadata(payload: dict[str, object]) -> tuple[str, str]:
         raise ValueError(
             f"agentic title exceeds {AGENTIC_TITLE_MAX_CHARS} characters"
         )
-    if len(summary) > AGENTIC_SUMMARY_MAX_CHARS:
-        raise ValueError(
-            f"agentic summary exceeds {AGENTIC_SUMMARY_MAX_CHARS} characters"
-        )
-    return title, summary
+    if len(summary) <= AGENTIC_SUMMARY_MAX_CHARS:
+        return title, summary, {}
+
+    truncated = _truncate_summary(summary, AGENTIC_SUMMARY_MAX_CHARS)
+    return title, truncated, {
+        "metadata_truncated": True,
+        "original_summary_chars": len(summary),
+        "final_summary_chars": len(truncated),
+    }
 
 
 def _fallback_metadata(
@@ -561,6 +579,19 @@ def _truncate_metadata(value: str, limit: int) -> str:
     if len(normalized) <= limit:
         return normalized
     return normalized[:limit - 1].rstrip() + "…"
+
+
+def _truncate_summary(value: str, limit: int) -> str:
+    """Shorten metadata locally, preferring a complete final sentence."""
+    normalized = re.sub(r"\s+", " ", value).strip()
+    if len(normalized) <= limit:
+        return normalized
+
+    prefix = normalized[:limit - 1].rstrip()
+    sentence_endings = list(re.finditer(r"[.!?。！？](?=\s|$)", prefix))
+    if sentence_endings:
+        prefix = prefix[:sentence_endings[-1].end()].rstrip()
+    return prefix + "…"
 
 
 def _parse_named_boundaries(

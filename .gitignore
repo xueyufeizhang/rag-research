@@ -52,16 +52,18 @@ coverage.xml
 cover/
 
 # Generated experiment outputs
+/output/
 artifacts/evaluations/
 artifacts/cache/
 artifacts/reports/
 artifacts/baselines/
 scratch/
 artifacts/visualizations/
-artifacts/stores/**/chunking_cache/
-artifacts/stores/**/extraction_cache/
-artifacts/stores/dickens_*/
-artifacts/stores/multihop_*/
+artifacts/stores/
+# artifacts/stores/**/chunking_cache/
+# artifacts/stores/**/extraction_cache/
+# artifacts/stores/dickens_*/
+# artifacts/stores/multihop_*/
 data/raw/MultiHopRAG/
 models/
 
