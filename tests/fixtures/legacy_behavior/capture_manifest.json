@@ -1,0 +1,42 @@
+{
+  "captured_on": "2026-10-12",
+  "git_head": "037632c68396cfb14de4dac6bce87041646fe31b",
+  "note": "Working tree already had unrelated evaluation edits; source hashes identify the exact pre-Jev capture. These hashes are archival, not a restriction on future source changes.",
+  "python": "3.12.13",
+  "dependencies": {
+    "pysbd": "0.3.4",
+    "numpy": "2.5.1",
+    "json-repair": "0.61.7"
+  },
+  "production_source_sha256": {
+    "src/rag_research/__init__.py": "0846bd4057cb33ca01231c0407eda9cf05fa39455d7c36bf7067242fb13092f2",
+    "src/rag_research/backends.py": "9a4d9d924fc80711fa58e2a9ce14215cd8453bba5b6e8e715b74a9b907d1e2e1",
+    "src/rag_research/chunking/__init__.py": "ab96070b5379fb0c7dcf0f83aa25030677951ff0fd93ed9acf8dd709d8725198",
+    "src/rag_research/chunking/agentic_boundaries.py": "994ac59a0953f84597e0d11deb056a0ceea724f55b036cec58257c15a5b4583a",
+    "src/rag_research/chunking/agentic_chunking.py": "340503dbf75b9cc4f8fad1294866420a81717157d323c15789073efb538b311c",
+    "src/rag_research/chunking/agentic_llm.py": "daa08f2b793d130ac6026c236e1754359e62c27cdd30a26b75c5f5465cb5c4ee",
+    "src/rag_research/chunking/chunking_models.py": "df8c8a6f01491f0376f590b15ee446ec18aebef8857540c44c36e9a6225a320a",
+    "src/rag_research/chunking/dispatcher.py": "59f0cce3f1bdeefbc5c93708042affa6e4bde961ad165dddff50ab80786cb124",
+    "src/rag_research/chunking/text_spans.py": "588f4e2ee6e9f46e5a512622f0735e5de827e5024b026dbc717de5f2683dec4b",
+    "src/rag_research/context_budget.py": "1f665218b56ac7ea2d767ed769b6597c69ceab847955597a6d6727680dbfa318",
+    "src/rag_research/core.py": "296bb4f681ad959d7092d9fa475af6e20063a2d880a95a0dfdca9f750ea52eec",
+    "src/rag_research/datasets/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/rag_research/datasets/multihop_rag.py": "ca47607600bf1fd44d51483d373b9d31b964ac70d414e7a9f60a4029c729752b",
+    "src/rag_research/embedding.py": "fa33ba094d566486b8f3583e9425b76e8d4d52356247fd09c3ade01904e437e7",
+    "src/rag_research/evaluation.py": "298ef404c32a1d2b6abf08f9c6f46bc443eb8b97be1aafa4b90628690f1824af",
+    "src/rag_research/extraction.py": "eacbabf1ba2aa7b39a161d4ffc59ee796ca7ee52cb44056cc0b5f0944fa562b7",
+    "src/rag_research/llm.py": "ee5dd0662a529f21c91b2371860f2120445b10793fe6a1d83d321cf36df7d52a",
+    "src/rag_research/models.py": "547f9f657ce33fdefacb3b0094203af05da8f60f66a5f078751a0bc6c1a6b293",
+    "src/rag_research/prompts.py": "7e367cce32e995ca794e9d97fb4759ba4cb88c056d8a520c54e822cd28184cef",
+    "src/rag_research/storage.py": "42baf848846b64b84da5bda39cf7c09c985eced67fe56aa64b89d44a64483a8e"
+  },
+  "fixture_sha256": {
+    "behavior.json": "ea7dcc40334ad932bbdf8aab4a63eb03fe6b47b781e69d914e025183521f001a",
+    "caches/agentic_projection_fallback.json": "dee419d7b71927e7c269b69da9ee447fd294b545ff2343011e37ded563a9f27e",
+    "caches/agentic_routing_repair.json": "505202056b45e806630652dc573c0dc6a47e14c496ff68695e5e46f40679b9d9",
+    "caches/fixed_overlap.json": "239a053446b34f7503af983fb04d2ffa1c1ddc26cb68e9bf2a813f2d4024fb1c",
+    "caches/semantic_topic_shift.json": "10a80a39101e0fc65b29ae27fe1e9d7b7763d98df83ca65277b983e0d8a8607e",
+    "caches/semantic_uniform.json": "ecee83eca4ad7771c3dca46dad919b91d0add547bd6c1d262c696611aea395bf",
+    "fingerprints.json": "01c6fa06120bec6d1925e8075ccd8aee7ec1a2818fbe22db2361efbeedcfe986"
+  }
+}

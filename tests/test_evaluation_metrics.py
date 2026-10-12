@@ -4,7 +4,7 @@ from rag_research.evaluation import (
     build_multidocument_chunk_index,
     calc_evidence_reachability,
     calc_multihop_official_metrics,
-    calc_multihop_retrieval_metrics,
+    calc_multihop_retrieval_metrics_by_k,
     calc_null_retrieval_context_metrics,
     map_multihop_evidence_to_chunks,
 )
@@ -35,7 +35,7 @@ def chunk(chunk_id, document_id, source, start, end):
 def score(question, documents, chunks, retrieved_ids, requested_k=None):
     index = build_multidocument_chunk_index(documents, chunks)
     mapping = map_multihop_evidence_to_chunks(question, index)
-    return calc_multihop_retrieval_metrics(
+    return calc_multihop_retrieval_metrics_by_k(
         question=question,
         retrieved_chunk_ids=retrieved_ids,
         requested_k=requested_k if requested_k is not None else max(len(retrieved_ids), 1),

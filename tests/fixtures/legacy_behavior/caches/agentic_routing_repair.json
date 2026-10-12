@@ -1,0 +1,268 @@
+{
+  "document": {
+    "schema_version": 4,
+    "chunking_fingerprint": "bae63ae508b8b66e15feaa4923fd9b28494c463827fa66232f86b43680a414f3",
+    "document_id": "legacy-agentic_routing_repair",
+    "text_sha256": "8a5cd6e49b622f834d8c473c1eead689b6c1a11e56455dcaa786228b77ecf93e",
+    "strategy": "agentic",
+    "spans": [
+      {
+        "text": "  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. He records three herons.\n\n",
+        "char_start": 0,
+        "char_end": 143,
+        "title": "Field observations",
+        "summary": "The team records Saturn and wetland birds."
+      },
+      {
+        "text": "rons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal returns.\nThe team files its report. It includes the observing schedule.  ",
+        "char_start": 136,
+        "char_end": 284,
+        "title": "Repair and reporting",
+        "summary": "The radio signal returns, and the team files a report with its schedule."
+      }
+    ],
+    "agentic_state_events": [
+      {
+        "event": "transition",
+        "proposition_index": 1,
+        "proposition_range": [
+          1,
+          1
+        ],
+        "allowed_actions": [
+          "new_chunk"
+        ],
+        "forced_reason": "no chunk exists yet",
+        "action": "new_chunk",
+        "target_chunk_id": "agentic-chunk-0001",
+        "target_revision": 1,
+        "title": "Observatory",
+        "summary": "Alice opens the observatory.",
+        "reason": "no chunk exists yet",
+        "decision_source": "llm"
+      },
+      {
+        "event": "transition",
+        "proposition_index": 2,
+        "proposition_range": [
+          2,
+          2
+        ],
+        "allowed_actions": [
+          "append"
+        ],
+        "forced_reason": "the open chunk has not reached the minimum size",
+        "action": "append",
+        "target_chunk_id": "agentic-chunk-0001",
+        "target_revision": 2,
+        "title": "Calibration",
+        "summary": "Alice prepares the telescope.",
+        "reason": "the open chunk has not reached the minimum size",
+        "decision_source": "llm"
+      },
+      {
+        "event": "transition",
+        "proposition_index": 3,
+        "proposition_range": [
+          3,
+          3
+        ],
+        "allowed_actions": [
+          "append"
+        ],
+        "forced_reason": "the open chunk has not reached the minimum size",
+        "action": "append",
+        "target_chunk_id": "agentic-chunk-0001",
+        "target_revision": 3,
+        "title": "Saturn",
+        "summary": "The telescope records Saturn.",
+        "reason": "the open chunk has not reached the minimum size",
+        "decision_source": "llm"
+      },
+      {
+        "event": "transition",
+        "proposition_index": 4,
+        "proposition_range": [
+          4,
+          5
+        ],
+        "allowed_actions": [
+          "append",
+          "new_chunk"
+        ],
+        "forced_reason": null,
+        "action": "append",
+        "target_chunk_id": "agentic-chunk-0001",
+        "target_revision": 4,
+        "title": "Field observations",
+        "summary": "The team records Saturn and wetland birds.",
+        "reason": "fixture semantic decision",
+        "decision_source": "llm"
+      },
+      {
+        "event": "transition",
+        "proposition_index": 5,
+        "proposition_range": [
+          6,
+          6
+        ],
+        "allowed_actions": [
+          "new_chunk"
+        ],
+        "forced_reason": "appending would exceed the maximum chunk size",
+        "action": "new_chunk",
+        "target_chunk_id": "agentic-chunk-0002",
+        "target_revision": 1,
+        "title": "Radio repair",
+        "summary": "Carol starts repairing the radio.",
+        "reason": "appending would exceed the maximum chunk size",
+        "decision_source": "llm"
+      },
+      {
+        "event": "transition",
+        "proposition_index": 6,
+        "proposition_range": [
+          7,
+          7
+        ],
+        "allowed_actions": [
+          "append"
+        ],
+        "forced_reason": "the open chunk has not reached the minimum size",
+        "action": "append",
+        "target_chunk_id": "agentic-chunk-0002",
+        "target_revision": 2,
+        "title": "Cable repair",
+        "summary": "Carol finds a loose cable.",
+        "reason": "the open chunk has not reached the minimum size",
+        "decision_source": "llm"
+      },
+      {
+        "event": "transition",
+        "proposition_index": 7,
+        "proposition_range": [
+          8,
+          8
+        ],
+        "allowed_actions": [
+          "append"
+        ],
+        "forced_reason": "the open chunk has not reached the minimum size",
+        "action": "append",
+        "target_chunk_id": "agentic-chunk-0002",
+        "target_revision": 3,
+        "title": "Signal restored",
+        "summary": "The repaired radio receives a signal.",
+        "reason": "the open chunk has not reached the minimum size",
+        "decision_source": "llm"
+      },
+      {
+        "event": "transition",
+        "proposition_index": 8,
+        "proposition_range": [
+          9,
+          9
+        ],
+        "allowed_actions": [
+          "append",
+          "new_chunk"
+        ],
+        "forced_reason": null,
+        "action": "new_chunk",
+        "target_chunk_id": "agentic-chunk-0003",
+        "target_revision": 1,
+        "title": "Report draft",
+        "summary": "The team files its report.",
+        "reason": "metadata repaired after invalid state output",
+        "decision_source": "metadata_repair",
+        "recovery_error": "ValueError: agentic metadata requires a non-empty title"
+      },
+      {
+        "event": "transition",
+        "proposition_index": 9,
+        "proposition_range": [
+          10,
+          10
+        ],
+        "allowed_actions": [
+          "append"
+        ],
+        "forced_reason": "the open chunk has not reached the minimum size",
+        "action": "append",
+        "target_chunk_id": "agentic-chunk-0003",
+        "target_revision": 2,
+        "title": "Report and schedule",
+        "summary": "The report includes an observing schedule.",
+        "reason": "the open chunk has not reached the minimum size",
+        "decision_source": "llm"
+      },
+      {
+        "event": "document_rebalance",
+        "sentence_count": 10,
+        "original_boundaries": [
+          [
+            1,
+            5
+          ],
+          [
+            6,
+            8
+          ],
+          [
+            9,
+            10
+          ]
+        ],
+        "final_boundaries": [
+          [
+            1,
+            5
+          ],
+          [
+            6,
+            10
+          ]
+        ]
+      },
+      {
+        "event": "metadata_refresh",
+        "final_boundary": [
+          6,
+          10
+        ],
+        "title": "Repair and reporting",
+        "summary": "The radio signal returns, and the team files a report with its schedule.",
+        "decision_source": "llm"
+      },
+      {
+        "event": "uniform_overlap",
+        "policy": "source-prefix-after-boundaries-v1",
+        "requested_overlap": 7,
+        "core_boundaries": [
+          [
+            0,
+            143
+          ],
+          [
+            143,
+            284
+          ]
+        ],
+        "expanded_boundaries": [
+          [
+            0,
+            143
+          ],
+          [
+            136,
+            284
+          ]
+        ],
+        "effective_overlaps": [
+          0,
+          7
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,1117 @@
+{
+  "schema_version": 1,
+  "cases": {
+    "fixed_overlap": {
+      "light_rag_config": {
+        "chunk_config": {
+          "strategy": "fixed",
+          "fixed_size": 70,
+          "overlap_size": 7,
+          "semantic_breakpoint_percentile": 80.0,
+          "semantic_min_sentences": 2,
+          "semantic_max_sentences": 4,
+          "semantic_buffer_size": 1,
+          "semantic_embedding_batch_size": 3,
+          "semantic_embedding_concurrency": 1,
+          "agentic_batch_max_sentences": 20,
+          "agentic_batch_max_chars": 2000,
+          "agentic_min_sentences": 3,
+          "agentic_max_sentences": 5,
+          "agentic_concurrency": 1,
+          "agentic_retries": 1
+        },
+        "chunk_top_k": 7,
+        "chunk_candidate_top_k": 23,
+        "entity_top_k": 6,
+        "relation_top_k": 8,
+        "relation_candidate_top_k": 29,
+        "embedding_batch_size": 2,
+        "embedding_concurrency": 1,
+        "llm_backend": "api",
+        "llm_model": "legacy-fixture-llm@2026-10-12",
+        "embedding_backend": "ollama",
+        "embedding_model": "legacy-fixture-embedding@2026-10-12"
+      },
+      "document": {
+        "document_id": "legacy-fixed_overlap",
+        "text": "  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. He records three herons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal returns.\nThe team files its report. It includes the observing schedule.  ",
+        "metadata": {
+          "title": "Synthetic field notes — 观测",
+          "source": "Legacy fixture",
+          "author": "Fixture Team",
+          "published_at": "2024-02-03",
+          "tags": [
+            "synthetic",
+            "café"
+          ],
+          "details": {
+            "revision": 2,
+            "verified": true
+          }
+        }
+      },
+      "llm_responses": [],
+      "embedding_vectors": {},
+      "expected": {
+        "sentences": [
+          {
+            "text": "  Alice opens the observatory.\n",
+            "char_start": 0,
+            "char_end": 31
+          },
+          {
+            "text": "She calibrates the telescope. ",
+            "char_start": 31,
+            "char_end": 61
+          },
+          {
+            "text": "The first image shows Saturn.\n\n",
+            "char_start": 61,
+            "char_end": 92
+          },
+          {
+            "text": "Bob surveys the wetland. ",
+            "char_start": 92,
+            "char_end": 117
+          },
+          {
+            "text": "He records three herons.\n\n",
+            "char_start": 117,
+            "char_end": 143
+          },
+          {
+            "text": "Carol repairs the radio. ",
+            "char_start": 143,
+            "char_end": 168
+          },
+          {
+            "text": "A loose cable caused the fault. ",
+            "char_start": 168,
+            "char_end": 200
+          },
+          {
+            "text": "The signal returns.\n",
+            "char_start": 200,
+            "char_end": 220
+          },
+          {
+            "text": "The team files its report. ",
+            "char_start": 220,
+            "char_end": 247
+          },
+          {
+            "text": "It includes the observing schedule.  ",
+            "char_start": 247,
+            "char_end": 284
+          }
+        ],
+        "chunks": [
+          {
+            "chunk_id": "chunk-832a1abeee1dedf7a79da3a3",
+            "document_id": "legacy-fixed_overlap",
+            "text": "  Alice opens the observatory.\nShe calibrates the telescope. The first",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n  Alice opens the observatory.\nShe calibrates the telescope. The first",
+            "chunk_index": 0,
+            "char_start": 0,
+            "char_end": 70,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              }
+            }
+          },
+          {
+            "chunk_id": "chunk-f20aa39eac73d77ecb2541a9",
+            "document_id": "legacy-fixed_overlap",
+            "text": "e first image shows Saturn.\n\nBob surveys the wetland. He records three herons",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\ne first image shows Saturn.\n\nBob surveys the wetland. He records three herons",
+            "chunk_index": 1,
+            "char_start": 63,
+            "char_end": 140,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              }
+            }
+          },
+          {
+            "chunk_id": "chunk-aa5dbeff0153cfe194dcc67b",
+            "document_id": "legacy-fixed_overlap",
+            "text": " herons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n herons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal",
+            "chunk_index": 2,
+            "char_start": 133,
+            "char_end": 210,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              }
+            }
+          },
+          {
+            "chunk_id": "chunk-37f4ffa0e41407abf5fc0a22",
+            "document_id": "legacy-fixed_overlap",
+            "text": " signal returns.\nThe team files its report. It includes the observing schedul",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n signal returns.\nThe team files its report. It includes the observing schedul",
+            "chunk_index": 3,
+            "char_start": 203,
+            "char_end": 280,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              }
+            }
+          },
+          {
+            "chunk_id": "chunk-26f860dbb829790c4f8d3324",
+            "document_id": "legacy-fixed_overlap",
+            "text": "schedule.  ",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\nschedule.  ",
+            "chunk_index": 4,
+            "char_start": 273,
+            "char_end": 284,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              }
+            }
+          }
+        ],
+        "chunk_embedding_texts": [
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n  Alice opens the observatory.\nShe calibrates the telescope. The first",
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\ne first image shows Saturn.\n\nBob surveys the wetland. He records three herons",
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n herons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal",
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n signal returns.\nThe team files its report. It includes the observing schedul",
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\nschedule.  "
+        ],
+        "model_calls": [],
+        "embedding_batches": [],
+        "cache_relative_path": "chunking/ea123ad7c073955fd379cee2b77d0590d1686a4c030eaf30780028df43d81d03/documents/a66c45b282f22aa30d597b63a608b4ab88e9c9c7a69944adac56620c5ee60c59.json"
+      }
+    },
+    "semantic_topic_shift": {
+      "light_rag_config": {
+        "chunk_config": {
+          "strategy": "semantic",
+          "fixed_size": 70,
+          "overlap_size": 7,
+          "semantic_breakpoint_percentile": 80.0,
+          "semantic_min_sentences": 2,
+          "semantic_max_sentences": 4,
+          "semantic_buffer_size": 1,
+          "semantic_embedding_batch_size": 3,
+          "semantic_embedding_concurrency": 1,
+          "agentic_batch_max_sentences": 20,
+          "agentic_batch_max_chars": 2000,
+          "agentic_min_sentences": 3,
+          "agentic_max_sentences": 5,
+          "agentic_concurrency": 1,
+          "agentic_retries": 1
+        },
+        "chunk_top_k": 7,
+        "chunk_candidate_top_k": 23,
+        "entity_top_k": 6,
+        "relation_top_k": 8,
+        "relation_candidate_top_k": 29,
+        "embedding_batch_size": 2,
+        "embedding_concurrency": 1,
+        "llm_backend": "api",
+        "llm_model": "legacy-fixture-llm@2026-10-12",
+        "embedding_backend": "ollama",
+        "embedding_model": "legacy-fixture-embedding@2026-10-12"
+      },
+      "document": {
+        "document_id": "legacy-semantic_topic_shift",
+        "text": "  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. He records three herons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal returns.\n",
+        "metadata": {
+          "title": "Synthetic field notes — 观测",
+          "source": "Legacy fixture",
+          "author": "Fixture Team",
+          "published_at": "2024-02-03",
+          "tags": [
+            "synthetic",
+            "café"
+          ],
+          "details": {
+            "revision": 2,
+            "verified": true
+          }
+        }
+      },
+      "llm_responses": [],
+      "embedding_vectors": {
+        "clustering: Alice opens the observatory.\nShe calibrates the telescope.": [
+          1.0,
+          0.0
+        ],
+        "clustering: Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.": [
+          1.0,
+          0.0
+        ],
+        "clustering: She calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland.": [
+          1.0,
+          0.0
+        ],
+        "clustering: The first image shows Saturn.\n\nBob surveys the wetland. He records three herons.": [
+          0.0,
+          1.0
+        ],
+        "clustering: Bob surveys the wetland. He records three herons.\n\nCarol repairs the radio.": [
+          0.0,
+          1.0
+        ],
+        "clustering: He records three herons.\n\nCarol repairs the radio. A loose cable caused the fault.": [
+          0.0,
+          1.0
+        ],
+        "clustering: Carol repairs the radio. A loose cable caused the fault. The signal returns.": [
+          0.0,
+          1.0
+        ],
+        "clustering: A loose cable caused the fault. The signal returns.": [
+          0.0,
+          1.0
+        ]
+      },
+      "expected": {
+        "sentences": [
+          {
+            "text": "  Alice opens the observatory.\n",
+            "char_start": 0,
+            "char_end": 31
+          },
+          {
+            "text": "She calibrates the telescope. ",
+            "char_start": 31,
+            "char_end": 61
+          },
+          {
+            "text": "The first image shows Saturn.\n\n",
+            "char_start": 61,
+            "char_end": 92
+          },
+          {
+            "text": "Bob surveys the wetland. ",
+            "char_start": 92,
+            "char_end": 117
+          },
+          {
+            "text": "He records three herons.\n\n",
+            "char_start": 117,
+            "char_end": 143
+          },
+          {
+            "text": "Carol repairs the radio. ",
+            "char_start": 143,
+            "char_end": 168
+          },
+          {
+            "text": "A loose cable caused the fault. ",
+            "char_start": 168,
+            "char_end": 200
+          },
+          {
+            "text": "The signal returns.\n",
+            "char_start": 200,
+            "char_end": 220
+          }
+        ],
+        "chunks": [
+          {
+            "chunk_id": "chunk-cb0f64dedae25ddb5ffa8b8f",
+            "document_id": "legacy-semantic_topic_shift",
+            "text": "  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\n",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\n",
+            "chunk_index": 0,
+            "char_start": 0,
+            "char_end": 92,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              }
+            }
+          },
+          {
+            "chunk_id": "chunk-b094e769e64b4c5764c33f0c",
+            "document_id": "legacy-semantic_topic_shift",
+            "text": "turn.\n\nBob surveys the wetland. He records three herons.\n\nCarol repairs the radio. ",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\nturn.\n\nBob surveys the wetland. He records three herons.\n\nCarol repairs the radio. ",
+            "chunk_index": 1,
+            "char_start": 85,
+            "char_end": 168,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              }
+            }
+          },
+          {
+            "chunk_id": "chunk-a933d58c345e8eb11475376e",
+            "document_id": "legacy-semantic_topic_shift",
+            "text": "radio. A loose cable caused the fault. The signal returns.\n",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\nradio. A loose cable caused the fault. The signal returns.\n",
+            "chunk_index": 2,
+            "char_start": 161,
+            "char_end": 220,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              }
+            }
+          }
+        ],
+        "chunk_embedding_texts": [
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\n",
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\nturn.\n\nBob surveys the wetland. He records three herons.\n\nCarol repairs the radio. ",
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\nradio. A loose cable caused the fault. The signal returns.\n"
+        ],
+        "model_calls": [],
+        "embedding_batches": [
+          [
+            "clustering: Alice opens the observatory.\nShe calibrates the telescope.",
+            "clustering: Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.",
+            "clustering: She calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland."
+          ],
+          [
+            "clustering: The first image shows Saturn.\n\nBob surveys the wetland. He records three herons.",
+            "clustering: Bob surveys the wetland. He records three herons.\n\nCarol repairs the radio.",
+            "clustering: He records three herons.\n\nCarol repairs the radio. A loose cable caused the fault."
+          ],
+          [
+            "clustering: Carol repairs the radio. A loose cable caused the fault. The signal returns.",
+            "clustering: A loose cable caused the fault. The signal returns."
+          ]
+        ],
+        "cache_relative_path": "chunking/4f57dd4a29da1396f84182bc699756062a3bde685539ca1d26950436aca10fe2/documents/2c344c0ccd12fc4a0c6987bdbaad0a759df0466ec229779e72b9064592551ef0.json"
+      }
+    },
+    "semantic_uniform": {
+      "light_rag_config": {
+        "chunk_config": {
+          "strategy": "semantic",
+          "fixed_size": 70,
+          "overlap_size": 7,
+          "semantic_breakpoint_percentile": 90.0,
+          "semantic_min_sentences": 2,
+          "semantic_max_sentences": 4,
+          "semantic_buffer_size": 1,
+          "semantic_embedding_batch_size": 3,
+          "semantic_embedding_concurrency": 1,
+          "agentic_batch_max_sentences": 20,
+          "agentic_batch_max_chars": 2000,
+          "agentic_min_sentences": 3,
+          "agentic_max_sentences": 5,
+          "agentic_concurrency": 1,
+          "agentic_retries": 1
+        },
+        "chunk_top_k": 7,
+        "chunk_candidate_top_k": 23,
+        "entity_top_k": 6,
+        "relation_top_k": 8,
+        "relation_candidate_top_k": 29,
+        "embedding_batch_size": 2,
+        "embedding_concurrency": 1,
+        "llm_backend": "api",
+        "llm_model": "legacy-fixture-llm@2026-10-12",
+        "embedding_backend": "ollama",
+        "embedding_model": "legacy-fixture-embedding@2026-10-12"
+      },
+      "document": {
+        "document_id": "legacy-semantic_uniform",
+        "text": "  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. He records three herons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal returns.\n",
+        "metadata": {
+          "title": "Synthetic field notes — 观测",
+          "source": "Legacy fixture",
+          "author": "Fixture Team",
+          "published_at": "2024-02-03",
+          "tags": [
+            "synthetic",
+            "café"
+          ],
+          "details": {
+            "revision": 2,
+            "verified": true
+          }
+        }
+      },
+      "llm_responses": [],
+      "embedding_vectors": {
+        "clustering: Alice opens the observatory.\nShe calibrates the telescope.": [
+          1.0,
+          0.0
+        ],
+        "clustering: Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.": [
+          1.0,
+          0.0
+        ],
+        "clustering: She calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland.": [
+          1.0,
+          0.0
+        ],
+        "clustering: The first image shows Saturn.\n\nBob surveys the wetland. He records three herons.": [
+          1.0,
+          0.0
+        ],
+        "clustering: Bob surveys the wetland. He records three herons.\n\nCarol repairs the radio.": [
+          1.0,
+          0.0
+        ],
+        "clustering: He records three herons.\n\nCarol repairs the radio. A loose cable caused the fault.": [
+          1.0,
+          0.0
+        ],
+        "clustering: Carol repairs the radio. A loose cable caused the fault. The signal returns.": [
+          1.0,
+          0.0
+        ],
+        "clustering: A loose cable caused the fault. The signal returns.": [
+          1.0,
+          0.0
+        ]
+      },
+      "expected": {
+        "sentences": [
+          {
+            "text": "  Alice opens the observatory.\n",
+            "char_start": 0,
+            "char_end": 31
+          },
+          {
+            "text": "She calibrates the telescope. ",
+            "char_start": 31,
+            "char_end": 61
+          },
+          {
+            "text": "The first image shows Saturn.\n\n",
+            "char_start": 61,
+            "char_end": 92
+          },
+          {
+            "text": "Bob surveys the wetland. ",
+            "char_start": 92,
+            "char_end": 117
+          },
+          {
+            "text": "He records three herons.\n\n",
+            "char_start": 117,
+            "char_end": 143
+          },
+          {
+            "text": "Carol repairs the radio. ",
+            "char_start": 143,
+            "char_end": 168
+          },
+          {
+            "text": "A loose cable caused the fault. ",
+            "char_start": 168,
+            "char_end": 200
+          },
+          {
+            "text": "The signal returns.\n",
+            "char_start": 200,
+            "char_end": 220
+          }
+        ],
+        "chunks": [
+          {
+            "chunk_id": "chunk-76d965bc6259d7294f8e509b",
+            "document_id": "legacy-semantic_uniform",
+            "text": "  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. ",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. ",
+            "chunk_index": 0,
+            "char_start": 0,
+            "char_end": 117,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              }
+            }
+          },
+          {
+            "chunk_id": "chunk-49d65131ea44b58c55f60de7",
+            "document_id": "legacy-semantic_uniform",
+            "text": "tland. He records three herons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal returns.\n",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\ntland. He records three herons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal returns.\n",
+            "chunk_index": 1,
+            "char_start": 110,
+            "char_end": 220,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              }
+            }
+          }
+        ],
+        "chunk_embedding_texts": [
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. ",
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\ntland. He records three herons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal returns.\n"
+        ],
+        "model_calls": [],
+        "embedding_batches": [
+          [
+            "clustering: Alice opens the observatory.\nShe calibrates the telescope.",
+            "clustering: Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.",
+            "clustering: She calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland."
+          ],
+          [
+            "clustering: The first image shows Saturn.\n\nBob surveys the wetland. He records three herons.",
+            "clustering: Bob surveys the wetland. He records three herons.\n\nCarol repairs the radio.",
+            "clustering: He records three herons.\n\nCarol repairs the radio. A loose cable caused the fault."
+          ],
+          [
+            "clustering: Carol repairs the radio. A loose cable caused the fault. The signal returns.",
+            "clustering: A loose cable caused the fault. The signal returns."
+          ]
+        ],
+        "cache_relative_path": "chunking/2a8564beae873a2cabdb2be1298d557030cbffd58503d6fccb74647d6d76e32e/documents/ccfdbb1db4ad6d822b41d58557638088ddf7952f0db2e7fdb0b4d8f49cc47554.json"
+      }
+    },
+    "agentic_routing_repair": {
+      "light_rag_config": {
+        "chunk_config": {
+          "strategy": "agentic",
+          "fixed_size": 70,
+          "overlap_size": 7,
+          "semantic_breakpoint_percentile": 80.0,
+          "semantic_min_sentences": 2,
+          "semantic_max_sentences": 4,
+          "semantic_buffer_size": 1,
+          "semantic_embedding_batch_size": 3,
+          "semantic_embedding_concurrency": 1,
+          "agentic_batch_max_sentences": 20,
+          "agentic_batch_max_chars": 2000,
+          "agentic_min_sentences": 3,
+          "agentic_max_sentences": 5,
+          "agentic_concurrency": 1,
+          "agentic_retries": 1
+        },
+        "chunk_top_k": 7,
+        "chunk_candidate_top_k": 23,
+        "entity_top_k": 6,
+        "relation_top_k": 8,
+        "relation_candidate_top_k": 29,
+        "embedding_batch_size": 2,
+        "embedding_concurrency": 1,
+        "llm_backend": "api",
+        "llm_model": "legacy-fixture-llm@2026-10-12",
+        "embedding_backend": "ollama",
+        "embedding_model": "legacy-fixture-embedding@2026-10-12"
+      },
+      "document": {
+        "document_id": "legacy-agentic_routing_repair",
+        "text": "  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. He records three herons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal returns.\nThe team files its report. It includes the observing schedule.  ",
+        "metadata": {
+          "title": "Synthetic field notes — 观测",
+          "source": "Legacy fixture",
+          "author": "Fixture Team",
+          "published_at": "2024-02-03",
+          "tags": [
+            "synthetic",
+            "café"
+          ],
+          "details": {
+            "revision": 2,
+            "verified": true
+          }
+        }
+      },
+      "llm_responses": [
+        {
+          "stage": "proposition",
+          "text": "{\"propositions\": [{\"start\": 1, \"end\": 1}, {\"start\": 2, \"end\": 2}, {\"start\": 3, \"end\": 3}, {\"start\": 4, \"end\": 5}, {\"start\": 6, \"end\": 6}, {\"start\": 7, \"end\": 7}, {\"start\": 8, \"end\": 8}, {\"start\": 9, \"end\": 9}, {\"start\": 10, \"end\": 10}]}"
+        },
+        {
+          "stage": "state",
+          "text": "{\"action\": \"append\", \"title\": \"Observatory\", \"summary\": \"Alice opens the observatory.\", \"reason\": \"fixture semantic decision\"}"
+        },
+        {
+          "stage": "state",
+          "text": "{\"action\": \"new_chunk\", \"title\": \"Calibration\", \"summary\": \"Alice prepares the telescope.\", \"reason\": \"fixture semantic decision\"}"
+        },
+        {
+          "stage": "state",
+          "text": "{\"action\": \"new_chunk\", \"title\": \"Saturn\", \"summary\": \"The telescope records Saturn.\", \"reason\": \"fixture semantic decision\"}"
+        },
+        {
+          "stage": "state",
+          "text": "{\"action\": \"append\", \"title\": \"Field observations\", \"summary\": \"The team records Saturn and wetland birds.\", \"reason\": \"fixture semantic decision\"}"
+        },
+        {
+          "stage": "state",
+          "text": "{\"action\": \"append\", \"title\": \"Radio repair\", \"summary\": \"Carol starts repairing the radio.\", \"reason\": \"fixture semantic decision\"}"
+        },
+        {
+          "stage": "state",
+          "text": "{\"action\": \"new_chunk\", \"title\": \"Cable repair\", \"summary\": \"Carol finds a loose cable.\", \"reason\": \"fixture semantic decision\"}"
+        },
+        {
+          "stage": "state",
+          "text": "{\"action\": \"new_chunk\", \"title\": \"Signal restored\", \"summary\": \"The repaired radio receives a signal.\", \"reason\": \"fixture semantic decision\"}"
+        },
+        {
+          "stage": "state",
+          "text": "{\"action\": \"new_chunk\", \"title\": \"\", \"summary\": \"The team starts its report.\", \"reason\": \"fixture semantic decision\"}"
+        },
+        {
+          "stage": "state",
+          "text": "{\"action\": \"new_chunk\", \"title\": \"\", \"summary\": \"The team starts its report.\", \"reason\": \"fixture semantic decision\"}"
+        },
+        {
+          "stage": "metadata",
+          "text": "{\"title\": \"Report draft\", \"summary\": \"The team files its report.\"}"
+        },
+        {
+          "stage": "state",
+          "text": "{\"action\": \"new_chunk\", \"title\": \"Report and schedule\", \"summary\": \"The report includes an observing schedule.\", \"reason\": \"fixture semantic decision\"}"
+        },
+        {
+          "stage": "metadata",
+          "text": "{\"title\": \"Repair and reporting\", \"summary\": \"The radio signal returns, and the team files a report with its schedule.\"}"
+        }
+      ],
+      "embedding_vectors": {},
+      "expected": {
+        "sentences": [
+          {
+            "text": "  Alice opens the observatory.\n",
+            "char_start": 0,
+            "char_end": 31
+          },
+          {
+            "text": "She calibrates the telescope. ",
+            "char_start": 31,
+            "char_end": 61
+          },
+          {
+            "text": "The first image shows Saturn.\n\n",
+            "char_start": 61,
+            "char_end": 92
+          },
+          {
+            "text": "Bob surveys the wetland. ",
+            "char_start": 92,
+            "char_end": 117
+          },
+          {
+            "text": "He records three herons.\n\n",
+            "char_start": 117,
+            "char_end": 143
+          },
+          {
+            "text": "Carol repairs the radio. ",
+            "char_start": 143,
+            "char_end": 168
+          },
+          {
+            "text": "A loose cable caused the fault. ",
+            "char_start": 168,
+            "char_end": 200
+          },
+          {
+            "text": "The signal returns.\n",
+            "char_start": 200,
+            "char_end": 220
+          },
+          {
+            "text": "The team files its report. ",
+            "char_start": 220,
+            "char_end": 247
+          },
+          {
+            "text": "It includes the observing schedule.  ",
+            "char_start": 247,
+            "char_end": 284
+          }
+        ],
+        "chunks": [
+          {
+            "chunk_id": "chunk-ae5db1a4d2c10648dc869b91",
+            "document_id": "legacy-agentic_routing_repair",
+            "text": "  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. He records three herons.\n\n",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. He records three herons.\n\n",
+            "chunk_index": 0,
+            "char_start": 0,
+            "char_end": 143,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              },
+              "chunk_title": "Field observations",
+              "chunk_summary": "The team records Saturn and wetland birds."
+            }
+          },
+          {
+            "chunk_id": "chunk-a31250d1878f075f668b4f68",
+            "document_id": "legacy-agentic_routing_repair",
+            "text": "rons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal returns.\nThe team files its report. It includes the observing schedule.  ",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\nrons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal returns.\nThe team files its report. It includes the observing schedule.  ",
+            "chunk_index": 1,
+            "char_start": 136,
+            "char_end": 284,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              },
+              "chunk_title": "Repair and reporting",
+              "chunk_summary": "The radio signal returns, and the team files a report with its schedule."
+            }
+          }
+        ],
+        "chunk_embedding_texts": [
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. He records three herons.\n\n",
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\nrons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal returns.\nThe team files its report. It includes the observing schedule.  "
+        ],
+        "model_calls": [
+          {
+            "stage": "proposition",
+            "system_sha256": "61456ff4403e1cda360a9b2705d5b64583113fc98e07e27be526f84cc41c4651",
+            "prompt_sha256": "ca9632c743a5722c3c474b28c3770826e1b625c4b7a133fe39029f35df1059ae"
+          },
+          {
+            "stage": "state",
+            "system_sha256": "c097655c645631170969b30f0a19f1377415a31068bd030e1435d48d87c3ad84",
+            "prompt_sha256": "19b71e1d99025e6a7ea6b0724fe1c4e98bffce48d9bf156b511571a85d775e96"
+          },
+          {
+            "stage": "state",
+            "system_sha256": "c097655c645631170969b30f0a19f1377415a31068bd030e1435d48d87c3ad84",
+            "prompt_sha256": "ff513cdd95be49623b7c19fa586a913917296fd1c6fd55ce1ee47f75ab9d8786"
+          },
+          {
+            "stage": "state",
+            "system_sha256": "c097655c645631170969b30f0a19f1377415a31068bd030e1435d48d87c3ad84",
+            "prompt_sha256": "2ac5b29ff07aa8dc49df4ccb56f3dc9dcff7dcd27cb59d89be19dc41dd3a1366"
+          },
+          {
+            "stage": "state",
+            "system_sha256": "c097655c645631170969b30f0a19f1377415a31068bd030e1435d48d87c3ad84",
+            "prompt_sha256": "c63d7b0cc054249b4de9c124d7b3a5c6068454ec23632c54fe001c1eb1c573d5"
+          },
+          {
+            "stage": "state",
+            "system_sha256": "c097655c645631170969b30f0a19f1377415a31068bd030e1435d48d87c3ad84",
+            "prompt_sha256": "eaf60fbc3b574a8377c4f86fb841b5b7857bf3f51f33d1b79cf9f0245a6c2e98"
+          },
+          {
+            "stage": "state",
+            "system_sha256": "c097655c645631170969b30f0a19f1377415a31068bd030e1435d48d87c3ad84",
+            "prompt_sha256": "415a15573bb765dc97c243301fe5c3d886b3b57520215be0c59f90944e22de15"
+          },
+          {
+            "stage": "state",
+            "system_sha256": "c097655c645631170969b30f0a19f1377415a31068bd030e1435d48d87c3ad84",
+            "prompt_sha256": "0a7f86d4c1cb4831fff4fdd9af394a654bfd2d618765f0257f5e0f03b5c2f33c"
+          },
+          {
+            "stage": "state",
+            "system_sha256": "c097655c645631170969b30f0a19f1377415a31068bd030e1435d48d87c3ad84",
+            "prompt_sha256": "8b6ebd733868a15a7c0a30bd47d67d5b11fd596a897c5367ada786453c0dff15"
+          },
+          {
+            "stage": "state",
+            "system_sha256": "c097655c645631170969b30f0a19f1377415a31068bd030e1435d48d87c3ad84",
+            "prompt_sha256": "660beb28ca05454d78ecf117cbeed685cf307674cdb6d3798917605d6ec85879"
+          },
+          {
+            "stage": "metadata",
+            "system_sha256": "b7bd4eef078ae28a82e226bb72c77d85bcef407fe16b3b121f94fae58a50578c",
+            "prompt_sha256": "c43a0a8310a217daa307e46dfdd77f7ca4b3b8c56502186d4c6f2af4cd3d3cd5"
+          },
+          {
+            "stage": "state",
+            "system_sha256": "c097655c645631170969b30f0a19f1377415a31068bd030e1435d48d87c3ad84",
+            "prompt_sha256": "3f5187057c08ff398b7f799067b853b822a217122af9f92164418173d576c06d"
+          },
+          {
+            "stage": "metadata",
+            "system_sha256": "b7bd4eef078ae28a82e226bb72c77d85bcef407fe16b3b121f94fae58a50578c",
+            "prompt_sha256": "2337d6ac420ce5b65555df95c20e8e2ca21ee667a0be6ad24f4ee7133cd3a668"
+          }
+        ],
+        "embedding_batches": [],
+        "cache_relative_path": "chunking/bae63ae508b8b66e15feaa4923fd9b28494c463827fa66232f86b43680a414f3/documents/747280bed5cb9b109ddd2f46133663a81f54566febf5b848b33218d75b81eb6f.json"
+      }
+    },
+    "agentic_projection_fallback": {
+      "light_rag_config": {
+        "chunk_config": {
+          "strategy": "agentic",
+          "fixed_size": 70,
+          "overlap_size": 7,
+          "semantic_breakpoint_percentile": 80.0,
+          "semantic_min_sentences": 2,
+          "semantic_max_sentences": 4,
+          "semantic_buffer_size": 1,
+          "semantic_embedding_batch_size": 3,
+          "semantic_embedding_concurrency": 1,
+          "agentic_batch_max_sentences": 20,
+          "agentic_batch_max_chars": 2000,
+          "agentic_min_sentences": 2,
+          "agentic_max_sentences": 3,
+          "agentic_concurrency": 1,
+          "agentic_retries": 0
+        },
+        "chunk_top_k": 7,
+        "chunk_candidate_top_k": 23,
+        "entity_top_k": 6,
+        "relation_top_k": 8,
+        "relation_candidate_top_k": 29,
+        "embedding_batch_size": 2,
+        "embedding_concurrency": 1,
+        "llm_backend": "api",
+        "llm_model": "legacy-fixture-llm@2026-10-12",
+        "embedding_backend": "ollama",
+        "embedding_model": "legacy-fixture-embedding@2026-10-12"
+      },
+      "document": {
+        "document_id": "legacy-agentic_projection_fallback",
+        "text": "  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. ",
+        "metadata": {
+          "title": "Synthetic field notes — 观测",
+          "source": "Legacy fixture",
+          "author": "Fixture Team",
+          "published_at": "2024-02-03",
+          "tags": [
+            "synthetic",
+            "café"
+          ],
+          "details": {
+            "revision": 2,
+            "verified": true
+          }
+        }
+      },
+      "llm_responses": [
+        {
+          "stage": "proposition",
+          "text": "{\"propositions\": [{\"start\": 1, \"end\": 4}]}"
+        },
+        {
+          "stage": "state",
+          "text": "{}"
+        },
+        {
+          "stage": "metadata",
+          "text": "{}"
+        },
+        {
+          "stage": "state",
+          "text": "{\"action\": \"append\", \"title\": \"Saturn and wetland\", \"summary\": \"The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. \", \"reason\": \"fixture semantic decision\"}"
+        }
+      ],
+      "embedding_vectors": {},
+      "expected": {
+        "sentences": [
+          {
+            "text": "  Alice opens the observatory.\n",
+            "char_start": 0,
+            "char_end": 31
+          },
+          {
+            "text": "She calibrates the telescope. ",
+            "char_start": 31,
+            "char_end": 61
+          },
+          {
+            "text": "The first image shows Saturn.\n\n",
+            "char_start": 61,
+            "char_end": 92
+          },
+          {
+            "text": "Bob surveys the wetland. ",
+            "char_start": 92,
+            "char_end": 117
+          }
+        ],
+        "chunks": [
+          {
+            "chunk_id": "chunk-041abff1c36ed223f6c12fb8",
+            "document_id": "legacy-agentic_projection_fallback",
+            "text": "  Alice opens the observatory.\nShe calibrates the telescope. ",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n  Alice opens the observatory.\nShe calibrates the telescope. ",
+            "chunk_index": 0,
+            "char_start": 0,
+            "char_end": 61,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              },
+              "chunk_title": "Alice opens the observatory.",
+              "chunk_summary": "Alice opens the observatory. She calibrates the telescope."
+            }
+          },
+          {
+            "chunk_id": "chunk-18d78b2b4b7e6c6f9a7882ea",
+            "document_id": "legacy-agentic_projection_fallback",
+            "text": "scope. The first image shows Saturn.\n\nBob surveys the wetland. ",
+            "model_text": "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\nscope. The first image shows Saturn.\n\nBob surveys the wetland. ",
+            "chunk_index": 1,
+            "char_start": 54,
+            "char_end": 117,
+            "metadata": {
+              "title": "Synthetic field notes — 观测",
+              "source": "Legacy fixture",
+              "author": "Fixture Team",
+              "published_at": "2024-02-03",
+              "tags": [
+                "synthetic",
+                "café"
+              ],
+              "details": {
+                "revision": 2,
+                "verified": true
+              },
+              "chunk_title": "Saturn and wetland",
+              "chunk_summary": "The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland.…"
+            }
+          }
+        ],
+        "chunk_embedding_texts": [
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\n  Alice opens the observatory.\nShe calibrates the telescope. ",
+          "Header:\nTitle: Synthetic field notes — 观测\nSource: Legacy fixture\nAuthor: Fixture Team\nDate: 2024-02-03\n\nContent:\nscope. The first image shows Saturn.\n\nBob surveys the wetland. "
+        ],
+        "model_calls": [
+          {
+            "stage": "proposition",
+            "system_sha256": "61456ff4403e1cda360a9b2705d5b64583113fc98e07e27be526f84cc41c4651",
+            "prompt_sha256": "85f0b86f464a3c64faeda8691032b7c81ba4fdb96bdab8e7bc4593cad241be8c"
+          },
+          {
+            "stage": "state",
+            "system_sha256": "c097655c645631170969b30f0a19f1377415a31068bd030e1435d48d87c3ad84",
+            "prompt_sha256": "705f77c7519865eeb59efaf15f3e63ffb4aa4591028e0dfe0b76011b00f08ce8"
+          },
+          {
+            "stage": "metadata",
+            "system_sha256": "b7bd4eef078ae28a82e226bb72c77d85bcef407fe16b3b121f94fae58a50578c",
+            "prompt_sha256": "d1e80211c8df877d075bd7006d02423ae1ec72de44bf61e773496088805c472a"
+          },
+          {
+            "stage": "state",
+            "system_sha256": "c097655c645631170969b30f0a19f1377415a31068bd030e1435d48d87c3ad84",
+            "prompt_sha256": "22dda828627f7eec2ddd593b7414c1f3591f08d00f0ab74b71f06ba8b8b1f5d6"
+          }
+        ],
+        "embedding_batches": [],
+        "cache_relative_path": "chunking/efee355a473e511d03f0e5dcd1f8411b268cd291f440f0f5e46009f7014a60c1/documents/66f6005bce0bbf1e2549320bdd83bf7a3b0e31826d3604f88b5fe77d5b29d80d.json"
+      }
+    }
+  }
+}

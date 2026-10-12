@@ -1,0 +1,104 @@
+{
+  "document": {
+    "schema_version": 4,
+    "chunking_fingerprint": "ea123ad7c073955fd379cee2b77d0590d1686a4c030eaf30780028df43d81d03",
+    "document_id": "legacy-fixed_overlap",
+    "text_sha256": "8a5cd6e49b622f834d8c473c1eead689b6c1a11e56455dcaa786228b77ecf93e",
+    "strategy": "fixed",
+    "spans": [
+      {
+        "text": "  Alice opens the observatory.\nShe calibrates the telescope. The first",
+        "char_start": 0,
+        "char_end": 70,
+        "title": null,
+        "summary": null
+      },
+      {
+        "text": "e first image shows Saturn.\n\nBob surveys the wetland. He records three herons",
+        "char_start": 63,
+        "char_end": 140,
+        "title": null,
+        "summary": null
+      },
+      {
+        "text": " herons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal",
+        "char_start": 133,
+        "char_end": 210,
+        "title": null,
+        "summary": null
+      },
+      {
+        "text": " signal returns.\nThe team files its report. It includes the observing schedul",
+        "char_start": 203,
+        "char_end": 280,
+        "title": null,
+        "summary": null
+      },
+      {
+        "text": "schedule.  ",
+        "char_start": 273,
+        "char_end": 284,
+        "title": null,
+        "summary": null
+      }
+    ],
+    "agentic_state_events": [
+      {
+        "event": "uniform_overlap",
+        "policy": "source-prefix-after-boundaries-v1",
+        "requested_overlap": 7,
+        "core_boundaries": [
+          [
+            0,
+            70
+          ],
+          [
+            70,
+            140
+          ],
+          [
+            140,
+            210
+          ],
+          [
+            210,
+            280
+          ],
+          [
+            280,
+            284
+          ]
+        ],
+        "expanded_boundaries": [
+          [
+            0,
+            70
+          ],
+          [
+            63,
+            140
+          ],
+          [
+            133,
+            210
+          ],
+          [
+            203,
+            280
+          ],
+          [
+            273,
+            284
+          ]
+        ],
+        "effective_overlaps": [
+          0,
+          7,
+          7,
+          7,
+          7
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "document": {
+    "schema_version": 4,
+    "chunking_fingerprint": "2a8564beae873a2cabdb2be1298d557030cbffd58503d6fccb74647d6d76e32e",
+    "document_id": "legacy-semantic_uniform",
+    "text_sha256": "0245eaa1ba9ff02fff41fc43fabf2ad83eac2f93e791669040cf2374e364a904",
+    "strategy": "semantic",
+    "spans": [
+      {
+        "text": "  Alice opens the observatory.\nShe calibrates the telescope. The first image shows Saturn.\n\nBob surveys the wetland. ",
+        "char_start": 0,
+        "char_end": 117,
+        "title": null,
+        "summary": null
+      },
+      {
+        "text": "tland. He records three herons.\n\nCarol repairs the radio. A loose cable caused the fault. The signal returns.\n",
+        "char_start": 110,
+        "char_end": 220,
+        "title": null,
+        "summary": null
+      }
+    ],
+    "agentic_state_events": [
+      {
+        "event": "uniform_overlap",
+        "policy": "source-prefix-after-boundaries-v1",
+        "requested_overlap": 7,
+        "core_boundaries": [
+          [
+            0,
+            117
+          ],
+          [
+            117,
+            220
+          ]
+        ],
+        "expanded_boundaries": [
+          [
+            0,
+            117
+          ],
+          [
+            110,
+            220
+          ]
+        ],
+        "effective_overlaps": [
+          0,
+          7
+        ]
+      }
+    ]
+  }
+}

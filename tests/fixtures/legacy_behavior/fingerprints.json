@@ -1,0 +1,331 @@
+{
+  "schema_version": 1,
+  "description": "Static legacy outputs captured from unchanged production code. Tests never regenerate this fixture.",
+  "documents": [
+    {
+      "document_id": "synthetic-zeta",
+      "text": "  Zeta measures the river.\nThe sensor records 12.5 °C.\n",
+      "metadata": {
+        "title": "Zeta — river observations",
+        "source": "Synthetic Observatory",
+        "author": "Fixture Author Z",
+        "published_at": "2024-02-03",
+        "url": "https://example.test/legacy/zeta",
+        "tags": [
+          "river",
+          "温度"
+        ],
+        "details": {
+          "revision": 2,
+          "verified": true,
+          "note": null
+        }
+      }
+    },
+    {
+      "document_id": "synthetic-alpha",
+      "text": "Alpha stores the sample.\n\nCafé staff label it “A-1”.  ",
+      "metadata": {
+        "title": "Alpha sample archive",
+        "source": "Synthetic Archive",
+        "author": "Fixture Author A",
+        "date": "2024-02-04",
+        "category": "controlled-fixture",
+        "url": "https://example.test/legacy/alpha"
+      }
+    }
+  ],
+  "cases": {
+    "fixed": {
+      "light_rag_config": {
+        "chunk_config": {
+          "strategy": "fixed",
+          "fixed_size": 137,
+          "overlap_size": 17,
+          "semantic_breakpoint_percentile": 83.5,
+          "semantic_min_sentences": 3,
+          "semantic_max_sentences": 11,
+          "semantic_buffer_size": 2,
+          "semantic_embedding_batch_size": 7,
+          "semantic_embedding_concurrency": 3,
+          "agentic_batch_max_sentences": 19,
+          "agentic_batch_max_chars": 4093,
+          "agentic_min_sentences": 2,
+          "agentic_max_sentences": 9,
+          "agentic_concurrency": 2,
+          "agentic_retries": 1
+        },
+        "chunk_top_k": 7,
+        "chunk_candidate_top_k": 23,
+        "entity_top_k": 6,
+        "relation_top_k": 8,
+        "relation_candidate_top_k": 29,
+        "embedding_batch_size": 5,
+        "embedding_concurrency": 3,
+        "llm_backend": "api",
+        "llm_model": "legacy-fixture-llm@2026-10-12",
+        "embedding_backend": "ollama",
+        "embedding_model": "legacy-fixture-embedding@2026-10-12"
+      },
+      "expected": {
+        "chunk_config_fingerprint_dict": {
+          "strategy": "fixed",
+          "fixed_size": 137,
+          "overlap_size": 17,
+          "semantic_breakpoint_percentile": 83.5,
+          "semantic_min_sentences": 3,
+          "semantic_max_sentences": 11,
+          "semantic_buffer_size": 2,
+          "semantic_embedding_batch_size": 7,
+          "semantic_embedding_concurrency": 3,
+          "agentic_batch_max_sentences": 19,
+          "agentic_batch_max_chars": 4093,
+          "agentic_min_sentences": 2,
+          "agentic_max_sentences": 9,
+          "agentic_concurrency": 2,
+          "agentic_retries": 1
+        },
+        "build_provenance": {
+          "chunking": {
+            "strategy": "fixed",
+            "pipeline_version": 6,
+            "overlap_size": 17,
+            "overlap_policy": "source-prefix-after-boundaries-v1"
+          },
+          "extraction": {
+            "backend": "api",
+            "model": "legacy-fixture-llm@2026-10-12",
+            "pipeline_version": 6,
+            "model_input_policy": "source-plus-dataset-metadata-no-generated-state-v1",
+            "few_shot_policy": "production-schema-only-test-fixtures-offline-v1",
+            "prompt_sha256": "ae48e6ad595c40746c0b319d6881bf075798f6cd0b90d4c68aa9082fbcfa3c5b"
+          },
+          "embedding": {
+            "backend": "ollama",
+            "model": "legacy-fixture-embedding@2026-10-12",
+            "prefix_policy": "nomic-task-prefix-v1",
+            "prefixes": {
+              "query": "search_query: ",
+              "document": "search_document: ",
+              "semantic": "clustering: "
+            },
+            "truncation_policy": "reject-overflow-no-silent-truncation-v1",
+            "truncate": false,
+            "chunk_input_policy": "source-plus-dataset-metadata-no-generated-state-v1",
+            "entity_input_policy": "entity-name-type-description-v1",
+            "relation_input_policy": "relation-endpoints-keywords-description-v1"
+          },
+          "assembly": {
+            "pipeline_version": 9,
+            "chunk_id_policy": "document-index-source-span-no-generated-state-v1",
+            "entity_name_normalization": "nfkc-typographic-punctuation-whitespace-casefold",
+            "entity_description_max_variants": 12,
+            "entity_description_max_chars": 4000,
+            "relation_description_max_variants": 12,
+            "relation_description_max_chars": 4000
+          }
+        },
+        "chunking_fingerprint": "739c27e81102c276af40d88033ed1e8ba5fbb681ff841513c63c36c16994f646",
+        "extraction_fingerprint": "29815cce779dcf094064f197b3ec2f1ee5ad90d7ef3fa5bdb655cfa4b213a879",
+        "build_fingerprint": "2d3961d4f14524ed4b297aaf354f6f882a294e86c392944e3757e8b1516aaa6c"
+      }
+    },
+    "semantic": {
+      "light_rag_config": {
+        "chunk_config": {
+          "strategy": "semantic",
+          "fixed_size": 137,
+          "overlap_size": 17,
+          "semantic_breakpoint_percentile": 83.5,
+          "semantic_min_sentences": 3,
+          "semantic_max_sentences": 11,
+          "semantic_buffer_size": 2,
+          "semantic_embedding_batch_size": 7,
+          "semantic_embedding_concurrency": 3,
+          "agentic_batch_max_sentences": 19,
+          "agentic_batch_max_chars": 4093,
+          "agentic_min_sentences": 2,
+          "agentic_max_sentences": 9,
+          "agentic_concurrency": 2,
+          "agentic_retries": 1
+        },
+        "chunk_top_k": 7,
+        "chunk_candidate_top_k": 23,
+        "entity_top_k": 6,
+        "relation_top_k": 8,
+        "relation_candidate_top_k": 29,
+        "embedding_batch_size": 5,
+        "embedding_concurrency": 3,
+        "llm_backend": "api",
+        "llm_model": "legacy-fixture-llm@2026-10-12",
+        "embedding_backend": "ollama",
+        "embedding_model": "legacy-fixture-embedding@2026-10-12"
+      },
+      "expected": {
+        "chunk_config_fingerprint_dict": {
+          "strategy": "semantic",
+          "fixed_size": 137,
+          "overlap_size": 17,
+          "semantic_breakpoint_percentile": 83.5,
+          "semantic_min_sentences": 3,
+          "semantic_max_sentences": 11,
+          "semantic_buffer_size": 2,
+          "semantic_embedding_batch_size": 7,
+          "semantic_embedding_concurrency": 3,
+          "agentic_batch_max_sentences": 19,
+          "agentic_batch_max_chars": 4093,
+          "agentic_min_sentences": 2,
+          "agentic_max_sentences": 9,
+          "agentic_concurrency": 2,
+          "agentic_retries": 1
+        },
+        "build_provenance": {
+          "chunking": {
+            "strategy": "semantic",
+            "pipeline_version": 7,
+            "overlap_size": 17,
+            "overlap_policy": "source-prefix-after-boundaries-v1",
+            "embedding_backend": "ollama",
+            "embedding_model": "legacy-fixture-embedding@2026-10-12",
+            "embedding_purpose": "semantic",
+            "embedding_prefix_policy": "nomic-task-prefix-v1",
+            "boundary_policy": "strict-percentile-rebalance-v2"
+          },
+          "extraction": {
+            "backend": "api",
+            "model": "legacy-fixture-llm@2026-10-12",
+            "pipeline_version": 6,
+            "model_input_policy": "source-plus-dataset-metadata-no-generated-state-v1",
+            "few_shot_policy": "production-schema-only-test-fixtures-offline-v1",
+            "prompt_sha256": "ae48e6ad595c40746c0b319d6881bf075798f6cd0b90d4c68aa9082fbcfa3c5b"
+          },
+          "embedding": {
+            "backend": "ollama",
+            "model": "legacy-fixture-embedding@2026-10-12",
+            "prefix_policy": "nomic-task-prefix-v1",
+            "prefixes": {
+              "query": "search_query: ",
+              "document": "search_document: ",
+              "semantic": "clustering: "
+            },
+            "truncation_policy": "reject-overflow-no-silent-truncation-v1",
+            "truncate": false,
+            "chunk_input_policy": "source-plus-dataset-metadata-no-generated-state-v1",
+            "entity_input_policy": "entity-name-type-description-v1",
+            "relation_input_policy": "relation-endpoints-keywords-description-v1"
+          },
+          "assembly": {
+            "pipeline_version": 9,
+            "chunk_id_policy": "document-index-source-span-no-generated-state-v1",
+            "entity_name_normalization": "nfkc-typographic-punctuation-whitespace-casefold",
+            "entity_description_max_variants": 12,
+            "entity_description_max_chars": 4000,
+            "relation_description_max_variants": 12,
+            "relation_description_max_chars": 4000
+          }
+        },
+        "chunking_fingerprint": "46a0514d125c9f6cc7a8c82e8ecb35b2dd60d5daf8311ec682db80b7e6b5df1d",
+        "extraction_fingerprint": "29815cce779dcf094064f197b3ec2f1ee5ad90d7ef3fa5bdb655cfa4b213a879",
+        "build_fingerprint": "d34c891605c1b1b423b3e4a37abdd595d16e9d24a1bb76639a3b751fe9da90a8"
+      }
+    },
+    "agentic": {
+      "light_rag_config": {
+        "chunk_config": {
+          "strategy": "agentic",
+          "fixed_size": 137,
+          "overlap_size": 17,
+          "semantic_breakpoint_percentile": 83.5,
+          "semantic_min_sentences": 3,
+          "semantic_max_sentences": 11,
+          "semantic_buffer_size": 2,
+          "semantic_embedding_batch_size": 7,
+          "semantic_embedding_concurrency": 3,
+          "agentic_batch_max_sentences": 19,
+          "agentic_batch_max_chars": 4093,
+          "agentic_min_sentences": 2,
+          "agentic_max_sentences": 9,
+          "agentic_concurrency": 2,
+          "agentic_retries": 1
+        },
+        "chunk_top_k": 7,
+        "chunk_candidate_top_k": 23,
+        "entity_top_k": 6,
+        "relation_top_k": 8,
+        "relation_candidate_top_k": 29,
+        "embedding_batch_size": 5,
+        "embedding_concurrency": 3,
+        "llm_backend": "api",
+        "llm_model": "legacy-fixture-llm@2026-10-12",
+        "embedding_backend": "ollama",
+        "embedding_model": "legacy-fixture-embedding@2026-10-12"
+      },
+      "expected": {
+        "chunk_config_fingerprint_dict": {
+          "strategy": "agentic",
+          "fixed_size": 137,
+          "overlap_size": 17,
+          "semantic_breakpoint_percentile": 83.5,
+          "semantic_min_sentences": 3,
+          "semantic_max_sentences": 11,
+          "semantic_buffer_size": 2,
+          "semantic_embedding_batch_size": 7,
+          "semantic_embedding_concurrency": 3,
+          "agentic_batch_max_sentences": 19,
+          "agentic_batch_max_chars": 4093,
+          "agentic_min_sentences": 2,
+          "agentic_max_sentences": 9,
+          "agentic_concurrency": 2,
+          "agentic_retries": 1
+        },
+        "build_provenance": {
+          "chunking": {
+            "strategy": "agentic",
+            "pipeline_version": 8,
+            "overlap_size": 17,
+            "overlap_policy": "source-prefix-after-boundaries-v1",
+            "llm_backend": "api",
+            "llm_model": "legacy-fixture-llm@2026-10-12",
+            "prompt_sha256": "41cb2f1ff4c065d84bf030b3cfd2a01a0aec3b209368a8b0e9ba967cadc9c750",
+            "state_model": "sequential-open-chunk-v4"
+          },
+          "extraction": {
+            "backend": "api",
+            "model": "legacy-fixture-llm@2026-10-12",
+            "pipeline_version": 6,
+            "model_input_policy": "source-plus-dataset-metadata-no-generated-state-v1",
+            "few_shot_policy": "production-schema-only-test-fixtures-offline-v1",
+            "prompt_sha256": "ae48e6ad595c40746c0b319d6881bf075798f6cd0b90d4c68aa9082fbcfa3c5b"
+          },
+          "embedding": {
+            "backend": "ollama",
+            "model": "legacy-fixture-embedding@2026-10-12",
+            "prefix_policy": "nomic-task-prefix-v1",
+            "prefixes": {
+              "query": "search_query: ",
+              "document": "search_document: ",
+              "semantic": "clustering: "
+            },
+            "truncation_policy": "reject-overflow-no-silent-truncation-v1",
+            "truncate": false,
+            "chunk_input_policy": "source-plus-dataset-metadata-no-generated-state-v1",
+            "entity_input_policy": "entity-name-type-description-v1",
+            "relation_input_policy": "relation-endpoints-keywords-description-v1"
+          },
+          "assembly": {
+            "pipeline_version": 9,
+            "chunk_id_policy": "document-index-source-span-no-generated-state-v1",
+            "entity_name_normalization": "nfkc-typographic-punctuation-whitespace-casefold",
+            "entity_description_max_variants": 12,
+            "entity_description_max_chars": 4000,
+            "relation_description_max_variants": 12,
+            "relation_description_max_chars": 4000
+          }
+        },
+        "chunking_fingerprint": "6ccd92a995e3b1d920117d7057a038081c6da984c38bc666efe3cbaff06f8e63",
+        "extraction_fingerprint": "29815cce779dcf094064f197b3ec2f1ee5ad90d7ef3fa5bdb655cfa4b213a879",
+        "build_fingerprint": "d7aa40649be97bff126201a3b6ec87907c0e21bc13d8d59fdde05b815cbbb578"
+      }
+    }
+  }
+}

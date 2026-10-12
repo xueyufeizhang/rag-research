@@ -32,7 +32,7 @@ from rag_research.datasets.multihop_rag import load_multihop_rag
 from rag_research.evaluation import (
     build_multidocument_chunk_index,
     calc_multihop_official_metrics,
-    calc_multihop_retrieval_metrics,
+    calc_multihop_retrieval_metrics_by_k,
     map_multihop_evidence_to_chunks,
 )
 
@@ -149,7 +149,7 @@ def main():
             "official": calc_multihop_official_metrics(
                 retrieved_texts=[chunks[cid]["model_text"] for cid in ranked[:10]],
                 gold_facts=[e.fact for e in q.evidence]),
-            "extended": {str(k): calc_multihop_retrieval_metrics(
+            "extended": {str(k): calc_multihop_retrieval_metrics_by_k(
                 question=q, retrieved_chunk_ids=ranked[:k], requested_k=k,
                 chunks=chunks, chunk_to_evidence=evidence_maps[qid], token_counter=count)
                 for k in (1, 5, 10, 20)},

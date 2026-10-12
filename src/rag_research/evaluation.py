@@ -214,7 +214,7 @@ def _merge_intervals(intervals: Iterable[tuple[int, int]]) -> list[tuple[int, in
 
 
 def _retrieved_context(
-    retrieved_chunk_ids: Sequence[str],
+    retrieved_chunk_ids: Sequence[str] | None,
     chunks: Mapping[str, dict],
     token_counter: Callable[[str], int],
 ) -> tuple[dict, dict[str, list[tuple[int, int]]]]:
@@ -224,14 +224,17 @@ def _retrieved_context(
     build_multidocument_chunk_index before a run. This also rejects malformed
     records when the pure metric functions are called directly.
     """
-    retrieved = dedupe_preserving_order(retrieved_chunk_ids)
+    if retrieved_chunk_ids is not None:
+        retrieved = dedupe_preserving_order(retrieved_chunk_ids)
+        selected_chunks = [chunks[chunk_id] for chunk_id in retrieved]
+    else:
+        selected_chunks = chunks
     texts: list[str] = []
     document_ids: list[str] = []
     intervals: dict[str, list[tuple[int, int]]] = defaultdict(list)
-    for chunk_id in retrieved:
-        chunk = chunks.get(chunk_id)
+    for chunk in selected_chunks:
         if chunk is None:
-            raise ValueError(f"retrieved chunk is missing from the store: {chunk_id}")
+            raise ValueError(f"retrieved chunk is missing from the store")
         text = chunk.get("text")
         document_id = chunk.get("document_id")
         start, end = chunk.get("char_start"), chunk.get("char_end")
@@ -247,14 +250,14 @@ def _retrieved_context(
             or start >= end
             or end - start != len(text)
         ):
-            raise ValueError(f"retrieved chunk has invalid source provenance: {chunk_id}")
+            raise ValueError(f"retrieved chunk has invalid source provenance: {chunk["chunk_id"]}")
         texts.append(text)
         document_ids.append(document_id)
         intervals[document_id].append((start, end))
 
     unique_documents = dedupe_preserving_order(document_ids)
     return {
-        "retrieved_count": len(retrieved),
+        "retrieved_count": len(selected_chunks),
         "retrieved_chars": sum(len(text) for text in texts),
         "chunk_source_tokens": token_counter("\n\n".join(texts)) if texts else 0,
         "retrieved_document_count": len(unique_documents),
@@ -307,7 +310,7 @@ def _evidence_interval_coverage(
     return fully_covered, covered_chars
 
 
-def calc_multihop_retrieval_metrics(
+def calc_multihop_retrieval_metrics_by_k(
     *,
     question: QuestionRecord,
     retrieved_chunk_ids: Sequence[str],
@@ -412,10 +415,76 @@ def calc_multihop_retrieval_metrics(
         ),
     }
 
+def calc_multihop_retrieval_metrics_by_token_budget(
+    *,
+    question: QuestionRecord,
+    selected_chunks: Sequence[dict],
+    token_budget: int,
+    token_counter: Callable[[str], int],
+) -> dict:
+    if (
+        not isinstance(token_budget, int)
+        or isinstance(token_budget, bool)
+        or token_budget < 0
+    ):
+        raise ValueError("token_budget must be a non-negative integer")
+
+    gold_ids = {evidence.evidence_id for evidence in question.evidence}
+    if not gold_ids:
+        raise ValueError("token-budget metrics require gold evidence")
+    if len(gold_ids) != len(question.evidence):
+        raise ValueError("question contains duplicate evidence IDs")
+
+    # 1. 使用筛选后的记录，包括被截断的最后一个 chunk
+    selected_by_id = {
+        chunk["chunk_id"]: chunk for chunk in selected_chunks
+    }
+    if len(selected_by_id) != len(selected_chunks):
+        raise ValueError("selected chunks contain duplicate chunk IDs")
+
+    # 2. 统计实际保留的文本，并检查预算
+    context, _ = _retrieved_context(
+        list(selected_by_id),
+        selected_by_id,
+        token_counter,
+    )
+    if context["chunk_source_tokens"] > token_budget:
+        raise ValueError("selected source text exceeds token_budget")
+
+    # 3. 根据实际保留的字符区间，重新匹配 evidence
+    selected_index = {
+        chunk_id: (
+            chunk["document_id"],
+            chunk["char_start"],
+            chunk["char_end"],
+        )
+        for chunk_id, chunk in selected_by_id.items()
+    }
+    selected_mapping = map_multihop_evidence_to_chunks(
+        question, selected_index,
+    )
+
+    # 同一条 evidence 被多个 chunk 命中，也只计算一次
+    matched_ids = {
+        evidence_id
+        for evidence_ids in selected_mapping.values()
+        for evidence_id in evidence_ids
+    }
+
+    return {
+        **context,
+        "token_budget": token_budget,
+        "evidence_recall": len(matched_ids) / len(gold_ids),
+        "joint_evidence_success": matched_ids == gold_ids,
+        "gold_evidence_count": len(gold_ids),
+        "matched_evidence_count": len(matched_ids),
+        "matched_evidence_ids": sorted(matched_ids),
+        "relevant_retrieved_count": len(selected_mapping),
+    }
 
 def calc_null_retrieval_context_metrics(
     *,
-    retrieved_chunk_ids: Sequence[str],
+    retrieved_chunk_ids: Sequence[str] | None,
     chunks: Mapping[str, dict],
     token_counter: Callable[[str], int],
 ) -> dict:

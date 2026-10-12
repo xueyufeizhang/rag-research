@@ -1,0 +1,120 @@
+{
+  "document": {
+    "schema_version": 4,
+    "chunking_fingerprint": "efee355a473e511d03f0e5dcd1f8411b268cd291f440f0f5e46009f7014a60c1",
+    "document_id": "legacy-agentic_projection_fallback",
+    "text_sha256": "fc9d25175f1ee648d2ef93ab8b25dafb036de9fbe810502c22654a2daafd582a",
+    "strategy": "agentic",
+    "spans": [
+      {
+        "text": "  Alice opens the observatory.\nShe calibrates the telescope. ",
+        "char_start": 0,
+        "char_end": 61,
+        "title": "Alice opens the observatory.",
+        "summary": "Alice opens the observatory. She calibrates the telescope."
+      },
+      {
+        "text": "scope. The first image shows Saturn.\n\nBob surveys the wetland. ",
+        "char_start": 54,
+        "char_end": 117,
+        "title": "Saturn and wetland",
+        "summary": "The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland.…"
+      }
+    ],
+    "agentic_state_events": [
+      {
+        "event": "proposition_projection",
+        "batch_index": 1,
+        "sentence_count": 4,
+        "original_boundaries": [
+          [
+            1,
+            4
+          ]
+        ],
+        "final_boundaries": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      {
+        "event": "transition",
+        "proposition_index": 1,
+        "proposition_range": [
+          1,
+          2
+        ],
+        "allowed_actions": [
+          "new_chunk"
+        ],
+        "forced_reason": "no chunk exists yet",
+        "action": "new_chunk",
+        "target_chunk_id": "agentic-chunk-0001",
+        "target_revision": 1,
+        "title": "Alice opens the observatory.",
+        "summary": "Alice opens the observatory. She calibrates the telescope.",
+        "reason": "no chunk exists yet",
+        "decision_source": "fallback",
+        "fallback_error": "ValueError: agentic metadata requires a non-empty title",
+        "recovery_error": "ValueError: agentic metadata requires a non-empty title"
+      },
+      {
+        "event": "transition",
+        "proposition_index": 2,
+        "proposition_range": [
+          3,
+          4
+        ],
+        "allowed_actions": [
+          "new_chunk"
+        ],
+        "forced_reason": "appending would exceed the maximum chunk size",
+        "action": "new_chunk",
+        "target_chunk_id": "agentic-chunk-0002",
+        "target_revision": 1,
+        "title": "Saturn and wetland",
+        "summary": "The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland. The first image shows Saturn, while Bob surveys the wetland.…",
+        "reason": "appending would exceed the maximum chunk size",
+        "decision_source": "llm",
+        "metadata_truncated": true,
+        "original_summary_chars": 914,
+        "final_summary_chars": 549
+      },
+      {
+        "event": "uniform_overlap",
+        "policy": "source-prefix-after-boundaries-v1",
+        "requested_overlap": 7,
+        "core_boundaries": [
+          [
+            0,
+            61
+          ],
+          [
+            61,
+            117
+          ]
+        ],
+        "expanded_boundaries": [
+          [
+            0,
+            61
+          ],
+          [
+            54,
+            117
+          ]
+        ],
+        "effective_overlaps": [
+          0,
+          7
+        ]
+      }
+    ]
+  }
+}

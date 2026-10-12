@@ -20,6 +20,7 @@ from scripts.evaluate_multihop_retrieval import (
     build_summaries,
     compact_trace,
     parse_k_values,
+    summarize_token_budget_group,
 )
 
 
@@ -168,6 +169,108 @@ class MultiHopEvaluatorRunnerTests(unittest.TestCase):
         self.assertEqual({row["group"] for row in summaries["thesis_extended"]["answerable"]}, {
             "all_answerable", "question_type", "evidence_count", "gold_document_count",
         })
+        self.assertEqual(summaries["thesis_extended"]["answerable_by_token_budget"], [])
+
+        budget_metrics = {
+            "evidence_recall": 0.5,
+            "joint_evidence_success": False,
+            "retrieved_count": 2,
+            "chunk_source_tokens": 25,
+        }
+        results[0]["thesis_extended"]["metrics_by_token_budget"] = {"4000": budget_metrics}
+        hybrid_row = {
+            **results[0],
+            "mode": "hybrid",
+            "thesis_extended": {
+                "metrics_by_k": {"2": answerable_metrics},
+                "metrics_by_token_budget": {
+                    "4000": {
+                        **budget_metrics,
+                        "evidence_recall": 1.0,
+                        "joint_evidence_success": True,
+                        "retrieved_count": 3,
+                        "chunk_source_tokens": 35,
+                    },
+                },
+            },
+        }
+        # The null row deliberately has no budget relevance metrics.
+        with_budget = build_summaries(
+            [*results, hybrid_row], ("naive", "hybrid"), (2,), (4000,),
+        )
+        by_mode = {
+            row["mode"]: row
+            for row in with_budget["thesis_extended"]["answerable_by_token_budget"]
+        }
+        self.assertEqual(set(by_mode), {"naive", "hybrid"})
+        self.assertEqual(by_mode["naive"]["question_count"], 1)
+        self.assertEqual(by_mode["naive"]["macro_evidence_recall"], 0.5)
+        self.assertEqual(by_mode["naive"]["joint_evidence_success_rate"], 0.0)
+        self.assertEqual(by_mode["hybrid"]["question_count"], 1)
+        self.assertEqual(by_mode["hybrid"]["macro_evidence_recall"], 1.0)
+        self.assertEqual(by_mode["hybrid"]["joint_evidence_success_rate"], 1.0)
+        self.assertEqual(by_mode["hybrid"]["avg_chunk_source_tokens"], 35)
+        self.assertEqual(
+            [row for row in with_budget["thesis_extended"]["answerable"]
+             if row["mode"] == "naive"],
+            summaries["thesis_extended"]["answerable"],
+        )
+        self.assertEqual(
+            with_budget["thesis_extended"]["null_queries"],
+            summaries["thesis_extended"]["null_queries"],
+        )
+
+    def test_token_budget_summaries_average_questions_at_each_budget(self):
+        rows = [
+            {"thesis_extended": {"metrics_by_token_budget": {
+                "1000": {
+                    "gold_evidence_count": 1, "matched_evidence_count": 1,
+                    "evidence_recall": 1.0, "joint_evidence_success": True,
+                    "retrieved_count": 1, "chunk_source_tokens": 800,
+                },
+                "2000": {
+                    "gold_evidence_count": 1, "matched_evidence_count": 1,
+                    "evidence_recall": 1.0, "joint_evidence_success": True,
+                    "retrieved_count": 2, "chunk_source_tokens": 1600,
+                },
+            }}},
+            {"thesis_extended": {"metrics_by_token_budget": {
+                "1000": {
+                    "gold_evidence_count": 3, "matched_evidence_count": 0,
+                    "evidence_recall": 0.0, "joint_evidence_success": False,
+                    "retrieved_count": 3, "chunk_source_tokens": 1000,
+                },
+                "2000": {
+                    "gold_evidence_count": 3, "matched_evidence_count": 2,
+                    "evidence_recall": 2 / 3, "joint_evidence_success": False,
+                    "retrieved_count": 4, "chunk_source_tokens": 1800,
+                },
+            }}},
+        ]
+
+        summaries = summarize_token_budget_group(
+            mode="naive", rows=rows, token_budgets=(1000, 2000),
+        )
+
+        self.assertEqual([row["token_budget"] for row in summaries], [1000, 2000])
+        for summary in summaries:
+            self.assertEqual(summary["mode"], "naive")
+            self.assertEqual(summary["group"], "all_answerable")
+            self.assertEqual(summary["group_value"], "all")
+            self.assertEqual(summary["question_count"], 2)
+            self.assertEqual(summary["joint_evidence_success_rate"], 0.5)
+        # Macro averaging gives both questions equal weight, unlike micro recall (1/4).
+        self.assertEqual(summaries[0]["macro_evidence_recall"], 0.5)
+        self.assertEqual(summaries[0]["avg_returned_chunks"], 2.0)
+        self.assertEqual(summaries[0]["avg_chunk_source_tokens"], 900.0)
+        self.assertAlmostEqual(summaries[1]["macro_evidence_recall"], 5 / 6)
+        self.assertEqual(summaries[1]["avg_returned_chunks"], 3.0)
+        self.assertEqual(summaries[1]["avg_chunk_source_tokens"], 1700.0)
+
+    def test_token_budget_summaries_skip_empty_groups(self):
+        self.assertEqual(summarize_token_budget_group(
+            mode="naive", rows=[], token_budgets=(1000, 4000),
+        ), [])
 
     def test_official_export_matches_the_upstream_json_shape(self):
         rows = [{
@@ -305,7 +408,18 @@ class MultiHopRunnerIntegrationTests(unittest.TestCase):
                 null = next(row for row in results if row["question_type"] == "null_query")
                 self.assertNotIn("evidence_recall", null["thesis_extended"]["metrics_by_k"]["3"])
                 self.assertIn("generation_context_tokens", null["thesis_extended"]["metrics_by_k"]["3"])
-                summaries = json.loads((run_directory / "summaries.json").read_text())
+                summary_bytes = (run_directory / "summaries.json").read_bytes()
+                summaries = json.loads(summary_bytes)
+                budget_summaries = summaries["thesis_extended"]["answerable_by_token_budget"]
+                self.assertEqual({row["mode"] for row in budget_summaries}, {"naive", "hybrid"})
+                self.assertEqual(len(budget_summaries), 2)
+                for budget_summary in budget_summaries:
+                    self.assertEqual(budget_summary["token_budget"], 4000)
+                    self.assertEqual(budget_summary["question_count"], 1)
+                    self.assertEqual(budget_summary["macro_evidence_recall"], 0.5)
+                    self.assertEqual(budget_summary["joint_evidence_success_rate"], 0.0)
+                    self.assertEqual(budget_summary["avg_returned_chunks"], 3)
+                    self.assertEqual(budget_summary["avg_chunk_source_tokens"], 5)
                 k5 = next(row for row in summaries["thesis_extended"]["answerable"]
                           if row["group"] == "all_answerable" and row["mode"] == "naive"
                           and row["requested_k"] == 5)
@@ -327,6 +441,7 @@ class MultiHopRunnerIntegrationTests(unittest.TestCase):
                 self.assertEqual(second_directory, run_directory)
                 self.assertEqual(second_manifest["evaluation_fingerprint"], manifest["evaluation_fingerprint"])
                 self.assertEqual((run_directory / "results.json").read_bytes(), result_bytes)
+                self.assertEqual((run_directory / "summaries.json").read_bytes(), summary_bytes)
                 self.assertEqual(rag.retrieve_trace.await_count, 4)
 
                 checkpoint = next((run_directory / "checkpoints").rglob("*.json"))

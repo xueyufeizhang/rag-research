@@ -34,12 +34,14 @@ from rag_research.evaluation import (
     build_multidocument_chunk_index,
     calc_evidence_reachability,
     calc_multihop_official_metrics,
-    calc_multihop_retrieval_metrics,
+    calc_multihop_retrieval_metrics_by_k,
+    calc_multihop_retrieval_metrics_by_token_budget,
     calc_null_retrieval_context_metrics,
     harmonic_mean,
     map_multihop_evidence_to_chunks,
 )
 from rag_research.models import QuestionRecord
+from rag_research.context_budget import select_chunks_by_token_budget
 
 
 load_dotenv()
@@ -308,6 +310,8 @@ def score_question_trace(
     k_values: tuple[int, ...],
     token_counter: Callable[[str], int],
     build_context: Callable[[list[dict], list[dict], list[dict]], str],
+    token_budgets: tuple[int, ...],
+    tokenizer: Any,
 ) -> dict:
     """Score an existing ranking without performing retrieval or model calls."""
     ranked_ids = trace.get("chunk_ids", [])
@@ -317,6 +321,7 @@ def score_question_trace(
         raise ValueError("trace contains duplicate retrieved chunk IDs")
     is_null = question.question_type == "null_query"
     metrics_by_k = {}
+    metrics_by_token_budget = {}
     for requested_k in k_values:
         retrieved_ids = ranked_ids[:requested_k]
         if is_null:
@@ -326,7 +331,7 @@ def score_question_trace(
                 token_counter=token_counter,
             )
         else:
-            metrics = calc_multihop_retrieval_metrics(
+            metrics = calc_multihop_retrieval_metrics_by_k(
                 question=question,
                 retrieved_chunk_ids=retrieved_ids,
                 requested_k=requested_k,
@@ -345,6 +350,28 @@ def score_question_trace(
         metrics["requested_k"] = requested_k
         metrics_by_k[str(requested_k)] = metrics
 
+    for token_budget in token_budgets:
+        selection = select_chunks_by_token_budget(
+            ordered_chunks=[chunks[chunk_id] for chunk_id in ranked_ids],
+            token_budget=token_budget,
+            tokenizer=tokenizer,
+        )
+        selected_chunks = selection["chunks"]
+        if is_null:
+            budget_metrics = calc_null_retrieval_context_metrics(
+                retrieved_chunk_ids=None,
+                chunks=selected_chunks,
+                token_counter=token_counter,
+            )
+        else:
+            budget_metrics = calc_multihop_retrieval_metrics_by_token_budget(
+                question=question,
+                selected_chunks=selected_chunks,
+                token_budget=token_budget,
+                token_counter=token_counter,
+            )
+        metrics_by_token_budget[str(token_budget)] = budget_metrics
+
     if is_null:
         official = {
             "applicable": False,
@@ -359,7 +386,14 @@ def score_question_trace(
                 gold_facts=[evidence.fact for evidence in question.evidence],
             ),
         }
-    return {"thesis_extended": {"metrics_by_k": metrics_by_k}, "official": official}
+
+    return {
+        "thesis_extended": {
+            "metrics_by_k": metrics_by_k,
+            "metrics_by_token_budget": metrics_by_token_budget
+        },
+        "official": official,
+    }
 
 
 def validate_checkpoint(
@@ -457,14 +491,46 @@ def summarize_answerable_group(
     return summaries
 
 
+def summarize_token_budget_group(
+    *,
+    mode: str,
+    rows: list[dict],
+    token_budgets: tuple[int, ...],
+) -> list[dict]:
+    """Average token-budget metrics across one mode's answerable questions."""
+    summaries = []
+    if not rows:
+        return summaries
+
+    for token_budget in token_budgets:
+        metrics = [
+            row["thesis_extended"]["metrics_by_token_budget"][str(token_budget)]
+            for row in rows
+        ]
+        summaries.append({
+            "mode": mode,
+            "group": "all_answerable",
+            "group_value": "all",
+            "question_count": len(rows),
+            "token_budget": token_budget,
+            "macro_evidence_recall": mean(metrics, "evidence_recall"),
+            "joint_evidence_success_rate": mean(metrics, "joint_evidence_success"),
+            "avg_returned_chunks": mean(metrics, "retrieved_count"),
+            "avg_chunk_source_tokens": mean(metrics, "chunk_source_tokens"),
+        })
+    return summaries
+
+
 def build_summaries(
     results: list[dict],
     modes: tuple[str, ...],
     k_values: tuple[int, ...],
+    token_budgets: tuple[int, ...] = (),
 ) -> dict:
     answerable_summaries: list[dict] = []
     null_summaries: list[dict] = []
     official_summaries: list[dict] = []
+    budget_summaries: list[dict] = []
 
     for mode in modes:
         mode_rows = [row for row in results if row["mode"] == mode]
@@ -476,6 +542,11 @@ def build_summaries(
                 group_value="all",
                 rows=answerable,
                 k_values=k_values,
+            ))
+            budget_summaries.extend(summarize_token_budget_group(
+                mode=mode,
+                rows=answerable,
+                token_budgets=token_budgets,
             ))
             official_metrics = [row["official"]["metrics"] for row in answerable]
             official_summaries.append({
@@ -540,6 +611,7 @@ def build_summaries(
         "thesis_extended": {
             "answerable": answerable_summaries,
             "null_queries": null_summaries,
+            "answerable_by_token_budget": budget_summaries,
         },
         "official": official_summaries,
     }
@@ -599,6 +671,7 @@ async def main() -> tuple[Path, dict]:
         "EVAL_K_VALUES",
         ",".join(str(value) for value in DEFAULT_K_VALUES),
     ))
+    token_budgets = (4000,)
     concurrency = int(os.getenv("EVAL_CONCURRENCY", "4"))
     if concurrency <= 0:
         raise ValueError("EVAL_CONCURRENCY must be positive")
@@ -796,6 +869,8 @@ async def main() -> tuple[Path, dict]:
             k_values=k_values,
             token_counter=token_counter,
             build_context=rag.build_context,
+            token_budgets=token_budgets,
+            tokenizer=tokenizer,
         )
 
         row = {
@@ -850,7 +925,12 @@ async def main() -> tuple[Path, dict]:
             f"incomplete evaluation: {len(completed_rows)} of {expected_result_count} results"
         )
 
-    summaries = build_summaries(completed_rows, modes, k_values)
+    summaries = build_summaries(
+        completed_rows,
+        modes,
+        k_values,
+        token_budgets=token_budgets,
+    )
     results_path = run_directory / "results.json"
     summaries_path = run_directory / "summaries.json"
     atomic_write_json(results_path, completed_rows)
